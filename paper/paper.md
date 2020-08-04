@@ -62,7 +62,7 @@ data translation between GALFIT output to ellipse can take time if the astronome
 needs to fit several model and careful model selection can take longer. 
 
 ``EllipSect`` is a python tool to analyse GALFIT output in order to select the 
-best model. Its output are graphs that include surface brightness profiles of the 
+best model. It reads the x,y center, axis ratio and angular position of the model to  divide the sectors of an ellipse and compute the surface brightness in those individual sectors. Its outputs are graphs that include surface brightness profiles of the 
 galaxy and model. It also includes Surface brightness profiles of individual 
 model components for a careful analysis of those. SB profiles includes 
 the one along the major axis and a multi graph at different angles to analyse 
@@ -73,42 +73,50 @@ the GALFIT photometry adding the total magnitud, luminosity, component to Total 
 astronomy community. GALFIT was designed to provide the user a quick decision over
 the surface brigthness model and ``EllipSect`` is also designed to follow this. It
 can provide the user to extract the most useful information of the model in order 
-to assist the user to decide to add, remove or change model components. ``EllipSect`` 
+to assist the user to decide to add, remove or change model components. It does not
+require to any direct interaction with the code. ``EllipSect`` 
 has been used to analyse models of 2MASS and LINERs galaxies.  
 
 
-[//]: <> (below is the sample paper: )
+# ``ELLIPSECT``
 
-The forces on stars, galaxies, and dark matter under external gravitational
-fields lead to the dynamical evolution of structures in the universe. The orbits
-of these bodies are therefore key to understanding the formation, history, and
-future state of galaxies. The field of "galactic dynamics," which aims to model
-the gravitating components of galaxies to study their structure and evolution,
-is now well-established, commonly taught, and frequently used in astronomy.
-Aside from toy problems and demonstrations, the majority of problems require
-efficient numerical tools, many of which require the same base code (e.g., for
-performing numerical orbit integration).
+The program was designed simple to use. It only requires GALFIT output file (galfit.XX).
+It reads the model In this simple mode, ``EllipSect`` makes two graphs: one with the average of surface brightness along major axis, and the other with multiple plots showing the surface brightness at different angles measured from major axis (i.e. major axis is the one with $0\deg$). See figure 1 for a fit of 7 gaussian models for an Elliptical galaxy.  
 
-``Gala`` is an Astropy-affiliated Python package for galactic dynamics. Python
-enables wrapping low-level languages (e.g., C) for speed without losing
-flexibility or ease-of-use in the user-interface. The API for ``Gala`` was
-designed to provide a class-based and user-friendly interface to fast (C or
-Cython-optimized) implementations of common operations such as gravitational
-potential and force evaluation, orbit integration, dynamical transformations,
-and chaos indicators for nonlinear dynamics. ``Gala`` also relies heavily on and
-interfaces well with the implementations of physical units and astronomical
-coordinate systems in the ``Astropy`` package [@astropy] (``astropy.units`` and
-``astropy.coordinates``).
+![EllipSect output sample for an elliptical galaxy that was fitted with 7 gaussian models. In both panels red color represents the galaxy and blue the GALFIT model. Left panel: Surface brightness average vs. radius of both galaxy and model along the major axis. Model also has error bars since it is the average of individual model components. Right panel: multi plot of surface brightness of galaxy and model at different angles from major axis (major axis is the one with $0\deg$). At the right of the surface brightness plot is the one showing the percentual error at that angle. ](Fig1.png)
 
-``Gala`` was designed to be used by both astronomical researchers and by
-students in courses on gravitational dynamics or astronomy. It has already been
-used in a number of scientific publications [@Pearson:2017] and has also been
-used in graduate courses on Galactic dynamics to, e.g., provide interactive
-visualizations of textbook material [@Binney:2008]. The combination of speed,
-design, and support for Astropy functionality in ``Gala`` will enable exciting
-scientific explorations of forthcoming data releases from the *Gaia* mission
-[@gaia] by students and experts alike. The source code for ``Gala`` has been
-archived to Zenodo with the linked DOI: [@zenodo]
+
+## Different Modes
+
+``EllipSect`` has different input option which allows to modify the original plots or 
+compute other photometric variables besides the ones computed by the GALFIT models.
+By default the program plots the graphs shown in Figure 1. Using different input options the user can: alter the X/Y range axis, include the surface brightness individual components to the plot, put a grid on the plot, change top X-axis to pixels. The program can also makes surface brightness to output to a file in such a way that 
+the user can make his/her own plots in another graphic tool. 
+
+Below is shown a summary of the different features that can be used with ``EllipSect``:
+
+- **Sky** The programs reads GALFIT sky that was used in the fit, but alternatively user can introduce their own sky value. In addition, ``EllipSect`` can compute the sky background in the region area where the gradient becomes positive. This is not used in the photometry output (see below) and it is only shown for comparison. 
+
+- **Additional photometric model parameters.**  If the user enables it, ``EllipSect`` can compute photometric variables that are not directly extracted from the fitted model parameters. Examples of such variables are: total magnitude, flux, mean surface brigthness at effective radius, radius at 90% of total light, bulge to total ratio, and light fraction per component. 
+
+- **Photometric aperture.** The program uses _sectors\_photometry_ (cite) which divides into sectors an ellipse around the galaxy to compute the counts in those individual sectors. Taking advantage of this already created ellipse, ``EllipSect`` compute photometric variables within it. Those include: Tidal, Bumpiness, SNR, Chinu (recomputed inside this ellipse), Akaike information criterion, Bayesian information criterion (cites).
+
+- **NED** ``EllipSect`` connects to NED (cite) to extract information of the galaxy needed to compute absolute magnitude, luminosity, galactic extinction, distance modulus, cosmology corrected scale, surface brightness dimming.  
+
+# Command line execution
+
+Once downloaded, the program is easily executed via the command line. It only requires 
+the latest output file that was generated with GALFIT (galfit.XX where XX is the largest number if multiple runs have been using with GALFIT). Example: 
+
+./EllipSect galfit.01
+
+This will generate the two graphs shown above. The _-help_ option will show additional
+features that can be used with the program.
+
+# Future
+
+This is part of a larger project where this program will be incorporated to analyze 
+large data images which includes hundreds of galaxies such as galaxy clusters. 
 
 # Acknowledgements
 

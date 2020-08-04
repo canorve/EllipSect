@@ -1009,7 +1009,6 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
 
         idgrad=np.where(ygrad > 0)
 
-        print("hola ",idgrad)
         
         print("1) gradient method: ")
         print("std sky is from averaging over sectors. Do not use it for sigma image ")

@@ -40,42 +40,25 @@ bibliography: paper.bib
 # Summary
 
 Galaxies are the building blocks of the large scale structure of the Universe. 
-They are composed of stellar structures like bulges, bars, disks or rings. The 
-study of those structures is a fundamental step to understanding the formation, history
-and composition of the galaxies. A critical step to study them is by 
-the means of appropriate model selection of surface brightness. Such step
-requires a careful analysis of the models that can be used to fit 
-the galaxy properly. 
+These contain billions of stars that make up a diverse variety of stellar components within galaxies such as bulges, bars, disks or rings. Hence, the study of those is a fundamental step to understanding the formation, structure, and composition of the galaxies. One way to analyze these components is fitting the components of a galaxy image using a stellar model. Such models are mathematical functions of surface brightness that vary for the different components of the galaxies. A good stellar model that truly represents the physical components requires a careful analysis of the fitted models of the galaxy.
 
-A popular program to fit such stellar surface brightness model is GALFIT (10000 cites 
-at the moment of writing this paper). It can provide a long variety of very well know 2D surface brightness such as Sersic, de Vaucouleurs, etc. It uses the Levenbergh-Marquart algorithm to find the optimal chinu that fits the model to 
-the galaxy. In order to check whether galaxy model is a good fit, it provides 
-a cube image which it contains the galaxy image, model image and residual image. The 
-visual check of the model and residual image can be tricky since it relies on image 
-contrast. If it is a good or bad model can be arbitrary to the user. This is not enough 
-to model analysis.
+A well-known program to fit stellar surface brightness model is GALFIT ( (cite)cites at the moment of writing this paper). It provides a wide variety of very well-known  surface brightness functions such as Sersic, de Vaucouleurs, Nuker, moffat, gaussian etc. In order for the user to check whether galaxy model is a good fit, it provides 
+a file with the fitted model parameters and a FITS (cite) cube image. This contains the galaxy image, model image and residual image. Sometimes, a visual check of the model and residual image can be tricky since it relies on image contrast. This is not enough for model analysis (extend this to avoid vague language).
 
-GALFIT's users have been using IRAF's Ellipse tool to create surface brightness models
-to compare galaxy and model and check if the model was a good fit. Nowadays IRAF is no
-longer maintained and actually supported by the astronomy community.  Moreover, 
-data translation between GALFIT output to ellipse can take time if the astronomer
-needs to fit several model and careful model selection can take longer. 
+On the other hand, another well-know common used package to extract surface brightness  
+from galaxy's isophotes is IRAF's ellipse. This method is one-dimensional and have its caveats. Nowadays IRAF is no longer maintained and it is actually supported by the astronomy community. 
 
-``EllipSect`` is a python tool to analyse GALFIT output in order to select the 
-best model. It reads the x,y center, axis ratio and angular position of the model to  divide the sectors of an ellipse and compute the surface brightness in those individual sectors. Its outputs are graphs that include surface brightness profiles of the 
-galaxy and model. It also includes Surface brightness profiles of individual 
-model components for a careful analysis of those. SB profiles includes 
-the one along the major axis and a multi graph at different angles to analyse 
-with detail inspection of the model. In addition, ``ElliSect`` complements 
-the GALFIT photometry adding the total magnitud, luminosity, component to Total luminosity ratio, Akaike information criteriion, among other photometric variables. 
+Most GALFIT's users have been using IRAF's Ellipse tool (cite) to create surface brightness profiles of their models to compare with the one of the galaxies. This process need the translation of the output data from GALFIT to Ellipse. Besides, this needs a new configuration for Ellipse parameter's entry. All these 
+can take time if the astronomer needs to fit several models to careful selects which one is the appropriate for the galaxy.
 
-``EllipSect`` was designed to be used by GALFIT's users researchers of the 
+
+``EllipSect`` is a python tool to create surface brightness profiles and additional photometry from GALFIT output. The objective is to provide the most information to aid the user to select the best model. Its outputs are graphs that include surface brightness profiles of the galaxy and model. It also includes Surface brightness profiles of individual model components for a careful analysis of those components. 
+Graphs of SB profiles includes the one along the major axis and a multi plot of SB at different angles to analyse the model with detail.  In addition, ``EllipSect`` complements the GALFIT photometry adding other that can not be extracted directly from the models parameters such as the total magnitud, luminosity, component to Total luminosity ratio, Akaike information criteriion, among other photometric variables. 
+
+``EllipSect`` was designed to be used by GALFIT's users or any researcher from the 
 astronomy community. GALFIT was designed to provide the user a quick decision over
-the surface brigthness model and ``EllipSect`` is also designed to follow this. It
-can provide the user to extract the most useful information of the model in order 
-to assist the user to decide to add, remove or change model components. It does not
-require to any direct interaction with the code. ``EllipSect`` 
-has been used to analyse models of 2MASS and LINERs galaxies.  
+the surface brigthness model and ``EllipSect`` is also designed to follow this objective. It provides the user the most useful information of the model in order to decide to add, remove or change model components. It does not require any direct interaction with the code or translation of GALFIT's data format. It uses directly 
+the GALFIT output file which is helpful to analyze large amounts of galaxies.  ``EllipSect`` has been used to analyse models of 2MASS and LINERs galaxies.  
 
 
 # ``ELLIPSECT``

@@ -210,44 +210,37 @@ with 7 gaussians (images for this galaxy are displayed above).
     ./EllipSect.py galfit.46 -logx
 
     ![A85 ](img/A85.log.png)
-    ![A85 ](img/A85.mul.log.png)
 
 * Include the individual model components to the plot:  
     ./EllipSect.py galfit.46 -comp
     (displays the 7 gaussians)
 
-    ![A85 ](img/A85.sub.png)
-    ![A85 ](img/A85.mul.sub.png)
+    ![A85 ](img/A85.comp.png)
 
 * Insert pixels units in the top X-axis: 
     ./EllipSect.py galfit.46 -pix
 
     ![A85 ](img/A85.pix.png)
-    ![A85 ](img/A85.mul.pix.png)
 
 * Range in X-axis is decreased 50%: 
     ./EllipSect.py galfit.46 -ranx 0.5 
 
     ![A85 ](img/A85.ranx1.png)
-    ![A85 ](img/A85.mul.ranx1.png)
 
 * Range in Y-axis is doubled: 
     ./EllipSect.py galfit.46 -rany 2 
 
     ![A85 ](img/A85.rany1.png)
-    ![A85 ](img/A85.mul.rany1.png)
 
 * X-axis range vary from 1 to 50: 
     ./EllipSect.py galfit.46 -ranx 1-50 
 
     ![A85 ](img/A85.ranx2.png)
-    ![A85 ](img/A85.mul.ranx2.png)
 
 * Use grid on plot and increase resolution to 300 dots per inch: 
     ./EllipSect.py galfit.46 -grid -dpi 300 
 
     ![A85 ](img/A85.grid.png)
-    ![A85 ](img/A85.mul.grid.png)
 
 * Same as above but popup window does not appear. Plots are 
     directly saved in directory: 

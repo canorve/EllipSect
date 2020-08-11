@@ -1,0 +1,12 @@
+
+To run this example, simply type:
+
+                          galfit galfit.feedme
+
+Chien Peng
+
+After this, type: 
+
+	./EllipSect galfit.01
+
+Chris

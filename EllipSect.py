@@ -2354,16 +2354,10 @@ def ReadGALFITout(inputf,galpar):
             errmsg="Unable to find Mask file"
             print(errmsg)
 
-        GetFits(galpar.inputimage, galpar.tempmask, galpar.xmin, galpar.xmax, galpar.ymin, galpar.ymax)
 
-        hdu = fits.open(galpar.tempmask)
-        mask = hdu[0].data
-        mask.fill(False)
-        mask=mask.astype("bool")
-        hdu[0].data = mask
+        data = np.zeros((galpar.ymax, galpar.xmax), dtype=np.float64)
+        hdu = fits.PrimaryHDU(data=data)
         hdu.writeto(galpar.tempmask, overwrite=True)
-
-        hdu.close()
 
 
 
@@ -2552,7 +2546,12 @@ def GetFits(Image, Imageout, xlo, xhi, ylo, yhi):
     hdu = fits.open(Image)
     dat = hdu[0].data[ylo - 1:yhi, xlo - 1:xhi]
     hdu[0].data = dat
-    hdu.writeto(Imageout, overwrite=True)
+    try:
+        hdu.writeto(Imageout, overwrite=True)
+    except: 
+        hdutemp=fits.PrimaryHDU(data=dat)
+        hdutemp.writeto(Imageout, overwrite=True)
+
     hdu.close()
 
 

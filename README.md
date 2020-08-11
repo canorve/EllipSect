@@ -353,7 +353,7 @@ with 7 gaussians (images for this galaxy are displayed above).
 
 ### Run the example
 
-    Check the [example](./example/README) to test it by yourself. 
+    Check the [example](example/README) to test it by yourself. 
 
 
 

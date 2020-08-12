@@ -52,6 +52,7 @@ Most GALFIT's users have been using IRAF's Ellipse tool to create surface bright
 
 ``EllipSect`` is a python tool to create surface brightness profiles and additional photometry from GALFIT output. The objective is to provide the most information to aid the user to select the best model. Its outputs are graphs that include surface brightness profiles of the galaxy and model. It also includes Surface brightness profiles of individual model components for a careful analysis of those. 
 In addition, ``EllipSect`` complements the GALFIT photometry adding other that can not be extracted directly from the models parameters such as the total magnitud, luminosity, component to Total luminosity ratio among others photometric variables. 
+(adds the galapagos software)
 
 ``EllipSect`` was designed to be used by GALFIT's users or any researcher from the 
 astronomy community. GALFIT was designed to provide the user a quick decision over

@@ -183,9 +183,9 @@ def SectorsGalfit(params):
     if params.flagmodel == False:
         # hdu 1 => image   hdu 2 => model
         hdu = fits.open(galpar.outimage)
-        galpar.img = (hdu[1].data).astype(float)
-        galpar.model = (hdu[2].data).astype(float)
-        galpar.imres = (hdu[3].data).astype(float)
+        galpar.img = (hdu[1].data.copy()).astype(float)
+        galpar.model = (hdu[2].data.copy()).astype(float)
+        galpar.imres = (hdu[3].data.copy()).astype(float)
         hdu.close()
 
     else:

@@ -48,10 +48,10 @@ used to carry out a deeper analysis of the model and its residuals.
 GALFIT's users have been using graphs of surface brightness vs. radius to guide the eye for deviations from the galaxy and the model. They have been using IRAF's[^](Image Reduction and Analysis Facility) task ellipse [@jed87] which is another well-know program to extract surface brightness profiles. This process needs the format translation from GALFIT to Ellipse. This take time if the user needs to test various models to select the appropriate one for the galaxy. An additional issue is, unfortunately, that the development and maintenance of IRAF is discontinued since 2013. Nowadays, IRAF is actually supported by the astronomy community. 
 
 ``EllipSect`` is a python tool for making surface brightness profiles and extracting complementary photometry from the GALFIT output. The goal is to provide the greatest amount of information to select the best model. Its outputs are graphs that include surface brightness profiles of the galaxy and model. It also includes Surface brightness profiles of individual model components for a careful analysis. 
-Furthermore, ``EllipSect`` complements the GALFIT photometry by adding others data that can not be extracted directly from the model's parameters, such as the total magnitud, luminosity, component to total luminosity ratio among others photometric variables. 
+Furthermore, ``EllipSect`` complements the GALFIT photometry by adding other data that besides the ones extracted from the model's parameters, such as the total magnitud, luminosity, component to total luminosity ratio among others photometric variables. 
 
 ``EllipSect`` was designed to be easy to use for any researcher from the 
-astronomy community. Users can make use of the program to decide to add, remove or change model components. It does not require any direct interaction with the code or translation of GALFIT's data format. ``EllipSect`` has been used to analyse galaxy images from 2MASS and LINERs galaxies.  
+astronomy community. Users can make use of the program to decide to add, remove or change model components. It omits any direct interaction with the code or translation of GALFIT's data format. ``EllipSect`` has been used to analyse galaxy images from 2MASS and LINERs galaxies.  
 
 Using wrapping scripts for GALFIT has been used before [@haussler13], but they cover other needs. For instance, their code run GALFIT to fit thousands of objects without user interaction on large images.
 
@@ -73,36 +73,35 @@ Below is shown a summary of the different features of ``EllipSect``:
 
 - **Components** If a surface brightness model is composed from multiple components, users can enable ``ElliSect`` to plot the surface brightness of each sub-component. This allows the user to check if sub-component if fitted as desired.
 
-- **Sky** The program uses the GALFIT's sky value from the input file, but alternatively,the user can enter their own sky value. Also, ``EllipSect`` can calculate the sky background in the region area where the gradient turns positive. The latter is only shown for verification and it is not used to calculate the other photometric variables.
+- **Sky** The program uses the GALFIT's sky value from the input file, but alternatively, the user can enter their own sky value. Furthermore, just for comparison, ``EllipSect`` can calculate the sky background in the sector region where the gradient turns positive. 
 
-#lastmod
 
-- **Additional photometric model parameters.**  ``EllipSect`` can compute photometric variables that are not directly extracted from the fitted model parameters. Examples of such variables are: total magnitude, flux, mean surface brigthness at effective radius, radius at 90% of total light, bulge to total ratio, and component light fraction of each component.
+- **Extra photometric variables.**  ``EllipSect`` can compute photometric variables that are indirectly extracted from the model parameters. Examples of such variables are: total magnitude, flux, mean surface brightness at effective radius, radius at 90% of total light, bulge to total ratio, and component to total light ratio.
   
-- **Photometric aperture.** The program uses _sectors\_photometry_ [@cappellari02] which divides into sectors an ellipse around the galaxy to compute the counts in each sectors. Taking advantage of this, ``EllipSect`` compute photometric variables within it. This means that the program computes: Tidal [@tal09], Bumpiness [@blakeslee06], SNR, Chinu (recomputed inside this ellipse), Akaike information criterion [@akaike74], Bayesian information criterion [schwarz78].
+- **Photometric aperture parameters.** The program uses _sectors\_photometry_ [@cappellari02] which divides an ellipse into sectors around to compute the counts in each sector. ``EllipSect`` computes, within this same ellipse, the following parameters: Tidal [@tal09], Bumpiness [@blakeslee06], SNR, Chinu, Akaike information criterion [@akaike74], Bayesian information criterion [schwarz78].
 
-- **NED** ``EllipSect`` connects to NED[^](The NASA/IPAC Extragalactic Database (NED) is funded by the National Aeronautics and Space Administration and operated by the California Institute of Technology.) to extract information of the galaxy to compute absolute magnitude, luminosity, galactic extinction, distance modulus, cosmology corrected scale and surface brightness dimming.  
+- **NED** ``EllipSect`` connects to NED[^](The NASA/IPAC Extragalactic Database (NED) is funded by the National Aeronautics and Space Administration and operated by the California Institute of Technology.) to download data of the galaxy to estimate absolute magnitude, luminosity, galactic extinction, distance modulus, cosmology corrected scale and surface brightness dimming.  
  
  
 
 # Command line execution
 
-Once downloaded, the program is easily executed via the command line. It only requires 
-the latest output file that was generated with GALFIT (galfit.XX where XX is the largest number if there are several galfit.XX files). Example: 
+The program is easily executed via the command line. It only requires 
+the latest GALFIT output file (galfit.XX where XX is the largest number if there are various galfit.XX files). Example: 
 
 ``` 
 ./EllipSect galfit.01
 ``` 
 
-This will generate the two graphs like the ones shown in figure 1. The _-help_ option will show additional features that can be used with the program.
+This will generate the two graphs like the ones shown in figure 1. The _-help_ option will show additional features of the program.
 
 # Future
 
-This is part of a larger project where this program will be incorporated to analyze 
-large data images which includes hundreds of galaxies such as galaxy clusters. 
+This is part of a larger project where this program will be adaptated to analyze 
+data images that includes hundreds of galaxies such as galaxy clusters. 
 
 # Acknowledgements
 
-We acknowledge Chien Peng for their invaluable help thorough his Facebook's GALFIT page and the MGE fitting method and software by Cappellari (2002)
+We acknowledge Chien Peng for their invaluable help thorough his Facebook's GALFIT page, and the MGE fitting method and software by Cappellari (2002)
 
 # References

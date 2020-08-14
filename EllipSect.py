@@ -2663,7 +2663,7 @@ def OutPhot(params, galpar, galcomps, sectgalax, sectmodel, sectcomps):
 
         print("running galfit to create sigma image...")
 
-        rungal = "galfit -o1 -outsig {} ".format(params.galfile) 
+        rungal = "galfit -o2 -outsig {} ".format(params.galfile) 
         errgal = sp.run([rungal], shell=True, stdout=sp.PIPE, stderr=sp.PIPE,
             universal_newlines=True)
 

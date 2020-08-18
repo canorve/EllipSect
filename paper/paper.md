@@ -40,27 +40,27 @@ bibliography: paper.bib
 # Summary
 
 Galaxies are the building blocks of the large scale structure of the Universe. 
-Those contain billions of stars that make up a diverse variety of galaxy morphology. As a consequence, they have various stellar components within galaxies such as bulges, bars, disks or rings among others. Hence, the image analysis for quantifying galaxy data is a fundamental step to understanding the formation, structure, and composition of the galaxies. One way to analyze them is through model fitting of the light distribution of a galaxy. Such models are mathematical functions of surface brightness that vary for the different components of the galaxies. A suitable model that reliably represents the physical properties requires a detailed inspection of the fitted models.
+These contain billions of stars that forms stellar components such as bulges, bars, disks and rings. Therefore, these components makes a diverse variety of galaxy morphology. A fundamental step is quantifying data through image analysis to understand the structure and composition of galaxies. Using models that fit their light distribution is one way to do it. Such models are mathematical functions of surface brightness for the different components of the galaxies. A suitable model that reliably represents the physical properties requires a detailed inspection of the fitted models.
 
-A well-known program to fit stellar surface brightness models is GALFIT ([@peng02] 1752 cites at the moment of writing this paper). It provides a wide variety of standards  functions such as Sersic [@sersic68], de Vaucouleurs [@devau48], Nuker, gaussian etc. To check if the galaxy model is a good fit, GALFIT provides a file with the fitted model parameters, errors, and a FITS[^](Flexible Image Transport System) cube image. The latter contains the galaxy, model and residual images. Typically, a visual check of those images can be tricky since it relies on image contrast. The provided data can be 
-used to carry out a deeper analysis of the model and its residuals. 
+A well-known program to fit surface brightness models is GALFIT ([@peng02] 1752 cites at the moment of writing this paper). It provides a wide variety of standard functions such as Sérsic [@sersic68], de Vaucouleurs [@devau48], Nuker, gaussian etc. 
 
-GALFIT's users have been using graphs of surface brightness vs. radius to guide the eye for deviations from the galaxy and the model. They have been using IRAF's[^](Image Reduction and Analysis Facility) task ellipse [@jed87] which is another well-know program to extract surface brightness profiles. This process needs the format translation from GALFIT to Ellipse. This take time if the user needs to test various models to select the appropriate one for the galaxy. An additional issue is that the development and maintenance of IRAF is discontinued since 2013. Nowadays, IRAF is actually supported by the astronomy community. 
+GALFIT provides a file with the fitted model parameters, errors, and a FITS[^](Flexible Image Transport System) cube image to check if the galaxy model is the appropriate one.
+The FITS file contains the galaxy, model and residual images. Typically, a visual check on those images can be tricky since it relies on image contrast. Nevertheless, users construct surface brightness profiles from the provided data to compare the galaxy and model images.
 
-``EllipSect`` is a python tool for making surface brightness profiles and extracting complementary photometry from the GALFIT output. The goal is to provide the greatest amount of information to select the best model. Its outputs are graphs that include surface brightness profiles of the galaxy and model. It also includes Surface brightness profiles of individual model components for a careful analysis. 
-Furthermore, ``EllipSect`` complements the GALFIT photometry by adding other data  besides the ones extracted from the model's parameters, such as the total magnitud, luminosity, component to total luminosity ratio among others photometric variables. 
+GALFIT's users have been using plots of surface brightness vs. radius to guide the eye for deviations from the galaxy and the model. To do this, they have been using IRAF's[^](Image Reduction and Analysis Facility) task ellipse [@jed87] which is another well-know program to extract surface brightness profiles through ellipse fitting of isophotes. This process needs the data format translation from GALFIT to ellipse. This take time if the user needs to test various models to select the appropriate one for the galaxy. An additional issue is that the development and maintenance of IRAF is discontinued since 2013. Nowadays, IRAF is actually supported by the astronomy community. 
 
-``EllipSect`` was designed to be easy to use for any researcher from the 
-astronomy community. Users can make use of the program to decide to add, remove or change model components. It omits any direct interaction with the code or translation of GALFIT's data format. ``EllipSect`` has been used to analyse galaxy images from 2MASS and LINERs galaxies.  
+``EllipSect`` is a python tool for making surface brightness profiles and extracting complementary photometry from the GALFIT output. The goal is to provide the greatest amount of information to select the best model. Its outputs are graphs that include surface brightness profiles of the galaxy and model. For multiple galaxy fits, it follows the surface brightness of nearby galaxies. This is unfeasible to do with IRAF's task ellipse. It can also includes surface brightness profiles of individual model components for a detailed analysis. Furthermore, ``EllipSect`` complements the GALFIT photometry by adding other data  besides the ones extracted from the model's parameters, such as the total magnitude, luminosity, component to total luminosity ratio among others photometric variables. 
+
+We designed ``EllipSect`` to be easy to use for any researcher from the 
+astronomy community. The program aids the users to select, remove or change model components. It omits any direct interaction with the code or translation of GALFIT's data format. ``EllipSect`` has been used to analyse galaxy images from 2MASS and LINERs galaxies.  
 
 Using wrapping scripts for GALFIT has been used before [@haussler13], but they cover other needs. For instance, their code run GALFIT to fit thousands of objects without user interaction on large images.
-
 
 # ``ELLIPSECT``
 
 ``EllipSect`` only requires GALFIT output file. In this simple mode, ``EllipSect`` makes two graphs: one with the average of surface brightness along major axis, and the other contains multiple plots showing the surface brightness at different angles. See figure 1 for a fit of 7 gaussian models for an elliptical galaxy.  
 
-![EllipSect output sample for an elliptical galaxy which was fitted with 7 gaussian models. In both panels red color represents the galaxy and blue the GALFIT model. Left panel: Surface brightness average vs. radius of both galaxy and model along the major axis. Model also has error bars since it is the average of individual model components. Right panel: multi plot of surface brightness of galaxy and model at different angles from major axis (major axis is the one with $0\deg$). At the right of the surface brightness plot, the percentage error is shown. ](Fig1.png)
+![EllipSect output sample of an elliptical galaxy and its model that was fitted with 7 gaussian models. In both panels red color represents the galaxy and blue the GALFIT model. Left panel: Surface brightness average vs. radius of both galaxy and model along the major axis. Model also has error bars since it is the average of individual model components. Right panel: multi plot of surface brightness of galaxy and model at different angles from major axis (major axis is the one with $0\deg$). At the right of the surface brightness plot, the percentage error is shown. ](Fig1.png)
 
 
 ## Different Modes
@@ -71,12 +71,12 @@ the surface brightness of the model sub-components. The program creates output f
 
 Below is shown a summary of the different features of ``EllipSect``:
 
-- **Components** If a surface brightness model is composed from multiple components, users can enable ``ElliSect`` to plot the surface brightness of each sub-component. This allows the user to check if sub-component if fitted as desired.
+- **Components** If multiple models compose a surface brightness model, users can enable ``ElliSect`` to plot the surface brightness of each sub-component. This allows the user to check if sub-component if fitted as desired.
 
 - **Sky** The program uses the GALFIT's sky value from the input file, but alternatively, the user can enter their own sky value. Furthermore, just for comparison, ``EllipSect`` can calculate the sky background in the sector region where the gradient turns positive. 
 
 
-- **Extra photometric variables.**  ``EllipSect`` can compute photometric variables that are indirectly extracted from the model parameters. Examples of such variables are: total magnitude, flux, mean surface brightness at effective radius, radius at 90% of total light, bulge to total ratio, and component to total light ratio.
+- **Extra photometric variables.**  ``EllipSect`` can compute photometric variables that are indirectly extracted from the model parameters. For instance: total magnitude, flux, mean surface brightness at effective radius, radius at 90% of total light, bulge to total ratio, and component to total light ratio.
   
 - **Photometric aperture parameters.** The program uses _sectors\_photometry_ [@cappellari02] which divides an ellipse into sectors around to compute the counts in each sector. ``EllipSect`` computes, within this same ellipse, the following parameters: Tidal [@tal09], Bumpiness [@blakeslee06], SNR, Chinu, Akaike information criterion [@akaike74], Bayesian information criterion [schwarz78].
 
@@ -98,7 +98,7 @@ This will generate the two graphs like the ones shown in figure 1. The _-help_ o
 # Future
 
 This is part of a larger project where this program will be adapted to analyze 
-data images that includes hundreds of galaxies such as galaxy clusters. 
+data images that contains hundreds of galaxies such as galaxy clusters. 
 
 # Acknowledgements
 

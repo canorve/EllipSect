@@ -10,30 +10,20 @@ authors:
   - name: Christopher Añorve
     orcid: 0000-0002-3721-8869
     affiliation: 1
-
-- name: Omar U. Reyes-Amador
+  - name: Omar U. Reyes-Amador
     orcid: 
     affiliation: 2
-
-
-- name: Emmanuel Ríos-López
+  - name: Emmanuel Ríos-López
     orcid: 
     affiliation: "1, 3"
-
-
-
 affiliations:
  - name: Facultad de Ciencias de la Tierra y el Espacio, Universidad Autónoma de Sinaloa, Blvd. de la Americas y Av. Universitarios S/N, Ciudad Universitaria, C.P. 80010 Culiacán, Sinaloa, México
    index: 1
-
  - name:  Instituto de Radioastronomía y Astrofísica, UNAM, Campus Morelia, AP 3-72, CP 58089, México
    index: 2
-
  - name: Instituto Nacional de Astrofísica Óptica y Electrónica (INAOE), Apartado Postal 51 y 216, 72000 Puebla, Mexico    
-  index: 3
-
-
-date: 1 August 2020
+   index: 3
+date: 21 August 2020
 bibliography: paper.bib
 ---
 

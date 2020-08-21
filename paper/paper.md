@@ -11,10 +11,8 @@ authors:
     orcid: 0000-0002-3721-8869
     affiliation: 1
   - name: Omar U. Reyes-Amador
-    orcid: 
     affiliation: 2
   - name: Emmanuel Ríos-López
-    orcid: 
     affiliation: "1, 3"
 affiliations:
  - name: Facultad de Ciencias de la Tierra y el Espacio, Universidad Autónoma de Sinaloa, Blvd. de la Americas y Av. Universitarios S/N, Ciudad Universitaria, C.P. 80010 Culiacán, Sinaloa, México

@@ -82,10 +82,10 @@ it can be used as ymin-ymax to change range.
 
 
 
-* EllipSectGalfit uses axis ratio (*q*) and position angle (*pa*) to create an      "ellipse" *grid* using the function *sectors_photometry* from the *mgefit* library. Unlike IRAF's Ellipse, *q* and *pa* are fixed through radius. 
+* EllipSect uses axis ratio (*q*) and position angle (*pa*) to create an      "ellipse" *grid* using the function *sectors_photometry* from the *mgefit* library. Unlike IRAF's Ellipse, *q* and *pa* are fixed through radius. 
 
     For this reason, errors are expected to 
-    be greater than those coming from IRAF's ellipse since EllipSectGalfit 
+    be greater than those coming from IRAF's ellipse since EllipSect 
     averages errors for different isophotes. While, on the other hand, IRAF's ellipse
     can change axis ratio and angular position for each isophote. 
     
@@ -100,7 +100,7 @@ it can be used as ymin-ymax to change range.
 See the output  examples below for an elliptical galaxy: 
 
 * Simple plot example: 
-    ./EllipSectGalfit.py galfit.46 
+    ./EllipSect.py galfit.46 
 
     ![A85 ](../img/A2593.png)
     ![A85 ](../img/A2593-mul.png)

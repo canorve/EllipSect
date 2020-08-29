@@ -2382,7 +2382,7 @@ def ReadNComp(inputf,X,Y,galcomps):
 
     n=0
 
-    distmin=3 # minimum distance for among component centers
+    distmin=10 # minimum distance for among component centers
 
     while index < len(lines):
 

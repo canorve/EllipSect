@@ -11,6 +11,7 @@ authors:
     orcid: 0000-0002-3721-8869
     affiliation: 1
   - name: Omar U. Reyes-Amador
+    orcid: 0000-0001-7707-7389
     affiliation: 2
   - name: Emmanuel Ríos-López
     orcid: 0000-0002-4436-221X
@@ -54,10 +55,17 @@ Various scripts for GALFIT have been used before [@haussler13; @barden12; @anorv
 We designed ``EllipSect`` to be easy to use for any researcher from the 
 astronomy community. It omits any direct interaction with the code or translation of GALFIT's data format. ``EllipSect`` has been used to analyze galaxy images from 2MASS (Two Micron All Sky Survey) and LINERs galaxies in which estimations of  morphological and structural parameters have been obtained through photometric decompositions using GALFIT [emmanuel comentario].  
 
+[ulises comentario]
+
+EllipSect.py is being used in a study of dust nuclear structures (of hundreds of parsecs) of a sample of Active Galactic Nuclei (AGN) in the local universe (z<0.01) through Hubble Space Telescope (HST) images, surface brightness models (with GALFIT) and radiative transfer simulations (with SKIRT). EllipSect.py is used to plot the surface brightness profiles in order to compare and test the GALFIT and SKIRT output models with the galaxy profile. Also, some photometry parameters such as luminosity and distance modulus have been obtained using the options of EllipSect.py.
+
+
 
 # ``ELLIPSECT``
 
-``EllipSect`` only requires the GALFIT output file. In this simple mode, ``EllipSect`` makes two graphs: one contains the surface brightness average along major axis, and the other contains the surface brightness for different angles displayed in multiple plots. See figure 1 for an example using 7 gaussian models [emmanuel comentario] for the  elliptical galaxy Holm15a [emmanuel comentario].  
+``EllipSect`` only requires the GALFIT output file. In this simple mode, ``EllipSect`` makes two graphs: one contains the surface brightness average along major axis, and the other contains the surface brightness for different angles displayed in multiple plots.
+
+The surface brightness is averaged through the perimeter of concentric ellipses along the major axis of the galaxy. The multiple plots aids the users to visualize where a model fit fails to match with the galaxy  [ulises comentarios]. See figure 1 for an example using 7 gaussian models [emmanuel comentario] for the  elliptical galaxy Holm15a [emmanuel comentario].  
 
 ![Example of EllipSect output for an elliptical galaxy and its model that was fitted with 7 gaussian components. In both panels red color represents the galaxy and blue the GALFIT model. Color for each component is shown in box. Left panel: Surface brightness average vs. radius along the major axis. Model also has error bars since it is the average of individual model components. Right panel: multiple plots of surface brightness of galaxy and model at different angles from major axis (major axis is the one with $0\deg$). The percentage error is shown at the right side of the multi plot. ](Fig1.png)
 

@@ -1,5 +1,5 @@
 ---
-title: 'EllipSect: A Python tool for surface brightness analysis'
+title: 'EllipSect: A Python tool for surface brightness analysis for GALFIT'
 tags:
   - Python
   - astronomy

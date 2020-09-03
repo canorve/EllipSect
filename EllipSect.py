@@ -1259,7 +1259,7 @@ def PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,params,scale):
 
 
     axsec.set_xlabel("radius ('')")
-    axsec.set_ylabel("mag/''")
+    axsec.set_ylabel("Surface Brightness (mag/'')")
 
     axsec.errorbar(xradq, ysbq,yerr=ysberrq,fmt='o-',capsize=2,color='red',markersize=0.7,label="galaxy",linewidth=2)
     axsec.errorbar(xradm, ysbm,yerr=ysberrm,fmt='o-',capsize=2,color='blue',markersize=0.7,label="Model",linewidth=2)
@@ -1620,7 +1620,7 @@ def MulEllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps):
         axpix = axsec[0,0].twiny()
         axpix2 = axsec[0,1].twiny()
 
-    fig.text(0.04, 0.5, 'Surface brightness', va='center', rotation='vertical')
+    fig.text(0.04, 0.5, "Surface Brightness (mag/'')", va='center', rotation='vertical')
     fig.text(0.96, 0.5, 'error (%)', va='center', rotation='vertical')
 
     axsec[-1, 0].set_xlabel("radius ('')")

@@ -1008,7 +1008,7 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
 
         ygrad=np.gradient(ysortsbc)
 
-        idgrad=np.where(ygrad > 0)
+        idgrad=np.where(ygrad >= 0)
 
         
         print("1) gradient method: ")
@@ -1021,13 +1021,13 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
                 #print("sky: {:.2f} , std: {:.2f} ".format(ysbc[idgrad][6],ysbcerr[idgrad][6]))
                 #if idx > 1 and idx < 10:
                 #print("idx: ",idx)
-                print("sky: {:.2f}, std: {:.2f} radius: {:.2f} grad: {:.2f} ".format(ysortsbc[idgrad][idx],ysortsbcerr[idgrad][idx],xsortrad[idgrad][idx]*galpar.scale,ygrad[idgrad][idx]))
+                print("sky: {:.2f} (ADUs), std: {:.2f} radius: {:.2f} (pix), grad: {:.2f} ".format(ysortsbc[idgrad][idx],ysortsbcerr[idgrad][idx],xsortrad[idgrad][idx],ygrad[idgrad][idx]))
 
             print("")
 
             print("mean sky: {:.2f} mean std: {:.2f} ".format(ysortsbc[idgrad].mean(),ysortsbcerr[idgrad].mean()))
             idmin=np.where(np.min(np.abs(ygrad[idgrad])) == np.abs(ygrad[idgrad]))
-            print("mingrad: sky: {:.2f} std: {:.2f} rad: {:.2f} ".format(ysortsbc[idgrad][idmin][0],ysortsbcerr[idgrad][idmin][0],xsortrad[idgrad][idmin][0]*galpar.scale))
+            print("minimum grad: sky: {:.2f} std: {:.2f} rad: {:.2f} ".format(ysortsbc[idgrad][idmin][0],ysortsbcerr[idgrad][idmin][0],xsortrad[idgrad][idmin][0]*galpar.scale))
 
         else:
             print("Can't determine sky because gradient never turns positive ")
@@ -1065,7 +1065,7 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
         skymean=np.mean(img2)
         skysig=np.std(img2)
 
-        print("mean sky: {:.2f} ".format(skymean))
+        print("mean sky: {:.2f} (ADUs) ".format(skymean))
         print("std sky: {:.2f} ".format(skysig))
 
 
@@ -2327,11 +2327,11 @@ def ReadGALFITout(inputf,galpar):
 
     flagaxis=False
     if (os.path.isfile(galpar.maskimage)):
-        col1,row1=GetAxis(galpar.maskimage)
+        col1,row1=GetAxis(galpar.maskimage,"none",False,1,False)
     else:
         col1=row1=0
     
-    col2,row2=GetAxis(galpar.inputimage)
+    col2,row2=GetAxis(galpar.inputimage,galpar.imgidx,galpar.flagidx,galpar.num,galpar.flagnum)
 
     if (col1 != col2 or row1 != row2):
         flagaxis=True
@@ -3712,20 +3712,25 @@ def GetKAprox(n):
     return (K)
 
 
-
-def GetAxis(Image):
+def GetAxis(Image,imgidx,flagidx,num,flagnum):
     # k Check
     "Get number of rows and columns from the image"
 
     hdu = fits.open(Image)
-#    ncol = hdu[0].header["NAXIS1"]
-#    nrow = hdu[0].header["NAXIS2"]
-    ncol = hdu[0].header.get("NAXIS1",2000) # return 2000 if not found
-    nrow = hdu[0].header.get("NAXIS2",2000) # return 2000 if not found
-    hdu.close()
+    if flagidx:
+        if flagnum:
+            ncol = hdu[imgidx,num].header.get("NAXIS1",2000) # return 2000 if not found
+            nrow = hdu[imgidx,num].header.get("NAXIS2",2000) # return 2000 if not found
+        else:    
+            ncol = hdu[imgidx].header.get("NAXIS1",2000) # return 2000 if not found
+            nrow = hdu[imgidx].header.get("NAXIS2",2000) # return 2000 if not found
 
-    #ncol=np.int(ncol)
-    #nrow=np.int(nrow)
+    else:
+        ncol = hdu[0].header.get("NAXIS1",2000) # return 2000 if not found
+        nrow = hdu[0].header.get("NAXIS2",2000) # return 2000 if not found
+
+
+    hdu.close()
 
     return ncol, nrow
 

@@ -777,6 +777,7 @@ def SectPhot(galpar, params, n_sectors=19, minlevel=0):
     ###############################
     #  galaxy:
 
+
     sectgalax = sectors_photometry(galpar.img, eps, angsec, xctemp, yctemp, minlevel=minlevel,
             plot=params.dplot, badpixels=maskb, n_sectors=n_sectors)
 
@@ -2355,7 +2356,16 @@ def ReadGALFITout(inputf,galpar):
             print(errmsg)
 
 
-        data = np.zeros((galpar.ymax, galpar.xmax), dtype=np.float64)
+        
+        #creates empty mask
+        hdu = fits.open(galpar.outimage)
+        tempimg = (hdu[1].data.copy()).astype(float)
+        hdu.close()
+
+        yaxis=tempimg.shape[0]
+        xaxis=tempimg.shape[1]
+
+        data = np.zeros((yaxis , xaxis ), dtype=np.float64)
         hdu = fits.PrimaryHDU(data=data)
         hdu.writeto(galpar.tempmask, overwrite=True)
 

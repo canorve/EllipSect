@@ -1027,7 +1027,7 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
 
             print("mean sky: {:.2f} mean std: {:.2f} ".format(ysortsbc[idgrad].mean(),ysortsbcerr[idgrad].mean()))
             idmin=np.where(np.min(np.abs(ygrad[idgrad])) == np.abs(ygrad[idgrad]))
-            print("minimum grad: sky: {:.2f} std: {:.2f} rad: {:.2f} ".format(ysortsbc[idgrad][idmin][0],ysortsbcerr[idgrad][idmin][0],xsortrad[idgrad][idmin][0]*galpar.scale))
+            print("minimum grad: sky: {:.2f} std: {:.2f} rad: {:.2f} ".format(ysortsbc[idgrad][idmin][0],ysortsbcerr[idgrad][idmin][0],xsortrad[idgrad][idmin][0]))
 
         else:
             print("Can't determine sky because gradient never turns positive ")

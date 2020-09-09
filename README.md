@@ -376,8 +376,11 @@ described in Cappellari, MNRAS, 333, 400 (2002).
 
 ## Questions?
 
-Do you have questions or suggestions?
-Please send an email to canorve [at] gmail [dot] com
+Do you have any questions or suggestions?
+Please send an email to canorve [at] gmail [dot] com 
+or open an [issue](https://github.com/canorve/EllipSect/issues)
+
+I'm open to new ideas that can benefit the GALFIT community
 
 ## License
 

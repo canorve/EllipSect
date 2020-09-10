@@ -11,7 +11,7 @@ plots for separate angles.
 Download  or clone this code. These codes are
 written for python 3.
 
-The python libraries used for those scripts are:
+The python libraries used are:
 - numpy
 - sys
 - os
@@ -24,24 +24,22 @@ The python libraries used for those scripts are:
 - warnings
 - platform
 
-The main programs are:
-
-**EllipSect** 
-
-**SbProf** 
+Although GALFIT is not *strictly* required, EllipSect needs the GALFIT output files (GALFIT.XX) to work.
 
 
 ## Code:
 
-** [EllipSect.py](EllipSect.py)**
+**[EllipSect.py](EllipSect.py)**
 
-This is a "quick" substitute for IRAF's ellipse routine. It 
+This code is similar to IRAF's ellipse routine. It 
 creates a Surface brightness profile for the galaxy and model.
 
 In addition, *EllipSect* can compute variables such as Absolute Magnitude, 
 luminosity, Flux, total apparent magnitude, Bulge to Total Ratio, Tidal, Chinu
-in the sectors ellipse, Bumpiness, SNR, AIC, BIC, mean surface brightness,
-percentage of total light per component, radius at 90% of light (Sersic component only), effective radius in kpc, etc.  
+in the sectors ellipse, Bumpiness, Signal to Noise Ratio, Akaike Information criterion, 
+Bayesian information criterion, mean surface brightness at effective radius, percentage 
+of total light per component, radius at 90% of light (Sersic component only), 
+effective radius in kpc, etc.  
 
 ## Additional Libraries: mgefit
 
@@ -149,11 +147,11 @@ Any of the following options disabled the connection to NED
 
 ## Notes
 
-* EllipSect works for GALFIT version $> 3.0.7$ Check this because you will
+* EllipSect works for GALFIT version >*3.0.7* Check this because you will
     have issues for *-comp* option.
 
 * EllipSect uses the mask image (option "*F*" GALFIT) only if this
-   is a **FITS** image. In case your mask is an *ASCII* file, you can convert it to **FITS** using the [xy2fits.py](xy2fits.md) tool.
+   is a **FITS** image. In case your mask is an *ASCII* file, you can convert it to **FITS** using the [xy2fits.py](https://github.com/canorve/GALFITools/blob/master/docs/xy2fits.md) tool.
 
 
 * EllipSect uses axis ratio (*q*) and position angle (*pa*) to create an "ellipse" *grid* using the function *sectors_photometry* from the *mgefit* library. Unlike IRAF's Ellipse, *q* and *pa* are fixed through radius. See the images below: 

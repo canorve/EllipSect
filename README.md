@@ -26,8 +26,9 @@ The python libraries used for those scripts are:
 
 The main programs are:
 
-** EllipSect ** 
-** SbProf ** 
+**EllipSect** 
+
+**SbProf** 
 
 
 ## Code:

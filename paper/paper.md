@@ -79,7 +79,7 @@ The program is easily executed via the command line. It only requires
 the latest GALFIT's output file. Example: 
 
 ``` 
-./EllipSect galfit.01
+./EllipSect.py galfit.01
 ``` 
 
 This will generate the two graphs like the ones shown in figure 1. The _-help_ option will show additional features of the program.
@@ -88,6 +88,8 @@ This will generate the two graphs like the ones shown in figure 1. The _-help_ o
 
 This is part of a larger project where this program will be adapted to analyze 
 data images that contain hundreds of galaxies such as galaxy clusters. 
+
+
 
 # Acknowledgements
 

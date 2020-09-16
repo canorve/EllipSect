@@ -1,6 +1,8 @@
 
 # EllipSect
 
+[![DOI](https://zenodo.org/badge/282223217.svg)](https://zenodo.org/badge/latestdoi/282223217)
+
 EllipSect.py creates surface brightness profiles
 for galaxy and galfit model from the galfit output: galfit.XX. 
 See peng et al. (2002). It also creates multiple surface brightness 

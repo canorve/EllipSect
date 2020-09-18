@@ -10,21 +10,21 @@ authors:
   - name: Christopher Añorve
     orcid: 0000-0002-3721-8869
     affiliation: 1
-  - name: Omar U. Reyes-Amador
-    orcid: 0000-0001-7707-7389
-    affiliation: 2
   - name: Emmanuel Ríos-López
     orcid: 0000-0002-4436-221X
-    affiliation: "1, 3"
+    affiliation: "1, 2"
+  - name: Omar U. Reyes-Amador
+    orcid: 0000-0001-7707-7389
+    affiliation: 3
 
 affiliations:
  - name: Facultad de Ciencias de la Tierra y el Espacio, Universidad Autónoma de Sinaloa, Blvd. de la Americas y Av. Universitarios S/N, Ciudad Universitaria, C.P. 80010 Culiacán, Sinaloa, México
    index: 1
- - name:  Instituto de Radioastronomía y Astrofísica, UNAM, Campus Morelia, AP 3-72, CP 58089, México
-   index: 2
  - name: Instituto Nacional de Astrofísica Óptica y Electrónica (INAOE), Apartado Postal 51 y 216, 72000 Puebla, Mexico    
+   index: 2
+- name:  Instituto de Radioastronomía y Astrofísica, UNAM, Campus Morelia, AP 3-72, CP 58089, México
    index: 3
-date: 21 August 2020
+date: 18 September 2020
 bibliography: paper.bib
 ---
 
@@ -33,9 +33,9 @@ bibliography: paper.bib
 Galaxies are the building blocks of the large scale structure of the Universe. 
 The larger ones contain billions of stars that can form one or various stellar components such as bulges, bars, disks and rings. Consequently, these make a wide variety in galaxy morphology. The quantification of the galaxy components is a fundamental step to understand their structure and composition. For instance, they can be compared with predictions of simulations of galaxy formation and see their evolution over time. Using models that fit their light distribution is one way to study those components. Such models are mathematical functions of surface brightness for the different components of the galaxies. A suitable model that reliably represents the physical properties requires a detailed inspection of the fitted models.
 
-A well-known program for modeling the surface brightness of astronomical sources is GALFIT [[@peng02] 1753 cites at the moment of writing this document]. It allows to use a wide variety of standard functions such as Sérsic [@sersic68], de Vaucouleurs [@devau48], Nuker, gaussian, among others. GALFIT provides the fitted model parameters, errors, and a FITS (Flexible Image Transport System) cube image to check if the galaxy model is the appropriate one. The FITS file contains the galaxy, model and residual images. Typically, a visual check on the residual image can be difficult to interpret without additional information in addition to the $\chi^2_{\nu}$. Nevertheless, users construct surface brightness profiles from the GALFIT's output data to compare the galaxy and model images.
+A well-known program for modeling the surface brightness of astronomical sources is GALFIT [[@peng02] 1763 cites at the moment of writing this document]. It allows to use a wide variety of standard functions such as Sérsic [@sersic68], de Vaucouleurs [@devau48], Nuker, gaussian, among others. GALFIT provides the fitted model parameters, errors, and a FITS (Flexible Image Transport System) cube image to check if the galaxy model is the appropriate one. The FITS file contains the galaxy, model and residual images. Typically, a visual check on the residual image can be difficult to interpret without extra information in addition to the $\chi^2_{\nu}$ statistics.  Nevertheless, users construct surface brightness profiles from the GALFIT's output data to compare the galaxy and model images.
 
-GALFIT users have been using plots of surface brightness vs. radius to guide the eye for deviations from the galaxy and the model. To do this, they have been using IRAF's (Image Reduction and Analysis Facility) task *ellipse* [@jed87], which is another well-known program to extract surface brightness profiles through ellipse fitting of the galaxy isophotes (regions of the galaxy where the surface brightness is constant). This process requires the data format translation from GALFIT to *ellipse*. This takes time if the user needs to test various models to select the appropriate one for the galaxy. An additional issue is that the development and maintenance of IRAF is discontinued since 2013. Nowadays, IRAF is actually supported by the astronomy community. 
+GALFIT users have been using plots of surface brightness vs. radius to guide the eye for deviations from the galaxy and the model. To do this, they have been using IRAF's (Image Reduction and Analysis Facility) task *ellipse* [@jed87], which is another well-known program to extract surface brightness profiles through ellipse fitting of the galaxy isophotes (regions of the galaxy where the surface brightness is constant). This process requires the data format translation from GALFIT to *ellipse*. This takes time if the user needs to test various models to select the appropriate one for the galaxy. An additional issue is that the development and maintenance of IRAF is discontinued since 2013. Nowadays, IRAF is actually supported by the Astronomy community. 
 
 Hence, we introduce ``EllipSect``, which is a Python tool to make surface brightness profiles and extract complementary photometry from the GALFIT's output. The program aids the users to select, remove or change model components. The goal is to provide as much information as possible to select the best model. ``EllipSect``'s outputs include graphs of the surface brightness profiles for the galaxy and the model. In case of multiple simultaneous galaxy fitting, it takes into account the surface brightness of neighbor galaxies to the galaxy of interest. This is unfeasible to do with IRAF's task *ellipse* since it only takes one at a time. It can also include the individual model components for a detailed analysis. Furthermore, ``EllipSect`` complements the GALFIT photometry by adding other data besides the ones extracted from the model's parameters, such as the total magnitude, luminosity, component to total luminosity ratio, among others photometric variables (see section below). 
 
@@ -50,7 +50,7 @@ The program only requires the GALFIT's output file. In this simple mode, ``Ellip
 
 The surface brightness is averaged through the perimeter of concentric ellipses along the major axis of the galaxy. The multiple plots aids the users to visualize where a fitted model fails to match with the galaxy. See figure 1 for an example using 7 Gaussian components for an elliptical galaxy.
 
-![Example of EllipSect output for an elliptical galaxy and its model that was fitted with 7 gaussian components. In both panels the color red represents the galaxy and the blue one the GALFIT model. The color for each component is shown in the (top right) box. Left panel: Surface brightness average vs. radius along the major axis. The model also has error bars since it is the average of individual model components. Right panel: Multiple plots of surface brightness of galaxy and model at different angles from major axis (major axis is the one with $0\deg$). The error percentage is shown at the right side of the multi plot. ](Fig1.png)
+![Example of EllipSect output for an elliptical galaxy and its model that was fitted with 7 gaussian components. In both panels the color red represents the galaxy and the blue one the GALFIT model. Left panel: Surface brightness average vs. radius along the major axis. The color for each component is shown in the (top right) box. The model also has error bars since it depends on two things: 1) the average over the ellipse of the individual components in that radius and 2) the size of the sector. Right panel: Multiple plots of surface brightness of galaxy and model at different angles from major axis (major axis is the one with $0\deg$). The error percentage is shown at the right side of the multi plot. ](Fig1.png)
 
 
 ## Different Modes

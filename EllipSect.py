@@ -2651,11 +2651,14 @@ def OutPhot(params, galpar, galcomps, sectgalax, sectmodel, sectcomps):
 
     Num=len(galcomps.Flux[maskmag])
 
-    galcomps.PerLight[maskmag]= (galcomps.Flux[maskmag] / totFlux )
-    namecomp=galcomps.NameComp[maskmag]
-    N=galcomps.N[maskmag]
 
-    N=N.astype(int)
+    if (Num > 0):
+
+        galcomps.PerLight[maskmag]= (galcomps.Flux[maskmag] / totFlux )
+        namecomp=galcomps.NameComp[maskmag]
+        N=galcomps.N[maskmag]
+
+        N=N.astype(int)
 
     #n=0
     #while(n<Num):
@@ -2848,10 +2851,13 @@ def OutPhot(params, galpar, galcomps, sectgalax, sectmodel, sectcomps):
 
     OUTPHOT = open (params.output,"w")
 
-    lineout= "#   Output photometry for {} \n".format(galpar.outimage)
+    lineout= "#   Output photometry for {} file \n".format(galpar.outimage)
     OUTPHOT.write(lineout)
 
     lineout= "#\n"
+    OUTPHOT.write(lineout)
+
+    lineout = "# Photometry for object: {} (use -object option to change it) \n".format(params.objname)
     OUTPHOT.write(lineout)
 
     lineout = "# All photometric quantities are computed for filter {} (use -filter option to change it) \n".format(params.band)

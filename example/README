@@ -7,6 +7,16 @@ Chien Peng
 
 After this, type: 
 
-	./EllipSect galfit.01
+	./EllipSect.py galfit.01
 
 Chris
+
+---------------
+
+If you want to check more options, download and uncompress Example.tar.gz
+
+after that, type:
+
+./EllipSect.py galfit.46 -comp -phot -object A85 -filter R
+
+check outputs files

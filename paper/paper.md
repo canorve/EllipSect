@@ -46,7 +46,8 @@ Astronomy community. It omits any direct interaction with the code or translatio
 
 # ``EllipSect``
 
-The program only requires the GALFIT's output file. In this simple mode, ``EllipSect`` makes two graphs: one contains the surface brightness average along major axis, and the other one contains the surface brightness for different angles displayed in multiple plots.
+The program is easily executed via the command line. It only requires 
+the latest GALFIT's output file. In this simple mode, ``EllipSect`` makes two graphs: one contains the surface brightness average along major axis, and the other one contains the surface brightness for different angles displayed in multiple plots.
 
 The surface brightness is averaged through the perimeter of concentric ellipses along the major axis of the galaxy. The multiple plots aids the users to visualize where a fitted model fails to match with the galaxy. See figure 1 for an example using 7 Gaussian components for an elliptical galaxy.
 
@@ -72,19 +73,6 @@ Below is shown a summary of the different features for ``EllipSect``:
 - **NED**: ``EllipSect`` connects to NED (NASA/IPAC Extragalactic Database) to download data for the galaxy to estimate absolute magnitude, luminosity, mean surface brightness, etc. 
  
  
- 
-
-# Command line execution
-
-The program is easily executed via the command line. It only requires 
-the latest GALFIT's output file. Example: 
-
-``` 
-./EllipSect.py galfit.01
-``` 
-
-This will generate the two graphs like the ones shown in figure 1. The _-help_ option will show additional features of the program.
-
 # Future
 
 This is part of a larger project where this program will be adapted to analyze 

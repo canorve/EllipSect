@@ -24,7 +24,7 @@ affiliations:
    index: 2
  - name:  Instituto de Radioastronomía y Astrofísica, UNAM, Campus Morelia, AP 3-72, CP 58089, México
    index: 3
-date: 18 September 2020
+date: 25 September 2020
 bibliography: paper.bib
 ---
 
@@ -37,7 +37,7 @@ A well-known program for modeling the surface brightness of astronomical sources
 
 GALFIT users have been using plots of surface brightness vs. radius to guide the eye for deviations from the galaxy and the model. To do this, they have been using IRAF's (Image Reduction and Analysis Facility) task *ellipse* [@jed87], which is another well-known program to extract surface brightness profiles through ellipse fitting of the galaxy isophotes (regions of the galaxy where the surface brightness is constant). This process requires the data format translation from GALFIT to *ellipse*. This takes time if the user needs to test various models to select the appropriate one for the galaxy. An additional issue is that the development and maintenance of IRAF is discontinued since 2013. Nowadays, IRAF is actually supported by the Astronomy community. 
 
-Hence, we introduce ``EllipSect``, which is a Python tool to make surface brightness profiles and extract complementary photometry from the GALFIT's output. The program aids the users to select, remove or change model components. The goal is to provide as much information as possible to select the best model. ``EllipSect``'s outputs include graphs of the surface brightness profiles for the galaxy and the model. In case of multiple simultaneous galaxy fitting, it takes into account the surface brightness of neighbor galaxies to the galaxy of interest. This is unfeasible to do with IRAF's task *ellipse* since it only takes one at a time. It can also include the individual model components for a detailed analysis. Furthermore, ``EllipSect`` complements the GALFIT photometry by adding other data besides the ones extracted from the model's parameters, such as the total magnitude, luminosity, component to total luminosity ratio, among others photometric variables (see section below). 
+Hence, we introduce ``EllipSect``, which is a Python tool to make surface brightness profiles and extract complementary photometry from the GALFIT's output. The program aids the users to select, remove or change model components. The goal is to provide as much information as possible to select the best model. ``EllipSect``'s outputs include graphs of the surface brightness profiles for the galaxy and the model. In case of multiple simultaneous galaxy fitting, it takes into account the surface brightness of neighbor galaxies to the target galaxy. This is unfeasible to do with IRAF's task *ellipse* since it only takes one at a time. It can also include the individual model components for a detailed analysis. Furthermore, ``EllipSect`` complements the GALFIT photometry by adding other data besides the ones extracted from the model's parameters, such as the total magnitude, luminosity, component to total luminosity ratio, among others photometric variables (see section below). 
 
 Various scripts for GALFIT have been used before [@haussler13; @barden12; @anorve12; @vikram10], however, they cover other needs. For instance, their codes run GALFIT to automatically fit thousands of objects without user interaction on images containing multiple galaxies.
 

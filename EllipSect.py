@@ -342,6 +342,13 @@ class InputParams:
     flagnedfile=False
 
     flagradsky=False
+    flagrandsky=False
+
+
+    flagskyRinit = False
+    flagskybox =  False
+    flagskynum = False
+    flagskywidth = False
 
 
     #init
@@ -356,7 +363,7 @@ class InputParams:
     minlevel=0
     sectors=19
 
-    insky=0
+
 
     #input file
     galfile= "galfit.01"
@@ -395,6 +402,15 @@ class InputParams:
     nedfile="default.xml"
 
 
+    # sky parameters:
+    insky=0
+
+    skyRinit = 200
+    skybox = 20
+    skynum = 20
+    skywidth = 20
+
+
 ### class for Galfit parameters
 class GalfitParams:
 
@@ -403,6 +419,8 @@ class GalfitParams:
     inxc=1        #same as above xc but used for input image
     inyc=1        #same as above yc but used for input image
     q=1         #for sectors_photometry
+    rad=0         #for sky rad 
+    serind=0         #for sky rad 
     ang=0       #for sectors_photometry
     skylevel=0
     scale=1
@@ -478,7 +496,9 @@ def InputSys(params,argv):
     ''' Read user's input '''
     OptionHandleList = ['-logx', '-q', '-pa','-comp','-pix','-ranx','-rany','-grid','-dpi','-sbout','-noplot',
         '-minlevel','-sectors','-phot','-object','-filter','-snr','-help','-checkimg','-noned','-distmod','-magcor',
-        '-scalekpc','-sbdim','-model','-sky','-keep','-ned','-gradsky']
+        '-scalekpc','-sbdim','-model','-sky','-keep','-ned','-gradsky','-randsky','-skyRad','-skynum','-skybox','-skywidth']
+
+
     options = {}
     for OptionHandle in OptionHandleList:
         options[OptionHandle[1:]] = argv[argv.index(OptionHandle)] if OptionHandle in argv else None
@@ -544,7 +564,17 @@ def InputSys(params,argv):
         params.flagnedfile=True
     if options['gradsky'] != None:
         params.flagradsky=True
+    if options['randsky'] != None:
+        params.flagrandsky=True
 
+    if options['skyRad'] != None:
+        params.flagskyRinit=True
+    if options['skywidth'] != None:
+        params.flagskywidth=True
+    if options['skybox'] != None:
+        params.flagskybox=True
+    if options['skynum'] != None:
+        params.flagskynum=True
 
     # check for unrecognized options:
     sysopts=argv[2:]
@@ -675,6 +705,33 @@ def InputSys(params,argv):
         params.nedfile=np.str(opt['ned'])
 
 
+    if params.flagskyRinit == True:
+        opt={}
+        OptionHandle="-skyRad"
+        opt[OptionHandle[1:]] = argv[argv.index(OptionHandle)+1]
+        params.skyRinit=np.float(opt['skyRad'])
+
+    if params.flagskybox == True:
+        opt={}
+        OptionHandle="-skybox"
+        opt[OptionHandle[1:]] = argv[argv.index(OptionHandle)+1]
+        params.skybox=np.int(opt['skybox'])
+
+    if params.flagskynum == True:
+        opt={}
+        OptionHandle="-skynum"
+        opt[OptionHandle[1:]] = argv[argv.index(OptionHandle)+1]
+        params.skynum=np.int(opt['skynum'])
+
+
+    if params.flagskywidth == True:
+        opt={}
+        OptionHandle="-skywidth"
+        opt[OptionHandle[1:]] = argv[argv.index(OptionHandle)+1]
+        params.skywidth=np.int(opt['skywidth'])
+
+
+
     params.galfile= sys.argv[1]
 
     return True
@@ -684,7 +741,7 @@ def InputSys(params,argv):
 def Help():
 
     print ("Usage:\n %s [GALFITOutputFile] [-logx] [-q AxisRatio] [-pa PositionAngle] [-comp] [-pix] [-ranx/y Value] [-grid] [-dpi Value] [-model File] [-phot] [-sky Value] " % (sys.argv[0]))
-    print ("More options: [-sbout] [-noplot] [-minlevel Value] [-sectors Value] [-object Name] [-filter Name] [-snr] [-help] [-checkimg] [-noned] [-distmod Value] [-magcor Value] [-scalekpc Value] [-sbdim Value] [-keep] [-ned XmlFile] [-gradsky ] ") 
+    print ("More options: [-sbout] [-noplot] [-minlevel Value] [-sectors Value] [-object Name] [-filter Name] [-snr] [-help] [-checkimg] [-noned] [-distmod Value] [-magcor Value] [-scalekpc Value] [-sbdim Value] [-keep] [-ned XmlFile] [-gradsky ] [-randsky ] [-skyRad Value] [-skynum Value] [-skybox Value] [-skywidth Value] ") 
 
     print ("GALFITOutputFile: GALFIT output file ")
     print ("logx: activates X-axis as logarithm ")
@@ -726,8 +783,14 @@ def Help():
     print ("                      Check sectors_photometry manual")
     print ("checkimg: save the images used for sectors_photometry in individual components")
     print ("gradsky: computes sky using the gradient method ")
+    print ("randsky: computes sky averaging random boxes ") 
 
+    print ("skyRad: for randsky, it creates a mask for the main target using this radio. For gradsky it is where the program stars to compute the gradient.")
+    print ("skynum: Number of boxes used in randsky. Default = 20")
+    print ("skywidth: width of the ring for gradsky. Default = 20")
+    print ("skybox: pixel size of the box for randsky. Default = 20") 
 
+ 
     print ("help: This menu ")
 
 
@@ -994,82 +1057,81 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
     xradq, ysbq, ysberrq, ysbc, ysbcerr  = FindSBCounts(xarcg, ymgeg, ymgec, n_sectors)
 
 
+    #######################################
+    #######################################
+    #######################################
+
     # computing sky as a reference.
     if params.flagradsky:
 
+        # computing sky with the gradient method
         print("Computing sky as a reference. This will not be used for output computations.")
 
-        #change sorting 
-        gradidx = np.argsort(xradq)
+        ImageFile = galpar.inputimage
+        MaskFile = galpar.maskimage
 
-        xsortrad=xradq[gradidx]
-        ysortsbc=ysbc[gradidx]
-        ysortsbcerr=ysbcerr[gradidx]
+        xx = galpar.xc
+        yy = galpar.yc
 
-        ygrad=np.gradient(ysortsbc)
+        thetadeg = galpar.ang
+        e = 1 - galpar.q
 
-        idgrad=np.where(ygrad >= 0)
-
-        
-        print("1) gradient method: ")
-        print("std sky is from averaging over sectors. Do not use it for sigma image ")
-
-        if any(idgrad[0]):
-
-            for idx, item in enumerate(xsortrad[idgrad]):
-
-                #print("sky: {:.2f} , std: {:.2f} ".format(ysbc[idgrad][6],ysbcerr[idgrad][6]))
-                #if idx > 1 and idx < 10:
-                #print("idx: ",idx)
-                print("sky: {:.2f} (ADUs), std: {:.2f} radius: {:.2f} (pix), grad: {:.2f} ".format(ysortsbc[idgrad][idx],ysortsbcerr[idgrad][idx],xsortrad[idgrad][idx],ygrad[idgrad][idx]))
-
-            print("")
-
-            print("mean sky: {:.2f} mean std: {:.2f} ".format(ysortsbc[idgrad].mean(),ysortsbcerr[idgrad].mean()))
-            idmin=np.where(np.min(np.abs(ygrad[idgrad])) == np.abs(ygrad[idgrad]))
-            print("minimum grad: sky: {:.2f} std: {:.2f} rad: {:.2f} ".format(ysortsbc[idgrad][idmin][0],ysortsbcerr[idgrad][idmin][0],xsortrad[idgrad][idmin][0]))
-
-        else:
-            print("Can't determine sky because gradient never turns positive ")
-            print("Try increasing the image region to fit ")
+        width = params.skywidth
 
 
+        Rinit = 200 #default
+        ###
+        if params.flagskyRinit:
+            Rinit = params.skyRinit
+        elif galpar.rad <= 0.1:
+            Rad90= galpar.rad * (1.53 + 0.73 * galpar.serind+ 0.07 * galpar.serind**2) 
+            Rinit = 1*Rad90 # 1 times the R 90% of light radius
 
 
-        print("")
-        print("2) Excluding the top and bottom 20%:") 
+        mean,std, median,rad = SkyCal().GetEllipSky(ImageFile,MaskFile,xx,yy,thetadeg,e,Rinit,width)
+
+        print("Total sky:  mean, std, median = ",mean,std,median)
 
 
-        if  (os.path.isfile(galpar.maskimage)): 
-            skymask = galpar.mask == False
-            #img=galpar.img[skymask]  + galpar.skylevel
-            img=galpar.img[skymask].copy()
-            img = img + galpar.skylevel
-        else:
-            #img=galpar.img  + galpar.skylevel
-            img=galpar.img.copy()
-            img = img + galpar.skylevel
+    if params.flagrandsky:
+
+        # computing sky  using random boxes across the image
+        print("Computing sky as a reference. This will not be used for output computations.")
+
+        ImageFile = galpar.inputimage
+        MaskFile = galpar.maskimage
+
+        xx = galpar.xc
+        yy = galpar.yc
+
+        thetadeg = galpar.ang
+        e = 1 - galpar.q
+
+        ###
+
+        box = params.skybox
+        num = params.skynum
 
 
-
-        flatimg=img.flatten()  
-        flatimg.sort()
-
-        tot=len(flatimg)
-
-        top=round(.8*tot)
-        bot=round(.2*tot)
-
-        img2=flatimg[bot:top]
-
-        skymean=np.mean(img2)
-        skysig=np.std(img2)
-
-        print("mean sky: {:.2f} (ADUs) ".format(skymean))
-        print("std sky: {:.2f} ".format(skysig))
+        Rinit = 200 #default
+        ###
+        if params.flagskyRinit:
+            Rinit = params.skyRinit
+        elif galpar.rad <= 0.1:
+            Rad90= galpar.rad * (1.53 + 0.73 * galpar.serind+ 0.07 * galpar.serind**2) 
+            Rinit = 3*Rad90 # 3 times the R 90% of light radius
 
 
-    ################
+        ##
+        mean,std, median = SkyCal().RandBox(ImageFile,MaskFile,xx,yy,thetadeg,e,Rinit,box,num)
+        ##
+
+        print("Total sky:  mean, std, median = ",mean,std,median)
+
+
+    #######################################
+    #######################################
+    #######################################
 
     # model
     stidxm = np.argsort(sectmodel.radius)
@@ -2191,6 +2253,13 @@ def ReadGALFITout(inputf,galpar):
                 if tmp[0] == "1)":   # center
                     galpar.xc=float(tmp[1])
                     galpar.yc=float(tmp[2])
+
+                if tmp[0] == "4)":    # Effective radius
+                    galpar.rad=float(tmp[1])
+
+                if tmp[0] == "5)":    # Sersic index 
+                    galpar.serind=float(tmp[1])
+
 
                 if tmp[0] == "9)":    # axis ratio
                     galpar.q=float(tmp[1])
@@ -3740,6 +3809,603 @@ def GetAxis(Image,imgidx,flagidx,num,flagnum):
 
     return ncol, nrow
 
+################################################
+################################################
+################################################
+
+class SkyCal:
+
+    def RandBox(self,ImageFile,MaskFile,xx,yy,thetadeg,e,Rinit,box,num):
+
+        self.xx = xx 
+        self.yy = yy
+
+        self.thetadeg= thetadeg
+
+        self.e = e
+        self.Rinit = Rinit
+       
+        self.box = box 
+        self.num = num
+
+        ###
+
+        hdumask = fits.open(MaskFile)
+        self.maskimg = hdumask[0].data
+        hdumask.close()
+
+
+        hdu=fits.open(ImageFile)
+        self.img = hdu[0].data
+        hdu.close()
+
+        ####
+        
+        (self.nrow,self.ncol)=self.img.shape
+
+
+        xmin,xmax,ymin,ymax,Rend = self.GetXYRBorder()
+
+        #print("border x ",xmin,xmax)
+        #print("border y ",ymin,ymax)
+        #print("Rborder ",Rkron)
+
+        mean, std, median  = self.GetRandBoxSky( Rinit, Rend )
+
+        #print("Total sky:  mean, std, median = ",mean,std,median)
+
+        meansky = np.mean(mean)
+        medsky = np.median(median)
+        rmstd = np.sqrt(np.mean(std**2))
+
+
+
+        return meansky, rmstd, medsky
+
+
+    def GetXYRBorder(self):
+        "this subroutine get the coordinates of the border"
+
+        q = (1 - self.e)
+
+        theta = self.thetadeg * (np.pi / 180)  # rads!!
+
+        thetax=np.sqrt((np.cos(theta))**2 + (q**2)*(np.sin(theta))**2 )
+        thetay=np.sqrt((q**2)*(np.cos(theta))**2 + (np.sin(theta))**2 )
+
+
+        if (self.thetadeg >-45 and self.thetadeg <= 45):
+
+            xmax=self.ncol
+            xmin =1
+            R1 = (xmax - self.xx)/thetax
+            R2 = (self.xx - xmin)/thetax
+
+            if (np.abs(R1)>=np.abs(R2)):
+                R = R1
+            else:
+                R = R2
+
+        elif (self.thetadeg >45 and self.thetadeg <= 135):
+            ymax=self.nrow
+            ymin =1
+            R1 = (ymax - self.yy)/thetay
+            R2 = (self.yy - ymin)/thetay
+
+            if (np.abs(R1)>=np.abs(R2)):
+                R = R1
+            else:
+                R = R2
+
+        elif (self.thetadeg >135 and self.thetadeg <= 225):
+            xmax=1
+            xmin =self.ncol
+
+            R1 = (xmax - self.xx)/thetax
+            R2 = (self.xx - xmin)/thetax
+
+            if (np.abs(R1)>=np.abs(R2)):
+                R = R1
+            else:
+                R = R2
+
+     
+        elif (self.thetadeg >225 and self.thetadeg <= 315):
+            ymax=1
+            ymin =self.nrow
+            R1 = (ymax - self.yy)/thetay
+            R2 = (self.yy - ymin)/thetay
+
+            if (np.abs(R1)>=np.abs(R2)):
+               R = R1
+            else:
+               R = R2
+
+
+        bim = q * R
+        # getting size
+
+        xmin = self.xx - np.sqrt((R**2) * (np.cos(theta))**2 +
+                         (bim**2) * (np.sin(theta))**2)
+
+        xmax = self.xx + np.sqrt((R**2) * (np.cos(theta))**2 +
+                         (bim**2) * (np.sin(theta))**2)
+
+        ymin = self.yy - np.sqrt((R**2) * (np.sin(theta))**2 +
+                         (bim**2) * (np.cos(theta))**2)
+
+        ymax = self.yy + np.sqrt((R**2) * (np.sin(theta))**2 +
+                         (bim**2) * (np.cos(theta))**2)
+
+        mask = xmin < 1
+        if mask.any():
+            if isinstance(xmin,np.ndarray):
+                xmin[mask] = 1
+            else:
+                xmin = 1
+
+        mask = xmax > self.ncol
+        if mask.any():
+            if isinstance(xmax,np.ndarray):
+                xmax[mask] = self.ncol
+            else:
+                xmax = self.ncol
+
+        mask = ymin < 1
+        if mask.any():
+            if isinstance(ymin,np.ndarray):
+                ymin[mask] = 1
+            else:
+                ymin = 1
+
+        mask = ymax > self.nrow
+        if mask.any():
+            if isinstance(ymax,np.ndarray):
+                ymax[mask] = self.nrow
+            else:
+                ymax =self.nrow
+
+        xmin=np.int(np.round(xmin))
+        ymin=np.int(np.round(ymin))
+        xmax=np.int(np.round(xmax))
+        ymax=np.int(np.round(ymax))
+
+
+        return (xmin,xmax,ymin,ymax,np.int(R))
+
+
+    def GetRandBoxSky(self, Rinit, Rmax):
+
+        #print("Rinit, Rmax ",Rinit, Rmax)
+        (nrow,ncol)=self.img.shape
+        # it obtains corners of Rinit
+        (xmino, xmaxo, ymino, ymaxo) = self.GetSize(self.xx, self.yy, Rinit, self.thetadeg, self.e, self.ncol, self.nrow) 
+        # it obtains corners of Rmax
+        (xminf, xmaxf, yminf, ymaxf) = self.GetSize(self.xx, self.yy, Rmax, self.thetadeg, self.e, self.ncol, self.nrow) 
+
+        #print("Coordenadas inner box ",xmino, xmaxo, ymino, ymaxo)
+        #print("Coordenadas outer box ",xminf, xmaxf, yminf, ymaxf)
+        
+        Value=1000 #  value of counts  for  the mask of  main target
+        self.maskimg = self.MakeKron(self.maskimg, Value, self.xx, self.yy, Rinit, self.thetadeg, self.e, xminf, xmaxf, yminf, ymaxf) 
+
+        ########
+
+        sky = np.array([])
+        skystd = np.array([])
+        skymed = np.array([])
+
+
+        cont=self.num # este es el numero de cajas que va a utilizar 
+        for idx,item in enumerate(range(cont)):
+
+            flatimg,xinit,yinit=self.GetRandomPatch(self.img,self.maskimg,self.box,xmino,xmaxo,ymino,ymaxo,xminf,xmaxf,yminf,ymaxf)
+            xfin = xinit + self.box - 1
+            yfin = yinit + self.box - 1 
+
+
+            flatimg.sort()
+
+            boxcont=0
+
+            while( not(flatimg.any()) and (boxcont < 10)):
+
+                if (boxcont == 0):
+                    print("Picking another box ")
+
+                flatimg,xinit,yinit=self.GetRandomPatch(self.img,self.maskimg,self.box,xmino,xmaxo,ymino,ymaxo,xminf,xmaxf,yminf,ymaxf)
+                xfin = xinit + self.box - 1
+                yfin = yinit + self.box - 1
+
+
+                flatimg.sort()
+
+                boxcont+=1 # avoid eternal loop
+
+            if (boxcont == 10):
+                print("max. iteration reached. I couldn't found a box")
+     
+
+            tot=len(flatimg)
+
+            top=round(.8*tot)
+            bot=round(.2*tot)
+            
+            imgpatch=flatimg[bot:top]
+
+            linebox = "Box:{}   xinit/fin: {}-{}; yinit/fin: {}-{}  ".format(item+1,xinit,xfin,yinit,yfin)
+            #print(linebox)
+
+            mean=np.mean(imgpatch)
+            std=np.std(imgpatch)
+
+            median=np.median(imgpatch)
+
+            linemean = "sky  mean = {:.2f}; std = {:.2f}; median = {}".format(mean,std,median)
+            print(linemean)
+
+            sky=np.append(sky,mean)
+            skystd=np.append(skystd,std)
+            skymed=np.append(skymed,median)
+
+        return sky,skystd,skymed
+
+
+    def MakeKron(self,imagemat, idn, x, y, R, theta, ell, xmin, xmax, ymin, ymax):
+        "This subroutine create a Kron ellipse within a box defined by: xmin, xmax, ymin, ymax"
+
+        xmin = np.int(xmin)
+        xmax = np.int(xmax)
+        ymin = np.int(ymin)
+        ymax = np.int(ymax)
+
+        q = (1 - ell)
+        bim = q * R
+
+        theta = theta * np.pi / 180  # Rads!!!
+
+        ypos, xpos = np.mgrid[ymin - 1:ymax, xmin - 1:xmax]
+
+        dx = xpos - x
+        dy = ypos - y
+
+        landa = np.arctan2(dy, dx)
+
+        mask = landa < 0
+        if mask.any():
+            landa[mask] = landa[mask] + 2 * np.pi
+
+        landa = landa - theta
+
+        angle = np.arctan2(np.sin(landa) / bim, np.cos(landa) / R)
+
+        xell = x + R * np.cos(angle) * np.cos(theta) - bim * \
+            np.sin(angle) * np.sin(theta)
+        yell = y + R * np.cos(angle) * np.sin(theta) + bim * \
+            np.sin(angle) * np.cos(theta)
+
+        dell = np.sqrt((xell - x)**2 + (yell - y)**2)
+        dist = np.sqrt(dx**2 + dy**2)
+
+        mask = dist < dell
+        imagemat[ypos[mask], xpos[mask]] = idn
+
+        return imagemat
+
+    def GetSize(self,x, y, R, theta, ell, ncol, nrow):
+        "this subroutine get the maximun"
+        "and minimim pixels for Kron and sky ellipse"
+        # k Check
+        q = (1 - ell)
+        bim = q * R
+
+        theta = theta * (np.pi / 180)  # rads!!
+
+        # getting size
+
+        xmin = x - np.sqrt((R**2) * (np.cos(theta))**2 +
+                           (bim**2) * (np.sin(theta))**2)
+
+        xmax = x + np.sqrt((R**2) * (np.cos(theta))**2 +
+                           (bim**2) * (np.sin(theta))**2)
+
+        ymin = y - np.sqrt((R**2) * (np.sin(theta))**2 +
+                           (bim**2) * (np.cos(theta))**2)
+
+        ymax = y + np.sqrt((R**2) * (np.sin(theta))**2 +
+                           (bim**2) * (np.cos(theta))**2)
+
+        mask = xmin < 1
+        if mask.any():
+            if isinstance(xmin,np.ndarray):
+                xmin[mask] = 1
+            else:
+                xmin = 1
+
+        mask = xmax > ncol
+
+        if mask.any():
+            if isinstance(xmax,np.ndarray):
+                xmax[mask] = ncol
+            else:
+                xmax = ncol
+
+        mask = ymin < 1
+        if mask.any():
+            if isinstance(ymin,np.ndarray):
+                ymin[mask] = 1
+            else:
+                ymin = 1
+
+        mask = ymax > nrow
+        if mask.any():
+            if isinstance(ymax,np.ndarray):
+                ymax[mask] = nrow
+            else:
+                ymax = nrow
+
+        xmin=np.int(np.round(xmin))
+        ymin=np.int(np.round(ymin))
+        xmax=np.int(np.round(xmax))
+        ymax=np.int(np.round(ymax))
+
+
+        return (xmin, xmax, ymin, ymax)
+
+    def GetRandomPatch(self,imagemat,mimg,box,xmino,xmaxo,ymino,ymaxo,xminf,xmaxf,yminf,ymaxf):
+
+        # get a random box patch of the imagemat 
+        xinit,yinit=self.GetRandomCoord(xmino-box,xmaxo+box,ymino-box,ymaxo+box,xminf,xmaxf,yminf,ymaxf)
+
+        xfin = xinit + box  - 1 
+        yfin = yinit + box  - 1
+
+        imagebox=imagemat[yinit - 1:yfin, xinit - 1:xfin]
+        maskbox=mimg[yinit - 1:yfin, xinit - 1:xfin]
+
+        invboxpatch=np.logical_not(maskbox)
+
+
+        return imagebox[invboxpatch],xinit,yinit
+
+
+
+    def GetRandomCoord(self,xmino,xmaxo,ymino,ymaxo,xminf,xmaxf,yminf,ymaxf):
+        #obtains coordinates between the inner and outer box
+        coordinates = [(x,y) for x in np.arange(0,xmaxf) for y in np.arange(0,ymaxf) if not((x >= xmino and x <= xmaxo) and ( y >= ymino and y <= ymaxo))]
+
+        # choose xinit, and yinit from coordinates
+
+        ridx = np.random.randint(0,len(coordinates)-1)
+
+        xinit = coordinates[ridx][0] 
+        yinit = coordinates[ridx][1] 
+
+        return xinit,yinit 
+
+######
+
+
+    def GetEllipSky(self, ImageFile, MaskFile, xx, yy, thetadeg, e, Rinit, width):
+
+        self.xx = xx 
+        self.yy = yy
+
+        self.thetadeg= thetadeg
+
+        self.e = e
+        self.Rinit=Rinit
+       
+        self.width = width 
+
+        # check how many galapagos has to compute sky gradient num = 15?
+        self.NumRings = 5  # number of rings per loop # read this from function?
+        ###
+
+
+        hdumask = fits.open(MaskFile)
+        self.maskimg = hdumask[0].data
+        hdumask.close()
+
+
+        hdu=fits.open(ImageFile)
+        self.img = hdu[0].data
+        hdu.close()
+
+        ####
+ 
+       
+        (self.nrow,self.ncol)=self.img.shape
+
+
+        xmin,xmax,ymin,ymax,Rkron = self.GetXYRBorder()
+
+        #print("border x ",xmin,xmax)
+        #print("border y ",ymin,ymax)
+        #print("Rborder ",Rkron)
+
+        self.R=Rkron
+
+
+        #Rinit=2 # init in 2 pixels 
+
+        q = (1 - self.e)
+
+        #bim = q * self.R   # check this bim and below, is R or Rinit
+        bim = q * Rkron   # check this bim and below, is R or Rinit
+
+
+        #R2 = self.R + self.width # not needed?
+        #bim2 = q * R2
+
+
+#        (xmino, xmaxo, ymino, ymaxo) = self.GetSize(self.xx, self.yy, Rinit, self.thetadeg, self.e, self.ncol, self.nrow) 
+
+        (xmin, xmax, ymin, ymax) = self.GetSize(self.xx, self.yy, Rkron, self.thetadeg, self.e, self.ncol, self.nrow) # obtain corners of R
+
+        theta = self.thetadeg * np.pi / 180  # Rads!!!
+
+        ypos, xpos = np.mgrid[ymin - 1:ymax, xmin - 1:xmax]
+
+
+        patch = self.maskimg[ymin - 1:ymax, xmin - 1:xmax] # logical patch mask image
+
+        self.invpatch=np.logical_not(patch)
+
+        dx = xpos - self.xx
+        dy = ypos - self.yy
+
+        self.dist = np.sqrt(dx**2 + dy**2)
+
+        landa = np.arctan2(dy, dx)
+
+
+        mask = landa < 0
+        if mask.any():
+            landa[mask] = landa[mask] + 2 * np.pi
+
+        landa = landa - theta
+
+
+        Rings=np.arange(self.Rinit,self.R,self.width) # anillos de tamaño width
+        bim=np.arange(self.Rinit*q, self.Rinit*q+self.width*len(Rings), self.width) # asi esta para que de el mismo tamanio que Rings
+       
+        #bRings=Rings*q
+
+
+        sky = np.array([])
+        skymed = np.array([])
+        skystd = np.array([])
+        radius = np.array([])
+
+        flagfirst=True
+
+        count = 0
+        idx=0
+        idx2 = idx + 1
+
+
+        for ind, item in enumerate(Rings):
+
+
+            maskring,flagfirst=self.GetRingMask(Rings,bim,landa,theta,flagfirst, idx,idx2)
+
+
+            flatimg=self.img[ypos[maskring], xpos[maskring]].flatten()  
+            flatimg.sort()
+
+            tot=len(flatimg)
+
+            top=round(.8*tot)
+            bot=round(.2*tot)
+
+
+            imgpatch=flatimg[bot:top]
+
+            mean=np.mean(imgpatch)
+            std=np.std(imgpatch)
+
+            median=np.median(imgpatch)
+
+            sky=np.append(sky,mean)
+            skymed=np.append(skymed,median)
+            skystd=np.append(skystd,std)
+            radius=np.append(radius,Rings[idx] + self.width/2)
+
+            print("rad, sky, median: ",Rings[idx] + self.width/2,mean, median) 
+
+            ###
+
+            # calcular gradiente
+            if (count >= self.NumRings):
+                gradmask = np.gradient(sky[1:-1]) >= 0 # [1:-1] avoiding the first and last element for gradient 
+               
+                count = 0
+                savidx=np.where(np.gradient(sky[1:-1]) >= 0)
+
+                if (sky[1:-1][gradmask].any()): 
+                    
+                    savidx2=savidx[0]+1                
+
+                    maskring,flagfirst=self.GetRingMask(Rings[1:-1],bim[1:-1],landa,theta,flagfirst, savidx, savidx2)
+                    
+                    print("Ring radius marked in checkringsky.fits ",radius[1:-1][savidx][0])
+                    self.img[ypos[maskring], xpos[maskring]] = radius[1:-1][savidx] 
+                    break
+
+                #clean the arrays:
+                #sky = np.array([])
+                #skymed = np.array([])
+                #skystd = np.array([])
+                #radius = np.array([])
+
+            count += 1
+            idx +=1
+            idx2 +=1
+
+            if idx == (len(Rings)-1): 
+                print("The edge of image has been reached. Sky can not be computed")
+                return 0,0,0,0
+
+
+        hdu[0].data=self.img
+
+        hdu.writeto("checkringsky.fits",overwrite=True) 
+
+
+        mean,median,std,Rad = sky[1:-1][gradmask],skymed[1:-1][gradmask],skystd[1:-1][gradmask],radius[1:-1][gradmask]
+
+        print("sky Rad, mean, std, median = ",Rad[0],mean[0],std[0],median[0])
+
+        #rms = np.sqrt(np.mean(mean**2))
+        #rmstd = np.sqrt(np.mean(std**2))
+        #rmsmed = np.sqrt(np.mean(median**2))
+
+
+
+        return mean[0],std[0],median[0],Rad[0]
+
+
+    def GetRingMask(self,Rings,bim,landa,theta,flagfirst, idx,idx2):
+
+
+        #bim=Rings[idx]*q
+        tempangle = np.arctan2(np.sin(landa) / bim[idx], np.cos(landa) / Rings[idx])
+
+        tempxell = self.xx + Rings[idx] * np.cos(tempangle) * np.cos(theta) - bim[idx] * \
+          np.sin(tempangle) * np.sin(theta)
+
+        tempyell = self.yy + Rings[idx] * np.cos(tempangle) * np.sin(theta) + bim[idx] * \
+          np.sin(tempangle) * np.cos(theta)
+
+        
+        tempangle2 = np.arctan2(np.sin(landa) / bim[idx2], np.cos(landa) / Rings[idx2])
+
+        tempxell2 = self.xx + Rings[idx2] * np.cos(tempangle2) * np.cos(theta) - bim[idx2] * \
+          np.sin(tempangle2) * np.sin(theta)
+
+        tempyell2 = self.yy + Rings[idx2] * np.cos(tempangle2) * np.sin(theta) + bim[idx2] * \
+          np.sin(tempangle2) * np.cos(theta)
+ 
+
+        if (flagfirst):
+            self.dell = np.sqrt((tempxell - self.xx)**2 + (tempyell- self.yy)**2)
+            flagfirst=False
+        else:
+            self.dell = self.dell2
+
+        self.dell2 = np.sqrt((tempxell2 - self.xx)**2 + (tempyell2 - self.yy)**2)
+
+        maskring = (self.dist < self.dell2) & (self.dist > self.dell)  
+
+        maskring=maskring*self.invpatch
+
+        return maskring,flagfirst 
+
+
+################################################
+################################################
+################################################
 
 
 if __name__ == '__main__':

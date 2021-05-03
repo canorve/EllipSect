@@ -785,7 +785,7 @@ def Help():
     print ("gradsky: computes sky using the gradient method ")
     print ("randsky: computes sky averaging random boxes ") 
 
-    print ("skyRad: for randsky, it creates a mask for the main target using this radio. For gradsky it is where the program stars to compute the gradient.")
+    print ("skyRad: for randsky, it creates a mask for the main target using this radio. For gradsky it is where the program starts to compute the gradient.")
     print ("skynum: Number of boxes used in randsky. Default = 20")
     print ("skywidth: width of the ring for gradsky. Default = 20")
     print ("skybox: pixel size of the box for randsky. Default = 20") 
@@ -1088,6 +1088,11 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
             Rinit = 1*Rad90 # 1 times the R 90% of light radius
 
 
+        print("computing sky with the gradient method")
+
+        line="using Rinit={:.2f} width={}".format(Rinit,width)
+        print(line)
+
         mean,std, median,rad = SkyCal().GetEllipSky(ImageFile,MaskFile,xx,yy,thetadeg,e,Rinit,width)
 
         print("Total sky:  mean, std, median = ",mean,std,median)
@@ -1121,6 +1126,9 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
             Rad90= galpar.rad * (1.53 + 0.73 * galpar.serind+ 0.07 * galpar.serind**2) 
             Rinit = 3*Rad90 # 3 times the R 90% of light radius
 
+        print("computing sky with the random box method")
+        line="using Rad={:.2f} box size={}, number of boxes ={}".format(Rinit,box,num)
+        print(line)
 
         ##
         mean,std, median = SkyCal().RandBox(ImageFile,MaskFile,xx,yy,thetadeg,e,Rinit,box,num)

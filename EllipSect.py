@@ -342,7 +342,7 @@ class InputParams:
     flagnedfile=False
 
     flagradsky=False
-    flagrandsky=False
+    flagrandboxsky=False
 
 
     flagskyRinit = False
@@ -405,7 +405,7 @@ class InputParams:
     # sky parameters:
     insky=0
 
-    skyRinit = 200
+    skyRinit = 50 # minimum radius
     skybox = 20
     skynum = 20
     skywidth = 20
@@ -565,7 +565,7 @@ def InputSys(params,argv):
     if options['gradsky'] != None:
         params.flagradsky=True
     if options['randsky'] != None:
-        params.flagrandsky=True
+        params.flagrandboxsky=True
 
     if options['skyRad'] != None:
         params.flagskyRinit=True
@@ -791,8 +791,9 @@ def Help():
     print ("skybox: pixel size of the box for randsky. Default = 20") 
 
  
+    print ("\n ")
     print ("help: This menu ")
-
+    print ("\n ")
 
     print ("Example:\n %s galfit.01 -logx" % (sys.argv[0]))
     print ("or Example:\n %s galfit.02 -q 0.35 -pa 60 -comp -ranx 2 -phot " % (sys.argv[0]))
@@ -1079,26 +1080,34 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
         width = params.skywidth
 
 
-        Rinit = 200 #default
         ###
-        if params.flagskyRinit:
-            Rinit = params.skyRinit
-        elif galpar.rad <= 0.1:
+        Rinit = 1
+
+        if not(params.flagskyRinit):
             Rad90= galpar.rad * (1.53 + 0.73 * galpar.serind+ 0.07 * galpar.serind**2) 
             Rinit = 1*Rad90 # 1 times the R 90% of light radius
+
+            if (Rinit < 50): # Rinit can not be less than the default value 
+                Rinit = 50 
+            params.skyRinit = Rinit # save value for output
+
+        else:
+            Rinit = params.skyRinit
+            
 
 
         print("computing sky with the gradient method")
 
-        line="using Rinit={:.2f} width={}".format(Rinit,width)
+        line="using Rinit = {:.2f} width = {}".format(Rinit,width)
         print(line)
 
         mean,std, median,rad = SkyCal().GetEllipSky(ImageFile,MaskFile,xx,yy,thetadeg,e,Rinit,width)
 
-        print("Total sky:  mean, std, median = ",mean,std,median)
+        line="Total sky:  mean = {:.2f}; std={:.2f}; median = {} ".format(mean,std,median)
+        print(line)
 
 
-    if params.flagrandsky:
+    if params.flagrandboxsky:
 
         # computing sky  using random boxes across the image
         print("Computing sky as a reference. This will not be used for output computations.")
@@ -1117,24 +1126,31 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
         box = params.skybox
         num = params.skynum
 
-
-        Rinit = 200 #default
         ###
-        if params.flagskyRinit:
+        Rinit = 1
+
+        if not(params.flagskyRinit):
+            Rad90= galpar.rad * (1.53 + 0.73 * galpar.serind + 0.07 * galpar.serind**2) 
+            Rinit = 3*Rad90 # 1 times the R 90% of light radius
+
+            if (Rinit < 100): # Rinit can not be less than the default value 
+                Rinit = 100 
+            params.skyRinit = Rinit # save value for output
+        else:
             Rinit = params.skyRinit
-        elif galpar.rad <= 0.1:
-            Rad90= galpar.rad * (1.53 + 0.73 * galpar.serind+ 0.07 * galpar.serind**2) 
-            Rinit = 3*Rad90 # 3 times the R 90% of light radius
+
 
         print("computing sky with the random box method")
-        line="using Rad={:.2f} box size={}, number of boxes ={}".format(Rinit,box,num)
+
+        line="using Rad = {:.2f}, box size= {}, number of boxes = {}".format(Rinit,box,num)
         print(line)
 
         ##
         mean,std, median = SkyCal().RandBox(ImageFile,MaskFile,xx,yy,thetadeg,e,Rinit,box,num)
-        ##
+        #
 
-        print("Total sky:  mean, std, median = ",mean,std,median)
+        line="Total sky:  mean = {:.2f} , std = {:.2f}, median = {}".format(mean,std,median)
+        print(line)
 
 
     #######################################
@@ -2292,6 +2308,13 @@ def ReadGALFITout(inputf,galpar):
                         dist = np.sqrt((galpar.xc-xcser)**2+(galpar.yc-ycser)**2)
 
 
+                if tmp[0] == "4)" and (dist < 3):    # Effective radius
+                    galpar.rad=float(tmp[1])
+
+                if tmp[0] == "5)" and (dist < 3):    # Sersic index 
+                    galpar.serind=float(tmp[1])
+
+
 
                 if tmp[0] == "9)" and (dist < 3):    # axis ratio
                     galpar.q=float(tmp[1])
@@ -2316,6 +2339,15 @@ def ReadGALFITout(inputf,galpar):
                         dist = np.sqrt((galpar.xc-xcexp)**2+(galpar.yc-ycexp)**2)
 
 
+                if tmp[0] == "4)" and (dist < 3):    # Effective radius
+                    galpar.rad=float(tmp[1])
+                    galpar.rad=1.678*galpar.rad
+
+                #if tmp[0] == "5)" and (dist < 3):    # Sersic index 
+                    galpar.serind=1
+
+
+
                 if (tmp[0] == "9)") and (dist < 3):    # axis ratio
                     galpar.q=float(tmp[1])
 
@@ -2337,6 +2369,17 @@ def ReadGALFITout(inputf,galpar):
 
                     if flagfirst == False:
                         dist = np.sqrt((galpar.xc-xcgauss)**2+(galpar.yc-ycgauss)**2)
+
+
+                if tmp[0] == "4)" and (dist < 3):    # Effective radius
+                    galpar.rad=float(tmp[1])
+                    galpar.rad=0.8325546*galpar.rad
+                    print("hello3 ",galpar.rad)
+
+                #if tmp[0] == "5)":    # Sersic index 
+                    galpar.serind=0.5
+
+
 
                 if (tmp[0] == "9)") and (dist < 3):    # axis ratio
                     galpar.q=float(tmp[1])
@@ -4320,7 +4363,7 @@ class SkyCal:
             skystd=np.append(skystd,std)
             radius=np.append(radius,Rings[idx] + self.width/2)
 
-            print("rad, sky, median: ",Rings[idx] + self.width/2,mean, median) 
+            print("rad = {}; sky mean = {:.2f}; sky std = {:.2f}; median: {:.2f} ".format(Rings[idx] + self.width/2,mean,std, median))
 
             ###
 
@@ -4329,15 +4372,16 @@ class SkyCal:
                 gradmask = np.gradient(sky[1:-1]) >= 0 # [1:-1] avoiding the first and last element for gradient 
                
                 count = 0
-                savidx=np.where(np.gradient(sky[1:-1]) >= 0)
-
+                tempidx=np.where(np.gradient(sky[1:-1]) >= 0)
                 if (sky[1:-1][gradmask].any()): 
                     
-                    savidx2=savidx[0]+1                
-
+                    savidx=tempidx[0][0]
+                    savidx2=savidx+1                
+                    
+                    flagfirst=True
                     maskring,flagfirst=self.GetRingMask(Rings[1:-1],bim[1:-1],landa,theta,flagfirst, savidx, savidx2)
                     
-                    print("Ring radius marked in checkringsky.fits ",radius[1:-1][savidx][0])
+                    print("Ring radius = {:.2f} marked in checkringsky.fits ".format(radius[1:-1][savidx]))
                     self.img[ypos[maskring], xpos[maskring]] = radius[1:-1][savidx] 
                     break
 
@@ -4361,17 +4405,14 @@ class SkyCal:
         hdu.writeto("checkringsky.fits",overwrite=True) 
 
 
-        mean,median,std,Rad = sky[1:-1][gradmask],skymed[1:-1][gradmask],skystd[1:-1][gradmask],radius[1:-1][gradmask]
-
-        print("sky Rad, mean, std, median = ",Rad[0],mean[0],std[0],median[0])
+        finmean,finmedian,finstd,finRad = sky[1:-1][gradmask],skymed[1:-1][gradmask],skystd[1:-1][gradmask],radius[1:-1][gradmask]
 
         #rms = np.sqrt(np.mean(mean**2))
         #rmstd = np.sqrt(np.mean(std**2))
         #rmsmed = np.sqrt(np.mean(median**2))
 
 
-
-        return mean[0],std[0],median[0],Rad[0]
+        return finmean[0],finstd[0],finmedian[0],finRad[0]
 
 
     def GetRingMask(self,Rings,bim,landa,theta,flagfirst, idx,idx2):
@@ -4403,9 +4444,7 @@ class SkyCal:
             self.dell = self.dell2
 
         self.dell2 = np.sqrt((tempxell2 - self.xx)**2 + (tempyell2 - self.yy)**2)
-
         maskring = (self.dist < self.dell2) & (self.dist > self.dell)  
-
         maskring=maskring*self.invpatch
 
         return maskring,flagfirst 

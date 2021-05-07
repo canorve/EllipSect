@@ -345,7 +345,8 @@ class InputParams:
     flagrandboxsky=False
 
 
-    flagskyRinit = False
+    flagskyRad = False
+    flagskyRadmax = False
     flagskybox =  False
     flagskynum = False
     flagskywidth = False
@@ -405,7 +406,7 @@ class InputParams:
     # sky parameters:
     insky=0
 
-    skyRinit = 50 # minimum radius
+    skyRad = 50 # minimum radius
     skybox = 20
     skynum = 20
     skywidth = 20
@@ -496,7 +497,7 @@ def InputSys(params,argv):
     ''' Read user's input '''
     OptionHandleList = ['-logx', '-q', '-pa','-comp','-pix','-ranx','-rany','-grid','-dpi','-sbout','-noplot',
         '-minlevel','-sectors','-phot','-object','-filter','-snr','-help','-checkimg','-noned','-distmod','-magcor',
-        '-scalekpc','-sbdim','-model','-sky','-keep','-ned','-gradsky','-randsky','-skyRad','-skynum','-skybox','-skywidth']
+        '-scalekpc','-sbdim','-model','-sky','-keep','-ned','-gradsky','-randsky','-skyRad','-skyRadmax','-skynum','-skybox','-skywidth']
 
 
     options = {}
@@ -568,7 +569,9 @@ def InputSys(params,argv):
         params.flagrandboxsky=True
 
     if options['skyRad'] != None:
-        params.flagskyRinit=True
+        params.flagskyRad=True
+    if options['skyRadmax'] != None:
+        params.flagskyRadmax=True
     if options['skywidth'] != None:
         params.flagskywidth=True
     if options['skybox'] != None:
@@ -705,11 +708,18 @@ def InputSys(params,argv):
         params.nedfile=np.str(opt['ned'])
 
 
-    if params.flagskyRinit == True:
+    if params.flagskyRad == True:
         opt={}
         OptionHandle="-skyRad"
         opt[OptionHandle[1:]] = argv[argv.index(OptionHandle)+1]
-        params.skyRinit=np.float(opt['skyRad'])
+        params.skyRad=np.float(opt['skyRad'])
+
+    if params.flagskyRadmax == True:
+        opt={}
+        OptionHandle="-skyRadmax"
+        opt[OptionHandle[1:]] = argv[argv.index(OptionHandle)+1]
+        params.skyRadmax=np.float(opt['skyRadmax'])
+
 
     if params.flagskybox == True:
         opt={}
@@ -741,7 +751,7 @@ def InputSys(params,argv):
 def Help():
 
     print ("Usage:\n %s [GALFITOutputFile] [-logx] [-q AxisRatio] [-pa PositionAngle] [-comp] [-pix] [-ranx/y Value] [-grid] [-dpi Value] [-model File] [-phot] [-sky Value] " % (sys.argv[0]))
-    print ("More options: [-sbout] [-noplot] [-minlevel Value] [-sectors Value] [-object Name] [-filter Name] [-snr] [-help] [-checkimg] [-noned] [-distmod Value] [-magcor Value] [-scalekpc Value] [-sbdim Value] [-keep] [-ned XmlFile] [-gradsky ] [-randsky ] [-skyRad Value] [-skynum Value] [-skybox Value] [-skywidth Value] ") 
+    print ("More options: [-sbout] [-noplot] [-minlevel Value] [-sectors Value] [-object Name] [-filter Name] [-snr] [-help] [-checkimg] [-noned] [-distmod Value] [-magcor Value] [-scalekpc Value] [-sbdim Value] [-keep] [-ned XmlFile] [-gradsky ] [-randsky ] [-skyRad Value] [-skyRadmax Value][-skynum Value] [-skybox Value] [-skywidth Value] ") 
 
     print ("GALFITOutputFile: GALFIT output file ")
     print ("logx: activates X-axis as logarithm ")
@@ -786,6 +796,7 @@ def Help():
     print ("randsky: computes sky averaging random boxes ") 
 
     print ("skyRad: for randsky, it creates a mask for the main target using this radio. For gradsky it is where the program starts to compute the gradient.")
+    print ("skyRadmax: for randsky only, maximum radius from main target where randbox can be selected ")
     print ("skynum: Number of boxes used in randsky. Default = 20")
     print ("skywidth: width of the ring for gradsky. Default = 20")
     print ("skybox: pixel size of the box for randsky. Default = 20") 
@@ -1083,16 +1094,16 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
         ###
         Rinit = 1
 
-        if not(params.flagskyRinit):
+        if not(params.flagskyRad):
             Rad90= galpar.rad * (1.53 + 0.73 * galpar.serind+ 0.07 * galpar.serind**2) 
             Rinit = 1*Rad90 # 1 times the R 90% of light radius
 
             if (Rinit < 50): # Rinit can not be less than the default value 
                 Rinit = 50 
-            params.skyRinit = Rinit # save value for output
+            params.skyRad = Rinit # save value for output
 
         else:
-            Rinit = params.skyRinit
+            Rinit = params.skyRad
             
 
 
@@ -1129,15 +1140,15 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
         ###
         Rinit = 1
 
-        if not(params.flagskyRinit):
+        if not(params.flagskyRad):
             Rad90= galpar.rad * (1.53 + 0.73 * galpar.serind + 0.07 * galpar.serind**2) 
             Rinit = 3*Rad90 # 1 times the R 90% of light radius
 
             if (Rinit < 100): # Rinit can not be less than the default value 
                 Rinit = 100 
-            params.skyRinit = Rinit # save value for output
+            params.skyRad = Rinit # save value for output
         else:
-            Rinit = params.skyRinit
+            Rinit = params.skyRad
 
 
         print("computing sky with the random box method")
@@ -1146,7 +1157,12 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
         print(line)
 
         ##
-        mean,std, median = SkyCal().RandBox(ImageFile,MaskFile,xx,yy,thetadeg,e,Rinit,box,num)
+        if params.flagskyRadmax:
+            Rmax = params.skyRadmax
+            mean,std, median = SkyCal().RandBox(ImageFile,MaskFile,xx,yy,thetadeg,e,Rinit,box,num,Rmax)
+        else:
+            Rmax = 0
+            mean,std, median = SkyCal().RandBox(ImageFile,MaskFile,xx,yy,thetadeg,e,Rinit,box,num,Rmax)
         #
 
         line="Total sky:  mean = {:.2f} , std = {:.2f}, median = {}".format(mean,std,median)
@@ -3866,7 +3882,7 @@ def GetAxis(Image,imgidx,flagidx,num,flagnum):
 
 class SkyCal:
 
-    def RandBox(self,ImageFile,MaskFile,xx,yy,thetadeg,e,Rinit,box,num):
+    def RandBox(self,ImageFile,MaskFile,xx,yy,thetadeg,e,Rinit,box,num,Rmax):
 
         self.xx = xx 
         self.yy = yy
@@ -3894,8 +3910,14 @@ class SkyCal:
         
         (self.nrow,self.ncol)=self.img.shape
 
-
         xmin,xmax,ymin,ymax,Rend = self.GetXYRBorder()
+
+        if Rmax != 0:
+            if Rmax <= Rend:
+                Rend = Rmax
+            else:
+                print("input skyRadmax is greater than image size")
+            print("using Rmax = ",Rend)
 
         #print("border x ",xmin,xmax)
         #print("border y ",ymin,ymax)

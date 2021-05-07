@@ -1321,6 +1321,12 @@ def PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,params,scale):
     fig, axsec = plt.subplots()
 
 
+    #change the linewidth of the axis
+    for axis in ['top','bottom','left','right']:
+        axsec.spines[axis].set_linewidth(1.5)
+
+
+
     if params.flagranx[1] == True:
         (xmin,xmax)=params.ranx.split("-")
         xmin=np.float(xmin)
@@ -1358,6 +1364,8 @@ def PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,params,scale):
 
         yran[0] = yran2 #inverted axis
         yran[1] = yran1
+
+
 
 
     axsec.set_xlabel("radius ('')")
@@ -1916,6 +1924,12 @@ def MulEllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps):
         axsec[row, 1].tick_params(which='both', width=2)
         axsec[row, 1].tick_params(which='major', length=7)
         axsec[row, 1].tick_params(which='minor', length=4, color='r')
+
+
+        #change the linewidth of the axis
+        for axis in ['top','bottom','left','right']:
+            axsec[row,0].spines[axis].set_linewidth(1.5)
+            axsec[row,1].spines[axis].set_linewidth(1.5)
 
 
         # row -= 1

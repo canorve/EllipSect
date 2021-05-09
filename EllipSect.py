@@ -1082,8 +1082,8 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
         ImageFile = galpar.inputimage
         MaskFile = galpar.maskimage
 
-        xx = galpar.xc
-        yy = galpar.yc
+        xx = galpar.inxc
+        yy = galpar.inyc
 
         thetadeg = galpar.ang
         e = 1 - galpar.q
@@ -1110,6 +1110,12 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
         print("computing sky with the gradient method")
 
         line="using Rinit = {:.2f} width = {}".format(Rinit,width)
+        print(line)
+
+        line="using thetadeg = {:.2f} q = {}".format(thetadeg,galpar.q)
+        print(line)
+        
+        line="using xx = {} yy  = {}".format(xx,yy)
         print(line)
 
         mean,std, median,rad = SkyCal().GetEllipSky(ImageFile,MaskFile,xx,yy,thetadeg,e,Rinit,width)
@@ -3901,7 +3907,10 @@ class SkyCal:
         self.xx = xx 
         self.yy = yy
 
-        self.thetadeg= thetadeg
+        #angsec=90-galpar.ang
+        #self.thetadeg= thetadeg
+        #self.thetadeg = 90 - thetadeg
+        self.thetadeg=90 + thetadeg
 
         self.e = e
         self.Rinit = Rinit
@@ -4110,7 +4119,7 @@ class SkyCal:
                 boxcont+=1 # avoid eternal loop
 
             if (boxcont == 10):
-                print("max. iteration reached. I couldn't found a box")
+                print("max. iteration reached. I couldn't find a box")
      
 
             tot=len(flatimg)
@@ -4278,7 +4287,10 @@ class SkyCal:
         self.xx = xx 
         self.yy = yy
 
-        self.thetadeg= thetadeg
+        #angsec=90-galpar.ang
+        #self.thetadeg= thetadeg
+        #Theta=galpar.ang + 90
+        self.thetadeg=90 + thetadeg
 
         self.e = e
         self.Rinit=Rinit

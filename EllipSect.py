@@ -1086,7 +1086,8 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
         yy = galpar.inyc
 
         thetadeg = galpar.ang
-        e = 1 - galpar.q
+        #e = 1 - galpar.q
+        q = galpar.q
 
         width = params.skywidth
 
@@ -1118,7 +1119,7 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
         line="using xx = {} yy  = {}".format(xx,yy)
         print(line)
 
-        mean,std, median,rad = SkyCal().GetEllipSky(ImageFile,MaskFile,xx,yy,thetadeg,e,Rinit,width)
+        mean,std, median,rad = SkyCal().GetEllipSky(ImageFile,MaskFile,xx,yy,thetadeg,q,Rinit,width)
 
         line="Total sky:  mean = {:.2f}; std={:.2f}; median = {} ".format(mean,std,median)
         print(line)
@@ -1136,7 +1137,8 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
         yy = galpar.yc
 
         thetadeg = galpar.ang
-        e = 1 - galpar.q
+        #e = 1 - galpar.q
+        q = galpar.q
 
         ###
 
@@ -1165,10 +1167,10 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
         ##
         if params.flagskyRadmax:
             Rmax = params.skyRadmax
-            mean,std, median = SkyCal().RandBox(ImageFile,MaskFile,xx,yy,thetadeg,e,Rinit,box,num,Rmax)
+            mean,std, median = SkyCal().RandBox(ImageFile,MaskFile,xx,yy,thetadeg,q,Rinit,box,num,Rmax)
         else:
             Rmax = 0
-            mean,std, median = SkyCal().RandBox(ImageFile,MaskFile,xx,yy,thetadeg,e,Rinit,box,num,Rmax)
+            mean,std, median = SkyCal().RandBox(ImageFile,MaskFile,xx,yy,thetadeg,q,Rinit,box,num,Rmax)
         #
 
         line="Total sky:  mean = {:.2f} , std = {:.2f}, median = {}".format(mean,std,median)
@@ -3902,7 +3904,7 @@ def GetAxis(Image,imgidx,flagidx,num,flagnum):
 
 class SkyCal:
 
-    def RandBox(self,ImageFile,MaskFile,xx,yy,thetadeg,e,Rinit,box,num,Rmax):
+    def RandBox(self,ImageFile,MaskFile,xx,yy,thetadeg,q,Rinit,box,num,Rmax):
 
         self.xx = xx 
         self.yy = yy
@@ -3912,7 +3914,7 @@ class SkyCal:
         #self.thetadeg = 90 - thetadeg
         self.thetadeg=90 + thetadeg
 
-        self.e = e
+        self.q = q
         self.Rinit = Rinit
        
         self.box = box 
@@ -3962,7 +3964,7 @@ class SkyCal:
     def GetXYRBorder(self):
         "this subroutine get the coordinates of the border"
 
-        q = (1 - self.e)
+        q =  self.q
 
         theta = self.thetadeg * (np.pi / 180)  # rads!!
 
@@ -4075,15 +4077,15 @@ class SkyCal:
         #print("Rinit, Rmax ",Rinit, Rmax)
         (nrow,ncol)=self.img.shape
         # it obtains corners of Rinit
-        (xmino, xmaxo, ymino, ymaxo) = self.GetSize(self.xx, self.yy, Rinit, self.thetadeg, self.e, self.ncol, self.nrow) 
+        (xmino, xmaxo, ymino, ymaxo) = self.GetSize(self.xx, self.yy, Rinit, self.thetadeg, self.q, self.ncol, self.nrow) 
         # it obtains corners of Rmax
-        (xminf, xmaxf, yminf, ymaxf) = self.GetSize(self.xx, self.yy, Rmax, self.thetadeg, self.e, self.ncol, self.nrow) 
+        (xminf, xmaxf, yminf, ymaxf) = self.GetSize(self.xx, self.yy, Rmax, self.thetadeg, self.q, self.ncol, self.nrow) 
 
         #print("Coordenadas inner box ",xmino, xmaxo, ymino, ymaxo)
         #print("Coordenadas outer box ",xminf, xmaxf, yminf, ymaxf)
         
         Value=1000 #  value of counts  for  the mask of  main target
-        self.maskimg = self.MakeKron(self.maskimg, Value, self.xx, self.yy, Rinit, self.thetadeg, self.e, xminf, xmaxf, yminf, ymaxf) 
+        self.maskimg = self.MakeKron(self.maskimg, Value, self.xx, self.yy, Rinit, self.thetadeg, self.q, xminf, xmaxf, yminf, ymaxf) 
 
         ########
 
@@ -4147,7 +4149,7 @@ class SkyCal:
         return sky,skystd,skymed
 
 
-    def MakeKron(self,imagemat, idn, x, y, R, theta, ell, xmin, xmax, ymin, ymax):
+    def MakeKron(self,imagemat, idn, x, y, R, theta, q, xmin, xmax, ymin, ymax):
         "This subroutine create a Kron ellipse within a box defined by: xmin, xmax, ymin, ymax"
 
         xmin = np.int(xmin)
@@ -4155,7 +4157,7 @@ class SkyCal:
         ymin = np.int(ymin)
         ymax = np.int(ymax)
 
-        q = (1 - ell)
+        #q = (1 - ell)
         bim = q * R
 
         theta = theta * np.pi / 180  # Rads!!!
@@ -4188,11 +4190,11 @@ class SkyCal:
 
         return imagemat
 
-    def GetSize(self,x, y, R, theta, ell, ncol, nrow):
+    def GetSize(self,x, y, R, theta, q, ncol, nrow):
         "this subroutine get the maximun"
         "and minimim pixels for Kron and sky ellipse"
         # k Check
-        q = (1 - ell)
+        #q = (1 - ell)
         bim = q * R
 
         theta = theta * (np.pi / 180)  # rads!!
@@ -4282,7 +4284,7 @@ class SkyCal:
 ######
 
 
-    def GetEllipSky(self, ImageFile, MaskFile, xx, yy, thetadeg, e, Rinit, width):
+    def GetEllipSky(self, ImageFile, MaskFile, xx, yy, thetadeg, q, Rinit, width):
 
         self.xx = xx 
         self.yy = yy
@@ -4291,8 +4293,8 @@ class SkyCal:
         #self.thetadeg= thetadeg
         #Theta=galpar.ang + 90
         self.thetadeg=90 + thetadeg
-
-        self.e = e
+        self.q = q
+        self.e = (1 - self.q)
         self.Rinit=Rinit
        
         self.width = width 
@@ -4328,10 +4330,9 @@ class SkyCal:
 
         #Rinit=2 # init in 2 pixels 
 
-        q = (1 - self.e)
 
         #bim = q * self.R   # check this bim and below, is R or Rinit
-        bim = q * Rkron   # check this bim and below, is R or Rinit
+        #bim = q * Rkron   # check this bim and below, is R or Rinit
 
 
         #R2 = self.R + self.width # not needed?
@@ -4340,7 +4341,7 @@ class SkyCal:
 
 #        (xmino, xmaxo, ymino, ymaxo) = self.GetSize(self.xx, self.yy, Rinit, self.thetadeg, self.e, self.ncol, self.nrow) 
 
-        (xmin, xmax, ymin, ymax) = self.GetSize(self.xx, self.yy, Rkron, self.thetadeg, self.e, self.ncol, self.nrow) # obtain corners of R
+        (xmin, xmax, ymin, ymax) = self.GetSize(self.xx, self.yy, Rkron, self.thetadeg, self.q, self.ncol, self.nrow) # obtain corners of R
 
         theta = self.thetadeg * np.pi / 180  # Rads!!!
 
@@ -4367,7 +4368,7 @@ class SkyCal:
 
 
         Rings=np.arange(self.Rinit,self.R,self.width) # anillos de tamaño width
-        bim=np.arange(self.Rinit*q, self.Rinit*q+self.width*len(Rings), self.width) # asi esta para que de el mismo tamanio que Rings
+        #bim=np.arange(self.Rinit*q, self.Rinit*q+self.width*len(Rings), self.width) # asi esta para que de el mismo tamanio que Rings
        
         #bRings=Rings*q
 
@@ -4387,7 +4388,7 @@ class SkyCal:
         for ind, item in enumerate(Rings):
 
 
-            maskring,flagfirst=self.GetRingMask(Rings,bim,landa,theta,flagfirst, idx,idx2)
+            maskring,flagfirst=self.GetRingMask(Rings,landa,theta,flagfirst, idx,idx2)
 
 
             flatimg=self.img[ypos[maskring], xpos[maskring]].flatten()  
@@ -4427,7 +4428,7 @@ class SkyCal:
                     savidx2=savidx+1                
                     
                     flagfirst=True
-                    maskring,flagfirst=self.GetRingMask(Rings[1:-1],bim[1:-1],landa,theta,flagfirst, savidx, savidx2)
+                    maskring,flagfirst=self.GetRingMask(Rings[1:-1],landa,theta,flagfirst, savidx, savidx2)
                     
                     print("Ring radius = {:.2f} marked in checkringsky.fits ".format(radius[1:-1][savidx]))
                     self.img[ypos[maskring], xpos[maskring]] = radius[1:-1][savidx] 
@@ -4463,25 +4464,26 @@ class SkyCal:
         return finmean[0],finstd[0],finmedian[0],finRad[0]
 
 
-    def GetRingMask(self,Rings,bim,landa,theta,flagfirst, idx,idx2):
+    def GetRingMask(self,Rings,landa,theta,flagfirst, idx,idx2):
 
 
-        #bim=Rings[idx]*q
-        tempangle = np.arctan2(np.sin(landa) / bim[idx], np.cos(landa) / Rings[idx])
+        bim=Rings[idx]*self.q
+        tempangle = np.arctan2(np.sin(landa) / bim, np.cos(landa) / Rings[idx])
 
-        tempxell = self.xx + Rings[idx] * np.cos(tempangle) * np.cos(theta) - bim[idx] * \
+        tempxell = self.xx + Rings[idx] * np.cos(tempangle) * np.cos(theta) - bim * \
           np.sin(tempangle) * np.sin(theta)
 
-        tempyell = self.yy + Rings[idx] * np.cos(tempangle) * np.sin(theta) + bim[idx] * \
+        tempyell = self.yy + Rings[idx] * np.cos(tempangle) * np.sin(theta) + bim * \
           np.sin(tempangle) * np.cos(theta)
 
         
-        tempangle2 = np.arctan2(np.sin(landa) / bim[idx2], np.cos(landa) / Rings[idx2])
+        bim2=Rings[idx2]*self.q
+        tempangle2 = np.arctan2(np.sin(landa) / bim2, np.cos(landa) / Rings[idx2])
 
-        tempxell2 = self.xx + Rings[idx2] * np.cos(tempangle2) * np.cos(theta) - bim[idx2] * \
+        tempxell2 = self.xx + Rings[idx2] * np.cos(tempangle2) * np.cos(theta) - bim2 * \
           np.sin(tempangle2) * np.sin(theta)
 
-        tempyell2 = self.yy + Rings[idx2] * np.cos(tempangle2) * np.sin(theta) + bim[idx2] * \
+        tempyell2 = self.yy + Rings[idx2] * np.cos(tempangle2) * np.sin(theta) + bim2 * \
           np.sin(tempangle2) * np.cos(theta)
  
 

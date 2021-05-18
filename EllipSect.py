@@ -153,6 +153,8 @@ def SectorsGalfit(params):
     params.namesnr=params.namefile + "-snr.fits"
 
     params.namecheck=params.namefile + "-check.fits"
+    
+    params.namering=params.namefile + "-ring.fits"
 
 
 
@@ -399,6 +401,7 @@ class InputParams:
     namesnr="none-snr.fits"
     namened="none-ned.xml"
     namecheck="none-check.fits"
+    namering="none-ring.fits"
 
     nedfile="default.xml"
 
@@ -1119,7 +1122,7 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
         line="using xx = {} yy  = {}".format(xx,yy)
         print(line)
 
-        mean,std, median,rad = SkyCal().GetEllipSky(ImageFile,MaskFile,xx,yy,thetadeg,q,Rinit,width)
+        mean,std, median,rad = SkyCal().GetEllipSky(ImageFile,MaskFile,xx,yy,thetadeg,q,Rinit,width,params.namering)
 
         line="Total sky:  mean = {:.2f}; std={:.2f}; median = {} ".format(mean,std,median)
         print(line)
@@ -4284,7 +4287,7 @@ class SkyCal:
 ######
 
 
-    def GetEllipSky(self, ImageFile, MaskFile, xx, yy, thetadeg, q, Rinit, width):
+    def GetEllipSky(self, ImageFile, MaskFile, xx, yy, thetadeg, q, Rinit, width,namering):
 
         self.xx = xx 
         self.yy = yy
@@ -4430,7 +4433,7 @@ class SkyCal:
                     flagfirst=True
                     maskring,flagfirst=self.GetRingMask(Rings[1:-1],landa,theta,flagfirst, savidx, savidx2)
                     
-                    print("Ring radius = {:.2f} marked in checkringsky.fits ".format(radius[1:-1][savidx]))
+                    print("Ring radius = {:.2f} marked in {} ".format(radius[1:-1][savidx],namering))
                     self.img[ypos[maskring], xpos[maskring]] = radius[1:-1][savidx] 
                     break
 
@@ -4451,7 +4454,7 @@ class SkyCal:
 
         hdu[0].data=self.img
 
-        hdu.writeto("checkringsky.fits",overwrite=True) 
+        hdu.writeto(namering,overwrite=True) 
 
 
         finmean,finmedian,finstd,finRad = sky[1:-1][gradmask],skymed[1:-1][gradmask],skystd[1:-1][gradmask],radius[1:-1][gradmask]

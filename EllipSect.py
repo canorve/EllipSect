@@ -4083,11 +4083,8 @@ class SkyCal:
         (xmino, xmaxo, ymino, ymaxo) = self.GetSize(self.xx, self.yy, Rinit, self.thetadeg, self.q, self.ncol, self.nrow) 
         # it obtains corners of Rmax
         (xminf, xmaxf, yminf, ymaxf) = self.GetSize(self.xx, self.yy, Rmax, self.thetadeg, self.q, self.ncol, self.nrow) 
-
-        #print("Coordenadas inner box ",xmino, xmaxo, ymino, ymaxo)
-        #print("Coordenadas outer box ",xminf, xmaxf, yminf, ymaxf)
         
-        Value=1000 #  value of counts  for  the mask of  main target
+        Value=1 #  value of counts  of the  main target for  the mask image  
         self.maskimg = self.MakeKron(self.maskimg, Value, self.xx, self.yy, Rinit, self.thetadeg, self.q, xminf, xmaxf, yminf, ymaxf) 
 
         ########
@@ -4126,7 +4123,6 @@ class SkyCal:
             if (boxcont == 10):
                 print("max. iteration reached. I couldn't find a box")
      
-
             tot=len(flatimg)
 
             top=round(.8*tot)
@@ -4265,7 +4261,6 @@ class SkyCal:
         maskbox=mimg[yinit - 1:yfin, xinit - 1:xfin]
 
         invboxpatch=np.logical_not(maskbox)
-
 
         return imagebox[invboxpatch],xinit,yinit
 
@@ -4434,6 +4429,7 @@ class SkyCal:
                     maskring,flagfirst=self.GetRingMask(Rings[1:-1],landa,theta,flagfirst, savidx, savidx2)
                     
                     print("Ring radius = {:.2f} marked in {} ".format(radius[1:-1][savidx],namering))
+                    print("The count value in ring is the ellipse long axis") 
                     self.img[ypos[maskring], xpos[maskring]] = radius[1:-1][savidx] 
                     break
 

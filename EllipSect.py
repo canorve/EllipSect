@@ -458,6 +458,17 @@ class GalfitParams:
     imsnr = np.array([[1,1],[1,1]])
 
 
+    # for computed gradsky
+    gradskymean = 0
+    gradskystd = 0
+    gradskymed = 0
+
+    randskymean = 0
+    randskystd = 0
+    randskymed = 0
+
+
+
 ### class for Galfit components
 class GalfitComps:
 
@@ -1127,6 +1138,14 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
         line="Total sky:  mean = {:.2f}; std={:.2f}; median = {} ".format(mean,std,median)
         print(line)
 
+        #saving for output
+        galpar.gradskymean = mean  
+        galpar.gradskystd = std
+        galpar.gradskymed = median
+
+
+
+
 
     if params.flagrandboxsky:
 
@@ -1178,6 +1197,13 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
 
         line="Total sky:  mean = {:.2f} , std = {:.2f}, median = {}".format(mean,std,median)
         print(line)
+
+        #saving for output
+        galpar.randskymean = mean  
+        galpar.randskystd = std
+        galpar.randskymed = median
+
+
 
 
     #######################################
@@ -3148,6 +3174,33 @@ def OutPhot(params, galpar, galcomps, sectgalax, sectmodel, sectcomps):
     lineout= "\n"
     OUTPHOT.write(lineout)
 
+    ############################
+
+    if params.flagradsky:
+
+        mean = galpar.gradskymean
+        std = galpar.gradskystd
+        median = galpar.gradskymed
+
+
+        lineout="computed sky with the gradient method:  mean = {:.2f} , std = {:.2f}, median = {} \n".format(mean,std,median)
+
+        OUTPHOT.write(lineout)
+ 
+    if params.flagrandboxsky:
+
+        mean = galpar.randskymean
+        std = galpar.randskystd
+        median = galpar.randskymed
+
+        lineout="computed sky with the random box method:  mean = {:.2f} , std = {:.2f}, median = {} \n".format(mean,std,median)
+        OUTPHOT.write(lineout)
+
+
+    lineout = "\n"  
+    OUTPHOT.write(lineout)
+
+    #############################
 
     lineout = "#########################################\n"  
     OUTPHOT.write(lineout)

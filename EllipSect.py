@@ -1195,7 +1195,7 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
             mean,std, median = SkyCal().RandBox(ImageFile,MaskFile,xx,yy,thetadeg,q,Rinit,box,num,Rmax)
         #
 
-        line="Total sky:  mean = {:.2f} , std = {:.2f}, median = {}".format(mean,std,median)
+        line="Total sky:  mean = {:.2f}; std = {:.2f}; median = {:.2f}".format(mean,std,median)
         print(line)
 
         #saving for output
@@ -4191,7 +4191,7 @@ class SkyCal:
 
             median=np.median(imgpatch)
 
-            linemean = "sky  mean = {:.2f}; std = {:.2f}; median = {}".format(mean,std,median)
+            linemean = "sky  mean = {:.2f}; std = {:.2f}; median = {:.2f}".format(mean,std,median)
             print(linemean)
 
             sky=np.append(sky,mean)
@@ -4332,7 +4332,7 @@ class SkyCal:
 
         return xinit,yinit 
 
-######
+        ######
 
 
     def GetEllipSky(self, ImageFile, MaskFile, xx, yy, thetadeg, q, Rinit, width,namering):
@@ -4374,7 +4374,6 @@ class SkyCal:
 
         self.R=Rkron
 
-        print("H3ll0 fri3nd",Rkron)
         #Rinit=2 # init in 2 pixels 
 
 
@@ -4459,7 +4458,7 @@ class SkyCal:
             skystd=np.append(skystd,std)
             radius=np.append(radius,Rings[idx] + self.width/2)
 
-            print("rad = {}; sky mean = {:.2f}; sky std = {:.2f}; median: {:.2f} ".format(Rings[idx] + self.width/2,mean,std, median))
+            print("rad = {:.2f}; sky mean = {:.2f}; sky std = {:.2f}; median: {:.2f} ".format(Rings[idx] + self.width/2,mean,std, median))
 
             ###
 

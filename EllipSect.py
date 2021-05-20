@@ -4075,7 +4075,7 @@ class SkyCal:
             else:
                R = R2
 
-
+        R = np.abs(R) #avoids negative numbers
         bim = q * R
         # getting size
 
@@ -4372,13 +4372,9 @@ class SkyCal:
 
         xmin,xmax,ymin,ymax,Rkron = self.GetXYRBorder()
 
-        #print("border x ",xmin,xmax)
-        #print("border y ",ymin,ymax)
-        #print("Rborder ",Rkron)
-
         self.R=Rkron
 
-
+        print("H3ll0 fri3nd",Rkron)
         #Rinit=2 # init in 2 pixels 
 
 
@@ -4504,7 +4500,6 @@ class SkyCal:
         hdu[0].data=self.img
 
         hdu.writeto(namering,overwrite=True) 
-
 
         finmean,finmedian,finstd,finRad = sky[1:-1][gradmask],skymed[1:-1][gradmask],skystd[1:-1][gradmask],radius[1:-1][gradmask]
 

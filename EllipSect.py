@@ -822,8 +822,8 @@ def Help():
 
     print ("Example:\n %s galfit.01 -logx" % (sys.argv[0]))
     print ("or Example:\n %s galfit.02 -q 0.35 -pa 60 -comp -ranx 2 -phot " % (sys.argv[0]))
-    print ("or Example:\n %s galfit.02 -q 0.35 -pa 60 -comp -ranx 1-20" % (sys.argv[0]))
-    print ("see https://github.com/canorve/GALFITools/blob/master/docs/Ellipse.md  for more examples")
+    print ("or Example:\n %s galfit.02 -q 0.35 -pa 60 -comp -ranx 1-20 \n" % (sys.argv[0]))
+    print ("see https://github.com/canorve/EllipSect/tree/master/docs/howto.md   for more examples")
 
 
 

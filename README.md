@@ -71,11 +71,13 @@ It will display images like the ones below:
 
    ![A85 ](img/A85.def.png)
 
+___
+
 ### **HOW TO USE**
 
 To see other forms of how to run and other options available see:
 
-   [How to](docs/howto.md)
+   [How to use](docs/howto.md)
 
 ___
 

@@ -1,18 +1,22 @@
 
 from ellipsect.lib.libs import *
 
-
 from ellipsect.io.gfits import GetExpTime
 from ellipsect.io.gfits import GetAxis
 
 from ellipsect.io.help import Help
+from ellipsect.lib.clas import InputParams
 
-def InputSys(params,argv):
+def InputSys(argv):
     ''' Read user's input '''
+
     OptionHandleList = ['-logx', '-q', '-pa','-comp','-pix','-ranx','-rany','-grid','-dpi','-sbout','-noplot',
         '-minlevel','-sectors','-phot','-object','-filter','-snr','-help','-checkimg','-noned','-distmod','-magcor',
         '-scalekpc','-sbdim','-model','-sky','-keep','-ned','-gradsky','-randsky','-skyRad','-skyRadmax','-skynum','-skybox','-skywidth']
 
+
+    #class for user's parameters
+    params=InputParams()
 
     options = {}
     for OptionHandle in OptionHandleList:
@@ -258,7 +262,7 @@ def InputSys(params,argv):
 
     params.galfile= sys.argv[1]
 
-    return True
+    return params
 
 
 

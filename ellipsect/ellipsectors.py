@@ -5,7 +5,6 @@
 from ellipsect.lib.libs import *
 
 
-from ellipsect.lib.clas import InputParams
 from ellipsect.io.read import InputSys
 from ellipsect.sectors.sect import SectorsGalfit
 
@@ -21,11 +20,9 @@ def run():
 
         sys.exit()
 
-    #class for user's parameters
-    params=InputParams()
 
     # read user's input 
-    InputSys(params,sys.argv)
+    params = InputSys(sys.argv)
 
     # full program:
 

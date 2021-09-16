@@ -1,10 +1,10 @@
 
 from ellipsect.lib.libs import *
 
-from ellipsect.io.gfits import GetExpTime
-from ellipsect.io.gfits import GetAxis
+from ellipsect.inout.gfits import GetExpTime
+from ellipsect.inout.gfits import GetAxis
 
-from ellipsect.io.help import Help
+from ellipsect.inout.help import Help
 from ellipsect.lib.clas import InputParams
 
 def InputSys(argv):

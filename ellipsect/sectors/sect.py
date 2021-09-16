@@ -8,10 +8,9 @@ from ellipsect.lib.clas import GalfitParams
 from ellipsect.lib.clas import GalfitComps 
 from ellipsect.lib.clas import PhotAPI 
 
-from ellipsect.io.read import ReadGALFITout 
+from ellipsect.inout.read import ReadGALFITout 
 
-
-from ellipsect.io.read import ReadNComp 
+from ellipsect.inout.read import ReadNComp 
 
 from ellipsect.sectors.ellip import EllipSectors
 from ellipsect.sectors.ellip import MulEllipSectors

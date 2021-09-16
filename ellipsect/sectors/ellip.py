@@ -5,7 +5,7 @@ from ellipsect.lib.libs import *
 
 #next function removed from this file and moved to comp
 from ellipsect.sectors.comp import FindSB
-from ellipsect.io.plots import PlotSB
+from ellipsect.inout.plots import PlotSB
 
 from ellipsect.sectors.num import Interpol
 

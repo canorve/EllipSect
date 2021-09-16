@@ -2,8 +2,8 @@
 from ellipsect.lib.libs import *
 
 
-from ellipsect.io.prt import PrintEllFilesComps 
-from ellipsect.io.plots import PlotSub 
+from ellipsect.inout.prt import PrintEllFilesComps 
+from ellipsect.inout.plots import PlotSub 
 
 
 def SubComp(params, galpar, galcomps, sectcomps, axsec, n_sectors=19):

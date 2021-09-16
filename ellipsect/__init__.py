@@ -2,7 +2,7 @@
 #Importing local libraries:
 #############################
 
-from ellipsect.io.read import InputSys
+from ellipsect.inout.read import InputSys
 from ellipsect.sectors.sect import SectorsGalfit 
 
 

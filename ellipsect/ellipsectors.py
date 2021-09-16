@@ -20,7 +20,6 @@ def run():
 
         sys.exit()
 
-
     # read user's input 
     params = InputSys(sys.argv)
 
@@ -33,6 +32,9 @@ def run():
 
     #print("AIC: ",photapi.AICrit)
     #print("Bulge to Total: ",photapi.BulgeToTotal)
+
+    return True
+
 
     ##############       #############
     ##############  END  #############

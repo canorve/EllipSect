@@ -5,11 +5,11 @@ import pytest
 from ellipsect import ellipsectors 
 
 
-
-
-
-def test_main():
-    value == ellipsectors.run()
-    assert value == True
+# simple run test
+def test_exit():
+    with pytest.raises(SystemExit) as e:
+        ellipsectors.run()
+    assert e.type == SystemExit 
+    assert e.value.code == 0 
 
 

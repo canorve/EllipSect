@@ -18,7 +18,7 @@ def run():
         print ("use help to display more information about 'options' arguments: ")
         print ("%s -help " % (sys.argv[0]))
 
-        sys.exit()
+        sys.exit(0)
 
     # read user's input 
     params = InputSys(sys.argv)

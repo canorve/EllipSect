@@ -260,7 +260,7 @@ def InputSys(argv):
 
 
 
-    params.galfile= sys.argv[1]
+    params.galfile= argv[1]
 
     return params
 

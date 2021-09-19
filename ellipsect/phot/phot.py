@@ -150,9 +150,20 @@ def OutPhot(params, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi):
             print("using existing sigma image ")
 
 
+    # ignore warnings from Card too long
+    if not sys.warnoptions:
+        warnings.simplefilter("ignore")
+
 
     # call to Tidal
     (tidal,objchinu,bump,snr,stdsnr,totsnr,rss,ndof,magalaper,magmodaper)=Tidal(params, galpar, galcomps, sectgalax, 2)
+
+    # returns warnings to normal
+    if not sys.warnoptions:
+        warnings.simplefilter("default")
+
+
+
 
     print("galaxy mag using sectors_photometry aperture = {:.3f} ".format(magalaper))
     print("Model mag using sectors_photometry aperture = {:.3f}".format(magmodaper))

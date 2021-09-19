@@ -13,6 +13,10 @@ from ellipsect.sectors.num import Interpol
 from ellipsect.sectors.comp import SubComp
 
 
+from ellipsect.inout.prt import PrintEllFilesGax
+from ellipsect.inout.prt import PrintFilesGax
+
+
 
 def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sectors=19, minlevel=0):
 

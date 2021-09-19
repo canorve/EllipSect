@@ -323,7 +323,7 @@ def SectorsGalfit(params):
             print("Creating directory for  output photometry ... ")
             os.makedirs("sbfiles")
 
-        msg="surface brightness output file: {} ".format(params.sboutput+".txt")
+        msg="prefix for surface brightness output file: {} ".format(params.sboutput)
         print(msg)
 
     if params.flagphot == True: 

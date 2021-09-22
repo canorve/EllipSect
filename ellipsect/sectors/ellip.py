@@ -8,7 +8,7 @@ from ellipsect.sectors.comp import FindSB
 from ellipsect.inout.plots import PlotSB
 
 from ellipsect.sectors.num import Interpol
-
+from ellipsect.sectors.num import Re90
 
 from ellipsect.sectors.comp import SubComp
 
@@ -90,8 +90,9 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
         Rinit = 1
 
         if not(params.flagskyRad):
-            Rad90= galpar.rad * (1.53 + 0.73 * galpar.serind+ 0.07 * galpar.serind**2) 
-            Rinit = 1*Rad90 # 1 times the R 90% of light radius
+            #rad90= galpar.rad * (1.53 + 0.73 * galpar.serind+ 0.07 * galpar.serind**2) 
+            rad90= Re90(galpar.rad,galpar.serind) 
+            Rinit = 1*rad90 # 1 times the R 90% of light radius
 
             if (Rinit < 50): # Rinit can not be less than the default value 
                 Rinit = 50 
@@ -152,8 +153,9 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
         Rinit = 1
 
         if not(params.flagskyRad):
-            Rad90= galpar.rad * (1.53 + 0.73 * galpar.serind + 0.07 * galpar.serind**2) 
-            Rinit = 3*Rad90 # 1 times the R 90% of light radius
+            #rad90=galpar.rad * (1.53 + 0.73 * galpar.serind + 0.07 * galpar.serind**2) 
+            rad90= Re90(galpar.rad,galpar.serind) 
+            Rinit = 3*rad90 # 1 times the R 90% of light radius
 
             if (Rinit < 100): # Rinit can not be less than the default value 
                 Rinit = 100 
@@ -456,7 +458,7 @@ def MulEllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps):
         r2 = mgemodrad[angmod]
 
         txtang= sectors[j]
-        txt = "$%.f^\circ$" % txtang
+        txt = r"$%.f^\circ$" % txtang
 
         if params.flagranx[1] == False:
             axsec[row, 0].set_xlim(xran)

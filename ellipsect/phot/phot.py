@@ -3,11 +3,12 @@
 from ellipsect.lib.libs import *
 
 
-from ellipsect.sectors.num import GetKAprox 
+from ellipsect.sectors.num import GetK
 from ellipsect.phot.tidal import Tidal
 from ellipsect.phot.ned import NED
 
 
+from ellipsect.sectors.num import Re90
 
 #phot/phot.py
 ### Dictionary for Absolute mag of the Sun taken from Willmer 2018
@@ -88,7 +89,8 @@ def OutPhot(params, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi):
 
     galcomps.Rad50sec[maskgalax] = galcomps.Rad50[maskgalax] * galpar.scale 
 
-    galcomps.Rad90[maskgalax] = galcomps.Rad50[maskgalax] * (1.53 + 0.73 * galcomps.SerInd[maskgalax] + 0.07 * galcomps.SerInd[maskgalax]**2) 
+    #galcomps.Rad90[maskgalax] = galcomps.Rad50[maskgalax] * (1.53 + 0.73 * galcomps.SerInd[maskgalax] + 0.07 * galcomps.SerInd[maskgalax]**2) 
+    galcomps.Rad90[maskgalax] = Re90(galcomps.Rad50[maskgalax],galcomps.SerInd[maskgalax] )
 
     ######
 
@@ -96,7 +98,7 @@ def OutPhot(params, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi):
 
 
 
-    galcomps.kser[maskgalax]  = GetKAprox(galcomps.SerInd[maskgalax])
+    galcomps.kser[maskgalax]  = GetK(galcomps.SerInd[maskgalax])
 
     # computing meanme and me 
     galcomps.mme[maskgalax]  = galcomps.Mag[maskgalax]  + 2.5 * np.log10(2 * np.pi * galcomps.AxRat[maskgalax] * galcomps.Rad50sec[maskgalax]**2 )

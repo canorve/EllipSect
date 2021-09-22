@@ -7,6 +7,7 @@ from astropy.io import fits
 import os.path  
 import scipy
 import scipy.special
+from scipy.special import gammaincinv
 import matplotlib.pyplot as plt
 import matplotlib.colors as colors
 import matplotlib.cm as cmx

@@ -50,6 +50,8 @@ class InputParams:
     flagskybox =  False
     flagskynum = False
     flagskywidth = False
+    
+    flagdistmax = False
 
 
 
@@ -106,12 +108,15 @@ class InputParams:
 
 
     # sky parameters:
-    insky=0
+    insky = 0
 
     skyRad = 50 # minimum radius
     skybox = 20
     skynum = 20
     skywidth = 20
+
+
+    distmax = 10
 
 
 #io/class.py

@@ -332,7 +332,7 @@ def SectorsGalfit(params):
 
 
     # read all the object components of the model in galfit.XX
-    ReadNComp(params.galfile,galpar.xc,galpar.yc,galcomps)
+    ReadNComp(params.galfile,galpar.xc,galpar.yc,galcomps,params.distmax)
     print("Number of components = ",len(galcomps.N))
 
 

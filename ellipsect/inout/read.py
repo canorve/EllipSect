@@ -13,7 +13,7 @@ def InputSys(argv):
 
     OptionHandleList = ['-logx', '-q', '-pa','-comp','-pix','-ranx','-rany','-grid','-dpi','-sbout','-noplot',
         '-minlevel','-sectors','-phot','-object','-filter','-snr','-help','-checkimg','-noned','-distmod','-magcor',
-        '-scalekpc','-sbdim','-model','-sky','-keep','-ned','-gradsky','-randsky','-skyRad','-skyRadmax','-skynum','-skybox','-skywidth']
+        '-scalekpc','-sbdim','-model','-sky','-keep','-ned','-gradsky','-randsky','-skyRad','-skyRadmax','-skynum','-skybox','-skywidth','-distmax']
 
 
     #class for user's parameters
@@ -97,6 +97,12 @@ def InputSys(argv):
         params.flagskybox=True
     if options['skynum'] != None:
         params.flagskynum=True
+
+    if options['distmax'] != None:
+        params.flagdistmax=True
+
+
+
 
     # check for unrecognized options:
     sysopts=argv[2:]
@@ -258,6 +264,16 @@ def InputSys(argv):
         OptionHandle="-skywidth"
         opt[OptionHandle[1:]] = argv[argv.index(OptionHandle)+1]
         params.skywidth=np.int(opt['skywidth'])
+
+
+    if params.flagdistmax == True:
+        opt={}
+        OptionHandle="-distmax"
+        opt[OptionHandle[1:]] = argv[argv.index(OptionHandle)+1]
+        params.distmax=np.float(opt['distmax'])
+
+
+
 
 
 
@@ -564,7 +580,7 @@ def ReadGALFITout(inputf,galpar):
     #return xc,yc,q,pa,skylevel,scale,outimage,mgzpt,exptime,mask
 
 #io/read.py
-def ReadNComp(inputf,X,Y,galcomps):
+def ReadNComp(inputf,X,Y,galcomps,distmax):
     ## search and count model components
 
     GalfitFile = open(inputf,"r")
@@ -581,7 +597,7 @@ def ReadNComp(inputf,X,Y,galcomps):
 
     n=0
 
-    distmin=10 # minimum distance for among component centers
+    distmin=distmax # minimum distance for among component centers
 
     while index < len(lines):
 

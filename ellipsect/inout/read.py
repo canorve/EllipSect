@@ -3,6 +3,7 @@ from ellipsect.lib.libs import *
 
 from ellipsect.inout.gfits import GetExpTime
 from ellipsect.inout.gfits import GetAxis
+from ellipsect.inout.gfits import GetFits
 
 from ellipsect.inout.help import Help
 from ellipsect.lib.clas import InputParams

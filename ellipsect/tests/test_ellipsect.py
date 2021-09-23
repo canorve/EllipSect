@@ -42,12 +42,30 @@ def test_files():
     assert os.path.isfile(filepng)
     assert os.path.isfile(filemulpng)
 
+
+    if os.path.isfile(filepng):
+        os.remove(filepng)
+    if os.path.isfile(filemulpng):
+        os.remove(filemulpng)
+
+
+
+  
+
 # checking the creation of the components file
 def test_comp():
 
     arg=['./ellsec.py', 'ellipsect/tests/galfit.01','-comp', '-noplot']
 
     path="ellipsect/tests/"
+
+    filepng = "imgblock.png"
+    filemulpng = "imgblock-mul.png"
+
+    filepng = path+filepng
+    filemulpng = path+filemulpng
+
+
 
     filecomp = "imgblock-comp.fits"
 
@@ -60,6 +78,19 @@ def test_comp():
     photapi = SectorsGalfit(params)
 
     assert os.path.isfile(filecomp),"is GALFIT installed?"
+
+
+    if os.path.isfile(filepng):
+        os.remove(filepng)
+    if os.path.isfile(filemulpng):
+        os.remove(filemulpng)
+
+
+    if os.path.isfile(filecomp):
+        os.remove(filecomp)
+
+
+
 
 
 
@@ -75,8 +106,47 @@ def test_phot():
     filephot = "imgblock-out.txt"
     filephot= path+filephot
 
+    filecomp = "imgblock-comp.fits"
+    filecomp= path+filecomp
+
+    filepng = "imgblock.png"
+    filemulpng = "imgblock-mul.png"
+
+    filesig = "imgblock-sig.fits"
+    filesig= path+filesig
+
+    filecheck = "imgblock-check.fits"
+    filecheck= path+filecheck
+
+
+
+    filepng = path+filepng
+    filemulpng = path+filemulpng
+
+    if os.path.isfile(filepng):
+        os.remove(filepng)
+    if os.path.isfile(filemulpng):
+        os.remove(filemulpng)
+
+
+
+    if os.path.isfile(filecomp):
+        os.remove(filecomp)
+
+
+
+
     if os.path.isfile(filephot):
         os.remove(filephot)
+
+    if os.path.isfile(filesig):
+        os.remove(filesig)
+
+    if os.path.isfile(filecheck):
+        os.remove(filecheck)
+
+
+
 
     params = InputSys(arg)
     photapi = SectorsGalfit(params)
@@ -104,7 +174,6 @@ def test_phot():
 
 
 
-
     assert os.path.isfile(filephot)
 
     assert diffbt < tol
@@ -116,6 +185,25 @@ def test_phot():
     assert diffaic < tol
     assert diffbic < tol
 
+
+
+    if os.path.isfile(filepng):
+        os.remove(filepng)
+
+    if os.path.isfile(filemulpng):
+        os.remove(filemulpng)
+
+    if os.path.isfile(filecomp):
+        os.remove(filecomp)
+
+    if os.path.isfile(filephot):
+        os.remove(filephot)
+
+    if os.path.isfile(filesig):
+        os.remove(filesig)
+
+    if os.path.isfile(filecheck):
+        os.remove(filecheck)
 
 
 

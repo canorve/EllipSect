@@ -443,7 +443,6 @@ def ReadGALFITout(inputf,galpar):
                 if tmp[0] == "4)" and (dist < 3):    # Effective radius
                     galpar.rad=float(tmp[1])
                     galpar.rad=0.8325546*galpar.rad
-                    print("hello3 ",galpar.rad)
 
                 #if tmp[0] == "5)":    # Sersic index 
                     galpar.serind=0.5

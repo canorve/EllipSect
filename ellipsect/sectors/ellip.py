@@ -471,13 +471,20 @@ def MulEllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps):
             axsec[row, 0].set_ylim(ymax,ymin) #inverted
 
         if params.flaglogx == False:
-            axsec[row, 0].plot(r, mgesb[angal], 'C3o')
 
-            axsec[row, 0].plot(r2, mgemodsb[angmod], 'C0-', linewidth=2)
+            #axsec[row, 0].plot(r, mgesb[angal], 'C3o') 
+            #change lines instead of dots
+            axsec[row, 0].plot(r, mgesb[angal], 'C3-',linewidth=2)
+
+            axsec[row, 0].plot(r2, mgemodsb[angmod], 'C0-', linewidth=1.5)
+
         else:
-            axsec[row, 0].semilogx(r, mgesb[angal], 'C3o')
 
-            axsec[row, 0].semilogx(r2, mgemodsb[angmod], 'C0-', linewidth=2)
+            #axsec[row, 0].semilogx(r, mgesb[angal], 'C3o')
+            #change lines instead of dots
+            axsec[row, 0].semilogx(r, mgesb[angal], 'C3-', linewidth=2)
+
+            axsec[row, 0].semilogx(r2, mgemodsb[angmod], 'C0-', linewidth=1.5)
 
         if params.flagsbout == True: 
 

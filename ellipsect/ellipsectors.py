@@ -21,7 +21,6 @@ def run():
         sys.exit(0)
 
     # read user's input 
-    print(sys.argv) # for tests only
     params = InputSys(sys.argv)
 
     # full program:

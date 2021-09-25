@@ -9,6 +9,7 @@ from ellipsect.phot.ned import NED
 
 
 from ellipsect.sectors.num import Re90
+from ellipsect.sectors.num import RadGamma
 
 #phot/phot.py
 ### Dictionary for Absolute mag of the Sun taken from Willmer 2018
@@ -41,6 +42,9 @@ def OutPhot(params, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi):
     maskexp= (galcomps.NameComp == "expdisk")
     maskdevauc=(galcomps.NameComp == "devauc")
     maskgauss=(galcomps.NameComp == "gaussian")
+    masknuker=(galcomps.NameComp == "nuker")
+
+
 
 
     if maskmag.any():
@@ -52,7 +56,9 @@ def OutPhot(params, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi):
         #print("total Flux = ",totFlux)
     #else:
     #    print("Total magnitud can not be computed with the actual galfit functions")
-
+    else:
+        totFlux = 0
+        totMag = 99
 
 
     if maskdisk.any():
@@ -92,9 +98,19 @@ def OutPhot(params, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi):
     #galcomps.Rad90[maskgalax] = galcomps.Rad50[maskgalax] * (1.53 + 0.73 * galcomps.SerInd[maskgalax] + 0.07 * galcomps.SerInd[maskgalax]**2) 
     galcomps.Rad90[maskgalax] = Re90(galcomps.Rad50[maskgalax],galcomps.SerInd[maskgalax] )
 
-    ######
 
     print("Rad90 is the radius at 90% of total light  ")
+
+    if masknuker.any():
+ 
+       
+        # if the component is Nuker, galcomps.Rad90 represents  the gamma radius
+        galcomps.Rad90[masknuker] = RadGamma(galcomps.Rad[masknuker],galcomps.Exp[masknuker],galcomps.Exp2[masknuker],galcomps.Exp3[masknuker])
+
+
+        print("For Nuker component, Rad90 is the gamma radius ")
+    ######
+
 
 
 
@@ -272,6 +288,12 @@ def OutPhot(params, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi):
         #print("Magnitud Absoluta using Distance Modulus independen of z ",AbsMag2)
         #print("check references in ",params.namened)
 
+    else:
+
+        AbsMag = 99
+        AbsMag2 = 99
+        Lum = 0
+
 
     if maskgalax.any():
 
@@ -338,7 +360,7 @@ def OutPhot(params, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi):
     lineout = "# Magnitudes are not corrected by K-Correction \n"
     OUTPHOT.write(lineout)
 
-    lineout= "# Total magnitude and other variables do NOT include: \n"
+    lineout= "# Total magnitude and other variables are NOT computed for: \n"
     OUTPHOT.write(lineout)
 
     lineout= "# ferrer, nuker, edgedisk and king components.  \n"
@@ -349,6 +371,10 @@ def OutPhot(params, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi):
 
     lineout = "# This ellipse has axis a = {:.2f} and b = {:.2f} centered at xc, yc \n".format(aell,bell)
     OUTPHOT.write(lineout)
+
+    lineout = "# To see this ellipse check the file {} \n".format(params.namecheck)
+    OUTPHOT.write(lineout)
+
 
     lineout= "#\n"
     OUTPHOT.write(lineout)

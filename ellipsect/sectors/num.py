@@ -45,3 +45,9 @@ def Re90(rad,n):
     return (rad90)
 
 
+def RadGamma(rb,alpha,beta,gamma):
+
+    rg = rb * ((1/2 - gamma)/(beta - 1/2))**(1/alpha)
+
+    return rg
+

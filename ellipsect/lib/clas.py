@@ -211,6 +211,7 @@ class GalfitComps:
     kser = np.array([])
 
 
+
 #class to comunicate externally:
 class PhotAPI:
 

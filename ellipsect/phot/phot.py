@@ -11,6 +11,9 @@ from ellipsect.phot.ned import NED
 from ellipsect.sectors.num import Re90
 from ellipsect.sectors.num import RadGamma
 
+from ellipsect.sectors.num import KronRadius
+from ellipsect.sectors.num import solvePet
+
 #phot/phot.py
 ### Dictionary for Absolute mag of the Sun taken from Willmer 2018
 SunMag = {
@@ -97,10 +100,16 @@ def OutPhot(params, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi):
 
     #galcomps.Rad90[maskgalax] = galcomps.Rad50[maskgalax] * (1.53 + 0.73 * galcomps.SerInd[maskgalax] + 0.07 * galcomps.SerInd[maskgalax]**2) 
     galcomps.Rad90[maskgalax] = Re90(galcomps.Rad50[maskgalax],galcomps.SerInd[maskgalax] )
-
-
     print("Rad90 is the radius at 90% of total light  ")
 
+    galcomps.KronRad[maskgalax] = KronRadius(galcomps.Rad50[maskgalax],galcomps.Rad50[maskgalax],galcomps.SerInd[maskgalax] )
+    print("Kron Radius is computed at Re ")
+
+
+    galcomps.PetRad[maskgalax]= solvePet(galcomps.SerInd[maskgalax])
+    print("Petrosian Radius is computed with 1/nu = 0.2 (in Re units)")
+
+ 
     if masknuker.any():
  
        
@@ -120,7 +129,7 @@ def OutPhot(params, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi):
     galcomps.mme[maskgalax]  = galcomps.Mag[maskgalax]  + 2.5 * np.log10(2 * np.pi * galcomps.AxRat[maskgalax] * galcomps.Rad50sec[maskgalax]**2 )
 
 
-    fn = (( galcomps.AxRat[maskgalax] * galcomps.SerInd[maskgalax] * np.exp( galcomps.kser[maskgalax])) / (galcomps.kser[maskgalax] ** (2 * galcomps.SerInd[maskgalax] )) ) * ( np.exp(scipy.special.gammaln(2*galcomps.SerInd[maskgalax])) )
+    fn = (( galcomps.AxRat[maskgalax] * galcomps.SerInd[maskgalax] * np.exp( galcomps.kser[maskgalax])) / (galcomps.kser[maskgalax] ** (2 * galcomps.SerInd[maskgalax] )) ) * ( np.exp(sc.gammaln(2*galcomps.SerInd[maskgalax])) )
 
     galcomps.me[maskgalax] = galcomps.mme[maskgalax] +  2.5 * np.log10( fn )
 
@@ -527,15 +536,15 @@ def OutPhot(params, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi):
     OUTPHOT.write(lineout)
 
 
-    lineout = "# Number   Component   FractionLight    me        <me>        AbsMag      Luminosity      Rad90       Re   \n"  
+    lineout = "# Number   Component   FractionLight    me        <me>        AbsMag      Luminosity      Rad90       Re      KronRadius      PetrosianRadius   \n"  
     OUTPHOT.write(lineout)
 
-    lineout = "#                                    (mag/'')   (mag/'')      (mag)    (10^10 SolarLum)   (pix)      (kpc)   \n"  
+    lineout = "#                                    (mag/'')   (mag/'')      (mag)    (10^10 SolarLum)   (pix)      (kpc)   (pix)      (Re)    \n"  
     OUTPHOT.write(lineout)
 
 
     for idx, item in enumerate(galcomps.N) :
-        lineout= "    {0:^2} {1:^17} {2:^10.3f} {3:^10.3f} {4:^10.3f} {5:^14.3f} {6:^14.3f} {7:^10.3f} {8:^10.3f}  \n".format(galcomps.N[idx],galcomps.NameComp[idx],galcomps.PerLight[idx],galcomps.me[idx],galcomps.mme[idx],galcomps.AbsMag[idx],galcomps.Lum[idx]/1e10,galcomps.Rad90[idx],galcomps.Rad50kpc[idx])
+        lineout= "    {0:^2} {1:^17} {2:^10.3f} {3:^10.3f} {4:^10.3f} {5:^14.3f} {6:^14.3f} {7:^10.3f} {8:^10.3f}  \n".format(galcomps.N[idx],galcomps.NameComp[idx],galcomps.PerLight[idx],galcomps.me[idx],galcomps.mme[idx],galcomps.AbsMag[idx],galcomps.Lum[idx]/1e10,galcomps.Rad90[idx],galcomps.Rad50kpc[idx],galcomps.KronRad[idx],galcomps.PetRad[idx])
         OUTPHOT.write(lineout)
 
     OUTPHOT.close()
@@ -569,5 +578,12 @@ def OutPhot(params, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi):
     photapi.Lum = Lum 
     photapi.AICrit   = AICrit 
     photapi.BICrit = BICrit
+
+
+    photapi.KronRad=galcomps.KronRad.copy()
+    photapi.PetRad=galcomps.PetRad.copy()
+
+
+
 
 

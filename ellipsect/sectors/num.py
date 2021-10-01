@@ -14,7 +14,7 @@ def  Interpol(X,Y,X2):
 def GetK(n):
     "Solve the Sersic function to get the dependence of K over Sersic index"
 
-    k = gammaincinv(2*n,0.5)
+    k = sc.gammaincinv(2*n,0.5)
 
     return (k)
 
@@ -34,8 +34,8 @@ def Re90(rad,n):
     "Returns the radius containing the 90% of light"
 
     #Rad90= galpar.rad * (1.53 + 0.73 * galpar.serind+ 0.07 * galpar.serind**2) 
-    x = gammaincinv(2*n,0.9)
-    k = gammaincinv(2*n,0.5)
+    x = sc.gammaincinv(2*n,0.9)
+    k = sc.gammaincinv(2*n,0.5)
 
     r9re=(x/k)**n
 
@@ -50,4 +50,67 @@ def RadGamma(rb,alpha,beta,gamma):
     rg = rb * ((1/2 - gamma)/(beta - 1/2))**(1/alpha)
 
     return rg
+
+def ReFrac(rad,n,frac):
+    "Returns the radius containing the fraction of light"
+
+    x = sc.gammaincinv(2*n,frac)
+    k = sc.gammaincinv(2*n,0.5)
+
+    rfre=(x/k)**n
+
+    radfrac = rad*rfre
+
+    return (radfrac)
+
+
+
+def KronRadius(rad,re,n):
+    "return the Kron Radius"
+
+    k = sc.gammaincinv(2*n,0.5)
+
+    x = k*(rad/re)**(1/n)
+
+    KronRad = ((re/k**n))*((sc.gammainc(3*n,x)*sc.gamma(3*n))/(sc.gammainc(2*n,x)*sc.gamma(2*n)))
+
+    return KronRad
+
+
+def PetrosianIndex(rad,re,n,C=0):
+    "returns the inverse of the Petrosian Index"
+
+    k = sc.gammaincinv(2*n,0.5)
+
+    x = k*(rad/re)**(1/n)
+
+
+    nu = (2*n*(sc.gammainc(2*n,x)*sc.gamma(2*n)))/((np.exp(-x))*x**(2*n))
+
+    invnu  = 1/nu
+
+    return invnu - C
+
+
+def solvePet(n,c=0.2):
+    "return the Petrosian radius (in Re units). It uses Bisection"
+
+
+    a = .1
+    b = 30
+
+    if(isinstance(n,np.ndarray)):
+        Rp =[]
+
+        for idx,item in enumerate(n):
+            r= bisect(PetrosianIndex,a,b,args=(1,item,c))
+            Rp.append(r)
+
+    else:
+
+        Rp=bisect(PetrosianIndex,a,b,args=(1,n,c))
+
+    return Rp
+
+
 

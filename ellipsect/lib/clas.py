@@ -174,7 +174,6 @@ class GalfitParams:
 
 
 
-#io/class.py
 ### class for Galfit components
 class GalfitComps:
 
@@ -209,6 +208,16 @@ class GalfitComps:
     me=np.array([])
     mme=np.array([])
     kser = np.array([])
+
+
+    KronRad=np.array([])
+    PetRad=np.array([])
+
+    # every new variable must be initialized at 
+    # the end of the function:
+    #inout/read.py:ReadNComp
+    
+    # Also every new variable must be added to the class below
 
 
 
@@ -316,6 +325,8 @@ class PhotAPI:
     mme=np.array([])
     kser = np.array([])
 
+    KronRad=np.array([])
+    PetRad=np.array([])
 
 
 
@@ -351,6 +362,8 @@ class PhotAPI:
     Lum = 0
     AICrit   = 0
     BICrit = 0
+
+
 
 
  

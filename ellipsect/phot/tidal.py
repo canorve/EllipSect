@@ -4,7 +4,6 @@ from ellipsect.lib.libs import *
 from ellipsect import *
 
 
-
 def Tidal(params, galpar, galcomps, sectgalax, rmin):
     "Computes Tidal  values as defined in Tal et al. 2009 AJ. It algo computes Bumpiness"
     "(Blakeslee 2006 ApJ) value defined between rmin and radius"
@@ -361,6 +360,10 @@ def Tidal(params, galpar, galcomps, sectgalax, rmin):
         else:
             bump=-1
 
+
+        #ks statistics
+        #ks,p = stats.kstest(galflux.flatten(),modflux.flatten())
+        #print("kolmogorov ks, p: ",ks,p)
 
     # computing RSS: 
     #rss=(imres[ylo - 1:yhi, xlo - 1:xhi][maskm]**2).sum()

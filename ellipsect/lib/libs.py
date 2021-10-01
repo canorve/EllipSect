@@ -5,15 +5,17 @@ import os
 import subprocess as sp
 from astropy.io import fits
 import os.path  
-import scipy
-import scipy.special
-from scipy.special import gammaincinv
+import scipy.special as sc
+from scipy.optimize import bisect
 import matplotlib.pyplot as plt
 import matplotlib.colors as colors
 import matplotlib.cm as cmx
 import mimetypes
 import warnings
 import platform
+
+
+
 
 
 from scipy import interpolate

@@ -579,7 +579,7 @@ def ReadGALFITout(inputf,galpar):
 
     #return xc,yc,q,pa,skylevel,scale,outimage,mgzpt,exptime,mask
 
-#io/read.py
+#inout/read.py
 def ReadNComp(inputf,X,Y,galcomps,distmax):
     ## search and count model components
 
@@ -725,6 +725,9 @@ def ReadNComp(inputf,X,Y,galcomps,distmax):
     galcomps.me=np.array([99.0]*tot)
     galcomps.mme=np.array([99.0]*tot)
     galcomps.kser = np.array([0.0]*tot)
+
+    galcomps.KronRad=np.array([0.0]*tot)
+    galcomps.PetRad=np.array([0.0]*tot)
 
 
     galcomps.N=galcomps.N.astype(int)

@@ -13,7 +13,7 @@ def InputSys(argv):
 
     OptionHandleList = ['-logx', '-q', '-pa','-comp','-pix','-ranx','-rany','-grid','-dpi','-sbout','-noplot',
         '-minlevel','-sectors','-phot','-object','-filter','-snr','-help','-checkimg','-noned','-distmod','-magcor',
-        '-scalekpc','-sbdim','-model','-sky','-keep','-ned','-gradsky','-randsky','-skyRad','-skyRadmax','-skynum','-skybox','-skywidth','-distmax']
+        '-scalekpc','-sbdim','-model','-sky','-keep','-ned','-gradsky','-randsky','-skyRad','-skyRadmax','-skynum','-skybox','-skywidth','-distmax', '-fwhm']
 
 
     #class for user's parameters
@@ -100,6 +100,9 @@ def InputSys(argv):
 
     if options['distmax'] != None:
         params.flagdistmax=True
+
+    if options['fwhm'] != None:
+        params.flagfwhm=True
 
 
 
@@ -273,6 +276,11 @@ def InputSys(argv):
         params.distmax=np.float(opt['distmax'])
 
 
+    if params.flagfwhm == True:
+        opt={}
+        OptionHandle="-fwhm"
+        opt[OptionHandle[1:]] = argv[argv.index(OptionHandle)+1]
+        params.fwhm=np.float(opt['fwhm'])
 
 
 

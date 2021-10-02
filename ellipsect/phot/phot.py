@@ -338,6 +338,17 @@ def OutPhot(params, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi):
 
     BICrit = objchinu * ndof + freepar * np.log(npix)
 
+
+    #    ; BAYESIAN INFORMATION CRITERION limited by  
+    # number of elements of resolution 
+
+    #    ; BIC = chi^2 * APSF + k * ln(n/APSF)
+
+    APSF = np.pi * params.fwhm**2
+
+    BICres = objchinu * ndof   + freepar * np.log(npix/APSF)
+
+
     ## for output only: 
     stidxg = np.argsort(sectgalax.radius)
 
@@ -492,6 +503,10 @@ def OutPhot(params, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi):
     lineout = "Bayesian Information Criterion = {:.3f} \n".format(BICrit)  
     OUTPHOT.write(lineout)
 
+    lineout = "Bayesian Information Criterion using nres = n / Area_psf = {:.3f} \n".format(BICres)  
+    OUTPHOT.write(lineout)
+
+
     lineout= "\n"
     OUTPHOT.write(lineout)
 
@@ -536,15 +551,15 @@ def OutPhot(params, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi):
     OUTPHOT.write(lineout)
 
 
-    lineout = "# Number   Component   FractionLight    me        <me>        AbsMag      Luminosity      Rad90       Re      KronRadius      PetrosianRadius   \n"  
+    lineout = "#   N      Component   FractionLight    me        <me>        AbsMag      Luminosity      Rad90       Re      KronRadius   PetroRad \n"  
     OUTPHOT.write(lineout)
 
-    lineout = "#                                    (mag/'')   (mag/'')      (mag)    (10^10 SolarLum)   (pix)      (kpc)   (pix)      (Re)    \n"  
+    lineout = "#                                    (mag/'')   (mag/'')      (mag)    (10^10 SolarLum)   (pix)      (kpc)      (pix)       (Re)    \n"  
     OUTPHOT.write(lineout)
 
 
     for idx, item in enumerate(galcomps.N) :
-        lineout= "    {0:^2} {1:^17} {2:^10.3f} {3:^10.3f} {4:^10.3f} {5:^14.3f} {6:^14.3f} {7:^10.3f} {8:^10.3f}  \n".format(galcomps.N[idx],galcomps.NameComp[idx],galcomps.PerLight[idx],galcomps.me[idx],galcomps.mme[idx],galcomps.AbsMag[idx],galcomps.Lum[idx]/1e10,galcomps.Rad90[idx],galcomps.Rad50kpc[idx],galcomps.KronRad[idx],galcomps.PetRad[idx])
+        lineout= "    {0:^2} {1:^17} {2:^10.3f} {3:^10.3f} {4:^10.3f} {5:^14.3f} {6:^14.3f} {7:^10.3f} {8:^10.3f} {9:^10.3f}  {10:^10.3f}  \n".format(galcomps.N[idx],galcomps.NameComp[idx],galcomps.PerLight[idx],galcomps.me[idx],galcomps.mme[idx],galcomps.AbsMag[idx],galcomps.Lum[idx]/1e10,galcomps.Rad90[idx],galcomps.Rad50kpc[idx],galcomps.KronRad[idx],galcomps.PetRad[idx])
         OUTPHOT.write(lineout)
 
     OUTPHOT.close()
@@ -578,6 +593,8 @@ def OutPhot(params, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi):
     photapi.Lum = Lum 
     photapi.AICrit   = AICrit 
     photapi.BICrit = BICrit
+
+    photapi.BICres = BICres
 
 
     photapi.KronRad=galcomps.KronRad.copy()

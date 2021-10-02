@@ -8,7 +8,7 @@ def Help():
 
     print ("EllipSect: an analysis tool for GALFIT output  ")
     print ("Usage:\n %s [GALFITOutputFile] [-logx] [-q AxisRatio] [-pa PositionAngle] [-comp] [-pix] [-ranx/y Value] [-grid] [-dpi Value] [-model File] [-phot] [-sky Value] " % (sys.argv[0]))
-    print ("More options: [-sbout] [-noplot] [-minlevel Value] [-sectors Value] [-object Name] [-filter Name] [-snr] [-help] [-checkimg] [-noned] [-distmod Value] [-magcor Value] [-scalekpc Value] [-sbdim Value] [-keep] [-ned XmlFile] [-gradsky ] [-randsky ] [-skyRad Value] [-skyRadmax Value][-skynum Value] [-skybox Value] [-skywidth Value] ") 
+    print ("More options: [-sbout] [-noplot] [-minlevel Value] [-sectors Value] [-object Name] [-filter Name] [-snr] [-help] [-checkimg] [-noned] [-distmod Value] [-magcor Value] [-scalekpc Value] [-sbdim Value] [-keep] [-ned XmlFile] [-gradsky ] [-randsky ] [-skyRad Value] [-skyRadmax Value][-skynum Value] [-skybox Value] [-skywidth Value] [-fwhm Value]") 
 
     print ("GALFITOutputFile: GALFIT output file ")
     print ("logx: activates X-axis as logarithm ")
@@ -51,6 +51,8 @@ def Help():
     print ("sectors: parameter given directly to sectors_photometry. Divide elipse in 'sectors' ")
     print ("                      Check sectors_photometry manual")
     print ("checkimg: save the images used for sectors_photometry in individual components")
+    print ("fwhm: It is used to compute Area_psf for BICres. Default = 2 pixels")
+
     print ("gradsky: computes sky using the gradient method ")
     print ("randsky: computes sky averaging random boxes ") 
 

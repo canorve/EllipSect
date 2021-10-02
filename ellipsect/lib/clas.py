@@ -53,6 +53,7 @@ class InputParams:
     
     flagdistmax = False
 
+    flagfwhm = False
 
 
     #init
@@ -115,6 +116,7 @@ class InputParams:
     skynum = 20
     skywidth = 20
 
+    fwhm = 2
 
     distmax = 10
 
@@ -362,7 +364,7 @@ class PhotAPI:
     Lum = 0
     AICrit   = 0
     BICrit = 0
-
+    BICres = 0
 
 
 

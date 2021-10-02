@@ -423,6 +423,9 @@ def SectorsGalfit(params):
 
     limx,limy=EllipSectors(params, galpar, galcomps, sectgalax,sectmodel, sectcomps,n_sectors=numsectors)
 
+    print("name of the plot file: ", params.namepng)
+ 
+
 
     ##############################################
     ##############################################
@@ -440,6 +443,9 @@ def SectorsGalfit(params):
     print("creating multi-plots..")
 
     MulEllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps)
+
+
+    print("name of the multi-plot file: ", params.namemul)
 
 
     if params.dplot:

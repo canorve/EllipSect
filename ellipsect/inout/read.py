@@ -292,7 +292,7 @@ def InputSys(argv):
 
 
 #io/read.py
-def ReadGALFITout(inputf,galpar):
+def ReadGALFITout(inputf,galpar,distmax):
 
     flagfirst = True
 
@@ -402,18 +402,18 @@ def ReadGALFITout(inputf,galpar):
                         dist = np.sqrt((galpar.xc-xcser)**2+(galpar.yc-ycser)**2)
 
 
-                if tmp[0] == "4)" and (dist < 3):    # Effective radius
+                if tmp[0] == "4)" and (dist < distmax):    # Effective radius
                     galpar.rad=float(tmp[1])
 
-                if tmp[0] == "5)" and (dist < 3):    # Sersic index 
+                if tmp[0] == "5)" and (dist < distmax):    # Sersic index 
                     galpar.serind=float(tmp[1])
 
 
 
-                if tmp[0] == "9)" and (dist < 3):    # axis ratio
+                if tmp[0] == "9)" and (dist < distmax ):    # axis ratio
                     galpar.q=float(tmp[1])
 
-                if tmp[0] == "10)" and (dist < 3): # position angle
+                if tmp[0] == "10)" and (dist < distmax): # position angle
                     galpar.ang=float(tmp[1])
 
         # second component exponential model
@@ -433,19 +433,19 @@ def ReadGALFITout(inputf,galpar):
                         dist = np.sqrt((galpar.xc-xcexp)**2+(galpar.yc-ycexp)**2)
 
 
-                if tmp[0] == "4)" and (dist < 3):    # Effective radius
+                if tmp[0] == "4)" and (dist < distmax):    # Effective radius
                     galpar.rad=float(tmp[1])
                     galpar.rad=1.678*galpar.rad
 
-                #if tmp[0] == "5)" and (dist < 3):    # Sersic index 
+                #if tmp[0] == "5)" and (dist < distmax):    # Sersic index 
                     galpar.serind=1
 
 
 
-                if (tmp[0] == "9)") and (dist < 3):    # axis ratio
+                if (tmp[0] == "9)") and (dist < distmax):    # axis ratio
                     galpar.q=float(tmp[1])
 
-                if (tmp[0] == "10)") and (dist < 3): # position angle
+                if (tmp[0] == "10)") and (dist < distmax): # position angle
                     galpar.ang=float(tmp[1])
 
 
@@ -465,7 +465,7 @@ def ReadGALFITout(inputf,galpar):
                         dist = np.sqrt((galpar.xc-xcgauss)**2+(galpar.yc-ycgauss)**2)
 
 
-                if tmp[0] == "4)" and (dist < 3):    # Effective radius
+                if tmp[0] == "4)" and (dist < distmax):    # Effective radius
                     galpar.rad=float(tmp[1])
                     galpar.rad=0.8325546*galpar.rad
 
@@ -474,10 +474,10 @@ def ReadGALFITout(inputf,galpar):
 
 
 
-                if (tmp[0] == "9)") and (dist < 3):    # axis ratio
+                if (tmp[0] == "9)") and (dist < distmax):    # axis ratio
                     galpar.q=float(tmp[1])
 
-                if (tmp[0] == "10)") and (dist < 3): # position angle
+                if (tmp[0] == "10)") and (dist < distmax): # position angle
                     galpar.ang=float(tmp[1])
 
 
@@ -690,11 +690,11 @@ def ReadNComp(inputf,X,Y,galcomps,distmax):
                     AxRat=float(tmp[1])
                     par=int(tmp[2])
                     freepar+=par
-                if tmp[0] == "10)" and flagcomp == True:    # axis ratio
+                if tmp[0] == "10)" and flagcomp == True:    # position angle 
                     PosAng=float(tmp[1])
                     par=int(tmp[2])
                     freepar+=par
-                if tmp[0] == "z)" and flagcomp == True:    # axis ratio
+                if tmp[0] == "z)" and flagcomp == True:    # skip
                     skip=int(tmp[1])
             if (flagcomp == True):
 
@@ -713,7 +713,7 @@ def ReadNComp(inputf,X,Y,galcomps,distmax):
                 galcomps.PosAng=np.append(galcomps.PosAng,PosAng)
                 galcomps.skip=np.append(galcomps.skip,skip)
                 galcomps.freepar=np.append(galcomps.freepar,freepar)
-
+      
         index += 1
 
     GalfitFile.close()

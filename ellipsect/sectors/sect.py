@@ -242,7 +242,7 @@ def SectorsGalfit(params):
     ######################################
     ####### Read Galfit File #############
     #  xc,yc,q,ang,skylevel,scale,file,mgzpt,exptime,mask=ReadGALFITout(params.galfile,galpars)
-    ReadGALFITout(params.galfile,galpar)
+    ReadGALFITout(params.galfile,galpar,params.distmax)
 
     ######################################
     ######################################
@@ -459,7 +459,7 @@ def SectorsGalfit(params):
     ############ Computing output photometry ###############
     ########################################################
 
-    PassVars(photapi,params,galpar,galcomps)    
+    #PassVars(photapi,params,galpar,galcomps)    
 
     if params.flagphot:
         print("Computing output photometry ... ")
@@ -470,6 +470,8 @@ def SectorsGalfit(params):
     if galpar.tempmask != None:
         os.remove(galpar.tempmask) # removing temp mask file
 
+
+    PassVars(photapi,params,galpar,galcomps)    
 
     return photapi
 

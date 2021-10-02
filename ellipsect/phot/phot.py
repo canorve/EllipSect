@@ -81,9 +81,15 @@ def OutPhot(params, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi):
 
     # sersic index
     galcomps.SerInd[masksersic] = galcomps.Exp[masksersic] 
+
     galcomps.SerInd[maskdevauc] = 4
+    galcomps.Exp[maskdevauc] = 4
+    
     galcomps.SerInd[maskexp]    = 1
+    galcomps.Exp[maskexp]    = 1
+
     galcomps.SerInd[maskgauss]  = 0.5
+    galcomps.Exp[maskgauss]  = 0.5
 
 
     # effective radius

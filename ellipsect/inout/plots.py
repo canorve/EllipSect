@@ -10,7 +10,15 @@ def PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,params,scale):
 
     # subplot for arc sec axis
     plt.close('all')
-    fig, axsec = plt.subplots()
+
+    # fig, axsec = plt.subplots() #old
+
+    #ULISES begin
+    fig, (axsec,axred) = plt.subplots(2, sharex=True, sharey=False)
+    gs = gridspec.GridSpec(2, 1,height_ratios=[3,1])
+    gs.update(hspace=0.07)
+    #ULISES end 
+
 
 
     #change the linewidth of the axis
@@ -59,9 +67,11 @@ def PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,params,scale):
 
 
 
-
-    axsec.set_xlabel("radius ('')")
+    # ULISES begin
+    axsec = plt.subplot(gs[0])
+    #axsec.set_xlabel("radius ('')")
     axsec.set_ylabel("Surface Brightness (mag/'')")
+    # ULISES end
 
     axsec.errorbar(xradq, ysbq,yerr=ysberrq,fmt='o-',capsize=2,color='red',markersize=0.7,label="galaxy",linewidth=2)
     axsec.errorbar(xradm, ysbm,yerr=ysberrm,fmt='o-',capsize=2,color='blue',markersize=0.7,label="Model",linewidth=2)
@@ -97,6 +107,15 @@ def PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,params,scale):
     axsec.tick_params(which='major', length=7)
     axsec.tick_params(which='minor', length=4, color='r')
 
+
+    # ULISES begin
+    axsec.axes.xaxis.set_ticklabels([])
+    # Estas dos líneas de abajo las quité mejor porque son cosas muy específicas de mi trabajo así que no tiene caso
+    #plt.axvline(x=17, color='k', linestyle='--') 
+    #plt.axvline(x=1, color='k', linestyle='dotted')
+    # ULISES end 
+
+
     axsec.yaxis.set_minor_locator(AutoMinorLocator())
     axsec.yaxis.set_major_locator(AutoLocator())
 
@@ -104,7 +123,7 @@ def PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,params,scale):
 
         axpix = axsec.twiny()
 
-        axpix.set_xlabel("(pixels)")
+        axpix.set_xlabel("Pixels")
         x1, x2 = axsec.get_xlim()
 
         axpix.set_xlim(x1/scale, x2/scale)
@@ -137,6 +156,40 @@ def PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,params,scale):
         axsec.grid(which='major', linestyle='-', linewidth='0.7', color='black')
         # Customize the minor grid
         axsec.grid(which='minor', linestyle=':', linewidth='0.5', color='black')
+
+    # ULISES begin
+    # Residual plot
+    if len(ysbq) < len(ysbm):
+        ysbm = ysbm[len(ysbm)-len(ysbq):]
+    elif len(ysbq) > len(ysbm):
+        ysbq = ysbq[len(ysbq)-len(ysbm):]
+
+    if len(ysbq) < len(ysberrm):
+        ysberrm = ysberrm[len(ysberrm)-len(ysbq):]
+    elif len(ysbq) > len(ysberrm):
+        ysbq = ysbq[len(ysbq)-len(ysberrm):]        
+    
+    residual = ((ysbq-ysbm)/ysbq)*100 # (data-model)/data in percentage
+    err = ysberrm/ysbq*100 # error_model/data in percentage
+    axred = plt.subplot(gs[1])
+    #axred.scatter(np.log10(xradm),residual, marker='.', color='k')
+    if len(xradq) != len(residual):
+        axred.errorbar(xradm, residual,yerr=err,fmt='.',capsize=2,color='k')
+    else:
+        axred.errorbar(xradq, residual,yerr=err,fmt='.',capsize=2,color='k')
+
+    #axsec.errorbar(xradm, ysbm,yerr=ysberrm,fmt='o-',capsize=2,color='blue',markersize=0.7,label="Model",linewidth=2)
+    axred.axhline(y=0,ls='dashed', color='k')
+    # Estas dos líneas también las quité por lo mismo que dije arriba
+    #plt.axvline(x=17, color='k', linestyle='--')
+    #plt.axvline(x=1, color='k', linestyle='dotted')
+    axred.set_xlabel('Radius (arcsec)')
+    axred.set_ylabel('Residual (%)')
+    axred.set_ylim(-2,2)
+    axred.set_xscale("log")
+    # ULISES end
+
+
 
     return xran,yran,axret
 

@@ -14,6 +14,7 @@ import mimetypes
 import warnings
 import platform
 
+from matplotlib import gridspec
 
 
 

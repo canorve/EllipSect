@@ -7,6 +7,6 @@ scipy>=1.5.2
 matplotlib>=3.3.2
 mimetypes
 warnings
-platform>=1.0.8
+platform
 mgefit>=5.0.13
 

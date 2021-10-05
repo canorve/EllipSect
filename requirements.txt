@@ -1,12 +1,6 @@
 numpy>=1.19.2
-sys
-os
-subprocess
 astropy>=4.0.2
 scipy>=1.5.2
 matplotlib>=3.3.2
-mimetypes
-warnings
-platform
 mgefit>=5.0.13
 

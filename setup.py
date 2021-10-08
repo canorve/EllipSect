@@ -1,5 +1,8 @@
 from setuptools import setup, find_packages
 
+exec(open('ellipsect/version.py').read())
+
+
 with open("README.md", "r") as fh:
 
     long_description = fh.read()
@@ -13,7 +16,7 @@ setup(
 
     name="EllipSect", # Replace with your username
 
-    version="2.1.1",
+    version=__version__,
 
     author="Christopher Añorve, Emmanuel Ríos-López, Omar U. Reyes-Amador and Omar López-Cruz",
 

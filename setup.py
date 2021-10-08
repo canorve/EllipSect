@@ -13,7 +13,7 @@ setup(
 
     name="EllipSect", # Replace with your username
 
-    version="2.1.0",
+    version="2.1.1",
 
     author="Christopher Añorve, Emmanuel Ríos-López, Omar U. Reyes-Amador and Omar López-Cruz",
 

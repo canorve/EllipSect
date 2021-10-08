@@ -21,12 +21,6 @@ def PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,params,scale):
 
 
 
-    #change the linewidth of the axis
-    for axis in ['top','bottom','left','right']:
-        axsec.spines[axis].set_linewidth(1.5)
-
-
-
     if params.flagranx[1] == True:
         (xmin,xmax)=params.ranx.split("-")
         xmin=np.float(xmin)
@@ -66,7 +60,6 @@ def PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,params,scale):
         yran[1] = yran1
 
 
-
     # ULISES begin
     axsec = plt.subplot(gs[0])
     #axsec.set_xlabel("radius ('')")
@@ -75,10 +68,6 @@ def PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,params,scale):
 
     axsec.errorbar(xradq, ysbq,yerr=ysberrq,fmt='o-',capsize=2,color='red',markersize=0.7,label="galaxy",linewidth=2)
     axsec.errorbar(xradm, ysbm,yerr=ysberrm,fmt='o-',capsize=2,color='blue',markersize=0.7,label="Model",linewidth=2)
-    if params.flagranx[1] == False:
-        axsec.set_xlim(xran)
-    else:
-        axsec.set_xlim(xmin,xmax)
 
 
     if params.flagrany[1] == False:
@@ -119,6 +108,69 @@ def PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,params,scale):
     axsec.yaxis.set_minor_locator(AutoMinorLocator())
     axsec.yaxis.set_major_locator(AutoLocator())
 
+
+    # ULISES begin
+    # Residual plot
+    if len(ysbq) < len(ysbm):
+        ysbm = ysbm[len(ysbm)-len(ysbq):]
+    elif len(ysbq) > len(ysbm):
+        ysbq = ysbq[len(ysbq)-len(ysbm):]
+
+    if len(ysbq) < len(ysberrm):
+        ysberrm = ysberrm[len(ysberrm)-len(ysbq):]
+    elif len(ysbq) > len(ysberrm):
+        ysbq = ysbq[len(ysbq)-len(ysberrm):]        
+    
+    residual = ((ysbq-ysbm)/ysbq)*100 # (data-model)/data in percentage
+    err = ysberrm/ysbq*100 # error_model/data in percentage
+    axred = plt.subplot(gs[1])
+    #axred.scatter(np.log10(xradm),residual, marker='.', color='k')
+    if len(xradq) != len(residual):
+        axred.errorbar(xradm, residual,yerr=err,fmt='.',capsize=2,color='k')
+    else:
+        axred.errorbar(xradq, residual,yerr=err,fmt='.',capsize=2,color='k')
+
+    #axsec.errorbar(xradm, ysbm,yerr=ysberrm,fmt='o-',capsize=2,color='blue',markersize=0.7,label="Model",linewidth=2)
+    axred.axhline(y=0,ls='dashed', color='k')
+    # Estas dos líneas también las quité por lo mismo que dije arriba
+    #plt.axvline(x=17, color='k', linestyle='--')
+    #plt.axvline(x=1, color='k', linestyle='dotted')
+    axred.set_xlabel('Radius (arcsec)')
+    axred.set_ylabel('Residual (%)')
+    axred.set_ylim(-2,2)
+
+    #axred.set_xscale("log")
+    # ULISES end
+
+
+    if params.flaglogx == True:
+
+        axred.set_xscale("log")
+
+        locmaj = LogLocator(base=10,numticks=12)
+        axred.xaxis.set_major_locator(locmaj)
+
+        locmin = LogLocator(base=10.0,subs=(0.2,0.4,0.6,0.8),numticks=12)
+        axred.xaxis.set_minor_locator(locmin)
+        axred.xaxis.set_minor_formatter(NullFormatter())
+    else:
+        axred.xaxis.set_minor_locator(AutoMinorLocator())
+        axred.xaxis.set_major_locator(AutoLocator())
+
+
+
+    axred.tick_params(which='both', width=2)
+    axred.tick_params(which='major', length=7)
+    axred.tick_params(which='minor', length=4, color='r')
+
+    if params.flagranx[1] == False:
+        axsec.set_xlim(xran)
+        axred.set_xlim(xran) #ulises plot
+    else:
+        axsec.set_xlim(xmin,xmax)
+        axred.set_xlim(xmin,xmax) #ulises plot
+
+
     if params.flagpix == True:
 
         axpix = axsec.twiny()
@@ -157,38 +209,11 @@ def PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,params,scale):
         # Customize the minor grid
         axsec.grid(which='minor', linestyle=':', linewidth='0.5', color='black')
 
-    # ULISES begin
-    # Residual plot
-    if len(ysbq) < len(ysbm):
-        ysbm = ysbm[len(ysbm)-len(ysbq):]
-    elif len(ysbq) > len(ysbm):
-        ysbq = ysbq[len(ysbq)-len(ysbm):]
 
-    if len(ysbq) < len(ysberrm):
-        ysberrm = ysberrm[len(ysberrm)-len(ysbq):]
-    elif len(ysbq) > len(ysberrm):
-        ysbq = ysbq[len(ysbq)-len(ysberrm):]        
-    
-    residual = ((ysbq-ysbm)/ysbq)*100 # (data-model)/data in percentage
-    err = ysberrm/ysbq*100 # error_model/data in percentage
-    axred = plt.subplot(gs[1])
-    #axred.scatter(np.log10(xradm),residual, marker='.', color='k')
-    if len(xradq) != len(residual):
-        axred.errorbar(xradm, residual,yerr=err,fmt='.',capsize=2,color='k')
-    else:
-        axred.errorbar(xradq, residual,yerr=err,fmt='.',capsize=2,color='k')
-
-    #axsec.errorbar(xradm, ysbm,yerr=ysberrm,fmt='o-',capsize=2,color='blue',markersize=0.7,label="Model",linewidth=2)
-    axred.axhline(y=0,ls='dashed', color='k')
-    # Estas dos líneas también las quité por lo mismo que dije arriba
-    #plt.axvline(x=17, color='k', linestyle='--')
-    #plt.axvline(x=1, color='k', linestyle='dotted')
-    axred.set_xlabel('Radius (arcsec)')
-    axred.set_ylabel('Residual (%)')
-    axred.set_ylim(-2,2)
-    axred.set_xscale("log")
-    # ULISES end
-
+    #change the linewidth of the axis
+    for axis in ['top','bottom','left','right']:
+        axsec.spines[axis].set_linewidth(1.5)
+        axred.spines[axis].set_linewidth(1.5)
 
 
     return xran,yran,axret

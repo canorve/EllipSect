@@ -4,9 +4,9 @@ ___
 
 [![DOI](https://zenodo.org/badge/282223217.svg)](https://zenodo.org/badge/latestdoi/282223217)
 
-EllipSect.py creates surface brightness profiles
-from the GALFIT output: galfit.XX. 
-See peng et al. (2002). It also extracts other photometric data from the fit.
+EllipSect.py creates surface brightness profiles and extracts 
+other photometric data from the 
+from the GALFIT output peng et al. (2002). 
 
 ___
 
@@ -14,7 +14,7 @@ ___
 
 **[EllipSect.py](EllipSect.py)**
 
-This code is "similar" to IRAF's ellipse routine. It 
+This code is "similar" (but not sustitute) to IRAF's ellipse routine. It 
 creates a Surface brightness profile for the galaxy and the model.
 
 In addition, *EllipSect* can compute variables such as Absolute Magnitude, 
@@ -28,24 +28,43 @@ ___
 
 ## **Installation**
 
-Download or clone this code. The code is
-written for python 3.
+The code is written for python 3.
 
 The python libraries used are:
 
 - numpy
-- sys
-- os
-- subprocess
 - astropy
 - scipy
 - matplotlib
-- mimetypes
-- warnings
-- platform
 - mgefit
 
-Although GALFIT is not *strictly* required, **EllipSect** needs the GALFIT output files (GALFIT.XX) to work.
+Download the release and installed via
+
+```
+cd ellipsect
+pip install . 
+```
+
+or 
+
+```
+cd ellipsect
+python setup.py install
+```
+
+Run the automated tests:
+
+```
+python -m pytest 
+```
+
+
+
+**EllipSect** needs the GALFIT output files (GALFIT.XX) to work.
+Although **GALFIT** is not stricly required, it will need it 
+to create the GALFIT components and sigma image. Make it
+sure that you can call GALFIT from the command line.
+
 
 EllipSect uses the mgefit library which 
 is described in Cappellari, MNRAS, 333, 400 (2002).
@@ -60,11 +79,12 @@ ___
 
 ## **Basic run:**
 
-The program is executed via the command line. It only requires 
-the latest GALFIT's output file. *The easiest way to run the program is:*
+Once installed, run the *ellsec.py* in the same directory 
+that you run GALFIT. It only requires the latest GALFIT's 
+output file. *The easiest way to run the program is:*
 
 ```
-./EllipSect.py galfit.01
+./ellsec.py galfit.01
 ```
 
 It will display images like the ones below:
@@ -72,6 +92,20 @@ It will display images like the ones below:
    ![A85 ](img/A85.def.png)
 
 ___
+
+For linux, you can make a simbolic link to *ellsec.py*
+
+```
+cd /usr/local/bin
+sudo ln -s /path/to/your/installed/ellipsect/ellsec.py .
+```
+
+for more options:
+
+```
+./ellsec.py -help 
+```
+
 
 ### **HOW TO USE**
 
@@ -95,6 +129,14 @@ ___
 ## **License**
 
 The code is under the license of **GNU**
+
+___
+
+## **References**
+
+
+Cappellari, MNRAS, 333, 400 (2002).
+
 
 ___
 

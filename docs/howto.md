@@ -408,7 +408,9 @@ python script, you can call it in the following way:
     from ellipsect.inout.read import InputSys
     from ellipsect.sectors.sect import SectorsGalfit
 
-    params = InputSys(sys.argv)
+    argv = ["./ellsec.py","galfit.01","-phot"]
+
+    params = InputSys(argv)
 
 
     #photapi stores all the variables computed by EllipSect

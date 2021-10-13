@@ -7,7 +7,7 @@ from ellipsect import *
 def Help():
 
     print ("EllipSect: an analysis tool for GALFIT output  ")
-    print ("Usage:\n %s [GALFITOutputFile] [-logx] [-q AxisRatio] [-pa PositionAngle] [-comp] [-pix] [-ranx/y Value] [-grid] [-dpi Value] [-model File] [-phot] [-sky Value] " % (sys.argv[0]))
+    print ("Usage:\n %s [GALFIT_File] [-logx] [-q AxisRatio] [-pa PositionAngle] [-comp] [-pix] [-ranx/y Value] [-grid] [-dpi Value] [-model File] [-phot] [-sky Value] " % (sys.argv[0]))
     print ("More options: [-sbout] [-noplot] [-minlevel Value] [-sectors Value] [-object Name] [-filter Name] [-snr] [-help] [-checkimg] [-noned] [-distmod Value] [-magcor Value] [-scalekpc Value] [-sbdim Value] [-keep] [-ned XmlFile] [-gradsky ] [-randsky ] [-skyRad Value] [-skyRadmax Value][-skynum Value] [-skybox Value] [-skywidth Value] [-fwhm Value]") 
 
     print ("GALFITOutputFile: GALFIT output file ")
@@ -37,7 +37,7 @@ def Help():
     print ("      ned: user can introduce his/her own ned xml file")
 
     print ("      noned: avoid to connect to NED")
-    print ("any of the following options disabled the connection of NED ")    
+    print ("any of the following options disabled the connection to NED ")    
     print ("      distmod: Introduce Distance Modulus ")
     print ("      magcor: Introduce Galactic Extinction ")
     print ("      scalekpc: Introduce equivalence of ''/kiloparsec ")

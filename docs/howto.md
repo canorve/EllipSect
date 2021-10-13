@@ -4,30 +4,36 @@ ___
 
 [![DOI](https://zenodo.org/badge/282223217.svg)](https://zenodo.org/badge/latestdoi/282223217)
 
-EllipSect.py creates surface brightness profiles
-from the GALFIT output: galfit.XX. 
-See peng et al. (2002). It also extracts other photometric data from the fit.
+EllipSect creates surface brightness profiles and extracts 
+other photometric data from the GALFIT output peng et al. (2002). 
 
 ### **OPTIONS**
 
-The options to run the code in the terminal (or ipython) are:
+You only need the GALFIT output file to run it. All the information
+EllipSect needs is in this file. However, there
+are some options available to use. 
+
+The options are:
 
 ```
- ./EllipSect.py [GALFITOutputFile] [-logx] [-q AxisRatio] [-pa PositionAngle] [-comp] [-pix] [-ranx/y Value] [-grid] [-dpi Value] [-noplot] [-phot] [-sbout] [-noplot] [-minlevel Value] [-sectors Value] [-object Name] [-filter Name] [-snr] [-help] [-checkimg] [-noned] [-distmod Value] [-magcor Value] [-scalekpc Value][-sbdim Value] [-model ModelImage] [-keep] [-ned XmlFile] 
+ ./ellsec.py [GALFIT_File] [-logx] [-q AxisRatio] [-pa PositionAngle] [-comp] [-pix] [-ranx/y Value] [-grid] [-dpi Value] [-noplot] [-phot] [-sbout] [-noplot] [-minlevel Value] [-sectors Value] [-object Name] [-filter Name] [-snr] [-help] [-checkimg] [-noned] [-distmod Value] [-magcor Value] [-scalekpc Value][-sbdim Value] [-model ModelImage] [-keep] [-ned XmlFile] [-gradsky ] [-randsky ] [-skyRad Value] [-skyRadmax Value][-skynum Value] [-skybox Value] [-skywidth Value] [-fwhm Value] 
 ```
+
+Below is an explanation of each parameter: 
 
 ### **Main input parameters**
 
-**GALFITOutputFile**: GALFIT output file  (e.g. galfit.01)
+**GALFIT_File**: GALFIT output file  (e.g. galfit.01). This **must** be the last GALFIT run. In
+other words, if there are two files: galfit.01  and galfit.02, the one you need is galfit.02
 
 **help**: Help menu
 
 **logx**: plots X-axis as logarithm
 
-**q**: axis ratio value. If ignored, it takes the one from the last component in GALFITOutputFile.
+**q**: axis ratio value. If ignored, it takes the one from the last component in GALFIT_File.
 
 **pa**: position angle value (same as GALFIT). If ignored, it takes the one 
-from the last component in GALFITOutputFile.
+from the last component in GALFIT_File.
 
 **comp**: plots include the individual model components
 
@@ -78,9 +84,9 @@ Any of the following options disabled the connection to NED
 ### **Advanced**
 
 **minlevel**: Parameter given directly to sectors_photometry.
-              Ellipse radius stops when it founds this value. Check sectors_photometry manual 
+              Ellipse radius stops when it founds this value (counts). Check sectors_photometry manual 
 
-**sectors**: parameter given directly to sectors_photometry. Divide ellipse in 'sectors'
+**sectors**: parameter given directly to sectors_photometry. It Divides the ellipse in 'sectors'
                       Check sectors_photometry manual
 
 **checkimg**: save the images used in sectors_photometry for individual components
@@ -92,15 +98,21 @@ Any of the following options disabled the connection to NED
 
 **ned**: User can introduce his/her own  ned xml file.
 
+**fwhm**: Parameter used to compute the PSF's Area to estimate BICres.
+	  It is the Bayesian Information Criterion but instead 
+	  of using pixels, it used PSF's Area (number of elements
+	  of resolution). Default = 2 pixels
+
 ### **Background Sky**
 
 **sky**: User can introduce his/her own sky value. This will be used instead
 of the one readed in galfit.XX
 
-EllipSect can estimate the background sky indepently of the one fitted by GALFIT. 
-The computed sky value will **not** be used in the final computations 
-of **phot** option. Sky is computed as a reference for the user. Check that 
-this value is  *close* to the calculated by GALFIT.
+EllipSect can estimate the background sky independently of the one fitted by GALFIT. 
+The computed sky value will **not** be used for the final computations 
+of the **phot** option. The purpose is that the computed sky can serve as a reference 
+for the user. It is expected that this value is  *close* to the calculated by GALFIT,
+but it could vary for different entries of the parameters.
 
 The script uses the information of galfit.XX file to make its computations. 
 
@@ -134,14 +146,25 @@ ___
 * Displays the help menu: 
   
   ```
-    ./EllipSect.py -help
+    ./ellsec.py -help
   ```
+
+____
+
+  EllipSect use the axis ratio and position angular to construct
+  an ellipse centered at the galaxy to extract the photometric counts data
+  (actually, this is done by the function sectors_photometry from MGE, see
+  Cappellari, MNRAS, 333, 400 (2002)). This is directly taken from the 
+  GALFIT File taking that info from the last component (in case it 
+  has more than one). In case, you want to change axis ratio and angular
+  posititon you can enter that data manually:
+
 
 * To introduce an axis ratio of 0.35 and position angular of 60 
     (measured from Y-axis): 
 
 ```
-     ./EllipSect.py galfit.02 -q 0.35 -pa 60 
+     ./ellsec.py galfit.02 -q 0.35 -pa 60 
 ```
 
 ### **Plot Examples**
@@ -152,7 +175,7 @@ with 7 gaussians (images for this galaxy are displayed in **Notes** section).
 * Simple plot example: 
   
   ```
-    ./EllipSect.py galfit.46 
+    ./ellsec.py galfit.46 
   ```
   
    ![A85 ](../img/A85.def.png)
@@ -160,15 +183,15 @@ with 7 gaussians (images for this galaxy are displayed in **Notes** section).
 * Displays the X-axis as log:
 
 ```
-    ./EllipSect.py galfit.46 -logx
+    ./ellsec.py galfit.46 -logx
 ```
 
    ![A85 ](../img/A85.log.png)
 
-* Include the individual model components to the plot:  
+* Include the individual model components into the plot:  
   
   ```
-    ./EllipSect.py galfit.46 -comp
+    ./ellsec.py galfit.46 -comp
   ```
   
    (displays the 7 gaussians)
@@ -178,7 +201,7 @@ with 7 gaussians (images for this galaxy are displayed in **Notes** section).
 * Insert pixels units in the top X-axis: 
   
   ```
-    ./EllipSect.py galfit.46 -pix
+    ./ellsec.py galfit.46 -pix
   ```
   
    ![A85 ](../img/A85.pix.png)
@@ -186,7 +209,7 @@ with 7 gaussians (images for this galaxy are displayed in **Notes** section).
 * Range in X-axis is decreased 50%: 
   
   ```
-    ./EllipSect.py galfit.46 -ranx 0.5 
+    ./ellsec.py galfit.46 -ranx 0.5 
   ```
   
    ![A85 ](../img/A85.ranx1.png)
@@ -194,7 +217,7 @@ with 7 gaussians (images for this galaxy are displayed in **Notes** section).
 * Range in Y-axis is doubled: 
   
   ```
-   ./EllipSect.py galfit.46 -rany 2 
+   ./ellsec.py galfit.46 -rany 2 
   ```
   
    ![A85 ](../img/A85.rany1.png)
@@ -202,7 +225,7 @@ with 7 gaussians (images for this galaxy are displayed in **Notes** section).
 * X-axis range vary from 1 to 50: 
   
   ```
-    ./EllipSect.py galfit.46 -ranx 1-50 
+    ./ellsec.py galfit.46 -ranx 1-50 
   ```
   
    ![A85 ](../img/A85.ranx2.png)
@@ -210,31 +233,30 @@ with 7 gaussians (images for this galaxy are displayed in **Notes** section).
 * Use grid on plot and increase resolution to 300 dots per inch: 
 
 ```
-   ./EllipSect.py galfit.46 -grid -dpi 300 
+   ./ellsec.py galfit.46 -grid -dpi 300 
 ```
 
    ![A85 ](../img/A85.grid.png)
 
-* Same as above but popup window does not appear. Plots are 
+* Same as above but popup window does not appear. Plot files are 
     directly saved in directory: 
 
 ```
-    ./EllipSect.py galfit.46 -grid -dpi 300 -noplot 
+    ./ellsec.py galfit.46 -grid -dpi 300 -noplot 
 ```
 
 * If the user desires to create their own plots, 'sbout' option
-  will save the surface brightness vs. radius of the galaxy and the model
-  in a file:
+  will save the surface brightness data of the plots into a file:
 
 ```
-    ./EllipSect.py galfit.46 -sbout
+    ./ellsec.py galfit.46 -sbout
 ```
 
   EllipSect can also save the surface brightness data for 
   individual components in separated files:
 
 ```
-    ./EllipSect.py galfit.46 -comp -sbout 
+    ./ellsec.py galfit.46 -comp -sbout 
 ```
 
 ### **Phot Examples**
@@ -244,16 +266,21 @@ with 7 gaussians (images for this galaxy are displayed in **Notes** section).
   Those variables are intended to help the user to have a quick reference 
   of the model and decide to modify the model or increase the number of components.
   
-  Such output variables have to be taken with caution and they always have to be verified for the user before to include them in their final work.
+  Such output variables have to be taken with caution and they always have to 
+  be verified for the user before to include them in their final work.
   
-  The output photometry variables include: Absolute Magnitude, luminosity, Flux, total apparent magnitude, Bulge to Total Ratio, Tidal, $\Chi_\nu$ within the sectors ellipse, Bumpiness, Signal to Noise Ratio, Akaike Information Criterion, Bayesian Information Criterion, mean surface brightness, percentage of total light per individual component, radius at 90% of light ( for Sersic components only). 
+  The output photometry variables include: Absolute Magnitude, luminosity, 
+  Flux, total apparent magnitude, Bulge to Total Ratio, Tidal, $\Chi_\nu$ 
+  within the sectors ellipse, Bumpiness, Signal to Noise Ratio, Akaike Information 
+  Criterion, Bayesian Information Criterion, mean surface brightness, percentage 
+  of total light per individual component, radius at 90% of light (for Sersic components only). 
   
   If you want to check the ellipse where all those photometric variables were computed, then check the file created "*-check.fits".
   
   Those variables are stored in a single file when the following command is executed:
   
   ```
-  ./EllipSect.py galfit.46 -phot
+  ./ellsec.py galfit.46 -phot
   ```
 
 * *phot* option connects to NED (NASA/IPAC Extragalactic Database) to download 
@@ -265,34 +292,35 @@ with 7 gaussians (images for this galaxy are displayed in **Notes** section).
   it is shown in the next example for galaxy messier 51 in the band B:  
 
 ```
-    ./EllipSect.py galfit.14 -phot -object m51 -filter B
+    ./ellsec.py galfit.14 -phot -object m51 -filter B
 ```
 
 * If the user wants to see a Signal to Noise image of the data, use 
   the next command:
   
   ```
-  ./EllipSect.py galfit.14 -phot -snr
+  ./ellsec.py galfit.14 -phot -snr
   ```
 
 * If for some reason the user does not want to connect to NED use 
   the following option:
 
 ```
-    ./EllipSect.py galfit.14 -phot -noned
+    ./ellsec.py galfit.14 -phot -noned
 ```
 
    take into account that Luminosity and Absolute magnitud will not be computed
 
-* EllipSect allows to introduce manually the NED info. For example, 
+* EllipSect allows to enter manually the NED info. For example, 
   the next command introduce a distance modulus of 10, galactic extinction 
   of 0.3, "/kpc of 1.3 and surface brightness dimming of 0.3.  
 
 ```
-    ./EllipSect.py galfit.10 -phot -distmod 10 -magcor 0.3 -scalekpc 1.3 -sbdim .3
+    ./ellsec.py galfit.10 -phot -distmod 10 -magcor 0.3 -scalekpc 1.3 -sbdim .3
 ```
 
-   This option avoids to connect with NED. 
+   Take into account that any of this options will avoid 
+   the connection to NED. 
 
    EllipSect does not correct by K-correction. 
 
@@ -303,7 +331,7 @@ with 7 gaussians (images for this galaxy are displayed in **Notes** section).
   If -phot option is enabled, SNR quantities will be inaccurate.
 
 ```
-    ./EllipSect.py galfit.14 -model model.fits
+    ./ellsec.py galfit.14 -model model.fits
 ```
 
 * sky option allows the user to introduce his/her own sky value to subtract it
@@ -311,18 +339,21 @@ with 7 gaussians (images for this galaxy are displayed in **Notes** section).
   otherwise EllipSect will produce wrong outputs.  
 
 ```
-    ./EllipSect.py galfit.01 -sky 300
+    ./ellsec.py galfit.01 -sky 300
 ```
 
+----
+
 * The following options requires that the user has already experienced with 
-  the *sectors_photometry* function of the mge library. 
+  the *sectors_photometry* function of the mge library. The inputs to 
+  the parameters below are directly given to the *sectors_photometry* function 
   
   minlevel is a parameter that is given directly to *sectors_photometry*. 
   It indicates when the functions stops. For example, the following command
   tells to *sectors_photometry* that stops when the sky is 0.
 
 ```
-    ./EllipSect.py galfit.14 -minlevel 0
+    ./ellsec.py galfit.14 -minlevel 0
 ```
 
    Note: Galfit sky parameter is already removed from image before the call 
@@ -333,7 +364,7 @@ with 7 gaussians (images for this galaxy are displayed in **Notes** section).
   use four-fold symmetry.  
 
 ```
-    ./EllipSect.py galfit.14 -sectors 19
+    ./ellsec.py galfit.14 -sectors 19
 ```
 
 * checkimg will create images used by *sectors_photometry* to check how 
@@ -343,7 +374,7 @@ with 7 gaussians (images for this galaxy are displayed in **Notes** section).
   Use it with the 'comp' option:  
 
 ```
-    ./EllipSect.py galfit.14 -comp -checkimg
+    ./ellsec.py galfit.14 -comp -checkimg
 ```
 
 ### **Sky calculation Example**
@@ -351,7 +382,7 @@ with 7 gaussians (images for this galaxy are displayed in **Notes** section).
 * Computes the sky using the gradient method
 
 ```
-    ./EllipSect.py galfit.06 -gradsky
+    ./ellsec.py galfit.06 -gradsky
 ```
 
 After computing sky, a outname-ring.fits will be created to check
@@ -367,9 +398,44 @@ Check the [example](example) to test it by yourself.
 
 ___
 
-## **Notes**
+## **Another way to use it**
+
+If you want to use EllipSect inside your own 
+python script, you can call it in the following way:
+
+```
+
+    from ellipsect.inout.read import InputSys
+    from ellipsect.sectors.sect import SectorsGalfit
+
+    params = InputSys(sys.argv)
+
+
+    #photapi stores all the variables computed by EllipSect
+
+    photapi = SectorsGalfit(params)
+
+    print("Akaike Criterion: ",photapi.AICrit)
+    print("Bulge to Total: ",photapi.BulgeToTotal)
+
+```
+In the previous example, the option "-phot" is necessary 
+in argv to produce an output. 
+
+
+To check all the output variables check: 
+
+   [Output variables ](api.md)
+
+___
+
+## **Notes** (read this please)
 
 * EllipSect works for GALFIT version > *3.0.7* 
+
+* This program is not like other one-dimensional surface brightness codes. It 
+ does not do any fit; the model fit was already done by GALFIT. It only extract 
+ that information to make the plots. 
 
 * EllipSect uses the mask image (option "*F*" GALFIT) only if this
    is a **FITS** image. In case your mask is an *ASCII* file, you can convert it to **FITS** using the [xy2fits.py](https://github.com/canorve/GALFITools/blob/master/docs/xy2fits.md) tool.
@@ -403,3 +469,20 @@ ___
     component is measured check the output file at that angle with the *-sbout* option 
 
 * EllipSect is not adapted for the GALFIT Fourier modes
+
+* If you fit different surface brightness models for the same galaxy, 
+  you will notice that (sometimes) the surface brightness of the galaxy
+  slightly vary for the different model fits. This will give you
+  the impression that there is something wrong with the code, but 
+  as explained above, the photometric data is extracted from an ellipse
+  centered at the galaxy. The photometry will be different 
+  if different model fits have different ellipse parameters. To correct
+  for this "problem", manually provide the same axis ratio and position
+  angle for the fit models you use for the same galaxy. See the 
+  first example of this page.  
+
+
+* Ulises escribe aqui 
+
+
+

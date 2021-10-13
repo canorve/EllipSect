@@ -4,20 +4,20 @@ ___
 
 [![DOI](https://zenodo.org/badge/282223217.svg)](https://zenodo.org/badge/latestdoi/282223217)
 
-EllipSect.py creates surface brightness profiles and extracts 
+EllipSect creates surface brightness profiles and extracts 
 other photometric data from the GALFIT output peng et al. (2002). 
 
 
 
 This code is "similar" (but not sustitute) to IRAF's ellipse routine. It 
-creates a Surface brightness profile for the galaxy, model and (optionally 
-individual model components).
+creates a Surface brightness profile for the galaxy, model and (optionally) 
+individual model components.
 
-In addition, *EllipSect* can compute variables such as Absolute Magnitude, 
+In addition, *EllipSect* computes variables such as Absolute Magnitude, 
 luminosity, Flux, total apparent magnitude, Bulge to Total Ratio, Tidal, Chinu
 in the sectors ellipse, Bumpiness, Signal to Noise Ratio, Akaike Information criterion, 
 Bayesian information criterion, mean surface brightness at effective radius, percentage 
-of total light per component, radius at 90% of light (for Sersic component only), 
+of total light per component, radius at 90% of light (for Sersic components only), 
 effective radius in kpc, etc.  
 
 ___
@@ -26,7 +26,7 @@ ___
 
 The code is written for python 3.
 
-The python libraries required for this program are:
+The python libraries required are:
 
 - numpy
 - astropy
@@ -34,7 +34,7 @@ The python libraries required for this program are:
 - matplotlib
 - mgefit
 
-Download the latest release and installed via
+Download the latest release, and installed it via
 
 ```
 cd ellipsect
@@ -57,11 +57,10 @@ python -m pytest
 **Note**: *EllipSect* needs the GALFIT output files (GALFIT.XX) to work.
 Although *GALFIT* is not stricly required, it will required it 
 to create the model components and sigma image. Make 
-sure that you can call GALFIT from the command line. Otherwise 
+sure you can call GALFIT from the command line. Otherwise 
 the automated tests will fail.
 
 ___
-
 For linux, you can make a simbolic link to *ellsec.py*
 
 ```
@@ -98,7 +97,7 @@ for more options:
 
 #### **Full manual:**
 
-To see other ways to call EllipSect see:
+To see other options for EllipSect:
 
    [How to use](docs/howto.md)
 
@@ -124,7 +123,6 @@ ___
 ## **References**
 
 
-Cappellari, MNRAS, 333, 400 (2002).
 
 Akaike, H. (1974). A New Look at the Statistical Model Identification. IEEE Transactions on
 Automatic Control, 19, 716–723.

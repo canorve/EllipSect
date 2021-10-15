@@ -149,7 +149,7 @@ ___
     ./ellsec.py -help
   ```
 
-____
+___
 
   EllipSect use the axis ratio and position angular to construct
   an ellipse centered at the galaxy to extract the photometric counts data
@@ -484,7 +484,6 @@ ___
   first example of this page.  
 
 
-* Ulises escribe aqui 
 
 
 

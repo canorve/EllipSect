@@ -99,9 +99,6 @@ def PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,params,scale):
 
     # ULISES begin
     axsec.axes.xaxis.set_ticklabels([])
-    # Estas dos líneas de abajo las quité mejor porque son cosas muy específicas de mi trabajo así que no tiene caso
-    #plt.axvline(x=17, color='k', linestyle='--') 
-    #plt.axvline(x=1, color='k', linestyle='dotted')
     # ULISES end 
 
 
@@ -113,22 +110,28 @@ def PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,params,scale):
     # Residual plot
     if len(ysbq) < len(ysbm):
         ysbm = ysbm[len(ysbm)-len(ysbq):]
+    
     elif len(ysbq) > len(ysbm):
         ysbq = ysbq[len(ysbq)-len(ysbm):]
+        ysberrq = ysberrq[len(ysberrq)-len(ysbq):]
 
     if len(ysbq) < len(ysberrm):
         ysberrm = ysberrm[len(ysberrm)-len(ysbq):]
+        #ysberrq = ysberrq[len(ysberrq)-len(ysbq):]
     elif len(ysbq) > len(ysberrm):
         ysbq = ysbq[len(ysbq)-len(ysberrm):]        
-    
     residual = ((ysbq-ysbm)/ysbq)*100 # (data-model)/data in percentage
-    err = ysberrm/ysbq*100 # error_model/data in percentage
+    #incorrect:
+    # err = ysberrm/ysbq*100 # error_model/data in percentage 
+    # correct: 
+    err = ((ysbm/ysbq**2)**2) * ysberrq**2 + ((1/ysbq)**2) * ysberrm**2 
+    err = np.sqrt(err)*100
     axred = plt.subplot(gs[1])
     #axred.scatter(np.log10(xradm),residual, marker='.', color='k')
     if len(xradq) != len(residual):
-        axred.errorbar(xradm, residual,yerr=err,fmt='.',capsize=2,color='k')
+        axred.errorbar(xradm, residual, yerr=err,fmt='.',capsize=2,color='k')
     else:
-        axred.errorbar(xradq, residual,yerr=err,fmt='.',capsize=2,color='k')
+        axred.errorbar(xradq, residual, yerr=err,fmt='.',capsize=2,color='k')
 
     #axsec.errorbar(xradm, ysbm,yerr=ysberrm,fmt='o-',capsize=2,color='blue',markersize=0.7,label="Model",linewidth=2)
     axred.axhline(y=0,ls='dashed', color='k')

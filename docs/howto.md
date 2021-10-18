@@ -141,10 +141,14 @@ skybox: pixel size of the box for randsky. Default = 20
 
 ### **Residuals subplot**
 
-The residual plot is created from the observed and model surface brightness profiles. It takes the x- and y-arrays from the observed and model profiles (including their errors). When the lengths of the y-arrays of the observed and model profiles are different, an interpolation is made in order to have both with the same length to do the following mathematical operations:
-residual = ((ydata - ymodel)/ydata)*100
-err = ((ymodel/ydata^2)^2) * ydata_error^2 + ((1/ydata)^2) * ymodel_error^2 
-err = np.sqrt(err)*100
+The residual plot is created from the observed and model surface brightness profiles. It takes the x- and y-arrays from the observed and model profiles (including their errors). When the lengths of the y-arrays of the observed and model profiles are different, an interpolation is made in order to have both with the same length to do the following mathematical operations.
+
+residual = ((ydata - ymodel)/ydata) * 100
+
+err = ((ymodel/ydata^2)^2) * ydata_error^2 + ((1/ydata)^2) * ymodel_error^2
+
+err = np.sqrt(err) * 100
+
 Note that both formulas are multiplied by 100 in order to show them in percentage.
 ___
 

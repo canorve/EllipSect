@@ -139,6 +139,12 @@ of the image
 skynum: Number of boxes used in randsky. Default = 20
 skybox: pixel size of the box for randsky. Default = 20
 
+### **Residuals subplot**
+
+The residual plot is created from the observed and model surface brightness profiles. It takes the x- and y-arrays from the observed and model profiles (including the error of the model). When the lengths of the y-arrays of the observed and model profiles are different, an interpolation is made in order to have both with the same length to do the following mathematical operations:
+residual = ((ydata - ymodel)/ydata)*100
+err = (ymodel_err/ydata)*100
+Note that both formulas are multiplied by 100 in order to show them in percentage.
 ___
 
 ## **Examples**

@@ -460,6 +460,9 @@ def MulEllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps):
         txtang= sectors[j]
         txt = r"$%.f^\circ$" % txtang
 
+        txtminor= "minor axis"
+        txtmajor= "major axis"
+
         if params.flagranx[1] == False:
             axsec[row, 0].set_xlim(xran)
         else:
@@ -573,7 +576,6 @@ def MulEllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps):
 
         axsec[row, 0].text(0.98, 0.95, txt, ha='right', va='top', transform=axsec[row, 0].transAxes)
 
-
         if (len(mgemodrad) > len(mgerad)):
 
             mgemodsbnew = Interpol(r2,mgemodsb[angmod],r)
@@ -592,6 +594,12 @@ def MulEllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps):
         axsec[row, 1].set_ylim([-19.5, 20])
         # axsec[row, 1].set_ylim([-20, 20])
         axsec[row, 1].text(0.98, 0.95, txt, ha='right', va='top', transform=axsec[row, 1].transAxes)
+        if (txtang == 0):
+            axsec[row, 1].text(0.98, 0.10, txtmajor,fontweight='bold',fontsize=8.5, ha='right', va='bottom', transform=axsec[row, 1].transAxes)
+
+        if (txtang == 90):
+            axsec[row, 1].text(0.98, 0.10, txtminor,fontweight='bold',fontsize=8.5, ha='right', va='bottom', transform=axsec[row, 1].transAxes)
+
 
 
         if params.flagranx[1] == False:

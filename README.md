@@ -74,7 +74,7 @@ ___
 
 ### **HOW TO USE**
 
-#### **Basic run:**
+#### **easy run:**
 
 Once installed, run *ellsec.py* in the same directory 
 that you run GALFIT. It only requires the latest GALFIT's 
@@ -100,6 +100,37 @@ for more options:
 To see other options for EllipSect:
 
    [How to use](docs/howto.md)
+
+
+
+#### **Script run:**
+
+
+If you want to use EllipSect inside your own 
+python script, you can call it in the following way:
+
+```
+
+    from ellipsect.inout.read import InputSys
+    from ellipsect.sectors.sect import SectorsGalfit
+
+    argv = ["./ellsec.py","galfit.01","-phot"]
+
+    params = InputSys(argv)
+
+
+    #photapi stores all the variables computed by EllipSect
+
+    photapi = SectorsGalfit(params)
+
+    print("Akaike Criterion: ",photapi.AICrit)
+    print("Bulge to Total: ",photapi.BulgeToTotal)
+
+```
+
+To check all the output variables besides AICrit and BulgeToTotal, check: 
+
+   [Output variables ](api.md)
 
 ___
 

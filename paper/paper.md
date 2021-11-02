@@ -28,21 +28,22 @@ affiliations:
    index: 2
  - name:  Instituto de Radioastronomía y Astrofísica, UNAM, Campus Morelia, AP 3-72, CP 58089, México
    index: 3
-date: 25 September 2020
+date: 1 November 2021
 bibliography: paper.bib
 ---
 
 # Summary
 
 Galaxies are the building blocks of the large scale structure of the Universe. 
-The larger ones contain billions of stars that can form one or various stellar 
+The larger ones contain billions of stars that can form one or various galaxy 
 components such as bulges, bars, disks and rings. Consequently, these make a 
 wide variety in galaxy morphology. The quantification of the galaxy components 
 is a fundamental step to understand their structure and composition. For instance, 
 they can be compared with predictions of simulations of galaxy formation and 
 see their evolution over time. Using models that fit their light distribution 
 is one way to study those components. Such models are mathematical functions 
-of surface brightness for the different components of the galaxies. A suitable 
+of surface brightness (luminosity per unit area) for the different 
+components of the galaxies. A suitable 
 model that reliably represents the physical properties requires a detailed 
 inspection of the fitted models.
 
@@ -54,14 +55,17 @@ fitted model parameters, errors, and a FITS (Flexible Image Transport System)
 cube image to check if the galaxy model is the appropriate one. The FITS file 
 contains the galaxy, model and residual images.
 
-EllipSect is a python code to analyze the surface brightness models fitted by GALFIT. It 
+
+The surface brightness models fitted by GALFIT could not be enough to decide whether 
+a model is appropiate or it would need more components. This is why we have developed \
+EllipSect. It is a python code to analyze the surface brightness models fitted by GALFIT. It 
 can extract the surface brightness models of the galaxy, model and their components. The
 programs also computes extra photometric variables that are not originally computed for 
 GALFIT such as total magnitude, flux, mean surface brightness at effective radius, 
 radius at 90% of total light, bulge to total ratio, and component to total light ratio. 
 Extra information for the model is computed as well: Tidal, Bumpiness, Signal to Noise Ratio. 
 Akaike Information Criterion and Bayesian information criterion. This aids to GALFIT's users
-to select the best model for their galaxies.
+to select the best model for their galaxies and compute extra-photometry information.
 
 
 # Statement of Need 
@@ -131,7 +135,8 @@ See figure 1 for an example using 7 Gaussian components for an elliptical galaxy
 was fitted with 7 gaussian components. In both panels the color red represents 
 the galaxy and the blue one the GALFIT model. Left panel: Surface brightness 
 average vs. radius along the major axis. The color for each component is 
-shown in the (top right) box. The model's errors depend on the average over 
+shown in the (top right) box. The residual percentage is shown at 
+the bottom left plot. The model's errors depend on the average over 
 the ellipse of the individual components in that radius. Right panel: Multiple 
 plots of surface brightness of galaxy and model at different angles from 
 major axis (major axis is the one with $0\deg$). The error percentage is 
@@ -152,9 +157,10 @@ each sub-component. This allows the user to check if these are fitted as desired
 
 - **Sky**: The program uses the GALFIT's sky value from the input file, 
 but alternatively, users can enter their own sky value. Furthermore, 
-just for comparison, ``EllipSect`` can calculate the sky background using 
-the slope of the image counts, and it returns the sky value in the region 
-where the gradient turns positive. 
+``EllipSect`` can calculate the sky background using two methods: 1) 
+it takes the slope of the image counts, and it returns the sky value 
+in the region where the gradient turns positive. 2) It averages the 
+computed sky in box regions around the galaxy like the one used in [@gao17].
 
 - **Complementary photometric variables**:  ``EllipSect`` can compute 
 photometric variables that are indirectly extracted from the model parameters. 

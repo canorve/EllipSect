@@ -56,16 +56,20 @@ cube image to check if the galaxy model is the appropriate one. The FITS file
 contains the galaxy, model and residual images.
 
 
-The surface brightness models fitted by GALFIT could not be enough to decide whether 
-a model is appropiate or it would need more components. This is why we have developed \
-EllipSect. It is a python code to analyze the surface brightness models fitted by GALFIT. It 
-can extract the surface brightness models of the galaxy, model and their components. The
-programs also computes extra photometric variables that are not originally computed for 
-GALFIT such as total magnitude, flux, mean surface brightness at effective radius, 
-radius at 90% of total light, bulge to total ratio, and component to total light ratio. 
-Extra information for the model is computed as well: Tidal, Bumpiness, Signal to Noise Ratio. 
-Akaike Information Criterion and Bayesian information criterion. This aids to GALFIT's users
-to select the best model for their galaxies and compute extra-photometry information.
+We have developed EllipSect to extract the surface brightness profiles through 
+the FITS file. It can extract the surface brightness 
+of the galaxy, model and their components. The program also computes 
+extra photometric variables that are not directly computed 
+by GALFIT such as total magnitude, flux, mean surface 
+brightness at effective radius, radius at 90% of total light, 
+Kron radius [@kron80], Petrosian radius [@petrosian76], 
+bulge to total ratio, and component to total light ratio. 
+Extra information for the model is computed as well: Tidal [@tal09], 
+Bumpiness [@blakeslee06], Signal to Noise Ratio, 
+Akaike Information Criterion [@akaike74] and Bayesian 
+information criterion [@schwarz78]. 
+This aids to GALFIT's users to select the best model for their galaxies and compute 
+extra-photometry information.
 
 
 # Statement of Need 
@@ -73,7 +77,7 @@ to select the best model for their galaxies and compute extra-photometry informa
 
 Typically, a visual check on the residual image can be difficult to 
 interpret without extra information in addition to the $\chi^2_{\nu}$ 
-statistics.  Nevertheless, users construct surface brightness profiles 
+statistics. Nevertheless, users construct surface brightness profiles 
 from the GALFIT's output data to compare the galaxy and model images.
 
 GALFIT users have been using plots of surface brightness vs. radius to guide 
@@ -143,7 +147,7 @@ major axis (major axis is the one with $0\deg$). The error percentage is
 shown at the right side of the multi plot. ](Fig1.png)
 
 
-## Different Functionalities
+## Other Functionalities
 
 ``EllipSect`` has different input options to compute other 
 photometric variables or to modify the original plots. Additionally, 
@@ -165,8 +169,8 @@ computed sky in box regions around the galaxy like the one used in [@gao17].
 - **Complementary photometric variables**:  ``EllipSect`` can compute 
 photometric variables that are indirectly extracted from the model parameters. 
 For instance: total magnitude, flux, mean surface brightness at effective 
-radius, radius at 90% of total light, bulge to total ratio, and component 
-to total light ratio.
+radius, radius at 90% of total light, bulge to total ratio, Kron radius [@kron80], Petrosian 
+radius [@petrosian76], and component to total light ratio.
   
 - **Photometric aperture parameters**: The program uses MGEfit library [@cappellari02] 
 to divide an ellipse around the galaxy into sectors to compute the counts in each 

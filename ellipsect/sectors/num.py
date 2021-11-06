@@ -8,7 +8,18 @@ from ellipsect import *
 def  Interpol(X,Y,X2):
 
     tck = interpolate.splrep(X, Y)
-    return interpolate.splev(X2, tck)
+
+    flag = False
+    if(np.isnan(np.sum(tck[1]))):
+
+        m=len(X)
+        s=m-np.sqrt(2*m)
+        tck = interpolate.splrep(X, Y,s=s)
+        flag=True
+
+    Y2 = interpolate.splev(X2, tck)
+
+    return Y2,flag
 
 #sectors/num.py
 def GetK(n):

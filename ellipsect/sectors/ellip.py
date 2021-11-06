@@ -578,14 +578,21 @@ def MulEllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps):
 
         if (len(mgemodrad) > len(mgerad)):
 
-            mgemodsbnew = Interpol(r2,mgemodsb[angmod],r)
+            mgemodsbnew,smooth_flag = Interpol(r2,mgemodsb[angmod],r)
             sberr=1-mgemodsbnew/mgesb[angal]
             axsec[row, 1].plot(r, sberr*100, 'C0o')
+            if(smooth_flag):
+                print("smoothing interpolation was used for angle: ",np.int(np.round(txtang)))
+
 
         else:
-            mgesbnew = Interpol(r,mgesb[angal],r2)
+
+            mgesbnew,smooth_flag = Interpol(r,mgesb[angal],r2)
             sberr=1-mgemodsb[angmod]/mgesbnew
             axsec[row, 1].plot(r2, sberr*100, 'C0o')
+
+            if(smooth_flag):
+                print("smoothing interpolation was used for angle: ",np.int(np.round(txtang)))
 
 
         axsec[row, 1].axhline(linestyle='--', color='C1', linewidth=2)
@@ -599,7 +606,6 @@ def MulEllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps):
 
         if (txtang == 90):
             axsec[row, 1].text(0.98, 0.10, txtminor,fontweight='bold',fontsize=8.5, ha='right', va='bottom', transform=axsec[row, 1].transAxes)
-
 
 
         if params.flagranx[1] == False:

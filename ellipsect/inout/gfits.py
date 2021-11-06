@@ -19,7 +19,7 @@ def GetExpTime(Image,imgidx,flagidx,num,flagnum):
         exptime = hdu[0].header.get("EXPTIME",1) # return 1 if not found
 
     hdu.close()
-    return exptime
+    return float(exptime)
 
 #io/fits.py
 def GetFits(Image, Imageout, xlo, xhi, ylo, yhi):

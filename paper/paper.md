@@ -24,7 +24,7 @@ authors:
 affiliations:
  - name: Facultad de Ciencias de la Tierra y el Espacio, Universidad Autónoma de Sinaloa, Blvd. de la Americas y Av. Universitarios S/N, Ciudad Universitaria, C.P. 80010 Culiacán, Sinaloa, México
    index: 1
- - name: Instituto Nacional de Astrofísica Óptica y Electrónica (INAOE), Apartado Postal 51 y 216, 72000 Puebla, Mexico    
+ - name: Instituto Nacional de Astrofísica, Óptica y Electrónica (INAOE), Luis Enrique Erro 1, Apartado Postal 51 y 216, 72840 Puebla, México    
    index: 2
  - name:  Instituto de Radioastronomía y Astrofísica, UNAM, Campus Morelia, AP 3-72, CP 58089, México
    index: 3
@@ -48,28 +48,27 @@ model that reliably represents the physical properties requires a detailed
 inspection of the fitted models.
 
 A well-known program for modeling the surface brightness of astronomical 
-sources is GALFIT [[@peng02] 1891 cites at the moment of writing this document]. 
+sources is GALFIT [[@peng02] 1892 cites at the moment of writing this document]. 
 It allows to use a wide variety of standard functions such as Sérsic [@sersic68], 
 de Vaucouleurs [@devau48], Nuker, gaussian, among others. GALFIT provides the 
 fitted model parameters, errors, and a FITS (Flexible Image Transport System) 
 cube image to check if the galaxy model is the appropriate one. The FITS file 
-contains the galaxy, model and residual images.
+contains the galaxy, model, and residual images.
 
 
 We have developed EllipSect to extract the surface brightness profiles through 
 the FITS file. It can extract the surface brightness 
 of the galaxy, model and their components. The program also computes 
 extra photometric variables that are not directly computed 
-by GALFIT such as total magnitude, flux, mean surface 
+by GALFIT, such as total magnitude, flux, mean surface 
 brightness at effective radius, radius at 90% of total light, 
 Kron radius [@kron80], Petrosian radius [@petrosian76], 
 bulge to total ratio, and component to total light ratio. 
-Extra information for the model is computed as well: Tidal [@tal09], 
+Additional information for the model is computed as well: Tidal [@tal09], 
 Bumpiness [@blakeslee06], Signal to Noise Ratio, 
 Akaike Information Criterion [@akaike74] and Bayesian 
-information criterion [@schwarz78]. 
-This aids to GALFIT's users to select the best model for their galaxies and compute 
-extra-photometry information.
+Information Criterion [@schwarz78]. 
+This aids to GALFIT users to select the best model for their galaxies
 
 
 # Statement of Need 
@@ -109,26 +108,25 @@ Various scripts for GALFIT have been used before [@haussler13; @barden12;
 @anorve12; @vikram10], however, they cover other needs. For instance, their 
 codes run GALFIT to automatically fit thousands of objects without user interaction 
 on images containing multiple galaxies. AutoProf [@stone21] is another code to extract 
-surface brightnes profiles of galaxy images but it is not parametric.
+surface brightnes profiles of galaxy images, but it is a non-parametric method.
 
 ``EllipSect`` has been used to analyze galaxy images 
 from *2MASS* (Two Micron All Sky Survey) in which estimations of  morphological 
 and structural parameters have been obtained through photometric decompositions 
-using GALFIT [@rios21]. Moreover,  the program was used in a study of dust nuclear 
+using GALFIT [@rios21]. Moreover, EllipSect was used in a study of dust nuclear 
 structures of a sample of Active Galactic Nuclei (AGN) in the local Universe 
-through Hubble Space Telescope (HST) images, surface brightness models (with GALFIT) 
-and radiative transfer simulations using SKIRT (advanced radiative transfer in dusty systems)
-[@reyes21]. 
+through Hubble Space Telescope (HST) images, surface brightness models 
+and radiative transfer simulations [@reyes21]. 
 
 # Usage
 
 We designed ``EllipSect`` to be easy to use for any researcher from the 
 Astronomy community. It omits any direct interaction with the code or 
 translation of GALFIT's data format. The program is easily executed via 
-the command line. It only requires the latest GALFIT's output file. 
+the command line. It only requires the latest GALFIT's output files. 
 In this simple mode, ``EllipSect`` makes two graphs: one contains the 
 surface brightness average along major axis, and the other one contains 
-the surface brightness for different angles displayed in multiple plots.
+the surface brightness for different azimuthal angles displayed in multiple plots.
 
 The surface brightness is averaged through the perimeter of concentric 
 ellipses along the major axis of the galaxy. The multiple plots aids the 
@@ -139,8 +137,8 @@ See figure 1 for an example using 7 Gaussian components for an elliptical galaxy
 was fitted with 7 gaussian components. In both panels the color red represents 
 the galaxy and the blue one the GALFIT model. Left panel: Surface brightness 
 average vs. radius along the major axis. The color for each component is 
-shown in the (top right) box. The residual percentage is shown at 
-the bottom left plot. The model's errors depend on the average over 
+shown in the top right inset box. The residual percentage is shown at 
+the bottom left plot. The model errors depend on the average over 
 the ellipse of the individual components in that radius. Right panel: Multiple 
 plots of surface brightness of galaxy and model at different angles from 
 major axis (major axis is the one with $0\deg$). The error percentage is 
@@ -153,18 +151,18 @@ shown at the right side of the multi plot. ](Fig1.png)
 photometric variables or to modify the original plots. Additionally, 
 the program creates files of the surface brightness data used in the graphs.
 
-Below is shown a summary of the different features for ``EllipSect``:
+Below is shown a summary of the different features of ``EllipSect``:
 
-- **Components**: If multiple models compose a surface brightness model, 
+- **Model Components**: If multiple sub-components compose a surface brightness model, 
 users can enable ``EllipSect`` to include the surface brightness of 
 each sub-component. This allows the user to check if these are fitted as desired.
 
-- **Sky**: The program uses the GALFIT's sky value from the input file, 
+- **Sky**: The program uses the GALFIT sky value from the input file, 
 but alternatively, users can enter their own sky value. Furthermore, 
 ``EllipSect`` can calculate the sky background using two methods: 1) 
 it takes the slope of the image counts, and it returns the sky value 
 in the region where the gradient turns positive. 2) It averages the 
-computed sky in box regions around the galaxy like the one used in [@gao17].
+computed sky in box regions around the galaxy like the one used in @gao17.
 
 - **Complementary photometric variables**:  ``EllipSect`` can compute 
 photometric variables that are indirectly extracted from the model parameters. 
@@ -180,8 +178,9 @@ Akaike information criterion [@akaike74], and Bayesian information criterion [@s
 
 - **NED**: ``EllipSect`` connects to NED (NASA/IPAC Extragalactic Database) to 
 download data for the galaxy to estimate absolute magnitude, luminosity, mean 
-surface brightness, etc. 
- 
+surface brightness, among other parameters. 
+
+
  
 # Future
 

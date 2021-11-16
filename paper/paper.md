@@ -35,40 +35,43 @@ bibliography: paper.bib
 # Summary
 
 Galaxies are the building blocks of the large scale structure of the Universe. 
-The larger ones contain billions of stars that can form one or various galaxy 
-components such as bulges, bars, disks and rings. Consequently, these make a 
-wide variety in galaxy morphology. The quantification of the galaxy components 
-is a fundamental step to understand their structure and composition. For instance, 
-they can be compared with predictions of simulations of galaxy formation and 
-see their evolution over time. Using models that fit their light distribution 
-is one way to study those components. Such models are mathematical functions 
+Giant galaxies may contain billions of stars that can be distributed into several galaxy 
+components such as bulges, bars, disks and rings. The quantification of those components
+can help to generate galaxy classification schemes. It can also help to derive the 
+galaxy's gravitational potential. Besides, the photometric analysis of those 
+components can be compared with predictions of simulations of galaxy formation and 
+see their evolution over time. Using parametric models to fit the light distribution
+in galaxies is one way to study those components. Such models are mathematical functions 
 of surface brightness (luminosity per unit area) for the different 
-components of the galaxies. A suitable 
-model that reliably represents the physical properties requires a detailed 
-inspection of the fitted models.
+components of the galaxies. Suitable models closely describe the light distribution, 
+hence we need tools to access the quality of the fits. 
 
 A well-known program for modeling the surface brightness of astronomical 
-sources is GALFIT [[@peng02] 1892 cites at the moment of writing this document]. 
+sources is GALFIT [[@peng02; @peng10] 2931 cites in total at the moment 
+of writing this document]. 
 It allows to use a wide variety of standard functions such as Sérsic [@sersic68], 
-de Vaucouleurs [@devau48], Nuker, gaussian, among others. GALFIT provides the 
+de Vaucouleurs [@devau48], Nuker, Gaussian, among others. GALFIT provides the 
 fitted model parameters, errors, and a FITS (Flexible Image Transport System) 
 cube image to check if the galaxy model is the appropriate one. The FITS file 
 contains the galaxy, model, and residual images.
 
 
-We have developed EllipSect to extract the surface brightness profiles through 
-the FITS file. It can extract the surface brightness 
-of the galaxy, model and their components. The program also computes 
+We have developed the code EllipSect to extract the surface brightness 
+profiles through images in FITS format as input. EllipSect can extract 
+the surface brightness of the galaxy, model and their components from 
+the GALFIT output file. It also computes 
 extra photometric variables that are not directly computed 
 by GALFIT, such as total magnitude, flux, mean surface 
 brightness at effective radius, radius at 90% of total light, 
 Kron radius [@kron80], Petrosian radius [@petrosian76], 
 bulge to total ratio, and component to total light ratio. 
-Additional information for the model is computed as well: Tidal [@tal09], 
-Bumpiness [@blakeslee06], Signal to Noise Ratio, 
+Additional information for the model is computed as well: Tidal parameter 
+deviations [@tal09], 
+Bumpiness [@blakeslee06], Signal to Noise Ratio (SNR), 
 Akaike Information Criterion [@akaike74] and Bayesian 
 Information Criterion [@schwarz78]. 
-This aids to GALFIT users to select the best model for their galaxies
+These two last parameters aids GALFIT users to select the best model 
+including the number of components that should be incorporated. 
 
 
 # Statement of Need 
@@ -90,7 +93,7 @@ test various models to select the appropriate one for the galaxy. An additional
 issue is that the development and maintenance of IRAF is discontinued since 2013. 
 Nowadays, IRAF is actually supported by the Astronomy community. 
 
-Hence, we introduce ``EllipSect``, which is a Python tool to make surface 
+Hence, we introduce ``EllipSect``, which is a Python tool to generate surface 
 brightness profiles and extract complementary photometry from the GALFIT's output. 
 The program aids the users to select, remove or change model components. The goal 
 is to provide as much information as possible to select the best model. ``EllipSect``'s 
@@ -99,7 +102,7 @@ and the model. In case of multiple simultaneous galaxy fitting, it takes
 into account the surface brightness of neighbor galaxies to the target galaxy. 
 This is unfeasible to do with IRAF's task *ellipse* since it only takes one 
 at a time. It can also include the individual model components for a detailed 
-analysis. Furthermore, ``EllipSect`` complements the GALFIT photometry by adding 
+analysis. Furthermore, ``EllipSect`` complements GALFIT analysis by adding 
 other data besides the ones extracted from the model's parameters, such as the 
 total and absolute magnitude, luminosity, component to total luminosity ratio, 
 among others photometric variables (see section below). 
@@ -116,11 +119,12 @@ and structural parameters have been obtained through photometric decompositions
 using GALFIT [@rios21]. Moreover, EllipSect was used in a study of dust nuclear 
 structures of a sample of Active Galactic Nuclei (AGN) in the local Universe 
 through Hubble Space Telescope (HST) images, surface brightness models 
-and radiative transfer simulations [@reyes21]. 
+and radiative transfer simulations [@reyes21]. EllipSect, also generate publication
+quality plots. 
 
 # Usage
 
-We designed ``EllipSect`` to be easy to use for any researcher from the 
+We designed ``EllipSect`` to be user-friendly for any researcher from the 
 Astronomy community. It omits any direct interaction with the code or 
 translation of GALFIT's data format. The program is easily executed via 
 the command line. It only requires the latest GALFIT's output files. 
@@ -145,7 +149,7 @@ major axis (major axis is the one with $0\deg$). The error percentage is
 shown at the right side of the multi plot. ](Fig1.png)
 
 
-## Other Functionalities
+## Addtional Capabilities 
 
 ``EllipSect`` has different input options to compute other 
 photometric variables or to modify the original plots. Additionally, 

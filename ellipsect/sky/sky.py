@@ -524,7 +524,7 @@ class SkyCal:
                     maskring,flagfirst=self.GetRingMask(Rings[1:-1],landa,theta,flagfirst, savidx, savidx2)
                     
                     print("Ring radius = {:.2f} marked in {} ".format(radius[1:-1][savidx],namering))
-                    print("The count value in ring is the ellipse long axis") 
+                    print("In this file, the count value within ring represent the value of the long axis") 
                     self.img[ypos[maskring], xpos[maskring]] = radius[1:-1][savidx] 
                     break
 

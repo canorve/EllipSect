@@ -17,6 +17,7 @@ from ellipsect.inout.prt import PrintEllFilesGax
 from ellipsect.inout.prt import PrintFilesGax
 
 
+from ellipsect.sky.sky import SkyCal
 
 def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sectors=19, minlevel=0):
 

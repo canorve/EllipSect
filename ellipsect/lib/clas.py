@@ -13,8 +13,8 @@ class InputParams:
     flagpa=False
     flagcomp=False
     flagpix=False
-    flagranx=[False,False]
-    flagrany=[False,False]
+    flagranx=False
+    flagrany=False
     flagnoplot=False
     flagrid=False
     flagdpi=False

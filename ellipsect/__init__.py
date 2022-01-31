@@ -2,14 +2,16 @@
 #Importing local libraries:
 #############################
 
-from ellipsect.inout.read import InputSys
+from ellipsect.inout.read import ArgParsing
+from ellipsect.inout.read import InitParsing
 from ellipsect.sectors.sect import SectorsGalfit 
 
 from .version import __version__
 
 
 __all__ = [
-    "InputSys",
+    "ArgParsing",
+    "InitParsing",
     "SectorsGalfit",
 ]
 

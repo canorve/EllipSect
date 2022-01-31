@@ -5,29 +5,20 @@
 from ellipsect.lib.libs import *
 
 
-from ellipsect.inout.read import InputSys
+from ellipsect.inout.read import ArgParsing
 from ellipsect.sectors.sect import SectorsGalfit
 
 
 def run():
 
-    if (len(sys.argv[1:]) == 0):
-        print ("EllipSect: an analysis tool for GALFIT output ")
-        print ('Missing arguments')
-        print ("Usage:\n %s [GALFITOutputFile] [-options] " % (sys.argv[0]))
-        print ("use help to display more information about 'options' arguments: ")
-        print ("%s -help " % (sys.argv[0]))
-
-        sys.exit(0)
-
     # read user's input 
-    params = InputSys(sys.argv)
+    args = ArgParsing()
 
     # full program:
 
     #photapi stores all the variables computed by EllipSect
 
-    photapi = SectorsGalfit(params)
+    photapi = SectorsGalfit(args)
 
 
     #print("AIC: ",photapi.AICrit)

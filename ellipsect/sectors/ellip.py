@@ -261,15 +261,14 @@ def MulEllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps):
 
     eps=1-galpar.q
 
-    if params.flagranx[1] == True:
-        (xmin,xmax)=params.ranx.split("-")
-        xmin=np.float(xmin)
-        xmax=np.float(xmax)
 
-    if params.flagrany[1] == True:
-        (ymin,ymax)=params.rany.split("-")
-        ymin=np.float(ymin)
-        ymax=np.float(ymax)
+    if params.flagranx == True:
+        (xmin,xmax)=params.ranx[0], params.ranx[1]
+
+    if params.flagrany == True:
+        (ymin,ymax)=params.rany[0], params.rany[1]
+
+
 
 
     yctemp=galpar.xc
@@ -364,34 +363,13 @@ def MulEllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps):
 
 
     minrad = np.min(mgerad)
-
-    if params.flagranx[1] == False:
-        maxrad = np.max(mgerad) * params.ranx
-    else:
-        maxrad = np.max(mgerad)
+    maxrad = np.max(mgerad)
 
     minsb = np.min(mgesb)
     maxsb = np.max(mgesb)
     xran = minrad * (maxrad/minrad)**np.array([-0.02, +1.02])
-    yran = minsb * (maxsb/minsb)**np.array([+1.05,-0.05])
+    yran = minsb * (maxsb/minsb)**np.array([+1.05,-0.05]) #inverted axis
 
-
-    if params.flagrany[1] == False:
-
-        yran1=yran[0]
-        yran2=yran[1]
-
-        lyran= yran2 - yran1
-
-        yranmid= yran1 + lyran/2
-
-        lyran=lyran*params.rany
-
-        yran1 = yranmid - lyran/2
-        yran2 = yranmid + lyran/2
-
-        yran[0] = yran1
-        yran[1] = yran2
 
 
     sectors = np.unique(mgeangle)
@@ -464,15 +442,17 @@ def MulEllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps):
         txtminor= "minor axis"
         txtmajor= "major axis"
 
-        if params.flagranx[1] == False:
-            axsec[row, 0].set_xlim(xran)
-        else:
+        if params.flagranx == True:
             axsec[row, 0].set_xlim(xmin,xmax)
-
-        if params.flagrany[1] == False:
-            axsec[row, 0].set_ylim(yran)
         else:
+            axsec[row, 0].set_xlim(xran)
+
+        if params.flagrany == True:
             axsec[row, 0].set_ylim(ymax,ymin) #inverted
+        else:
+            axsec[row, 0].set_ylim(yran)
+
+
 
         if params.flaglogx == False:
 
@@ -609,11 +589,10 @@ def MulEllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps):
             axsec[row, 1].text(0.98, 0.10, txtminor,fontweight='bold',fontsize=8.5, ha='right', va='bottom', transform=axsec[row, 1].transAxes)
 
 
-        if params.flagranx[1] == False:
-            axsec[row, 1].set_xlim(xran)
-        else:
+        if params.flagranx == True:
             axsec[row, 1].set_xlim(xmin,xmax)
-
+        else:
+            axsec[row, 1].set_xlim(xran)
 
         axsec[row, 0].yaxis.set_minor_locator(AutoMinorLocator())
         axsec[row, 0].tick_params(which='both', width=2)
@@ -641,13 +620,13 @@ def MulEllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps):
      
         #x1, x2 = axsec[7,0].get_xlim() ## buggy for some data have to change it for code below:
         
-        if params.flagranx[1] == False:
-            x1= xran[0]
-            x2= xran[1]
-        else:
+        if params.flagranx == True:
             x1=xmin
             x2=xmax
-
+        else:
+            x1= xran[0]
+            x2= xran[1]
+ 
         axpix.set_xlim(x1/galpar.scale, x2/galpar.scale)
         axpix.figure.canvas.draw()
 

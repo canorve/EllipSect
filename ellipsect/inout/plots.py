@@ -20,46 +20,22 @@ def PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,params,scale):
     #ULISES end 
 
 
+    if params.flagranx == True:
+        (xmin,xmax)=params.ranx[0], params.ranx[1]
 
-    if params.flagranx[1] == True:
-        (xmin,xmax)=params.ranx.split("-")
-        xmin=np.float(xmin)
-        xmax=np.float(xmax)
-
-    if params.flagrany[1] == True:
-        (ymin,ymax)=params.rany.split("-")
-        ymin=np.float(ymin)
-        ymax=np.float(ymax)
+    if params.flagrany == True:
+        (ymin,ymax)=params.rany[0], params.rany[1]
 
 
     minrad = np.min(xradq)
-    if params.flagranx[1] == False:
-        maxrad = np.max(xradq) * params.ranx
-    else:
-        maxrad = np.max(xradq)
+    maxrad = np.max(xradq)
 
     mincnt = np.min(ysbq)
     maxcnt = np.max(ysbq)
     xran = minrad * (maxrad/minrad)**np.array([-0.02, +1.02])
-    yran = mincnt * (maxcnt/mincnt)**np.array([-0.05, +1.05])
+    yran = mincnt * (maxcnt/mincnt)**np.array([+1.05, -0.05]) #inverted axis
 
-    if params.flagrany[1] == False:
-        yran1=yran[0]
-        yran2=yran[1]
-
-        lyran= yran2 - yran1
-
-        yranmid= yran1 + lyran/2
-
-        lyran=lyran*params.rany
-
-        yran1 = yranmid - lyran/2
-        yran2 = yranmid + lyran/2
-
-        yran[0] = yran2 #inverted axis
-        yran[1] = yran1
-
-
+   
     # ULISES begin
     axsec = plt.subplot(gs[0])
     #axsec.set_xlabel("radius ('')")
@@ -70,11 +46,10 @@ def PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,params,scale):
     axsec.errorbar(xradm, ysbm,yerr=ysberrm,fmt='o-',capsize=2,color='blue',markersize=0.7,label="Model",linewidth=2)
 
 
-    if params.flagrany[1] == False:
-        axsec.set_ylim(yran)
-    else:
+    if params.flagrany == True:
         axsec.set_ylim(ymax,ymin) #inverted
-
+    else:
+        axsec.set_ylim(yran)
 
     if params.flaglogx == True:
 
@@ -166,12 +141,14 @@ def PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,params,scale):
     axred.tick_params(which='major', length=7)
     axred.tick_params(which='minor', length=4, color='r')
 
-    if params.flagranx[1] == False:
-        axsec.set_xlim(xran)
-        axred.set_xlim(xran) #ulises plot
-    else:
+    if params.flagranx == True:
         axsec.set_xlim(xmin,xmax)
         axred.set_xlim(xmin,xmax) #ulises plot
+    else:
+        axsec.set_xlim(xran)
+        axred.set_xlim(xran) #ulises plot
+ 
+
 
 
     if params.flagpix == True:

@@ -17,6 +17,7 @@ from ellipsect.sectors.ellip import MulEllipSectors
 
 from ellipsect.phot.phot import OutPhot
 
+from ellipsect.lib.clas import InputParams
 
 
 def SectPhot(galpar, params, n_sectors=19, minlevel=0):
@@ -223,8 +224,11 @@ def SectPhotComp(galpar, params, galcomps, n_sectors=19, minlevel=0):
     return sectcomps
 
 #/sectors/sect.py
-def SectorsGalfit(params):
+def SectorsGalfit(args):
 
+
+
+    params = PassArgs(args) # from now on, params is used instead of args
 
     print("angle in multi-plot is measured from the galaxy's major axis ")
 
@@ -582,6 +586,169 @@ def PassVars(photapi,params,galpar,galcomps):
     photapi.me=galcomps.me.copy()
     photapi.mme=galcomps.mme.copy()
     photapi.kser = galcomps.kser.copy()
+
+
+def PassArgs(args):
+    '''function to pass arguments from args to params'''
+
+    # Note: This function shouldn't exist, but since 
+    # I didn't know about the argparse library when 
+    # I start this project, I have to create this function
+    # to pass the arguments from argparse to my old parsing arguments
+    # this is the minimum thing to do without modifying the rest 
+    # of the code.
+
+    #class for user's parameters
+    params=InputParams()
+
+    # passing to params
+    ##########################
+    params.galfile= args.GalFile 
+    ##########################
+
+    #options without arguments
+
+    if args.logx:
+        params.flaglogx=True
+
+    if args.comp:
+        params.flagcomp=True
+ 
+    if args.pix:
+        params.flagpix=True
+ 
+    if args.grid:
+        params.flagrid=True
+ 
+    if args.sbout:
+        params.flagsbout=True
+ 
+    if args.noplot:
+        params.flagnoplot=True
+        params.dplot=False
+
+    if args.phot:
+        params.flagphot=True
+ 
+    if args.checkimg:
+        params.flagcheck=True
+ 
+    if args.noned:
+        params.flagned=True
+ 
+    if args.gradsky:
+        params.flagradsky=True
+
+    if args.randsky:
+        params.flagrandboxsky=True
+
+    if args.snr:
+        params.flagsnr=True
+ 
+    if args.keep:
+        params.flagkeep=True
+
+
+    #options with arguments
+
+    if args.axisrat:
+        params.flagq = True
+        params.qarg = args.axisrat  
+
+
+    if args.posangle:
+        params.flagpa= True
+        params.parg = args.posangle  
+
+
+    if args.ranx:
+        params.flagranx=True
+        params.ranx=args.ranx
+
+    if args.rany:
+        params.flagrany=True
+        params.rany=args.rany
+
+
+    if args.dotsinch:
+        params.flagdpi = True
+        params.dpival = args.dotsinch
+
+    if args.minlevel:
+        params.flagminlevel= True
+        params.minlevel= args.minlevel
+
+    if args.sectors:
+        params.flagsectors= True
+        params.sectors= args.sectors
+
+    if args.object:
+        params.flagobj= True
+        params.objname= args.object
+
+    if args.filter:
+        params.flagband= True
+        params.band= args.filter
+
+    if args.distmod:
+        params.flagmod = True
+        params.InDistMod = args.distmod
+
+    if args.magcor:
+        params.flagmag= True
+        params.InMagCor= args.magcor
+
+    if args.scalekpc:
+        params.flagscale= True
+        params.InScale= args.scalekpc
+
+    if args.sbdim:
+        params.flagdim= True
+        params.InSbDim= args.sbdim
+
+    if args.model:
+        params.flagmodel= True
+        params.inputmodel= args.model
+
+    if args.sky:
+        params.flagsky= True
+        params.insky= args.sky
+
+    if args.ned:
+        params.flagnedfile= True
+        params.nedfile= args.ned
+
+    if args.skyrad:
+        params.flagskyRad= True
+        params.skyRad= args.skyrad
+
+    if args.skyradmax:
+        params.flagskyRadmax= True
+        params.skyRadmax= args.skyradmax
+
+    if args.skybox:
+        params.flagskybox= True
+        params.skybox= args.skybox
+  
+    if args.skynum:
+        params.flagskynum= True
+        params.skynum= args.skynum
+
+    if args.skywidth:
+        params.flagskywidth= True
+        params.skywidth= args.skywidth
+
+    if args.distmax:
+        params.flagdistmax= True
+        params.distmax= args.distmax
+   
+    if args.fwhm:
+        params.flagfwhm= True
+        params.fwhm= args.fwhm
+
+
+
+    return params
 
 
 

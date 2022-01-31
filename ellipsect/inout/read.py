@@ -5,289 +5,87 @@ from ellipsect.inout.gfits import GetExpTime
 from ellipsect.inout.gfits import GetAxis
 from ellipsect.inout.gfits import GetFits
 
-from ellipsect.inout.help import Help
-from ellipsect.lib.clas import InputParams
 
-def InputSys(argv):
+
+import argparse
+
+
+def ArgParsing():
     ''' Read user's input '''
 
-    OptionHandleList = ['-logx', '-q', '-pa','-comp','-pix','-ranx','-rany','-grid','-dpi','-sbout','-noplot',
-        '-minlevel','-sectors','-phot','-object','-filter','-snr','-help','-checkimg','-noned','-distmod','-magcor',
-        '-scalekpc','-sbdim','-model','-sky','-keep','-ned','-gradsky','-randsky','-skyRad','-skyRadmax','-skynum','-skybox','-skywidth','-distmax', '-fwhm']
+
+    parser = InitParsing()
+
+    args = parser.parse_args()
+
+    #args = parser.parse_args('') # get default parameters
 
 
-    #class for user's parameters
-    params=InputParams()
-
-    options = {}
-    for OptionHandle in OptionHandleList:
-        options[OptionHandle[1:]] = argv[argv.index(OptionHandle)] if OptionHandle in argv else None
-    if options['logx'] != None:
-        params.flaglogx=True
-        print("X axis is logarithm")
-    if options['q'] != None:
-        params.flagq=True
-    if options['pa'] != None:
-        params.flagpa=True
-    if options['pix'] != None:
-        params.flagpix=True
-    if options['ranx'] != None:
-        params.flagranx[0]=True
-    if options['rany'] != None:
-        params.flagrany[0]=True
-    if options['grid'] != None:
-        params.flagrid=True
-    if options['dpi'] != None:
-        params.flagdpi=True
-    if options['comp'] != None:
-        params.flagcomp=True
-        print("Plotting subcomponents ")
-    if options['noplot'] != None:
-        params.flagnoplot=True
-        print("images will not be displayed")
-    if options['sbout'] != None:
-        params.flagsbout=True
-        print("surface brightness output file will be created")
-    if options['phot'] != None:
-        params.flagphot=True
-        print("output photometry file will be created")
-    if options['minlevel'] != None:
-        params.flagminlevel=True
-    if options['sectors'] != None:
-        params.flagsectors=True
-    if options['object'] != None:
-        params.flagobj=True
-    if options['filter'] != None:
-        params.flagband=True
-    if options['snr'] != None:
-        params.flagsnr=True
-    if options['checkimg'] != None:
-        params.flagcheck=True
-    if options['noned'] != None:
-        params.flagned=True
-    if options['distmod'] != None:
-        params.flagmod=True
-    if options['magcor'] != None:
-        params.flagmag=True
-    if options['scalekpc'] != None:
-        params.flagscale=True
-    if options['sbdim'] != None:
-        params.flagdim=True
-    if options['model'] != None:
-        params.flagmodel=True
-        print("input model image will be used")
-    if options['sky'] != None:
-        params.flagsky=True
-    if options['keep'] != None:
-        params.flagkeep=True
-    if options['ned'] != None:
-        params.flagnedfile=True
-    if options['gradsky'] != None:
-        params.flagradsky=True
-    if options['randsky'] != None:
-        params.flagrandboxsky=True
-
-    if options['skyRad'] != None:
-        params.flagskyRad=True
-    if options['skyRadmax'] != None:
-        params.flagskyRadmax=True
-    if options['skywidth'] != None:
-        params.flagskywidth=True
-    if options['skybox'] != None:
-        params.flagskybox=True
-    if options['skynum'] != None:
-        params.flagskynum=True
-
-    if options['distmax'] != None:
-        params.flagdistmax=True
-
-    if options['fwhm'] != None:
-        params.flagfwhm=True
+    #params = PassArgs(args)
 
 
 
 
-    # check for unrecognized options:
-    sysopts=argv[2:]
-    for idx,key in enumerate(sysopts):
-        if not(key in OptionHandleList): 
-            if key[0] == "-":
-                print("WARNING: {} option not recognized ".format(key)) 
-
-    if options['help'] != None:
-        Help()
-
-    ################## search arguments after the option:
-    if params.flagpa == True:
-        opt={}
-        OptionHandle="-pa"
-        opt[OptionHandle[1:]] = argv[argv.index(OptionHandle)+1]
-        params.parg=np.float(opt['pa'])
-
-    if params.flagq == True:
-        opt={}
-        OptionHandle="-q"
-        opt[OptionHandle[1:]] = argv[argv.index(OptionHandle)+1]
-        params.qarg=np.float(opt['q'])
-
-    if params.flagranx[0] == True:
-        opt={}
-        OptionHandle="-ranx"
-        opt[OptionHandle[1:]] = argv[argv.index(OptionHandle)+1]
-
-        params.rangex=opt["ranx"]
-        if "-" in params.rangex:
-            params.flagranx[1] = True
-            params.ranx=opt['ranx']
-        else:
-            params.ranx=np.float(opt['ranx'])
-
-    if params.flagrany[0]== True:
-        opt={}
-        OptionHandle="-rany"
-        opt[OptionHandle[1:]] = argv[argv.index(OptionHandle)+1]
-
-        params.rangey=opt["rany"]
-        if "-" in params.rangey:
-            params.flagrany[1] = True
-            params.rany=opt['rany']
-        else:
-            params.rany=np.float(opt['rany'])
-
-    if params.flagdpi == True:
-        opt={}
-        OptionHandle="-dpi"
-        opt[OptionHandle[1:]] = argv[argv.index(OptionHandle)+1]
-        params.dpival=np.int(opt['dpi'])
-
-    if params.flagnoplot == True:
-        params.dplot=False
-
-    if params.flagminlevel == True:
-        opt={}
-        OptionHandle="-minlevel"
-        opt[OptionHandle[1:]] = argv[argv.index(OptionHandle)+1]
-        params.minlevel=np.float(opt['minlevel'])
-
-    if params.flagsectors == True:
-        opt={}
-        OptionHandle="-sectors"
-        opt[OptionHandle[1:]] = argv[argv.index(OptionHandle)+1]
-        params.sectors=np.int(opt['sectors'])
-
-    if params.flagobj == True:
-        opt={}
-        OptionHandle="-object"
-        opt[OptionHandle[1:]] = argv[argv.index(OptionHandle)+1]
-        params.objname=np.str(opt['object'])
-
-    if params.flagband == True:
-        opt={}
-        OptionHandle="-filter"
-        opt[OptionHandle[1:]] = argv[argv.index(OptionHandle)+1]
-        params.band=np.str(opt['filter'])
+    return args
 
 
-    if params.flagmod == True:
-        opt={}
-        OptionHandle="-distmod"
-        opt[OptionHandle[1:]] = argv[argv.index(OptionHandle)+1]
-        params.InDistMod=np.float(opt['distmod'])
+def InitParsing():
+    '''initial input parsing'''
 
 
-    if params.flagmag == True:
-        opt={}
-        OptionHandle="-magcor"
-        opt[OptionHandle[1:]] = argv[argv.index(OptionHandle)+1]
-        params.InMagCor=np.float(opt['magcor'])
+    parser = argparse.ArgumentParser(description="EllipSect creates surface brightness profiles (and other photometric variables) from GALFIT output ")
+
+    # required arguments
+    parser.add_argument("GalFile", help="GALFIT output file: galfit.XX ")
+
+    #options without arguments
+    parser.add_argument("-lx","--logx", action="store_true", help="turn the X-axis to logarithm ")
+    parser.add_argument("-cp","--comp", action="store_true", help="add individual model components to the plot")
+    parser.add_argument("-px","--pix", action="store_true", help="turn the top x-axis in pixels ")
+    parser.add_argument("-g","--grid", action="store_true", help="display a grid in the plot ")
+    parser.add_argument("-sb","--sbout", action="store_true", help="creates output file containing the surface brightness profiles")
+    parser.add_argument("-np","--noplot", action="store_true", help="avoids pop up windows and only creates images files")
+    parser.add_argument("-ph","--phot", action="store_true", help="Compute photometry. Check the created output file")
+    parser.add_argument("-ci","--checkimg", action="store_true", help="save the images used for sectors_photometry in individual files")
+    parser.add_argument("-nn","--noned", action="store_true", help="it avoids to connect to NED")
+    parser.add_argument("-gsky","--gradsky", action="store_true", help="computes sky using the gradient method")
+    parser.add_argument("-rsky","--randsky", action="store_true", help="computes sky using random boxes")
+    parser.add_argument("-snr","--snr", action="store_true", help="Creates Signal to Noise image")
+
+    parser.add_argument("-k","--keep", action="store_true", help="use existing file to compute subcomponents")
+
+ 
+    #options with arguments
+    parser.add_argument("-q","--axisrat", type=float, help="galaxy axis ratio ",default=1)
+    parser.add_argument("-pa","--posangle", type=float, help="position angle (same as GALFIT)  ",default=0)
+    parser.add_argument("-rx","--ranx",nargs=2, type=float, help="provide a range for x-axis: xmin-xmax ")
+    parser.add_argument("-ry","--rany", nargs=2,type=float, help="provide a range for y-axis: ymin-ymax  ")
+    parser.add_argument("-dpi","--dotsinch", type=int, help="dots per inch used for images files ")
+    parser.add_argument("-ml","--minlevel", type=float, help="parameter given directly to sectors_photometry. ")
+    parser.add_argument("-sc","--sectors", type=int, help="parameter given directly to sectors_photometry. Divide elipse in 'sectors'")
+    parser.add_argument("-ob","--object",  help="used for 'phot' to search in NED")
+    parser.add_argument("-f","--filter",  help="used for 'phot' to indicate band for NED  ")
+    parser.add_argument("-dm","--distmod", type=float, help="Introduce Distance Modulus  ")
+    parser.add_argument("-mc","--magcor", type=float, help="Introduce Galactic Extinction ")
+    parser.add_argument("-sk","--scalekpc", type=float, help="Introduce equivalence of ''/kiloparsec ")
+    parser.add_argument("-sd","--sbdim", type=float, help="surface brightness dimming ")
+    parser.add_argument("-md","--model",  help="User can introduce its own image model. ")
+    parser.add_argument("-sky","--sky", type=float, help="User can introduce his/her own sky value. ")
+    parser.add_argument("-ned","--ned",  help="user can introduce his/her own ned xml file")
+    parser.add_argument("-sr","--skyrad", type=float, help="for randsky, it creates a mask for the main target using this radio. For gradsky it is where the program starts to compute the gradient ")
+    parser.add_argument("-srm","--skyradmax", type=float, help="for randsky only, maximum radius from main target where randbox can be selected")
+    parser.add_argument("-skb","--skybox", type=int, help="pixel size of the box for randsky. Default = 20",default=20)
+    parser.add_argument("-skn","--skynum", type=int, help="Number of boxes used in randsky. Default = 20",default=20)
+    parser.add_argument("-skw","--skywidth", type=int, help="width of the ring for gradsky. Default = 20 ",default=20)
+    parser.add_argument("-distm","--distmax", type=float, help="maximum distance among model centers to be considered to be part of the same galaxy ")
+    parser.add_argument("-fw","--fwhm", type=float, help="It is used to compute Area_psf for BICres. Default = 2 pixels ",default=2)
 
 
-    if params.flagscale == True:
-        opt={}
-        OptionHandle="-scalekpc"
-        opt[OptionHandle[1:]] = argv[argv.index(OptionHandle)+1]
-        params.InScale=np.float(opt['scalekpc'])
-
-
-    if params.flagdim == True:
-        opt={}
-        OptionHandle="-sbdim"
-        opt[OptionHandle[1:]] = argv[argv.index(OptionHandle)+1]
-        params.InSbDim=np.float(opt['sbdim'])
-
-    if params.flagmodel == True:
-        opt={}
-        OptionHandle="-model"
-        opt[OptionHandle[1:]] = argv[argv.index(OptionHandle)+1]
-        params.inputmodel=np.str(opt['model'])
-
-
-    if params.flagsky == True:
-        opt={}
-        OptionHandle="-sky"
-        opt[OptionHandle[1:]] = argv[argv.index(OptionHandle)+1]
-        params.insky=np.float(opt['sky'])
-
-
-    if params.flagnedfile == True:
-        opt={}
-        OptionHandle="-ned"
-        opt[OptionHandle[1:]] = argv[argv.index(OptionHandle)+1]
-        params.nedfile=np.str(opt['ned'])
-
-
-    if params.flagskyRad == True:
-        opt={}
-        OptionHandle="-skyRad"
-        opt[OptionHandle[1:]] = argv[argv.index(OptionHandle)+1]
-        params.skyRad=np.float(opt['skyRad'])
-
-    if params.flagskyRadmax == True:
-        opt={}
-        OptionHandle="-skyRadmax"
-        opt[OptionHandle[1:]] = argv[argv.index(OptionHandle)+1]
-        params.skyRadmax=np.float(opt['skyRadmax'])
-
-
-    if params.flagskybox == True:
-        opt={}
-        OptionHandle="-skybox"
-        opt[OptionHandle[1:]] = argv[argv.index(OptionHandle)+1]
-        params.skybox=np.int(opt['skybox'])
-
-    if params.flagskynum == True:
-        opt={}
-        OptionHandle="-skynum"
-        opt[OptionHandle[1:]] = argv[argv.index(OptionHandle)+1]
-        params.skynum=np.int(opt['skynum'])
-
-
-    if params.flagskywidth == True:
-        opt={}
-        OptionHandle="-skywidth"
-        opt[OptionHandle[1:]] = argv[argv.index(OptionHandle)+1]
-        params.skywidth=np.int(opt['skywidth'])
-
-
-    if params.flagdistmax == True:
-        opt={}
-        OptionHandle="-distmax"
-        opt[OptionHandle[1:]] = argv[argv.index(OptionHandle)+1]
-        params.distmax=np.float(opt['distmax'])
-
-
-    if params.flagfwhm == True:
-        opt={}
-        OptionHandle="-fwhm"
-        opt[OptionHandle[1:]] = argv[argv.index(OptionHandle)+1]
-        params.fwhm=np.float(opt['fwhm'])
+    return parser
 
 
 
 
-    params.galfile= argv[1]
-
-    return params
 
 
 

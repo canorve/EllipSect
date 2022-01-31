@@ -36,7 +36,7 @@ def InitParsing():
     parser = argparse.ArgumentParser(description="EllipSect creates surface brightness profiles (and other photometric variables) from GALFIT output ")
 
     # required arguments
-    parser.add_argument("GalFile", help="GALFIT output file: galfit.XX ")
+    parser.add_argument("GalFile",default="galfit.01",help="GALFIT output file: galfit.XX ")
 
     #options without arguments
     parser.add_argument("-lx","--logx", action="store_true", help="turn the X-axis to logarithm ")

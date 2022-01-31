@@ -91,7 +91,7 @@ It will display images like the ones below:
 for more options:
 
 ```
-./ellsec.py -help 
+./ellsec.py --help 
 ```
 
 
@@ -110,27 +110,38 @@ If you want to use EllipSect inside your own
 python script, you can call it in the following way:
 
 ```
+    from ellipsect import InitParsing
+    from ellipsect import SectorsGalfit
 
-    from ellipsect.inout.read import InputSys
-    from ellipsect.sectors.sect import SectorsGalfit
+    parser = InitParsing()
 
-    argv = ["./ellsec.py","galfit.01","-phot"]
 
-    params = InputSys(argv)
+    # Get the args container with default values
+    if __name__ == '__main__':
+      args = parser.parse_args()  # get arguments from command line
+    else:
+      args = parser.parse_args('')  # get default arguments
 
 
     #photapi stores all the variables computed by EllipSect
 
-    photapi = SectorsGalfit(params)
+    args.GalFile = "galfit.46"
+    args.logx = True
+    args.phot = True
+
+    photapi = SectorsGalfit(args)
 
     print("Akaike Criterion: ",photapi.AICrit)
     print("Bulge to Total: ",photapi.BulgeToTotal)
 
+
 ```
+
+
 
 To check all the output variables besides AICrit and BulgeToTotal, check: 
 
-   [Output variables ](api.md)
+   [Output variables ](docs/api.md)
 
 ___
 

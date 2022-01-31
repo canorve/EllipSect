@@ -16,7 +16,7 @@ are some options available to use.
 The options are:
 
 ```
- ./ellsec.py [GALFIT_File] [-logx] [-q AxisRatio] [-pa PositionAngle] [-comp] [-pix] [-ranx/y Value] [-grid] [-dpi Value] [-noplot] [-phot] [-sbout] [-noplot] [-minlevel Value] [-sectors Value] [-object Name] [-filter Name] [-snr] [-help] [-checkimg] [-noned] [-distmod Value] [-magcor Value] [-scalekpc Value][-sbdim Value] [-model ModelImage] [-keep] [-ned XmlFile] [-gradsky ] [-randsky ] [-skyRad Value] [-skyRadmax Value][-skynum Value] [-skybox Value] [-skywidth Value] [-fwhm Value] 
+ ./ellsec.py [GALFIT_File] [--logx] [-q AxisRatio] [-pa PositionAngle] [--comp] [--pix] [--ranx/y Value] [--grid] [--dpi Value] [--noplot] [--phot] [--sbout] [--noplot] [--minlevel Value] [--sectors Value] [--object Name] [--filter Name] [--snr] [--help] [--checkimg] [--noned] [--distmod Value] [--magcor Value] [--scalekpc Value][--sbdim Value] [--model ModelImage] [--keep] [--ned XmlFile] [--gradsky ] [--randsky ] [--skyRad Value] [--skyRadmax Value][--skynum Value] [--skybox Value] [--skywidth Value] [--fwhm Value] 
 ```
 
 Below is an explanation of each parameter: 
@@ -39,11 +39,9 @@ from the last component in GALFIT_File.
 
 **pix**: adds pixels units to the top of x-axis.
 
-**ranx**: constant that increase/decrease the range of the x axis *or* 
-it can be used as xmin-xmax to change range.
+**ranx**: it can be used as xmin-xmax to change range.
 
-**rany**: constant that increase/decrease the range of the y axis *or* 
-it can be used as ymin-ymax to change range.
+**rany**: it can be used as ymin-ymax to change range.
 
 **noplot**: the code creates images but do not display them.
 
@@ -153,8 +151,10 @@ ___
 * Displays the help menu: 
   
   ```
-    ./ellsec.py -help
+    ./ellsec.py --help
   ```
+
+Check the short versions of the arguments when help is displayed.
 
 ___
 
@@ -190,7 +190,7 @@ with 7 gaussians (images for this galaxy are displayed in **Notes** section).
 * Displays the X-axis as log:
 
 ```
-    ./ellsec.py galfit.46 -logx
+    ./ellsec.py galfit.46 --logx
 ```
 
    ![A85 ](../img/A85.log.png)
@@ -198,7 +198,7 @@ with 7 gaussians (images for this galaxy are displayed in **Notes** section).
 * Include the individual model components into the plot:  
   
   ```
-    ./ellsec.py galfit.46 -comp
+    ./ellsec.py galfit.46 --comp
   ```
   
    (displays the 7 gaussians)
@@ -208,31 +208,15 @@ with 7 gaussians (images for this galaxy are displayed in **Notes** section).
 * Insert pixels units in the top X-axis: 
   
   ```
-    ./ellsec.py galfit.46 -pix
+    ./ellsec.py galfit.46 --pix
   ```
   
    ![A85 ](../img/A85.pix.png)
 
-* Range in X-axis is decreased 50%: 
-  
-  ```
-    ./ellsec.py galfit.46 -ranx 0.5 
-  ```
-  
-   ![A85 ](../img/A85.ranx1.png)
-
-* Range in Y-axis is doubled: 
-  
-  ```
-   ./ellsec.py galfit.46 -rany 2 
-  ```
-  
-   ![A85 ](../img/A85.rany1.png)
-
 * X-axis range vary from 1 to 50: 
   
   ```
-    ./ellsec.py galfit.46 -ranx 1-50 
+    ./ellsec.py galfit.46 -ranx 1 50 
   ```
   
    ![A85 ](../img/A85.ranx2.png)
@@ -240,7 +224,7 @@ with 7 gaussians (images for this galaxy are displayed in **Notes** section).
 * Use grid on plot and increase resolution to 300 dots per inch: 
 
 ```
-   ./ellsec.py galfit.46 -grid -dpi 300 
+   ./ellsec.py galfit.46 --grid --dpi 300 
 ```
 
    ![A85 ](../img/A85.grid.png)
@@ -249,21 +233,21 @@ with 7 gaussians (images for this galaxy are displayed in **Notes** section).
     directly saved in directory: 
 
 ```
-    ./ellsec.py galfit.46 -grid -dpi 300 -noplot 
+    ./ellsec.py galfit.46 --grid --dpi 300 --noplot 
 ```
 
 * If the user desires to create their own plots, 'sbout' option
   will save the surface brightness data of the plots into a file:
 
 ```
-    ./ellsec.py galfit.46 -sbout
+    ./ellsec.py galfit.46 --sbout
 ```
 
   EllipSect can also save the surface brightness data for 
   individual components in separated files:
 
 ```
-    ./ellsec.py galfit.46 -comp -sbout 
+    ./ellsec.py galfit.46 --comp --sbout 
 ```
 
 ### **Phot Examples**
@@ -287,7 +271,7 @@ with 7 gaussians (images for this galaxy are displayed in **Notes** section).
   Those variables are stored in a single file when the following command is executed:
   
   ```
-  ./ellsec.py galfit.46 -phot
+  ./ellsec.py galfit.46 --phot
   ```
 
 * *phot* option connects to NED (NASA/IPAC Extragalactic Database) to download 
@@ -299,21 +283,21 @@ with 7 gaussians (images for this galaxy are displayed in **Notes** section).
   it is shown in the next example for galaxy messier 51 in the band B:  
 
 ```
-    ./ellsec.py galfit.14 -phot -object m51 -filter B
+    ./ellsec.py galfit.14 --phot --object m51 --filter B
 ```
 
 * If the user wants to see a Signal to Noise image of the data, use 
   the next command:
   
   ```
-  ./ellsec.py galfit.14 -phot -snr
+  ./ellsec.py galfit.14 --phot --snr
   ```
 
 * If for some reason the user does not want to connect to NED use 
   the following option:
 
 ```
-    ./ellsec.py galfit.14 -phot -noned
+    ./ellsec.py galfit.14 --phot --noned
 ```
 
    take into account that Luminosity and Absolute magnitud will not be computed
@@ -323,7 +307,7 @@ with 7 gaussians (images for this galaxy are displayed in **Notes** section).
   of 0.3, "/kpc of 1.3 and surface brightness dimming of 0.3.  
 
 ```
-    ./ellsec.py galfit.10 -phot -distmod 10 -magcor 0.3 -scalekpc 1.3 -sbdim .3
+    ./ellsec.py galfit.10 --phot --distmod 10 --magcor 0.3 --scalekpc 1.3 --sbdim .3
 ```
 
    Take into account that any of this options will avoid 
@@ -338,7 +322,7 @@ with 7 gaussians (images for this galaxy are displayed in **Notes** section).
   If -phot option is enabled, SNR quantities will be inaccurate.
 
 ```
-    ./ellsec.py galfit.14 -model model.fits
+    ./ellsec.py galfit.14 --model model.fits
 ```
 
 * sky option allows the user to introduce his/her own sky value to subtract it
@@ -346,7 +330,7 @@ with 7 gaussians (images for this galaxy are displayed in **Notes** section).
   otherwise EllipSect will produce wrong outputs.  
 
 ```
-    ./ellsec.py galfit.01 -sky 300
+    ./ellsec.py galfit.01 --sky 300
 ```
 
 ----
@@ -360,7 +344,7 @@ with 7 gaussians (images for this galaxy are displayed in **Notes** section).
   tells to *sectors_photometry* that stops when the sky is 0.
 
 ```
-    ./ellsec.py galfit.14 -minlevel 0
+    ./ellsec.py galfit.14 --minlevel 0
 ```
 
    Note: Galfit sky parameter is already removed from image before the call 
@@ -371,7 +355,7 @@ with 7 gaussians (images for this galaxy are displayed in **Notes** section).
   use four-fold symmetry.  
 
 ```
-    ./ellsec.py galfit.14 -sectors 19
+    ./ellsec.py galfit.14 --sectors 19
 ```
 
 * checkimg will create images used by *sectors_photometry* to check how 
@@ -381,7 +365,7 @@ with 7 gaussians (images for this galaxy are displayed in **Notes** section).
   Use it with the 'comp' option:  
 
 ```
-    ./ellsec.py galfit.14 -comp -checkimg
+    ./ellsec.py galfit.14 --comp --checkimg
 ```
 
 ### **Sky calculation Example**
@@ -389,7 +373,7 @@ with 7 gaussians (images for this galaxy are displayed in **Notes** section).
 * Computes the sky using the gradient method
 
 ```
-    ./ellsec.py galfit.06 -gradsky
+    ./ellsec.py galfit.06 --gradsky
 ```
 
 After computing sky, a outname-ring.fits will be created to check
@@ -475,7 +459,7 @@ ___
     in the top right corner and the one from each component. This is because
     *sectors_photometry* is applied different for individual components and the 
     galaxy itself. They are at different angles. To see the real angle which the 
-    component is measured check the output file at that angle with the *-sbout* option 
+    component is measured check the output file at that angle with the *--sbout* option 
 
 * EllipSect is not adapted for the GALFIT Fourier modes
 

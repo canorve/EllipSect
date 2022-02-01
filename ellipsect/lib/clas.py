@@ -39,6 +39,8 @@ class InputParams:
 
     flagsky=False
     flagkeep=False
+    flagalax=False
+
     flagnedfile=False
 
     flagradsky=False

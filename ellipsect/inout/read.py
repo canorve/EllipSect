@@ -53,6 +53,7 @@ def InitParsing():
     parser.add_argument("-snr","--snr", action="store_true", help="Creates Signal to Noise image")
 
     parser.add_argument("-k","--keep", action="store_true", help="use existing file to compute subcomponents")
+    parser.add_argument("-gx","--galax", action="store_true", help="only the galaxy surface brightness is shown in the plot")
 
  
     #options with arguments

@@ -463,7 +463,6 @@ def SectorsGalfit(args):
     ############ Computing output photometry ###############
     ########################################################
 
-    #PassVars(photapi,params,galpar,galcomps)    
 
     if params.flagphot:
         print("Computing output photometry ... ")
@@ -647,6 +646,10 @@ def PassArgs(args):
  
     if args.keep:
         params.flagkeep=True
+
+    if args.galax:
+        params.flagalax=True
+
 
 
     #options with arguments

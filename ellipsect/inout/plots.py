@@ -43,7 +43,10 @@ def PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,params,scale):
     # ULISES end
 
     axsec.errorbar(xradq, ysbq,yerr=ysberrq,fmt='o-',capsize=2,color='red',markersize=0.7,label="galaxy",linewidth=2)
-    axsec.errorbar(xradm, ysbm,yerr=ysberrm,fmt='o-',capsize=2,color='blue',markersize=0.7,label="Model",linewidth=2)
+
+
+    if params.flagalax == False:
+        axsec.errorbar(xradm, ysbm,yerr=ysberrm,fmt='o-',capsize=2,color='blue',markersize=0.7,label="Model",linewidth=2)
 
 
     if params.flagrany == True:

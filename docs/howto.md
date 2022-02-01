@@ -16,7 +16,7 @@ are some options available to use.
 The options are:
 
 ```
- ./ellsec.py [GALFIT_File] [--logx] [-q AxisRatio] [-pa PositionAngle] [--comp] [--pix] [--ranx/y Value] [--grid] [--dpi Value] [--noplot] [--phot] [--sbout] [--noplot] [--minlevel Value] [--sectors Value] [--object Name] [--filter Name] [--snr] [--help] [--checkimg] [--noned] [--distmod Value] [--magcor Value] [--scalekpc Value][--sbdim Value] [--model ModelImage] [--keep] [--ned XmlFile] [--gradsky ] [--randsky ] [--skyinit Value] [--skyRadmax Value][--skynum Value] [--skybox Value] [--skywidth Value] [--fwhm Value] 
+ ./ellsec.py [GALFIT_File] [--logx] [-q AxisRatio] [-pa PositionAngle] [--comp] [--pix] [--ranx/y Value] [--grid] [--dpi Value] [--noplot] [--phot] [--sbout] [--noplot] [--minlevel Value] [--sectors Value] [--object Name] [--filter Name] [--snr] [--help] [--checkimg] [--noned] [--distmod Value] [--magcor Value] [--scalekpc Value][--sbdim Value] [--model ModelImage] [--keep] [--ned XmlFile] [--gradsky ] [--randsky ] [--skyinit Value] [--skyRadmax Value][--skynum Value] [--skybox Value] [--skywidth Value] [--fwhm Value] [--galax ]
 ```
 
 Below is an explanation of each parameter: 
@@ -39,9 +39,9 @@ from the last component in GALFIT_File.
 
 **pix**: adds pixels units to the top of x-axis.
 
-**ranx**: it can be used as xmin-xmax to change range.
+**ranx**: set the range to xmin-xmax .
 
-**rany**: it can be used as ymin-ymax to change range.
+**rany**: set the range to ymin-ymax .
 
 **noplot**: the code creates images but do not display them.
 
@@ -50,6 +50,8 @@ from the last component in GALFIT_File.
 **dpi**: dots per inch value to increase/decrease resolution.
 
 **sbout**: Creates output file containing the surface brightness profiles.
+
+**galax**: Only the galaxy surface brightness is plotted. 
 
 ### **Photometric output options**
 

@@ -16,10 +16,11 @@ def run():
 
     # full program:
 
-    #photapi stores all the variables computed by EllipSect
 
     photapi = SectorsGalfit(args)
 
+
+    #photapi stores all the variables computed by EllipSect
 
     #print("AIC: ",photapi.AICrit)
     #print("Bulge to Total: ",photapi.BulgeToTotal)

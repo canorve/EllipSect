@@ -16,7 +16,7 @@ are some options available to use.
 The options are:
 
 ```
- ./ellsec.py [GALFIT_File] [--logx] [-q AxisRatio] [-pa PositionAngle] [--comp] [--pix] [--ranx/y Value] [--grid] [--dpi Value] [--noplot] [--phot] [--sbout] [--noplot] [--minlevel Value] [--sectors Value] [--object Name] [--filter Name] [--snr] [--help] [--checkimg] [--noned] [--distmod Value] [--magcor Value] [--scalekpc Value][--sbdim Value] [--model ModelImage] [--keep] [--ned XmlFile] [--gradsky ] [--randsky ] [--skyRad Value] [--skyRadmax Value][--skynum Value] [--skybox Value] [--skywidth Value] [--fwhm Value] 
+ ./ellsec.py [GALFIT_File] [--logx] [-q AxisRatio] [-pa PositionAngle] [--comp] [--pix] [--ranx/y Value] [--grid] [--dpi Value] [--noplot] [--phot] [--sbout] [--noplot] [--minlevel Value] [--sectors Value] [--object Name] [--filter Name] [--snr] [--help] [--checkimg] [--noned] [--distmod Value] [--magcor Value] [--scalekpc Value][--sbdim Value] [--model ModelImage] [--keep] [--ned XmlFile] [--gradsky ] [--randsky ] [--skyinit Value] [--skyRadmax Value][--skynum Value] [--skybox Value] [--skywidth Value] [--fwhm Value] 
 ```
 
 Below is an explanation of each parameter: 
@@ -122,7 +122,7 @@ EllipSect offers two ways to compute the background sky:
 
 gradsky: computes sky using the gradient method 
 skywidth: width of the ring (in major axis). Default = 20 pix
-skyRad: (optional) For gradsky it is where the program starts to compute the gradient.
+skyinit: (optional) For gradsky it is where the program starts to compute the gradient.
 
 To see the ring, a file with name outfile-ring.fits will be created.  
 
@@ -131,7 +131,7 @@ To see the ring, a file with name outfile-ring.fits will be created.
    around the main target. 
 
 randsky: computes the sky averaging random boxes. 
-skyRad: for randsky, it creates a mask for the main target using this radio.
+skynit: for randsky, it creates a mask for the main target using this radio.
 skyRadmax: for randsky only, maximum radius from main target where randbox can be selected. Default: edge 
 of the image 
 skynum: Number of boxes used in randsky. Default = 20

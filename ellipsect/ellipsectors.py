@@ -24,7 +24,7 @@ def run():
     #print("AIC: ",photapi.AICrit)
     #print("Bulge to Total: ",photapi.BulgeToTotal)
 
-    return True
+    return photapi 
 
 
     ##############       #############

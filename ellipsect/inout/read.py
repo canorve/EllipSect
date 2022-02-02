@@ -11,18 +11,12 @@ import argparse
 
 
 def ArgParsing():
-    ''' Read user's input '''
+    ''' Read user's arguments input '''
 
 
     parser = InitParsing()
 
     args = parser.parse_args()
-
-    #args = parser.parse_args('') # get default parameters
-
-
-    #params = PassArgs(args)
-
 
 
 
@@ -30,7 +24,10 @@ def ArgParsing():
 
 
 def InitParsing():
-    '''initial input parsing'''
+    '''initial argument parsing'''
+
+    # every new parameter added here must be
+    # also added in function PassArgs() in ellipsect/sectors/sect.py
 
 
     parser = argparse.ArgumentParser(description="EllipSect creates surface brightness profiles (and other photometric variables) from GALFIT output ")

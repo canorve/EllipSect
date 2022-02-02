@@ -354,8 +354,15 @@ def ReadGALFITout(inputf,galpar,distmax):
 
         flagbm = not(mime[0] == "text/plain")
 
-        errmsg="Sorry the mask file: {}  must be binary, not ASCII ".format(maskimage)
-        assert flagbm is True, errmsg
+        #errmsg="Sorry the mask file: {}  must be binary, not ASCII ".format(maskimage)
+        #assert flagbm is True, errmsg
+
+        if flagbm is False:
+
+            print("Converting mask ascii to mask FITS ")
+            Value = 100
+            galpar.maskimage = xy2fits().MakeFits(galpar.inputimage, galpar.maskimage, Value)
+
 
         GetFits(galpar.maskimage, galpar.tempmask, galpar.xmin, galpar.xmax, galpar.ymin, galpar.ymax)
 
@@ -540,6 +547,80 @@ def ReadNComp(inputf,X,Y,galcomps,distmax):
     galcomps.N=galcomps.N.astype(int)
 
     return True
+
+
+class xy2fits:
+
+
+    def MakeFits(self,ImageFile, AsciiFile, Value):
+        
+        (tmp)=AsciiFile.split(".")
+
+        namefile=tmp[0]
+
+        maskfits=namefile + ".fits"
+
+
+        (ncol, nrow) = self.GetAxis(ImageFile)
+
+        self.MakeImage(maskfits, ncol, nrow)
+
+        X, Y = np.genfromtxt(AsciiFile, delimiter="", unpack=True)
+
+        X = X.astype(int)
+        Y = Y.astype(int)
+
+        X = X-1
+        Y = Y-1
+
+
+        self.PutPix(X,Y,Value,maskfits)
+
+        print("Ascii -> Fits done ")
+
+        return maskfits
+
+    def GetAxis(self,Image):
+        "Get number of rows and columns from the image"
+
+        hdu = fits.open(Image)
+        ncol = hdu[0].header["NAXIS1"]  # for hubble images
+        nrow = hdu[0].header["NAXIS2"]
+        hdu.close()
+
+        return ncol, nrow
+
+    def MakeImage(self,newfits, sizex, sizey):
+        "create a new blank Image"
+
+        if os.path.isfile(newfits):
+            print("{} deleted; a new one is created ".format(newfits))
+
+            runcmd = "rm {}".format(newfits)
+            errrm = sp.run([runcmd], shell=True, stdout=sp.PIPE,
+                        stderr=sp.PIPE, universal_newlines=True)
+
+
+        hdu = fits.PrimaryHDU()
+        hdu.data = np.zeros((sizey, sizex),dtype=np.float64)
+        hdu.writeto(newfits, overwrite=True)
+
+        return True
+
+
+
+    def PutPix(self,X,Y,Value,ImageFits):
+
+        # original file
+        hdu=fits.open(ImageFits)
+        Image = hdu[0].data
+
+        ## for some strange reason I have to interchange X and Y
+        Image[[Y],[X]]=Value
+
+        hdu[0].data=Image
+        hdu.writeto(ImageFits,overwrite=True)
+        hdu.close()
 
 
 

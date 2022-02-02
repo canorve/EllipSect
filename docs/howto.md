@@ -444,8 +444,8 @@ ___
  does not do any fit; the model fit was already done by GALFIT. It only extract 
  that information to make the plots. 
 
-* EllipSect uses the mask image (option "*F*" GALFIT) only if this
-   is a **FITS** image. In case your mask is an *ASCII* file, you can convert it to **FITS** using the [xy2fits.py](https://github.com/canorve/GALFITools/blob/master/docs/xy2fits.md) tool.
+* EllipSect uses the mask image (option "*F*" GALFIT) if this
+   is a **FITS** image. In case your mask is an *ASCII* file, EllipSect convert it to **FITS** using the same code found in [xy2fits.py](https://github.com/canorve/GALFITools/blob/master/docs/xy2fits.md) tool.
 
 * EllipSect uses axis ratio (*q*) and position angle (*pa*) to create an "ellipse" *grid* using the function *sectors_photometry* from the *mgefit* library. Unlike IRAF's Ellipse, *q* and *pa* are fixed through radius. See the images below: 
   

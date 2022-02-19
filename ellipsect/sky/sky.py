@@ -194,10 +194,14 @@ class SkyCal:
         skymed = np.array([])
 
 
+
+        coordinates = self.MakeCoord(xmino-self.box,xmaxo+self.box,ymino-self.box,ymaxo+self.box,xmaxf,ymaxf)
+
+
         cont=self.num # este es el numero de cajas que va a utilizar 
         for idx,item in enumerate(range(cont)):
 
-            flatimg,xinit,yinit=self.GetRandomPatch(self.img,self.maskimg,self.box,xmino,xmaxo,ymino,ymaxo,xminf,xmaxf,yminf,ymaxf)
+            flatimg,xinit,yinit=self.GetRandomPatch(self.img,self.maskimg,self.box,coordinates)
             xfin = xinit + self.box - 1
             yfin = yinit + self.box - 1 
 
@@ -211,7 +215,7 @@ class SkyCal:
                 if (boxcont == 0):
                     print("Picking another box ")
 
-                flatimg,xinit,yinit=self.GetRandomPatch(self.img,self.maskimg,self.box,xmino,xmaxo,ymino,ymaxo,xminf,xmaxf,yminf,ymaxf)
+                flatimg,xinit,yinit=self.GetRandomPatch(self.img,self.maskimg,self.box,coordinates)
                 xfin = xinit + self.box - 1
                 yfin = yinit + self.box - 1
 
@@ -246,6 +250,13 @@ class SkyCal:
             skymed=np.append(skymed,median)
 
         return sky,skystd,skymed
+
+    def MakeCoord(self,xmino,xmaxo,ymino,ymaxo,xmaxf,ymaxf):
+
+        #creates coordinates between the inner and outer box
+        coordinates = [(x,y) for x in np.arange(0,xmaxf) for y in np.arange(0,ymaxf) if not((x >= xmino and x <= xmaxo) and ( y >= ymino and y <= ymaxo))]
+
+        return coordinates
 
 
     def MakeKron(self,imagemat, idn, x, y, R, theta, q, xmin, xmax, ymin, ymax):
@@ -349,10 +360,10 @@ class SkyCal:
 
         return (xmin, xmax, ymin, ymax)
 
-    def GetRandomPatch(self,imagemat,mimg,box,xmino,xmaxo,ymino,ymaxo,xminf,xmaxf,yminf,ymaxf):
+    def GetRandomPatch(self,imagemat,mimg,box,coordinates):
 
         # get a random box patch of the imagemat 
-        xinit,yinit=self.GetRandomCoord(xmino-box,xmaxo+box,ymino-box,ymaxo+box,xminf,xmaxf,yminf,ymaxf)
+        xinit,yinit=self.GetRandomCoord(coordinates)
 
         xfin = xinit + box  - 1 
         yfin = yinit + box  - 1
@@ -366,12 +377,9 @@ class SkyCal:
 
 
 
-    def GetRandomCoord(self,xmino,xmaxo,ymino,ymaxo,xminf,xmaxf,yminf,ymaxf):
-        #obtains coordinates between the inner and outer box
-        coordinates = [(x,y) for x in np.arange(0,xmaxf) for y in np.arange(0,ymaxf) if not((x >= xmino and x <= xmaxo) and ( y >= ymino and y <= ymaxo))]
+    def GetRandomCoord(self,coordinates):
 
         # choose xinit, and yinit from coordinates
-
         ridx = np.random.randint(0,len(coordinates)-1)
 
         xinit = coordinates[ridx][0] 

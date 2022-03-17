@@ -214,3 +214,77 @@ def PlotSub(xradq,ysbq,nsub,axsec,namec,colorval):
     #axsec.plot(xradq, ysbq,'--',color=colorval,linewidth=1.5,markersize=0.7,label=substr)
 
 
+class ShowCube:
+
+    def __init__(self, cubeimg: str,namepng="cubeout.png",dpival=100,frac= 0.2,cmap='viridis',ellipse=False):
+        """
+        This routine shows the GALFIT output cube image: galaxy, model and residual    
+        """
+
+        
+        hdu = fits.open(cubeimg)
+        data = (hdu[1].data.copy()).astype(float)
+        model = (hdu[2].data.copy()).astype(float)
+        residual = (hdu[3].data.copy()).astype(float)
+        hdu.close()
+
+        flatmodimg=model.flatten()  
+        flatresimg=residual.flatten()  
+
+        flatmodimg.sort()
+        flatresimg.sort()
+
+        restot=len(flatresimg)
+
+        restop=round(.9*restot)
+        resbot=round(.1*restot)
+
+        modimgpatch=flatmodimg#[modbot:modtop]
+        resimgpatch=flatresimg[resbot:restop]
+
+        modmin = np.min(modimgpatch)
+        modmax = np.max(modimgpatch)
+
+        if frac  < 1:
+            modmin = (1-frac)*modmin 
+            modmax = frac*modmax
+
+
+        if (modmin > modmax):
+            modmin, modmax = modmax, modmin
+
+
+        resmin = np.min(resimgpatch)
+        resmax = np.max(resimgpatch)
+
+
+        mask=data < 0 
+        data[mask] = 1 # avoids problems in log
+    
+        #beggining of the plotting
+
+        plt.close('all')
+
+        fig, (ax1, ax2, ax3) = plt.subplots(figsize=(14, 5), nrows=1, ncols=3)
+        fig.subplots_adjust(left=0.04, right=0.98, bottom=0.02, top=0.98)
+
+        #ax1.imshow(data, origin='lower',vmin=modmin, vmax=modmax,cmap=cmap)
+        ax1.imshow(data, origin='lower',norm=colors.LogNorm(vmin=modmin, vmax=modmax),cmap=cmap)
+        ax1.set_title('Data')
+
+        if ellipse:
+            ax1.add_patch(ellipse)
+
+
+        ax2.imshow(model, origin='lower',norm=colors.LogNorm(vmin=modmin, vmax=modmax),cmap=cmap)
+        #ax2.imshow(model, origin='lower',vmin=modmin, vmax=modmax,cmap=cmap)
+        ax2.set_title('GALFIT Model')
+
+        ax3.imshow(residual, origin='lower',vmin=resmin, vmax=resmax,cmap=cmap)
+        ax3.set_title('Residual')
+
+        plt.savefig(namepng,dpi=dpival)
+     
+        #plt.show()
+
+

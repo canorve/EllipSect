@@ -107,6 +107,9 @@ class InputParams:
     namecheck="none-check.fits"
     namering="none-ring.fits"
 
+    namecube="none-cub.png"
+
+
     nedfile="default.xml"
 
 
@@ -122,6 +125,7 @@ class InputParams:
 
     distmax = 10
 
+    frac = 0.2
 
 #io/class.py
 ### class for Galfit parameters

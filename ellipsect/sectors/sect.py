@@ -11,6 +11,7 @@ from ellipsect.lib.clas import PhotAPI
 from ellipsect.inout.read import ReadGALFITout 
 
 from ellipsect.inout.read import ReadNComp 
+from ellipsect.inout.plots import ShowCube 
 
 from ellipsect.sectors.ellip import EllipSectors
 from ellipsect.sectors.ellip import MulEllipSectors
@@ -318,6 +319,16 @@ def SectorsGalfit(args):
     params.namecheck=params.namefile + "-check.fits"
     
     params.namering=params.namefile + "-ring.fits"
+
+    params.namecube=params.namefile + "-cub.png"
+
+    # shows galax, model residual
+
+    ShowCube(galpar.outimage,namepng=params.namecube,dpival=params.dpival,frac=params.frac)
+
+    if params.dplot:
+        plt.pause(1.5)
+ 
 
 
 
@@ -748,6 +759,9 @@ def PassArgs(args):
     if args.fwhm:
         params.flagfwhm= True
         params.fwhm= args.fwhm
+
+    if args.frac:
+        params.frac = args.frac
 
 
 

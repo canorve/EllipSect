@@ -284,7 +284,10 @@ class ShowCube:
         ax3.set_title('Residual')
 
         plt.savefig(namepng,dpi=dpival)
-     
+    
+
+        #plt.style.use('default')
+
         #plt.show()
 
 

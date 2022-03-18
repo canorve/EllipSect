@@ -324,11 +324,12 @@ def SectorsGalfit(args):
 
     # shows galax, model residual
 
-    ShowCube(galpar.outimage,namepng=params.namecube,dpival=params.dpival,frac=params.frac)
+    ShowCube(galpar.outimage,namepng=params.namecube,dpival=params.dpival,frac=params.frac,cmap=params.cmap)
 
     if params.dplot:
         plt.pause(1.5)
  
+    plt.close()
 
 
 
@@ -762,6 +763,9 @@ def PassArgs(args):
 
     if args.frac:
         params.frac = args.frac
+
+    if args.cmap:
+        params.cmap = args.cmap
 
 
 

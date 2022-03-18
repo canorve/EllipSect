@@ -83,6 +83,8 @@ def InitParsing():
     parser.add_argument("-fr","--frac", type=float, help="value to use as a fraction  to change the value of vmin, vmax of imshow for the cube image ",default=0.2)
 
 
+    parser.add_argument("-cm","--cmap", type=str, help="cmap used for imshow for the cube image ",default="viridis")
+
     return parser
 
 

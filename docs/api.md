@@ -10,27 +10,19 @@ other photometric data from the GALFIT output peng et al. (2002).
 If you want to use EllipSect inside your own 
 python script, you can call it like the following example:
 
+
+
 ```
-    from ellipsect import InitParsing
+    from ellipsect import ArgParsing 
     from ellipsect import SectorsGalfit
 
-    parser = InitParsing()
+    #put all the argument parsing in a list:
+    args=['galfit.01','--logx', '--phot','--noplot']
 
 
-    # Get the args container with default values
-    if __name__ == '__main__':
-      args = parser.parse_args()  # get arguments from command line
-    else:
-      args = parser.parse_args('')  # get default arguments
+    parser_args = ArgParsing(args)
 
-
-    #photapi stores all the variables computed by EllipSect
-
-    args.GalFile="galfit.46"
-    args.logx=True
-    args.phot = True
-
-    photapi = SectorsGalfit(args)
+    photapi = SectorsGalfit(parser_args)
 
     print("Akaike Criterion: ",photapi.AICrit)
     print("Bulge to Total: ",photapi.BulgeToTotal)
@@ -38,8 +30,8 @@ python script, you can call it like the following example:
 
 ```
 
-  In the previous example, the option "args.phot = True" 
-  is necessary to produce an output. 
+  In the previous example, the option "--phot" 
+  is necessary to produce the output variables such as "photapi.AICirt". 
 
 
 ### **Variables of the output class**

@@ -12,7 +12,7 @@ from ellipsect.sectors.sect import SectorsGalfit
 def run():
 
     # read user's input 
-    args = ArgParsing()
+    args = ArgParsing(sys.argv[1:])
 
     # full program:
 

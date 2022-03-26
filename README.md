@@ -110,26 +110,16 @@ If you want to use EllipSect inside your own
 python script, you can call it in the following way:
 
 ```
-    from ellipsect import InitParsing
+    from ellipsect import ArgParsing 
     from ellipsect import SectorsGalfit
 
-    parser = InitParsing()
+    #put all the argument parsing in a list:
+    args=['galfit.01','--logx', '--phot','--noplot']
 
 
-    # Get the args container with default values
-    if __name__ == '__main__':
-      args = parser.parse_args()  # get arguments from command line
-    else:
-      args = parser.parse_args('')  # get default arguments
+    parser_args = ArgParsing(args)
 
-
-    #photapi stores all the variables computed by EllipSect
-
-    args.GalFile = "galfit.46"
-    args.logx = True
-    args.phot = True
-
-    photapi = SectorsGalfit(args)
+    photapi = SectorsGalfit(parser_args)
 
     print("Akaike Criterion: ",photapi.AICrit)
     print("Bulge to Total: ",photapi.BulgeToTotal)

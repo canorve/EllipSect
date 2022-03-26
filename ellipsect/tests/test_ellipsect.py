@@ -6,7 +6,7 @@ import os
 
 from ellipsect import ellipsectors 
 
-from ellipsect.inout.read import InputSys
+from ellipsect.inout.read import ArgParsing
 from ellipsect.sectors.sect import SectorsGalfit
 
 
@@ -15,12 +15,12 @@ def test_exit():
     with pytest.raises(SystemExit) as e:
         ellipsectors.run()
     assert e.type == SystemExit 
-    assert e.value.code == 0 
+    assert e.value.code == 2 
 
 # checking the creation of files
 def test_files():
 
-    arg=['./ellsec.py', 'ellipsect/tests/galfit.01', '-noplot']
+    arg=['ellipsect/tests/galfit.01', '-np']
 
     path="ellipsect/tests/"
 
@@ -36,8 +36,13 @@ def test_files():
         os.remove(filemulpng)
 
 
-    params = InputSys(arg)
-    photapi = SectorsGalfit(params)
+
+    args = ArgParsing(arg)
+
+    # full program:
+    photapi = SectorsGalfit(args)
+
+
 
     assert os.path.isfile(filepng)
     assert os.path.isfile(filemulpng)
@@ -50,12 +55,11 @@ def test_files():
 
 
 
-  
 
 # checking the creation of the components file
 def test_comp():
 
-    arg=['./ellsec.py', 'ellipsect/tests/galfit.01','-comp', '-noplot']
+    arg=['ellipsect/tests/galfit.01','--comp', '--noplot']
 
     path="ellipsect/tests/"
 
@@ -74,8 +78,15 @@ def test_comp():
     if os.path.isfile(filecomp):
         os.remove(filecomp)
 
-    params = InputSys(arg)
-    photapi = SectorsGalfit(params)
+
+    # read user's input 
+    args = ArgParsing(arg)
+
+    # full program:
+    photapi = SectorsGalfit(args)
+
+
+
 
     assert os.path.isfile(filecomp),"is GALFIT installed?"
 
@@ -94,12 +105,11 @@ def test_comp():
 
 
 
-
 # checking the creation of the sbout files
 def test_phot():
 
 
-    arg=['./ellsec.py', 'ellipsect/tests/galfit.01','-phot', '-noned', '-noplot']
+    arg=['ellipsect/tests/galfit.01','--phot', '--noned', '--noplot']
 
     path="ellipsect/tests/"
 
@@ -118,6 +128,9 @@ def test_phot():
     filecheck = "imgblock-check.fits"
     filecheck= path+filecheck
 
+    filecube = "imgblock-cub.png"
+    filecomp= path+filecube
+
 
 
     filepng = path+filepng
@@ -128,13 +141,8 @@ def test_phot():
     if os.path.isfile(filemulpng):
         os.remove(filemulpng)
 
-
-
     if os.path.isfile(filecomp):
         os.remove(filecomp)
-
-
-
 
     if os.path.isfile(filephot):
         os.remove(filephot)
@@ -145,23 +153,32 @@ def test_phot():
     if os.path.isfile(filecheck):
         os.remove(filecheck)
 
+    if os.path.isfile(filecube):
+        os.remove(filecube)
 
 
 
-    params = InputSys(arg)
-    photapi = SectorsGalfit(params)
+
+    # read user's input 
+    args = ArgParsing(arg)
+
+    # full program:
+    photapi = SectorsGalfit(args)
+
+
+
 
     #tolerance parameter
     tol = 1e-3
 
     bt= 1.000 
-    tidal = 2.011 
-    lchinu = 1.043 
-    bump = 0.129 
-    snr = 1.477 
-    std_snr = 3.860 
-    aic= 1399.730 
-    bic = 1436.107 
+    tidal = 2.879 
+    lchinu = 1.015 
+    bump = 0.107 
+    snr = 1.199 
+    std_snr = 3.492 
+    aic= 1730.316 
+    bic = 1768.377 
 
     diffbt =abs(bt-photapi.BulgeToTotal ) 
     difftidal = abs(tidal-photapi.tidal)
@@ -204,6 +221,9 @@ def test_phot():
 
     if os.path.isfile(filecheck):
         os.remove(filecheck)
+
+    if os.path.isfile(filecube):
+        os.remove(filecube)
 
 
 

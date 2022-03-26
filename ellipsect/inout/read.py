@@ -10,17 +10,17 @@ from ellipsect.inout.gfits import GetFits
 import argparse
 
 
-def ArgParsing():
+def ArgParsing(args):
     ''' Read user's arguments input '''
 
 
     parser = InitParsing()
 
-    args = parser.parse_args()
+    parser_args = parser.parse_args(args)
 
 
 
-    return args
+    return parser_args
 
 
 def InitParsing():

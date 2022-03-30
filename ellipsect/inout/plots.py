@@ -216,7 +216,7 @@ def PlotSub(xradq,ysbq,nsub,axsec,namec,colorval):
 
 class ShowCube:
 
-    def __init__(self, cubeimg: str,namepng="cubeout.png",dpival=100,frac= 0.2,cmap='viridis',ellipse=False):
+    def __init__(self, cubeimg: str,namepng="cubeout.png",dpival=100,frac= 0.2,cmap='viridis',ellipse=[]):
         """
         This routine shows the GALFIT output cube image: galaxy, model and residual    
         """
@@ -260,11 +260,7 @@ class ShowCube:
 
         mask=data < 0 
         data[mask] = 1 # avoids problems in log
-    
-        #beggining of the plotting
-
-        plt.close('all')
-
+     
         fig, (ax1, ax2, ax3) = plt.subplots(figsize=(14, 5), nrows=1, ncols=3)
         fig.subplots_adjust(left=0.04, right=0.98, bottom=0.02, top=0.98)
 
@@ -272,8 +268,9 @@ class ShowCube:
         ax1.imshow(data, origin='lower',norm=colors.LogNorm(vmin=modmin, vmax=modmax),cmap=cmap)
         ax1.set_title('Data')
 
-        if ellipse:
-            ax1.add_patch(ellipse)
+
+        for ell in ellipse:
+            ax1.add_patch(ell)
 
 
         ax2.imshow(model, origin='lower',norm=colors.LogNorm(vmin=modmin, vmax=modmax),cmap=cmap)
@@ -284,10 +281,8 @@ class ShowCube:
         ax3.set_title('Residual')
 
         plt.savefig(namepng,dpi=dpival)
-    
-
-        #plt.style.use('default')
-
+     
         #plt.show()
+
 
 

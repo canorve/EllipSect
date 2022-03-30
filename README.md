@@ -86,6 +86,7 @@ output file. *The easiest way to run the program is:*
 
 It will display images like the ones below:
 
+   ![A85 ](img/A85.cub.png)
    ![A85 ](img/A85.def.png)
 
 for more options:

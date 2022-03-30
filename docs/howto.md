@@ -252,6 +252,40 @@ with 7 gaussians (images for this galaxy are displayed in **Notes** section).
     ./ellsec.py galfit.46 --comp --sbout 
 ```
 
+* You can change the contrast of the cube image with the -fr option:
+
+```
+   ./ellsec.py galfit.46 --fr 0.4
+```
+
+   ![A85 ](../img/A85.con-cub.png)
+
+
+**Note**: the contrast of the image is done by setting the vmin and vmax
+of the colors.LogNorm function of matplotlib. vmax is taken as the fraction ("fr" parameter)
+of the maximum value of the counts in the model for vmax. On the 
+contrary vmin is taken as "1 - fr". So far, this is the best way I have found to display
+the images, if you have a better way write to me. 
+
+Residual image is just the max and min value of the residual. So far this work 
+fine.
+
+* Also with the -cp option it display the ellipse of each component on the galaxy
+panel of the cube image: 
+
+```
+   ./ellsec.py galfit.46 --fr 0.5 -cp
+```
+
+   ![A85 ](../img/A85.ell-cub.png)
+
+
+**Note**: the ellipse's axis ratio corresponds to the radius of the "4)" component
+as it is. If the component is a Sersic model, then it is the effective radius (pix);
+if it is a gaussian, then it is the FWHM (pix), and so on.
+
+
+
 ### **Phot Examples**
 
 * *EllipSect* can calculate additional info besides the ones 

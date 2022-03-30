@@ -228,7 +228,6 @@ def SectPhotComp(galpar, params, galcomps, n_sectors=19, minlevel=0):
 def SectorsGalfit(args):
 
 
-
     params = PassArgs(args) # from now on, params is used instead of args
 
     print("angle in multi-plot is measured from the galaxy's major axis ")
@@ -322,15 +321,6 @@ def SectorsGalfit(args):
 
     params.namecube=params.namefile + "-cub.png"
 
-    # shows galax, model residual
-
-    ShowCube(galpar.outimage,namepng=params.namecube,dpival=params.dpival,frac=params.frac,cmap=params.cmap)
-
-    if params.dplot:
-        plt.pause(1.5)
- 
-    plt.close()
-
 
 
     if params.flagsbout == True: 
@@ -411,6 +401,32 @@ def SectorsGalfit(args):
         galpar.mask=None
     ####
 
+    ######################
+    #shows the image cube#
+    ######################{
+
+    linewidth = 1.2
+
+    if (params.flagcomp):
+
+        ell = Comp2Ellip(galpar,galcomps,linewidth)
+    else:
+        ell=[]
+
+
+    ShowCube(galpar.outimage,namepng=params.namecube,dpival=params.dpival,frac=params.frac,cmap=params.cmap,ellipse=ell)
+
+    if params.dplot:
+        plt.pause(1.5)
+ 
+    plt.close()
+
+
+    #}
+    #####################
+    #####################
+
+
 
     #   numsectors=19
     #   numsectors=15
@@ -489,6 +505,54 @@ def SectorsGalfit(args):
     PassVars(photapi,params,galpar,galcomps)    
 
     return photapi
+
+
+def Comp2Ellip(galpar,galcomps,lw=1):
+    ''' converts galfit component parameter into an Ellipse object''' 
+
+
+    ellipses = [] 
+    #col = 'red'
+
+    N=len(galcomps.N)
+
+    #color value
+    values = range(N)
+    jet = cm = plt.get_cmap('jet') 
+    cNorm  = colors.Normalize(vmin=0, vmax=values[-1])
+    scalarMap = cmx.ScalarMappable(norm=cNorm, cmap=jet)
+
+
+
+    
+    for idx, item in enumerate(galcomps.N):
+
+
+        # correcting coordinates
+        xc=galcomps.PosX[idx] - galpar.xmin + 1
+        yc=galcomps.PosY[idx] - galpar.ymin + 1
+
+
+        pa = galcomps.PosAng[idx] + 90
+
+        w = galcomps.Rad[idx]
+        h = galcomps.Rad[idx]*galcomps.AxRat[idx]
+
+
+        colorVal = scalarMap.to_rgba(values[idx])
+
+
+        ell=Ellipse((xc, yc), width=w, height=h,angle=pa,
+                     edgecolor=colorVal,
+                     facecolor='none',
+                     linewidth=lw)
+
+        ellipses.append(ell)
+
+
+    return ellipses
+
+
 
 
 def PassVars(photapi,params,galpar,galcomps):
@@ -597,6 +661,8 @@ def PassVars(photapi,params,galpar,galcomps):
     photapi.me=galcomps.me.copy()
     photapi.mme=galcomps.mme.copy()
     photapi.kser = galcomps.kser.copy()
+
+
 
 
 def PassArgs(args):

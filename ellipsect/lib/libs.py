@@ -17,6 +17,7 @@ import platform
 from matplotlib import gridspec
 
 
+from matplotlib.patches import Ellipse
 
 
 from scipy import interpolate

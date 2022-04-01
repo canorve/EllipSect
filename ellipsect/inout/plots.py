@@ -208,7 +208,7 @@ def PlotSub(xradq,ysbq,nsub,axsec,namec,colorval):
 
     """
 
-    substr=namec+" "+np.str(nsub+1)
+    substr=namec + " " + np.str_(nsub+1)
 
     axsec.plot(xradq, ysbq,'--',color=colorval,linewidth=1.7,markersize=0.7,label=substr)
     #axsec.plot(xradq, ysbq,'--',color=colorval,linewidth=1.5,markersize=0.7,label=substr)

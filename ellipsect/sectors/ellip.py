@@ -474,7 +474,7 @@ def MulEllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps):
 
         if params.flagsbout == True: 
 
-            rtxtang=np.int(np.round(txtang)) 
+            rtxtang=np.int32(np.round(txtang)) 
 
             PrintFilesGax(params,galpar,rtxtang,r,mgesb,angal,r2,mgemodsb,angmod)
 
@@ -565,7 +565,7 @@ def MulEllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps):
             sberr=1-mgemodsbnew/mgesb[angal]
             axsec[row, 1].plot(r, sberr*100, 'C0o')
             if(smooth_flag):
-                print("smoothing interpolation was used for angle: ",np.int(np.round(txtang)))
+                print("smoothing interpolation was used for angle: ",np.int32(np.round(txtang)))
 
 
         else:
@@ -575,7 +575,7 @@ def MulEllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps):
             axsec[row, 1].plot(r2, sberr*100, 'C0o')
 
             if(smooth_flag):
-                print("smoothing interpolation was used for angle: ",np.int(np.round(txtang)))
+                print("smoothing interpolation was used for angle: ",np.int32(np.round(txtang)))
 
 
         axsec[row, 1].axhline(linestyle='--', color='C1', linewidth=2)
@@ -693,7 +693,7 @@ def FindSBCounts(xarcq, ymgeq, ymgec, numsectors):
     init=numsave%numsectors
     n=init
 
-    num=np.int((xarcq.size-init)/numsectors)
+    num=np.int32((xarcq.size-init)/numsectors)
     n=xarcq.size-init
     for i in range(num,0,-1):
 

@@ -104,7 +104,7 @@ def FindSB(xarcq, ymgeq, numsectors):
     init=numsave%numsectors
     n=init
 
-    num=np.int((xarcq.size-init)/numsectors)
+    num=np.int32((xarcq.size-init)/numsectors)
     n=xarcq.size-init
     for i in range(num,0,-1):
 

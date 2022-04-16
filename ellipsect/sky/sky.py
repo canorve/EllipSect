@@ -4,7 +4,6 @@ from ellipsect.lib.libs import *
 from ellipsect import *
 
 
-
 class SkyCal:
     "This class compute the sky using two methods: random boxes and sky gradient"
 
@@ -382,7 +381,7 @@ class SkyCal:
         ######
 
 
-    def GetEllipSky(self, ImageFile, MaskFile, xx, yy, thetadeg, q, Rinit, width,namering):
+    def GetEllipSky(self, ImageFile, MaskFile, xx, yy, thetadeg, q, Rinit, width,namering,ringmask):
         "Gradient sky method"
 
         self.xx = xx 
@@ -396,7 +395,7 @@ class SkyCal:
 
         self.NumRings = 5  # number of rings per loop # read this from function?
 
-        self.ringfile = "ringmask.fits"
+        self.ringmask = ringmask 
 
         ###
 
@@ -447,8 +446,13 @@ class SkyCal:
         val = 1 
         for ridx, ritem in enumerate(Rings):
 
-            points = (Rings[ridx] + 2*self.width) * 2*np.pi 
-            points = points + points*.1
+
+            bring = (Rings[ridx] + self.width) * self.q
+            aring = Rings[ridx] + self.width 
+
+            #incresing number of points per rad 
+            points = 2*np.pi * np.sqrt(0.5*(aring**2 + bring**2)) #Aprox. 
+            points = 2*points #doubling the number of points
             points = int(round(points))
            
             alpha = np.linspace(0,2*np.pi,points)
@@ -472,7 +476,7 @@ class SkyCal:
 
 
         hdu[0].data=masksky
-        hdu.writeto(self.ringfile,overwrite=True) 
+        hdu.writeto(self.ringmask,overwrite=True) 
 
         ########################################
         ########################################

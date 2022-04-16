@@ -106,6 +106,7 @@ class InputParams:
     namened="none-ned.xml"
     namecheck="none-check.fits"
     namering="none-ring.fits"
+    nameringmask="none-ringmask.fits"
 
     namecube="none-cub.png"
 

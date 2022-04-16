@@ -16,7 +16,6 @@ def run():
 
     # full program:
 
-
     photapi = SectorsGalfit(args)
 
 

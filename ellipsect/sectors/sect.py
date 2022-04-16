@@ -248,6 +248,7 @@ def SectorsGalfit(args):
     #  xc,yc,q,ang,skylevel,scale,file,mgzpt,exptime,mask=ReadGALFITout(params.galfile,galpars)
     ReadGALFITout(params.galfile,galpar,params.distmax)
 
+
     ######################################
     ######################################
 
@@ -318,6 +319,8 @@ def SectorsGalfit(args):
     params.namecheck=params.namefile + "-check.fits"
     
     params.namering=params.namefile + "-ring.fits"
+    
+    params.nameringmask=params.namefile + "-ringmask.fits"
 
     params.namecube=params.namefile + "-cub.png"
 
@@ -735,7 +738,6 @@ def PassArgs(args):
     if args.axisrat:
         params.flagq = True
         params.qarg = args.axisrat  
-
 
     if args.posangle:
         params.flagpa= True

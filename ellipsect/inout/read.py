@@ -54,7 +54,7 @@ def InitParsing():
 
  
     #options with arguments
-    parser.add_argument("-q","--axisrat", type=float, help="galaxy axis ratio ",default=1)
+    parser.add_argument("-q","--axisrat", type=float, help="galaxy axis ratio ")
     parser.add_argument("-pa","--posangle", type=float, help="position angle (same as GALFIT)  ",default=0)
     parser.add_argument("-rx","--ranx",nargs=2, type=float, help="provide a range for x-axis: xmin-xmax ")
     parser.add_argument("-ry","--rany", nargs=2,type=float, help="provide a range for y-axis: ymin-ymax  ")

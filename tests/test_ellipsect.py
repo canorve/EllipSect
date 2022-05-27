@@ -172,13 +172,13 @@ def test_phot():
     tol = 1e-3
 
     bt= 1.000 
-    tidal = 2.879 
-    lchinu = 1.015 
-    bump = 0.107 
-    snr = 1.199 
-    std_snr = 3.492 
-    aic= 1730.316 
-    bic = 1768.377 
+    tidal = 2.011 
+    lchinu = 1.043 
+    bump = 0.129 
+    snr = 1.477 
+    std_snr = 3.860 
+    aic= 1399.730 
+    bic = 1436.107 
 
     diffbt =abs(bt-photapi.BulgeToTotal ) 
     difftidal = abs(tidal-photapi.tidal)

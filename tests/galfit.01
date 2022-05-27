@@ -5,10 +5,10 @@
 
 ================================================================================
 # IMAGE and GALFIT CONTROL PARAMETERS
-A) ellipsect/tests/gal.fits            # Input data image (FITS file)
-B) ellipsect/tests/imgblock.fits       # Output data image block
+A) tests/gal.fits            # Input data image (FITS file)
+B) tests/imgblock.fits       # Output data image block
 C) none                # Sigma image name (made from data if blank or "none") 
-D) ellipsect/tests/psf.fits            # Input PSF image and (optional) diffusion kernel
+D) tests/psf.fits            # Input PSF image and (optional) diffusion kernel
 E) 1                   # PSF fine sampling factor relative to data 
 F) none                # Bad pixel mask (FITS image or ASCII coord list)
 G) none                # File with parameter constraints (ASCII file) 

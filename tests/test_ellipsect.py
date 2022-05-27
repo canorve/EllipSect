@@ -20,9 +20,9 @@ def test_exit():
 # checking the creation of files
 def test_files():
 
-    arg=['ellipsect/tests/galfit.01', '-np']
+    arg=['tests/galfit.01', '-np']
 
-    path="ellipsect/tests/"
+    path="tests/"
 
     filepng = "imgblock.png"
     filemulpng = "imgblock-mul.png"
@@ -59,9 +59,9 @@ def test_files():
 # checking the creation of the components file
 def test_comp():
 
-    arg=['ellipsect/tests/galfit.01','--comp', '--noplot']
+    arg=['tests/galfit.01','--comp', '--noplot']
 
-    path="ellipsect/tests/"
+    path="tests/"
 
     filepng = "imgblock.png"
     filemulpng = "imgblock-mul.png"
@@ -109,9 +109,9 @@ def test_comp():
 def test_phot():
 
 
-    arg=['ellipsect/tests/galfit.01','--phot', '--noned', '--noplot']
+    arg=['tests/galfit.01','--phot', '--noned', '--noplot']
 
-    path="ellipsect/tests/"
+    path="tests/"
 
     filephot = "imgblock-out.txt"
     filephot= path+filephot

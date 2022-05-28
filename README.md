@@ -54,6 +54,14 @@ Run the automated tests:
 python -m pytest 
 ```
 
+or
+
+```
+pytest
+```
+
+
+
 **Note**: *EllipSect* needs the GALFIT output files (GALFIT.XX) to work.
 Although *GALFIT* is not stricly required, it will required it 
 to create the model components and sigma image. Make 
@@ -61,11 +69,10 @@ sure you can call GALFIT from the command line. Otherwise
 the automated tests will fail.
 
 ___
-For linux, you can make a simbolic link to *ellsec.py*
+For linux, just run ellipsect in the command line:
 
 ```
-cd /usr/local/bin
-sudo ln -s /path/to/your/installed/ellipsect/ellsec.py .
+ellipsect
 ```
 
 and that's it!!
@@ -81,7 +88,7 @@ that you run GALFIT. It only requires the latest GALFIT's
 output file. *The easiest way to run the program is:*
 
 ```
-./ellsec.py galfit.01
+ellipsect galfit.01
 ```
 
 It will display images like the ones below:
@@ -92,7 +99,7 @@ It will display images like the ones below:
 for more options:
 
 ```
-./ellsec.py --help 
+ellipsect --help 
 ```
 
 

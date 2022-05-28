@@ -153,7 +153,7 @@ ___
 * Displays the help menu: 
   
   ```
-    ./ellsec.py --help
+    ellipsect --help
   ```
 
 Check the short versions of the arguments when help is displayed.
@@ -173,7 +173,7 @@ ___
     (measured from Y-axis): 
 
 ```
-     ./ellsec.py galfit.02 -q 0.35 -pa 60 
+     ellipsect galfit.02 -q 0.35 -pa 60 
 ```
 
 ### **Plot Examples**
@@ -184,7 +184,7 @@ with 7 gaussians (images for this galaxy are displayed in **Notes** section).
 * Simple plot example: 
   
   ```
-    ./ellsec.py galfit.46 
+    ellipsect galfit.46 
   ```
   
    ![A85 ](../img/A85.def.png)
@@ -192,7 +192,7 @@ with 7 gaussians (images for this galaxy are displayed in **Notes** section).
 * Displays the X-axis as log:
 
 ```
-    ./ellsec.py galfit.46 --logx
+    ellipsect galfit.46 --logx
 ```
 
    ![A85 ](../img/A85.log.png)
@@ -200,7 +200,7 @@ with 7 gaussians (images for this galaxy are displayed in **Notes** section).
 * Include the individual model components into the plot:  
   
   ```
-    ./ellsec.py galfit.46 --comp
+    ellipsect galfit.46 --comp
   ```
   
    (displays the 7 gaussians)
@@ -210,7 +210,7 @@ with 7 gaussians (images for this galaxy are displayed in **Notes** section).
 * Insert pixels units in the top X-axis: 
   
   ```
-    ./ellsec.py galfit.46 --pix
+    ellipsect galfit.46 --pix
   ```
   
    ![A85 ](../img/A85.pix.png)
@@ -218,7 +218,7 @@ with 7 gaussians (images for this galaxy are displayed in **Notes** section).
 * X-axis range vary from 1 to 50: 
   
   ```
-    ./ellsec.py galfit.46 -ranx 1 50 
+    ellipsect galfit.46 -ranx 1 50 
   ```
   
    ![A85 ](../img/A85.ranx2.png)
@@ -226,7 +226,7 @@ with 7 gaussians (images for this galaxy are displayed in **Notes** section).
 * Use grid on plot and increase resolution to 300 dots per inch: 
 
 ```
-   ./ellsec.py galfit.46 --grid --dpi 300 
+   ellipsect galfit.46 --grid --dpi 300 
 ```
 
    ![A85 ](../img/A85.grid.png)
@@ -235,27 +235,27 @@ with 7 gaussians (images for this galaxy are displayed in **Notes** section).
     directly saved in directory: 
 
 ```
-    ./ellsec.py galfit.46 --grid --dpi 300 --noplot 
+    ellipsect galfit.46 --grid --dpi 300 --noplot 
 ```
 
 * If the user desires to create their own plots, 'sbout' option
   will save the surface brightness data of the plots into a file:
 
 ```
-    ./ellsec.py galfit.46 --sbout
+    ellipsect galfit.46 --sbout
 ```
 
   EllipSect can also save the surface brightness data for 
   individual components in separated files:
 
 ```
-    ./ellsec.py galfit.46 --comp --sbout 
+    ellipsect galfit.46 --comp --sbout 
 ```
 
 * You can change the contrast of the cube image with the -fr option:
 
 ```
-   ./ellsec.py galfit.46 --fr 0.4
+    ellipsect galfit.46 --fr 0.4
 ```
 
    ![A85 ](../img/A85.con-cub.png)
@@ -274,7 +274,7 @@ fine.
 panel of the cube image: 
 
 ```
-   ./ellsec.py galfit.46 --fr 0.5 -cp
+   ellipsect galfit.46 --fr 0.5 -cp
 ```
 
    ![A85 ](../img/A85.ell-cub.png)
@@ -307,7 +307,7 @@ if it is a gaussian, then it is the FWHM (pix), and so on.
   Those variables are stored in a single file when the following command is executed:
   
   ```
-  ./ellsec.py galfit.46 --phot
+   ellipsect galfit.46 --phot
   ```
 
 * *phot* option connects to NED (NASA/IPAC Extragalactic Database) to download 
@@ -319,21 +319,21 @@ if it is a gaussian, then it is the FWHM (pix), and so on.
   it is shown in the next example for galaxy messier 51 in the band B:  
 
 ```
-    ./ellsec.py galfit.14 --phot --object m51 --filter B
+    ellipsect galfit.14 --phot --object m51 --filter B
 ```
 
 * If the user wants to see a Signal to Noise image of the data, use 
   the next command:
   
   ```
-  ./ellsec.py galfit.14 --phot --snr
+  ellipsect galfit.14 --phot --snr
   ```
 
 * If for some reason the user does not want to connect to NED use 
   the following option:
 
 ```
-    ./ellsec.py galfit.14 --phot --noned
+  ellipsect galfit.14 --phot --noned
 ```
 
    take into account that Luminosity and Absolute magnitud will not be computed
@@ -343,7 +343,7 @@ if it is a gaussian, then it is the FWHM (pix), and so on.
   of 0.3, "/kpc of 1.3 and surface brightness dimming of 0.3.  
 
 ```
-    ./ellsec.py galfit.10 --phot --distmod 10 --magcor 0.3 --scalekpc 1.3 --sbdim .3
+   ellipsect galfit.10 --phot --distmod 10 --magcor 0.3 --scalekpc 1.3 --sbdim .3
 ```
 
    Take into account that any of this options will avoid 
@@ -358,7 +358,7 @@ if it is a gaussian, then it is the FWHM (pix), and so on.
   If -phot option is enabled, SNR quantities will be inaccurate.
 
 ```
-    ./ellsec.py galfit.14 --model model.fits
+   ellipsect galfit.14 --model model.fits
 ```
 
 * sky option allows the user to introduce his/her own sky value to subtract it
@@ -366,7 +366,7 @@ if it is a gaussian, then it is the FWHM (pix), and so on.
   otherwise EllipSect will produce wrong outputs.  
 
 ```
-    ./ellsec.py galfit.01 --sky 300
+   ellipsect galfit.01 --sky 300
 ```
 
 ----
@@ -380,7 +380,7 @@ if it is a gaussian, then it is the FWHM (pix), and so on.
   tells to *sectors_photometry* that stops when the sky is 0.
 
 ```
-    ./ellsec.py galfit.14 --minlevel 0
+    ellipsect galfit.14 --minlevel 0
 ```
 
    Note: Galfit sky parameter is already removed from image before the call 
@@ -391,7 +391,7 @@ if it is a gaussian, then it is the FWHM (pix), and so on.
   use four-fold symmetry.  
 
 ```
-    ./ellsec.py galfit.14 --sectors 19
+    ellipsect galfit.14 --sectors 19
 ```
 
 * checkimg will create images used by *sectors_photometry* to check how 
@@ -401,7 +401,7 @@ if it is a gaussian, then it is the FWHM (pix), and so on.
   Use it with the 'comp' option:  
 
 ```
-    ./ellsec.py galfit.14 --comp --checkimg
+    ellipsect galfit.14 --comp --checkimg
 ```
 
 ### **Sky calculation Example**
@@ -409,7 +409,7 @@ if it is a gaussian, then it is the FWHM (pix), and so on.
 * Computes the sky using the gradient method
 
 ```
-    ./ellsec.py galfit.06 --gradsky
+    ellipsect galfit.06 --gradsky
 ```
 
 After computing sky, a outname-ring.fits will be created to check

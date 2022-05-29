@@ -15,7 +15,6 @@ def run():
     args = ArgParsing(sys.argv[1:])
 
     # full program:
-
     photapi = SectorsGalfit(args)
 
 
@@ -24,7 +23,9 @@ def run():
     #print("AIC: ",photapi.AICrit)
     #print("Bulge to Total: ",photapi.BulgeToTotal)
 
-    return photapi 
+    #return photapi 
+    #return False
+
 
 
     ##############       #############
@@ -41,4 +42,12 @@ def run():
     #   |_|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|/
 
 
+#def main():
+#    ellipsectors.run()
+
+
+
+#if __name__ == '__main__':
+
+#    main()
 

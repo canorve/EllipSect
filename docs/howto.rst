@@ -23,7 +23,7 @@ The options are:
 
 ::
 
-    ./ellsec.py [GALFIT_File] [--logx] [-q AxisRatio] [-pa PositionAngle] [--comp] [--pix] [--ranx/y Value] [--grid] [--dpi Value] [--noplot] [--phot] [--sbout] [--noplot] [--minlevel Value] [--sectors Value] [--object Name] [--filter Name] [--snr] [--help] [--checkimg] [--noned] [--distmod Value] [--magcor Value] [--scalekpc Value][--sbdim Value] [--model ModelImage] [--keep] [--ned XmlFile] [--gradsky ] [--randsky ] [--skyinit Value] [--skyRadmax Value][--skynum Value] [--skybox Value] [--skywidth Value] [--fwhm Value] [--galax ]
+    ellipsect [GALFIT_File] [--logx] [-q AxisRatio] [-pa PositionAngle] [--comp] [--pix] [--ranx/y Value] [--grid] [--dpi Value] [--noplot] [--phot] [--sbout] [--noplot] [--minlevel Value] [--sectors Value] [--object Name] [--filter Name] [--snr] [--help] [--checkimg] [--noned] [--distmod Value] [--magcor Value] [--scalekpc Value][--sbdim Value] [--model ModelImage] [--keep] [--ned XmlFile] [--gradsky ] [--randsky ] [--skyinit Value] [--skyRadmax Value][--skynum Value] [--skybox Value] [--skywidth Value] [--fwhm Value] [--galax ]
 
 Below is an explanation of each parameter:
 
@@ -215,7 +215,6 @@ gaussians (images for this galaxy are displayed in **Notes** section).
    .. figure:: ../img/A85.def.png
       :alt: A85
 
-      A85
 
 -  Displays the X-axis as log:
 
@@ -226,7 +225,6 @@ gaussians (images for this galaxy are displayed in **Notes** section).
 .. figure:: ../img/A85.log.png
    :alt: A85
 
-   A85
 
 -  Include the individual model components into the plot:
 
@@ -239,7 +237,6 @@ gaussians (images for this galaxy are displayed in **Notes** section).
    .. figure:: ../img/A85.comp.png
       :alt: A85
 
-      A85
 
 -  Insert pixels units in the top X-axis:
 
@@ -250,7 +247,6 @@ gaussians (images for this galaxy are displayed in **Notes** section).
    .. figure:: ../img/A85.pix.png
       :alt: A85
 
-      A85
 
 -  X-axis range vary from 1 to 50:
 
@@ -261,7 +257,6 @@ gaussians (images for this galaxy are displayed in **Notes** section).
    .. figure:: ../img/A85.ranx2.png
       :alt: A85
 
-      A85
 
 -  Use grid on plot and increase resolution to 300 dots per inch:
 
@@ -272,7 +267,6 @@ gaussians (images for this galaxy are displayed in **Notes** section).
 .. figure:: ../img/A85.grid.png
    :alt: A85
 
-   A85
 
 -  Same as above but popup window does not appear. Plot files are
    directly saved in directory:
@@ -304,7 +298,6 @@ components in separated files:
 .. figure:: ../img/A85.con-cub.png
    :alt: A85
 
-   A85
 
 **Note**: the contrast of the image is done by setting the vmin and vmax
 of the colors.LogNorm function of matplotlib. vmax is taken as the
@@ -326,7 +319,6 @@ this work fine.
 .. figure:: ../img/A85.ell-cub.png
    :alt: A85
 
-   A85
 
 **Note**: the ellipse’s axis ratio corresponds to the radius of the “4)”
 component as it is. If the component is a Sersic model, then it is the
@@ -480,7 +472,6 @@ ring where the sky was computed:
 .. figure:: ../img/A2029.ring.png
    :alt: A2029
 
-   A2029
 
 --------------
 
@@ -499,36 +490,27 @@ it in the following way:
 
 ::
 
-       from ellipsect import InitParsing
+       from ellipsect import ArgParsing 
        from ellipsect import SectorsGalfit
 
-       parser = InitParsing()
+       #put all the argument parsing in a list:
+       args=['galfit.01','--logx', '--phot','--noplot']
 
 
-       # Get the args container with default values
-       if __name__ == '__main__':
-         args = parser.parse_args()  # get arguments from command line
-       else:
-         args = parser.parse_args('')  # get default arguments
+       parser_args = ArgParsing(args)
 
-
-       #photapi stores all the variables computed by EllipSect
-
-       args.GalFile="galfit.46"
-       args.logx=True
-       args.phot = True
-
-       photapi = SectorsGalfit(args)
+       photapi = SectorsGalfit(parser_args)
 
        print("Akaike Criterion: ",photapi.AICrit)
        print("Bulge to Total: ",photapi.BulgeToTotal)
+
 
 In the previous example, the option “-phot” is necessary in argv to
 produce an output.
 
 To check all the output variables check:
 
-`Output variables <api.md>`__
+`Output variables <api.rst>`__
 
 --------------
 

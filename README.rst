@@ -111,7 +111,7 @@ for more options:
 
 To see other options for EllipSect:
 
-`How to use <docs/howto.md>`__
+`How to use <docs/howto.rst>`__
 
 **Script run:**
 ^^^^^^^^^^^^^^^
@@ -138,7 +138,7 @@ it in the following way:
 To check all the output variables besides AICrit and BulgeToTotal,
 check:
 
-`Output variables <docs/api.md>`__
+`Output variables <docs/api.rst>`__
 
 --------------
 

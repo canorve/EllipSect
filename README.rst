@@ -98,7 +98,7 @@ way to run the program is:*
 
 It will display images like the ones below:
 
-|A85| |A85|
+|A85a| |A85b|
 
 for more options:
 
@@ -221,5 +221,5 @@ Check my others GALFIT tools
 
 .. |DOI| image:: https://zenodo.org/badge/282223217.svg
    :target: https://zenodo.org/badge/latestdoi/282223217
-.. |A85| image:: img/A85.cub.png
-.. |A85| image:: img/A85.def.png
+.. |A85a| image:: img/A85.cub.png
+.. |A85b| image:: img/A85.def.png

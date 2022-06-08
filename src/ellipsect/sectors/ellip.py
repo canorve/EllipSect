@@ -377,6 +377,8 @@ def MulEllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps):
     dn = int(round(n/6.))
     nrows = (n-1)//dn + 1 # integer division
 
+
+    #begin plotting
     plt.clf()
 
     fig, axsec = plt.subplots(nrows, 2, sharex=True, sharey='col', num=fignum)
@@ -453,6 +455,15 @@ def MulEllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps):
             axsec[row, 0].set_ylim(yran)
 
 
+        #begin psf fwhm 
+        if params.flagfwhm: 
+            xpos = params.fwhm*galpar.scale
+            axsec[row, 0].axvline(x=xpos,  linestyle='--', color='k', linewidth=2)
+        # end 
+
+
+
+
 
         if params.flaglogx == False:
 
@@ -523,8 +534,7 @@ def MulEllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps):
                 jj=(np.abs(sectorsub[ii]-alpha2)).argmin()  
 
                 diffangle =  sectorsub[ii][jj] - alpha2
-                # uncomment below to check angles in multiplot:
-                #print("Check C{}: Axrat: {:.3f}, alpha: {:.3f} angsec: {:.3f} ; theta2: {:.3f} sector {:.3f}; alpha2 {:.3f} ".format(ii,galcomps.AxRat[ii],alpha,angsec,90-galcomps.PosAng[ii],sectorsub[ii][jj],alpha2))
+
                 # alpha: angle from major axis of galaxy
                 # angsec: position angle of the galaxy
                 # theta2: position angle of the component

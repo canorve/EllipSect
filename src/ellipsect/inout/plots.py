@@ -75,6 +75,15 @@ def PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,params,scale):
     axsec.tick_params(which='minor', length=4, color='r')
 
 
+    #begin psf fwhm #
+
+    if params.flagfwhm: 
+        xpos = params.fwhm*scale
+        axsec.axvline(x=xpos,  linestyle='--', color='k', linewidth=2)
+
+
+    # end 
+
     # ULISES begin
     axsec.axes.xaxis.set_ticklabels([])
     # ULISES end 

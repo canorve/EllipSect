@@ -76,7 +76,7 @@ def InitParsing():
     parser.add_argument("-skn","--skynum", type=int, help="Number of boxes used in randsky. Default = 20",default=20)
     parser.add_argument("-skw","--skywidth", type=int, help="width of the ring for gradsky. Default = 20 ",default=20)
     parser.add_argument("-distm","--distmax", type=float, help="maximum distance among model centers to be considered to be part of the same galaxy ")
-    parser.add_argument("-fw","--fwhm", type=float, help="It is used to compute Area_psf for BICres. It also draws a vertical line at the given value. Default = 2 pixels ",default=2)
+    parser.add_argument("-fw","--fwhm", type=float, help="It is used to compute Area_psf for BICres. It also draws a vertical line at the given value. Default = 2 pixels ")
 
 
 

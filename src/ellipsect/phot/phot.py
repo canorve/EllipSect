@@ -392,6 +392,13 @@ def OutPhot(params, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi):
     lineout= "# ferrer, nuker, edgedisk and king components.  \n"
     OUTPHOT.write(lineout)
 
+    if masknuker.any():
+ 
+        lineout= "# For Nuker component, Rad90 is the gamma radius   \n"
+        OUTPHOT.write(lineout)
+
+
+
     lineout = "# Some photometric variables are computed within an ellipse defined by sectors_photometry \n"
     OUTPHOT.write(lineout)
 

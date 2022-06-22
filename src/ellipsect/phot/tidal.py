@@ -134,7 +134,15 @@ def Tidal(params, galpar, galcomps, sectgalax, rmin):
 
     header['TypeIMG'] = ('SNR', 'Signal to Noise Ratio image')
     hdu[0].header  =header
-    galpar.imsnr=imgal/imsigma
+
+
+    if imgal.shape == imsigma.shape:
+
+        galpar.imsnr=imgal/imsigma
+
+    else:
+        print("WARNING: SNR can not be computed because galaxy and sigma images have different shapes")
+        galpar.imsnr=np.ones(imgal.shape)
     
     hdu[0].data = galpar.imsnr
 
@@ -246,7 +254,18 @@ def Tidal(params, galpar, galcomps, sectgalax, rmin):
         #sigfluxbum  = imsigma[ylo - 1:yhi, xlo - 1:xhi][maskbum]
         galfluxbum  = imgal[maskbum]
         modfluxbum  = immodel[maskbum]
-        sigfluxbum  = imsigma[maskbum]
+        if imgal.shape == imsigma.shape:
+
+            sigfluxbum  = imsigma[maskbum]
+            sumsig   = np.sum(imsigma[maskm])
+            sigflux  = imsigma[maskm]
+        else:
+            print("WARNING: Bumpiness and local chinu will have a wrong values because galaxy and sigma images have different shapes")
+ 
+            sigfluxbum  = np.ones(imgal[maskbum].shape)
+            sumsig = np.ones(imgal[maskm].shape)
+            sigflux= np.ones(imgal[maskm].shape)
+
 
     ####
 
@@ -264,13 +283,11 @@ def Tidal(params, galpar, galcomps, sectgalax, rmin):
 
         sumflux  = np.sum(imgal[maskm])
         sumfluxmod  = np.sum(immodel[maskm])
-        sumsig   = np.sum(imsigma[maskm])
 
 
         galflux  = imgal[maskm]
         modflux  = immodel[maskm]
 
-        sigflux  = imsigma[maskm]
 
 
 

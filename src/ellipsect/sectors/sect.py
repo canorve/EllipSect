@@ -165,7 +165,8 @@ def SectPhotComp(galpar, params, galcomps, n_sectors=19, minlevel=0):
     if mac == 'Darwin':
         initcomp=1
     else:
-        initcomp=2
+        initcomp=2 #old galfit version
+        initcomp=1 #new galfit version init subcomponents in 1
 
     cnt=0  # image =0 do not count
     while(cnt<len(galcomps.Comps)):

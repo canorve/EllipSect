@@ -15,7 +15,7 @@ from ellipsect.sectors.comp import SubComp
 
 from ellipsect.inout.prt import PrintEllFilesGax
 from ellipsect.inout.prt import PrintFilesGax
-
+from ellipsect.inout.prt import PrintFilesComps
 
 from ellipsect.sky.sky import SkyCal
 

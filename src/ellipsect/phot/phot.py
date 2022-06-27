@@ -252,8 +252,8 @@ def OutPhot(params, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi):
             params.flagband = True
             params.band=header["FILTNAM1"] 
         else:
-            print("WARNING: filter not found. using default filter: ",params.band) 
-            print("use -filter option to change band") 
+            print("WARNING: filter not found. Using default filter: ",params.band) 
+            print("use --filter option to change band") 
     else:
         print("using {} band to correct for galactic extinction ".format(params.band)) 
 

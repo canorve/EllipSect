@@ -50,9 +50,13 @@ class SkyCal:
 
         meansky = np.mean(mean)
         medsky = np.median(median)
-        rmstd = np.sqrt(np.mean(std**2))
+        stdsky = np.sqrt(np.mean(std**2))
 
-        return meansky, rmstd, medsky
+        varsky = std**2
+        rmstd = np.sqrt(varsky.sum())/varsky.size # standard error
+        #rmstd = stats.sem(mean)
+
+        return meansky, stdsky, rmstd, medsky
 
 
     def GetXYRBorder(self):

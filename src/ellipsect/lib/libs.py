@@ -21,6 +21,7 @@ from matplotlib.patches import Ellipse
 
 
 from scipy import interpolate
+from scipy import stats
 from astropy.io.votable import parse
 from mgefit.sectors_photometry import sectors_photometry
 

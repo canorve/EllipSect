@@ -712,9 +712,11 @@ def FindSBCounts(xarcq, ymgeq, ymgec, numsectors):
 
         xradq=np.append(xradq,np.mean(xarcq[lima:limb]))
         ysbq=np.append(ysbq,np.mean(ymgeq[lima:limb]))
-        ysberrq=np.append(ysberrq,np.std(ymgeq[lima:limb]))
+        #ysberrq=np.append(ysberrq,np.std(ymgeq[lima:limb]))
+        ysberrq=np.append(ysberrq,stats.sem(ymgeq[lima:limb])) #standard error is more appropiated
         ysbc=np.append(ysbc,np.mean(ymgec[lima:limb]))
-        ysbcerr=np.append(ysbcerr,np.std(ymgec[lima:limb]))
+        #ysbcerr=np.append(ysbcerr,np.std(ymgec[lima:limb]))
+        ysbcerr=np.append(ysbcerr,stats.sem(ymgec[lima:limb]))
 
         n=n-numsectors
 

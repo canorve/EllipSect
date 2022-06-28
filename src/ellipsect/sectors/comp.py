@@ -113,7 +113,8 @@ def FindSB(xarcq, ymgeq, numsectors):
 
         xradq=np.append(xradq,np.mean(xarcq[lima:limb]))
         ysbq=np.append(ysbq,np.mean(ymgeq[lima:limb]))
-        ysberrq=np.append(ysberrq,np.std(ymgeq[lima:limb]))
+        #ysberrq=np.append(ysberrq,np.std(ymgeq[lima:limb]))
+        ysberrq=np.append(ysberrq,stats.sem(ymgeq[lima:limb])) #standard error is more appropiate
 
         n=n-numsectors
 

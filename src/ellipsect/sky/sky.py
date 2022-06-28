@@ -45,18 +45,19 @@ class SkyCal:
                 print("input skyRadmax is greater than image size")
             print("using Rmax = ",Rend)
 
-        mean, std, median  = self.GetRandBoxSky( Rinit, Rend )
+        #mean, std, median  = self.GetRandBoxSky( Rinit, Rend )
+        mean, var, median, N  = self.GetRandBoxSky2( Rinit, Rend )
 
 
         meansky = np.mean(mean)
         medsky = np.median(median)
-        stdsky = np.sqrt(np.mean(std**2))
+        Npix = N.sum()
+        stdsky = np.sqrt(var.sum()/Npix )
 
-        varsky = std**2
-        rmstd = np.sqrt(varsky.sum())/varsky.size # standard error
+
         #rmstd = stats.sem(mean)
 
-        return meansky, stdsky, rmstd, medsky
+        return meansky, stdsky,  medsky
 
 
     def GetXYRBorder(self):
@@ -170,7 +171,6 @@ class SkyCal:
 
         return (xmin,xmax,ymin,ymax,np.int32(R))
 
-
     def GetRandBoxSky(self, Rinit, Rmax):
         '''compute mean, std, and median from random selected boxes'''
 
@@ -248,6 +248,107 @@ class SkyCal:
             skymed=np.append(skymed,median)
 
         return sky,skystd,skymed
+
+
+    def GetRandBoxSky2(self, Rinit, Rmax):
+        '''compute mean, std, and median from random selected boxes'''
+
+        (nrow,ncol)=self.img.shape
+
+        # it obtains corners of Rinit
+        (xmino, xmaxo, ymino, ymaxo) = self.GetSize(self.xx, self.yy, Rinit, self.thetadeg, self.q, self.ncol, self.nrow) 
+
+        # it obtains corners of Rmax
+        (xminf, xmaxf, yminf, ymaxf) = self.GetSize(self.xx, self.yy, Rmax, self.thetadeg, self.q, self.ncol, self.nrow) 
+        
+        Value=1 #  value of counts  of the  main target for  the mask image  
+        self.maskimg = self.MakeKron(self.maskimg, Value, self.xx, self.yy, Rinit, self.thetadeg, self.q, xminf, xmaxf, yminf, ymaxf) 
+
+        ########
+
+        sky = np.array([])
+        skystd = np.array([])
+        skymed = np.array([])
+
+        boximg = [] #list not numpy array
+
+        N= np.array([])
+
+
+        coordinates = self.MakeCoord(xmino-self.box,xmaxo+self.box,ymino-self.box,ymaxo+self.box,xmaxf,ymaxf)
+
+
+        cont=self.num # this is the number of boxes to use 
+
+        for idx,item in enumerate(range(cont)):
+
+            flatimg,xinit,yinit=self.GetRandomPatch(self.img,self.maskimg,self.box,coordinates)
+            xfin = xinit + self.box - 1
+            yfin = yinit + self.box - 1 
+
+
+            flatimg.sort()
+
+            boxcont=0
+
+            while( not(flatimg.any()) and (boxcont < 10)):
+
+                if (boxcont == 0):
+                    print("Picking another box ")
+
+                flatimg,xinit,yinit=self.GetRandomPatch(self.img,self.maskimg,self.box,coordinates)
+                xfin = xinit + self.box - 1
+                yfin = yinit + self.box - 1
+
+
+                flatimg.sort()
+
+                boxcont+=1 # avoid eternal loop
+
+            if (boxcont == 10):
+                print("max. iteration reached. I couldn't find a box") 
+                return 0,0,0 # It couldn't found any box; terminating
+    
+
+            linebox = "Box:{}   xinit/fin: {}-{}; yinit/fin: {}-{}  ".format(item+1,xinit,xfin,yinit,yfin)
+
+            tot=len(flatimg)
+
+            top=round(.8*tot)
+            bot=round(.2*tot)
+            
+            imgpatch=flatimg[bot:top]
+
+            boximg.append(imgpatch) #save for later
+            N=np.append(N,imgpatch.size) #save for later
+
+            mean=np.mean(imgpatch)
+            std=np.std(imgpatch)
+
+            median=np.median(imgpatch)
+
+            linemean = "sky  mean = {:.2f}; std = {:.2f}; median = {:.2f}".format(mean,std,median)
+            print(linemean)
+
+            sky=np.append(sky,mean)
+            #skystd=np.append(skystd,std)
+            skymed=np.append(skymed,median)
+
+
+
+        totmean = np.mean(sky)
+        # to compute standard deviation:
+        for idx, item in enumerate(range(cont)):
+
+            bimg=boximg[idx]
+
+            # not quite the var of the box, but it is needed to compute the TOTAL std:
+            skyvar =  ((bimg-totmean)**2).sum() 
+
+            skystd=np.append(skystd,skyvar)
+
+
+        return sky,skystd,skymed,N
 
     def MakeCoord(self,xmino,xmaxo,ymino,ymaxo,xmaxf,ymaxf):
         ''' creates (x,y) coordinates between the inner and outer box'''

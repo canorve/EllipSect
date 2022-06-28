@@ -173,13 +173,13 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
         ##
         if params.flagskyRadmax:
             Rmax = params.skyRadmax
-            mean,std,stderr, median = SkyCal().RandBox(ImageFile,MaskFile,xx,yy,thetadeg,q,Rinit,box,num,Rmax)
+            mean,std, median = SkyCal().RandBox(ImageFile,MaskFile,xx,yy,thetadeg,q,Rinit,box,num,Rmax)
         else:
             Rmax = 0
-            mean,std,stderr, median = SkyCal().RandBox(ImageFile,MaskFile,xx,yy,thetadeg,q,Rinit,box,num,Rmax)
+            mean,std, median = SkyCal().RandBox(ImageFile,MaskFile,xx,yy,thetadeg,q,Rinit,box,num,Rmax)
         #
 
-        line="Total sky:  mean = {:.2f}; std = {:.2f}; stderr = {:.2f}; median = {:.2f}".format(mean,std,stderr,median)
+        line="Total sky:  mean = {:.2f}; std = {:.2f}; median = {:.2f}".format(mean,std,median)
         print(line)
 
         #saving for output

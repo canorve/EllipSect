@@ -261,7 +261,11 @@ def OutPhot(params, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi):
         (GalExt,DistMod,DistMod2,Scalekpc,SbDim)=NED(params, galpar, galcomps)
     else:
         if params.flagned: 
-            print("No search in NED. Lum and abs Mag will not be computed")
+            print("No search in NED because it is indicated by the user")
+            print("Lum and abs Mag will not be computed")
+        elif not(params.flagobj):
+            print("No search in NED. Object name not provided or not found in Header")
+            print("Lum and abs Mag will not be computed")
 
         GalExt=0
         DistMod=0

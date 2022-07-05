@@ -57,8 +57,13 @@ class InputParams:
 
     flagfwhm = False
 
+    flagcent = False 
+
 
     #init
+    xc = 1 
+    yc = 1 
+
     qarg=1
     parg=0
     ranx=1

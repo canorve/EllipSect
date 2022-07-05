@@ -54,6 +54,8 @@ def InitParsing():
 
  
     #options with arguments
+    parser.add_argument("-cn","--center",nargs=2,action="store", type=float, help="galaxy's center ")
+
     parser.add_argument("-q","--axisrat", type=float, help="galaxy axis ratio ")
     parser.add_argument("-pa","--posangle", type=float, help="position angle (same as GALFIT)  ",default=0)
     parser.add_argument("-rx","--ranx",nargs=2, type=float, help="provide a range for x-axis: xmin-xmax ")
@@ -92,9 +94,11 @@ def InitParsing():
 
 
 
-
 #io/read.py
-def ReadGALFITout(inputf,galpar,distmax):
+def ReadGALFITout(params,galpar):
+
+    inputf = params.galfile 
+    distmax = params.distmax
 
     flagfirst = True
 
@@ -171,8 +175,13 @@ def ReadGALFITout(inputf,galpar,distmax):
                 (tmp) = line.split()
 
                 if tmp[0] == "1)":   # center
-                    galpar.xc=float(tmp[1])
-                    galpar.yc=float(tmp[2])
+
+                    if(params.flagcent):
+                        galpar.xc=params.xc  
+                        galpar.yc=params.yc  
+                    else:
+                        galpar.xc=float(tmp[1])
+                        galpar.yc=float(tmp[2])
 
                 if tmp[0] == "4)":    # Effective radius
                     galpar.rad=float(tmp[1])

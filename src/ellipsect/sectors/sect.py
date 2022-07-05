@@ -247,7 +247,8 @@ def SectorsGalfit(args):
     ######################################
     ####### Read Galfit File #############
     #  xc,yc,q,ang,skylevel,scale,file,mgzpt,exptime,mask=ReadGALFITout(params.galfile,galpars)
-    ReadGALFITout(params.galfile,galpar,params.distmax)
+    #ReadGALFITout(params.galfile,galpar,params.distmax)
+    ReadGALFITout(params,galpar)
 
 
     ######################################
@@ -735,6 +736,12 @@ def PassArgs(args):
 
 
     #options with arguments
+
+    if args.center:
+        params.flagcent = True
+        params.xc = args.center[0]
+        params.yc = args.center[1]
+
 
     if args.axisrat:
         params.flagq = True

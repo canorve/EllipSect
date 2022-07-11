@@ -43,7 +43,16 @@ class SkyCal:
                 Rend = Rmax
             else:
                 print("input skyRadmax is greater than image size")
-            print("using Rmax = ",Rend)
+            print("using Rmax = {:0.2f} ".format(Rend))
+
+        if Rinit > Rend:
+
+            Rinit= Rend/3 #is this number ok?
+            print("Rinit is greater than image size")
+            print("using Rinit = {:0.2f} ".format(Rinit))
+            print("change this value with --radinit ")
+
+
 
         #mean, std, median  = self.GetRandBoxSky( Rinit, Rend )
         mean, var, median, N  = self.GetRandBoxSky2( Rinit, Rend )
@@ -280,6 +289,8 @@ class SkyCal:
 
         cont=self.num # this is the number of boxes to use 
 
+
+
         for idx,item in enumerate(range(cont)):
 
             flatimg,xinit,yinit=self.GetRandomPatch(self.img,self.maskimg,self.box,coordinates)
@@ -352,6 +363,21 @@ class SkyCal:
 
     def MakeCoord(self,xmino,xmaxo,ymino,ymaxo,xmaxf,ymaxf):
         ''' creates (x,y) coordinates between the inner and outer box'''
+
+        if xmino < 1:
+            xmino = 1
+
+        if ymino < 1:
+            ymino = 1
+
+        if xmaxo > xmaxf:
+            xmaxo = xmaxf
+
+        if ymaxo > ymaxf:
+            ymaxo = ymaxf
+
+
+
 
         coordinates = [(x,y) for x in np.arange(0,xmaxf) for y in np.arange(0,ymaxf) if not((x >= xmino and x <= xmaxo) and ( y >= ymino and y <= ymaxo))]
 
@@ -459,6 +485,8 @@ class SkyCal:
     def GetRandomPatch(self,imagemat,mimg,box,coordinates):
         '''get a random box patch of the imagemat'''
 
+
+
         xinit,yinit=self.GetRandomCoord(coordinates)
 
         xfin = xinit + box  - 1 
@@ -477,6 +505,7 @@ class SkyCal:
         '''choose xinit, and yinit from coordinates'''
         
         ridx = np.random.randint(0,len(coordinates)-1)
+
 
         xinit = coordinates[ridx][0] 
         yinit = coordinates[ridx][1] 
@@ -521,6 +550,17 @@ class SkyCal:
         xmin,xmax,ymin,ymax,Rkron = self.GetXYRBorder()
 
         self.R = Rkron
+
+        if self.Rinit > Rkron: # avoid radius greater than the border
+
+            self.Rinit= Rkron/3 #is this number ok?
+            print("Rinit is greater than image size")
+            print("using Rinit = {:0.2f} ".format(self.Rinit))
+            print("change this value with --radinit ")
+
+
+
+
 
         (xmin, xmax, ymin, ymax) = self.GetSize(self.xx, self.yy, Rkron, self.thetadeg, self.q, self.ncol, self.nrow) # obtain corners of R
 

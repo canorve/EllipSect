@@ -809,9 +809,9 @@ def PassArgs(args):
         params.flagnedfile= True
         params.nedfile= args.ned
 
-    if args.skyinit:
+    if args.radinit:
         params.flagskyRad= True
-        params.skyRad= args.skyinit
+        params.skyRad= args.radinit
 
     if args.skyradmax:
         params.flagskyRadmax= True

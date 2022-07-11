@@ -117,7 +117,7 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
 
         mean,std, median,rad = SkyCal().GetEllipSky(ImageFile,MaskFile,xx,yy,thetadeg,q,Rinit,width,params.namering,params.nameringmask)
 
-        line="Total sky:  mean = {:.2f}; std={:.2f}; median = {} ".format(mean,std,median)
+        line="Total sky:  mean = {:.2f}; std={:.2f}; median = {:.2f} ".format(mean,std,median)
         print(line)
 
         #saving for output

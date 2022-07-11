@@ -72,7 +72,7 @@ def InitParsing():
     parser.add_argument("-md","--model",  help="User can introduce its own image model. ")
     parser.add_argument("-sky","--sky", type=float, help="User can introduce his/her own sky value. ")
     parser.add_argument("-ned","--ned",  help="user can introduce his/her own ned xml file")
-    parser.add_argument("-si","--skyinit", type=float, help="for randsky, it creates a mask for the main target using this radio. For gradsky it is where the program starts to compute the gradient ")
+    parser.add_argument("-ri","--radinit", type=float, help="for randsky, it creates a mask for the main target using this radio. For gradsky it is where the program starts to compute the gradient ")
     parser.add_argument("-srm","--skyradmax", type=float, help="for randsky only, maximum radius from main target where randbox can be selected")
     parser.add_argument("-skb","--skybox", type=int, help="pixel size of the box for randsky. Default = 20",default=20)
     parser.add_argument("-skn","--skynum", type=int, help="Number of boxes used in randsky. Default = 20",default=20)

@@ -231,7 +231,8 @@ def SectorsGalfit(args):
 
     params = PassArgs(args) # from now on, params is used instead of args
 
-    print("angle in multi-plot is measured from the galaxy's major axis ")
+    print("grey angle in multi-plot is measured from the galaxy's major axis ")
+    print("red angle in multi-plot is measured from the Y-axis (same as GALFIT) ")
 
     #class for GALFIT's parameters
     galpar=GalfitParams()

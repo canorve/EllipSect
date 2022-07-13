@@ -438,8 +438,16 @@ def MulEllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps):
 
         r2 = mgemodrad[angmod]
 
+        #angsec=90-galpar.ang
         txtang= sectors[j]
+        txtangsky= sectors[j] + galpar.ang #angle measured from sky north. Same as GALFIT
+
+        if txtangsky > 90:
+            txtangsky=txtangsky - 180 
+
+
         txt = r"$%.f^\circ$" % txtang
+        txtsky = r"$%.f^\circ$" % txtangsky
 
         txtminor= "minor axis"
         txtmajor= "major axis"
@@ -567,7 +575,9 @@ def MulEllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps):
 
                 ii+=1
 
-        axsec[row, 0].text(0.98, 0.95, txt, ha='right', va='top', transform=axsec[row, 0].transAxes)
+        #axsec[row, 0].text(0.98, 0.95, txt, ha='right', va='top', transform=axsec[row, 0].transAxes)
+        axsec[row, 0].text(0.98, 0.95, txtsky, color='red',ha='right', va='top', transform=axsec[row, 0].transAxes)
+        axsec[row, 0].text(0, 0, txt, ha='left', va='bottom', color='grey', transform=axsec[row, 0].transAxes)
 
         if (len(mgemodrad) > len(mgerad)):
 
@@ -593,7 +603,9 @@ def MulEllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps):
         axsec[row, 1].yaxis.set_label_position("right")
         axsec[row, 1].set_ylim([-19.5, 20])
         # axsec[row, 1].set_ylim([-20, 20])
-        axsec[row, 1].text(0.98, 0.95, txt, ha='right', va='top', transform=axsec[row, 1].transAxes)
+        #axsec[row, 1].text(0.98, 0.95, txt, ha='right', va='top', transform=axsec[row, 1].transAxes)
+        axsec[row, 1].text(0.98, 0.95, txtsky,fontweight='bold', color='red',ha='right', va='top', transform=axsec[row, 1].transAxes)
+        axsec[row, 1].text(0, 0, txt, ha='left', va='bottom',color='grey', transform=axsec[row, 1].transAxes)
         if (txtang == 0):
             axsec[row, 1].text(0.98, 0.10, txtmajor,fontweight='bold',fontsize=8.5, ha='right', va='bottom', transform=axsec[row, 1].transAxes)
 

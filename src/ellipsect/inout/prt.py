@@ -3,7 +3,7 @@ from ellipsect.lib.libs import *
 
 from ellipsect import *
 
-
+import ellipsect
 
 
 def PrintEllFilesGax(params,galpar,xradq,ysbq,ysberrq,xradm,ysbm,ysberrm):
@@ -270,6 +270,26 @@ def PrintFilesComps(params,galpar,galcomps,rtxtang,ncomp,diffangle,rtemp,mgesbsu
     runcmd = "mv  {}  sbfiles/{}".format(filesub,filesub)
     errmv = sp.run([runcmd], shell=True, stdout=sp.PIPE,
                        stderr=sp.PIPE, universal_newlines=True)
+
+
+def printWelcome():
+
+
+    print("Ellipsect: A surface brightness analysis tool for GALFIT output ")
+
+    print("Version:",ellipsect.__version__)
+
+    url = "https://github.com/canorve/EllipSect"
+    
+    print("webpage: "+url+"\n")
+
+
+    print("check 'ellipsect -h' for full options \n")
+
+    print("EllipSect will create SB plots based on sectors ")
+    print("of an ellipse with the following properties: \n")
+
+
 
 
 

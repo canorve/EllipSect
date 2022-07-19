@@ -339,7 +339,7 @@ def ReadGALFITout(params,galpar):
     #errmsg="xc and yc are unknown "
     #assert ("xc" in locals()) and ("yc" in locals())  , errmsg
 
-    print("center is at xc, yc = ",galpar.xc,galpar.yc)
+    print("center is at xc, yc = {}, {} ".format(galpar.xc,galpar.yc))
 
     galpar.inxc=galpar.xc
     galpar.inyc=galpar.yc

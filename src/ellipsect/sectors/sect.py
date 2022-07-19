@@ -2,13 +2,13 @@
 from ellipsect.lib.libs import *
 
 from ellipsect import *
-import ellipsect
 
 from ellipsect.lib.clas import GalfitParams
 from ellipsect.lib.clas import GalfitComps 
 from ellipsect.lib.clas import PhotAPI 
 
 from ellipsect.inout.read import ReadGALFITout 
+from ellipsect.inout.prt import printWelcome 
 
 from ellipsect.inout.read import ReadNComp 
 from ellipsect.inout.plots import ShowCube 
@@ -232,11 +232,7 @@ def SectorsGalfit(args):
     params = PassArgs(args) # from now on, params is used instead of args
 
 
-    print("EllipSect Version:",ellipsect.__version__)
-
-
-    print("grey angle in multi-plot is measured from the galaxy's major axis ")
-    print("red angle in multi-plot is measured from the Y-axis (same as GALFIT) ")
+    printWelcome() # print version and description 
 
     #class for GALFIT's parameters
     galpar=GalfitParams()
@@ -248,14 +244,9 @@ def SectorsGalfit(args):
     photapi=PhotAPI()
 
 
-
     ######################################
     ####### Read Galfit File #############
-    #  xc,yc,q,ang,skylevel,scale,file,mgzpt,exptime,mask=ReadGALFITout(params.galfile,galpars)
-    #ReadGALFITout(params.galfile,galpar,params.distmax)
     ReadGALFITout(params,galpar)
-
-
     ######################################
     ######################################
 
@@ -275,21 +266,11 @@ def SectorsGalfit(args):
     str = "pa = {} ".format(galpar.ang)
     print(str)
 
-    str = "sky = {} ".format(galpar.skylevel)
-    print(str)
-
-    ##
-    str = "dpi = {} for plots ".format(params.dpival)
-    print(str)
-    ##
-
-    ##
-    str = "minlevel = {} ".format(params.minlevel)
-    print(str)
-
     ##
     str = "number of sectors = {}  ".format(params.sectors)
     print(str)
+
+    print("\nother parameters: \n")
 
     str = "Mag zeropoint = {} ".format(galpar.mgzpt)
     print(str)
@@ -297,7 +278,24 @@ def SectorsGalfit(args):
     str = "Plate Scale = {} ".format(galpar.scale)
     print(str)
 
+    str = "sky = {} ".format(galpar.skylevel)
+    print(str)
 
+    ##
+    str = "minlevel = {} ".format(params.minlevel)
+    print(str)
+
+
+    ##
+    str = "for plots dpi = {} ".format(params.dpival)
+    print(str)
+    ##
+
+    print("grey angle at lower-bottom in multi-plot is measured from the galaxy's major axis ")
+    print("red angle at upper-right in multi-plot is measured from the Y-axis (same as GALFIT)\n")
+
+
+    #names of the output files based on prefix of galfit output
 
     #(tmp)=galpar.outimage.split(".")
     root_ext = os.path.splitext(galpar.outimage)
@@ -306,31 +304,31 @@ def SectorsGalfit(args):
 
     # names for the different png
 
-    params.namepng=params.namefile + ".png"
-    params.namesec=params.namefile + "-gal.png"
-    params.namemod=params.namefile + "-mod.png"
-    params.namemul=params.namefile + "-mul.png"
-    params.namesub=params.namefile + "-comp.fits"
+    params.namepng = params.namefile + ".png"
+    params.namesec = params.namefile + "-gal.png"
+    params.namemod = params.namefile + "-mod.png"
+    params.namemul = params.namefile + "-mul.png"
+    params.namesub = params.namefile + "-comp.fits"
 
-    params.namesig=params.namefile + "-sig.fits"
-
-
-    params.sboutput=params.namefile + "-sbout"
-    params.output=params.namefile + "-out.txt"
-
-    params.namened=params.namefile + "-ned.xml"
+    params.namesig = params.namefile + "-sig.fits"
 
 
+    params.sboutput = params.namefile + "-sbout"
+    params.output = params.namefile + "-out.txt"
 
-    params.namesnr=params.namefile + "-snr.fits"
+    params.namened = params.namefile + "-ned.xml"
 
-    params.namecheck=params.namefile + "-check.fits"
+
+
+    params.namesnr = params.namefile + "-snr.fits"
+
+    params.namecheck = params.namefile + "-check.fits"
     
-    params.namering=params.namefile + "-ring.fits"
+    params.namering = params.namefile + "-ring.fits"
     
-    params.nameringmask=params.namefile + "-ringmask.fits"
+    params.nameringmask = params.namefile + "-ringmask.fits"
 
-    params.namecube=params.namefile + "-cub.png"
+    params.namecube = params.namefile + "-cub.png"
 
 
 
@@ -466,7 +464,7 @@ def SectorsGalfit(args):
 
     limx,limy=EllipSectors(params, galpar, galcomps, sectgalax,sectmodel, sectcomps,n_sectors=numsectors)
 
-    print("name of the plot file: ", params.namepng)
+    print("plot file: ", params.namepng)
  
 
 
@@ -488,7 +486,7 @@ def SectorsGalfit(args):
     MulEllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps)
 
 
-    print("name of the multi-plot file: ", params.namemul)
+    print("multi-plot file: ", params.namemul)
 
 
     if params.dplot:

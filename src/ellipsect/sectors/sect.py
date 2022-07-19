@@ -299,9 +299,10 @@ def SectorsGalfit(args):
 
 
 
-    (tmp)=galpar.outimage.split(".")
+    #(tmp)=galpar.outimage.split(".")
+    root_ext = os.path.splitext(galpar.outimage)
 
-    params.namefile=tmp[0]
+    params.namefile = root_ext[0]
 
     # names for the different png
 

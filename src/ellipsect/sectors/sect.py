@@ -2,7 +2,7 @@
 from ellipsect.lib.libs import *
 
 from ellipsect import *
-
+import ellipsect
 
 from ellipsect.lib.clas import GalfitParams
 from ellipsect.lib.clas import GalfitComps 
@@ -230,6 +230,10 @@ def SectorsGalfit(args):
 
 
     params = PassArgs(args) # from now on, params is used instead of args
+
+
+    print("EllipSect Version:",ellipsect.__version__)
+
 
     print("grey angle in multi-plot is measured from the galaxy's major axis ")
     print("red angle in multi-plot is measured from the Y-axis (same as GALFIT) ")

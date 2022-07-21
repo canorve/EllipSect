@@ -2,8 +2,6 @@
 
 from ellipsect.lib.libs import *
 
-
-#next function removed from this file and moved to comp
 from ellipsect.sectors.comp import FindSB
 from ellipsect.inout.plots import PlotSB
 
@@ -65,14 +63,14 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
 
 
     #######################################
-    #######################################
+    ############## SKY ####################
     #######################################
 
-    # computing sky as a reference.
+    #  gradient sky method:
     if params.flagradsky:
 
         # computing sky with the gradient method
-        print("Computing sky as a reference. This will not be used for output computations.")
+        print("Computing sky as a reference. This won't be used for output photometry")
 
         ImageFile = galpar.inputimage
         MaskFile = galpar.maskimage
@@ -91,7 +89,7 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
         Rinit = 1
 
         if not(params.flagskyRad):
-            #rad90= galpar.rad * (1.53 + 0.73 * galpar.serind+ 0.07 * galpar.serind**2) 
+
             rad90= Re90(galpar.rad,galpar.serind) 
             Rinit = 1*rad90 # 1 times the R 90% of light radius
 
@@ -126,13 +124,11 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
         galpar.gradskymed = median
 
 
-
-
-
+    #  random sky method:
     if params.flagrandboxsky:
 
         # computing sky  using random boxes across the image
-        print("Computing sky as a reference. This will not be used for output computations.")
+        print("Computing sky as a reference. This won't be used for output photometry")
 
         ImageFile = galpar.inputimage
         MaskFile = galpar.maskimage
@@ -154,9 +150,9 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
         Rinit = 1
 
         if not(params.flagskyRad):
-            #rad90=galpar.rad * (1.53 + 0.73 * galpar.serind + 0.07 * galpar.serind**2) 
+
             rad90= Re90(galpar.rad,galpar.serind) 
-            Rinit = 3*rad90 # 1 times the R 90% of light radius
+            Rinit = 2.5*rad90 # 2 times the R 90% of light radius
 
             if (Rinit < 100): # Rinit can not be less than the default value 
                 Rinit = 100 
@@ -189,9 +185,8 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
 
 
 
-
     #######################################
-    #######################################
+    ############## SKY End ################
     #######################################
 
     # model
@@ -219,13 +214,11 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
     ymgem = mgesbm[stidxq]
 
 
-
-
     ######  Function to order SB along X-axis for model
 
-    xradm, ysbm, ysberrm    = FindSB(xarcm, ymgem, n_sectors)
+    xradm, ysbm, ysberrm = FindSB(xarcm, ymgem, n_sectors)
 
-    ################ Plotting
+    ##### Plotting
 
     limx,limy,axsec=PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,params,galpar.scale)
 
@@ -240,12 +233,9 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
 
     #### Creating Subcomponents images with Galfit
 
-
     if params.flagcomp:
 
-
         xradq,ysbq,n=SubComp(params, galpar, galcomps, sectcomps, axsec, n_sectors=n_sectors)
-
 
 
     axsec.legend(loc=1)

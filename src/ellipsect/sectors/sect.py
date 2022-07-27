@@ -21,211 +21,6 @@ from ellipsect.phot.phot import OutPhot
 from ellipsect.lib.clas import InputParams
 
 
-def SectPhot(galpar, params, n_sectors=19, minlevel=0):
-    """ calls to function sectors_photometry for galaxy and model """
-
-
-    maskb=galpar.mask
-
-
-    eps=1-galpar.q
-
-    if params.dplot:
-        plt.clf()
-        print("")
-
-    ############
-    # I have to switch x and y values because they are different axes for
-    # numpy:
-    if params.flagmodel == False:
-        yctemp=galpar.xc
-        xctemp=galpar.yc
-    else:
-        yctemp=galpar.inxc
-        xctemp=galpar.inyc
-
-
-    # and angle is different as well:
-    angsec=90-galpar.ang
-    #    angsec=ang
-
-
-    ###############################
-    #  galaxy:
-
-
-    sectgalax = sectors_photometry(galpar.img, eps, angsec, xctemp, yctemp, minlevel=minlevel,
-            plot=params.dplot, badpixels=maskb, n_sectors=n_sectors)
-
-
-    if params.dplot:
-        plt.pause(1)  # Allow plot to appear on the screen
-        plt.savefig(params.namesec)
-
-    ###################################################
-    
-    #  model: 
-    # user input minlevel
-    #sectmodel = sectors_photometry(galpar.model, eps, angsec, xctemp, yctemp,minlevel=minlevel,
-    #        plot=params.dplot, badpixels=maskb, n_sectors=n_sectors)
-    # minlevel =0
-    sectmodel = sectors_photometry(galpar.model, eps, angsec, xctemp, yctemp,minlevel=0,
-            plot=params.dplot, badpixels=maskb, n_sectors=n_sectors)
-
-
-    if params.dplot:
-        plt.pause(1)  # Allow plot to appear on the screen
-        plt.savefig(params.namemod)
-
-
-
-    return sectgalax,sectmodel
-
-
-#sectors/sect.py
-def SectPhotComp(galpar, params, galcomps, n_sectors=19, minlevel=0):
-    """ calls to function sectors_photometry for subcomponents """
-
-    if (params.flagphot) and (not(os.path.isfile(params.namesig))):
-
-        if ((os.path.isfile(params.namesub)) and (params.flagkeep)):
-            print("using existing subcomponent model image file *-comp.fits")
-
-            print("running galfit to create sigma image ...")
-
-            rungal = "galfit -outsig {}".format(params.galfile)
-            errgal = sp.run([rungal], shell=True, stdout=sp.PIPE, stderr=sp.PIPE,
-                universal_newlines=True)
-
-            # changing name to sigma image
-            runchg = "mv sigma.fits {}".format(params.namesig)
-            errchg = sp.run([runchg], shell=True, stdout=sp.PIPE, stderr=sp.PIPE,
-                universal_newlines=True)
-
-            errmsg="file {} does not exist".format(params.namesig)
-            assert os.path.isfile(params.namesig), errmsg
-
-        else:
-
-            print("running galfit to create sigma image and individual model images...")
-
-            rungal = "galfit -o3 -outsig {}".format(params.galfile)
-            errgal = sp.run([rungal], shell=True, stdout=sp.PIPE, stderr=sp.PIPE,
-                universal_newlines=True)
-
-            # changing name to subcomponents
-            runchg = "mv subcomps.fits {}".format(params.namesub)
-            errchg = sp.run([runchg], shell=True, stdout=sp.PIPE, stderr=sp.PIPE,
-                universal_newlines=True)
-
-            errmsg="file {} does not exist".format(params.namesub)
-            assert os.path.isfile(params.namesub), errmsg
-
-            # changing name to sigma image
-
-            runchg = "mv sigma.fits {}".format(params.namesig)
-            errchg = sp.run([runchg], shell=True, stdout=sp.PIPE, stderr=sp.PIPE,
-                universal_newlines=True)
-
-            errmsg="file {} does not exist".format(params.namesig)
-            assert os.path.isfile(params.namesig), errmsg
-
-    else: 
-
-        if ((os.path.isfile(params.namesub)) and (params.flagkeep)):
-            print("using existing subcomponent model image file *-comp.fits")
-        else:
-
-            print("running galfit to create individual model images...")
-
-            rungal = "galfit -o3 {}".format(params.galfile)
-            errgal = sp.run([rungal], shell=True, stdout=sp.PIPE, stderr=sp.PIPE,
-                universal_newlines=True)
-
-            # changing name to subcomponents
-            runchg = "mv subcomps.fits {}".format(params.namesub)
-            errchg = sp.run([runchg], shell=True, stdout=sp.PIPE, stderr=sp.PIPE,
-                universal_newlines=True)
-
-            errmsg="file {} does not exist".format(params.namesub)
-            assert os.path.isfile(params.namesub), errmsg
-
-
-        if (os.path.isfile(params.namesig) and (params.flagphot)):
-            print("using existing sigma image")
-
-    ##
-
-    hdu = fits.open(params.namesub)
-
-    subimgs=[]
-
-    mac=platform.system()
-
-    if mac == 'Darwin':
-        initcomp=1
-    else:
-        initcomp=2 #old galfit version
-        initcomp=1 #new galfit version init subcomponents in 1
-
-    cnt=0  # image =0 do not count
-    while(cnt<len(galcomps.Comps)):
-        if galcomps.Comps[cnt] == True:
-            img = hdu[cnt+initcomp].data.astype(float)
-            subimgs.append(img)
-        cnt=cnt+1
-    hdu.close()
-
-
-    maskb=galpar.mask
-
-
-    eps=1-galpar.q
-
-    ############
-    # I have to switch x and y values because they are different axes for
-    # numpy:
-    yctemp=galpar.xc
-    xctemp=galpar.yc
-    # and angle is different as well:
-    angsec=90-galpar.ang
-
-    epsmul=eps
-    angsecmul=angsec
-    #print("eps,angle mul ",epsmul,angsecmul)
-    #############
-    sectcomps=[]
-    #sectmulcomps=[]
-    n=0
-
-    while(n<len(galcomps.N)):
-
-        subim=subimgs[n]
-
-        eps=1-galcomps.AxRat[n]
-        angsec=90-galcomps.PosAng[n]
-
-
-        if params.flagcheck:
-            scmp = sectors_photometry(subim, eps, angsec, xctemp, yctemp,minlevel=minlevel,plot=1, badpixels=maskb, n_sectors=n_sectors)
-            plt.savefig("Comp"+str(n)+".png")
-        else:
-            scmp = sectors_photometry(subim, eps, angsec, xctemp, yctemp,minlevel=minlevel,plot=0, badpixels=maskb, n_sectors=n_sectors)
-
-
-        #scmpmul = sectors_photometry(subim, epsmul, angsecmul, xctemp, yctemp,minlevel=minlevel,plot=0, badpixels=maskb, n_sectors=n_sectors)
-        #plt.savefig("Cmul"+str(n)+".png")
-
-        sectcomps.append(scmp)
-
-        #sectmulcomps.append(scmpmul)
-
-        n=n+1
-
-
-    return sectcomps
-
-#/sectors/sect.py
 def SectorsGalfit(args):
 
 
@@ -516,6 +311,214 @@ def SectorsGalfit(args):
     return photapi
 
 
+
+
+
+def SectPhot(galpar, params, n_sectors=19, minlevel=0):
+    """ calls to function sectors_photometry for galaxy and model """
+
+
+    maskb=galpar.mask
+
+
+    eps=1-galpar.q
+
+    if params.dplot:
+        plt.clf()
+        print("")
+
+    ############
+    # I have to switch x and y values because they are different axes for
+    # numpy:
+    if params.flagmodel == False:
+        yctemp=galpar.xc
+        xctemp=galpar.yc
+    else:
+        yctemp=galpar.inxc
+        xctemp=galpar.inyc
+
+
+    # and angle is different as well:
+    angsec=90-galpar.ang
+    #    angsec=ang
+
+
+    ###############################
+    #  galaxy:
+
+
+    sectgalax = sectors_photometry(galpar.img, eps, angsec, xctemp, yctemp, minlevel=minlevel,
+            plot=params.dplot, badpixels=maskb, n_sectors=n_sectors)
+
+
+    if params.dplot:
+        plt.pause(1)  # Allow plot to appear on the screen
+        plt.savefig(params.namesec)
+
+    ###################################################
+    
+    #  model: 
+    # user input minlevel
+    #sectmodel = sectors_photometry(galpar.model, eps, angsec, xctemp, yctemp,minlevel=minlevel,
+    #        plot=params.dplot, badpixels=maskb, n_sectors=n_sectors)
+    # minlevel =0
+    sectmodel = sectors_photometry(galpar.model, eps, angsec, xctemp, yctemp,minlevel=0,
+            plot=params.dplot, badpixels=maskb, n_sectors=n_sectors)
+
+
+    if params.dplot:
+        plt.pause(1)  # Allow plot to appear on the screen
+        plt.savefig(params.namemod)
+
+
+
+    return sectgalax,sectmodel
+
+
+#sectors/sect.py
+def SectPhotComp(galpar, params, galcomps, n_sectors=19, minlevel=0):
+    """ calls to function sectors_photometry for subcomponents """
+
+    if (params.flagphot) and (not(os.path.isfile(params.namesig))):
+
+        if ((os.path.isfile(params.namesub)) and (params.flagkeep)):
+            print("using existing subcomponent model image file *-comp.fits")
+
+            print("running galfit to create sigma image ...")
+
+            rungal = "galfit -outsig {}".format(params.galfile)
+            errgal = sp.run([rungal], shell=True, stdout=sp.PIPE, stderr=sp.PIPE,
+                universal_newlines=True)
+
+            # changing name to sigma image
+            runchg = "mv sigma.fits {}".format(params.namesig)
+            errchg = sp.run([runchg], shell=True, stdout=sp.PIPE, stderr=sp.PIPE,
+                universal_newlines=True)
+
+            errmsg="file {} does not exist".format(params.namesig)
+            assert os.path.isfile(params.namesig), errmsg
+
+        else:
+
+            print("running galfit to create sigma image and individual model images...")
+
+            rungal = "galfit -o3 -outsig {}".format(params.galfile)
+            errgal = sp.run([rungal], shell=True, stdout=sp.PIPE, stderr=sp.PIPE,
+                universal_newlines=True)
+
+            # changing name to subcomponents
+            runchg = "mv subcomps.fits {}".format(params.namesub)
+            errchg = sp.run([runchg], shell=True, stdout=sp.PIPE, stderr=sp.PIPE,
+                universal_newlines=True)
+
+            errmsg="file {} does not exist".format(params.namesub)
+            assert os.path.isfile(params.namesub), errmsg
+
+            # changing name to sigma image
+
+            runchg = "mv sigma.fits {}".format(params.namesig)
+            errchg = sp.run([runchg], shell=True, stdout=sp.PIPE, stderr=sp.PIPE,
+                universal_newlines=True)
+
+            errmsg="file {} does not exist".format(params.namesig)
+            assert os.path.isfile(params.namesig), errmsg
+
+    else: 
+
+        if ((os.path.isfile(params.namesub)) and (params.flagkeep)):
+            print("using existing subcomponent model image file *-comp.fits")
+        else:
+
+            print("running galfit to create individual model images...")
+
+            rungal = "galfit -o3 {}".format(params.galfile)
+            errgal = sp.run([rungal], shell=True, stdout=sp.PIPE, stderr=sp.PIPE,
+                universal_newlines=True)
+
+            # changing name to subcomponents
+            runchg = "mv subcomps.fits {}".format(params.namesub)
+            errchg = sp.run([runchg], shell=True, stdout=sp.PIPE, stderr=sp.PIPE,
+                universal_newlines=True)
+
+            errmsg="file {} does not exist".format(params.namesub)
+            assert os.path.isfile(params.namesub), errmsg
+
+
+        if (os.path.isfile(params.namesig) and (params.flagphot)):
+            print("using existing sigma image")
+
+    ##
+
+    hdu = fits.open(params.namesub)
+
+    subimgs=[]
+
+    mac=platform.system()
+
+    if mac == 'Darwin':
+        initcomp=1
+    else:
+        initcomp=2 #old galfit version
+        initcomp=1 #new galfit version init subcomponents in 1
+
+    cnt=0  # image =0 do not count
+    while(cnt<len(galcomps.Comps)):
+        if galcomps.Comps[cnt] == True:
+            img = hdu[cnt+initcomp].data.astype(float)
+            subimgs.append(img)
+        cnt=cnt+1
+    hdu.close()
+
+
+    maskb=galpar.mask
+
+
+    eps=1-galpar.q
+
+    ############
+    # I have to switch x and y values because they are different axes for
+    # numpy:
+    yctemp=galpar.xc
+    xctemp=galpar.yc
+    # and angle is different as well:
+    angsec=90-galpar.ang
+
+    epsmul=eps
+    angsecmul=angsec
+    #print("eps,angle mul ",epsmul,angsecmul)
+    #############
+    sectcomps=[]
+    #sectmulcomps=[]
+    n=0
+
+    while(n<len(galcomps.N)):
+
+        subim=subimgs[n]
+
+        eps=1-galcomps.AxRat[n]
+        angsec=90-galcomps.PosAng[n]
+
+
+        if params.flagcheck:
+            scmp = sectors_photometry(subim, eps, angsec, xctemp, yctemp,minlevel=minlevel,plot=1, badpixels=maskb, n_sectors=n_sectors)
+            plt.savefig("Comp"+str(n)+".png")
+        else:
+            scmp = sectors_photometry(subim, eps, angsec, xctemp, yctemp,minlevel=minlevel,plot=0, badpixels=maskb, n_sectors=n_sectors)
+
+
+        #scmpmul = sectors_photometry(subim, epsmul, angsecmul, xctemp, yctemp,minlevel=minlevel,plot=0, badpixels=maskb, n_sectors=n_sectors)
+        #plt.savefig("Cmul"+str(n)+".png")
+
+        sectcomps.append(scmp)
+
+        #sectmulcomps.append(scmpmul)
+
+        n=n+1
+
+
+    return sectcomps
+
+
 def Comp2Ellip(galpar,galcomps,lw=1):
     ''' converts galfit component parameter into an Ellipse object''' 
 
@@ -736,6 +739,9 @@ def PassArgs(args):
 
     if args.galax:
         params.flagalax=True
+
+    if args.rmskyout:
+        params.flagrmsky=True
 
 
 

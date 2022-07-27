@@ -113,7 +113,16 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
         line="using xx = {} yy  = {}".format(xx,yy)
         print(line)
 
-        mean,std, median,rad = SkyCal().GetEllipSky(ImageFile,MaskFile,xx,yy,thetadeg,q,Rinit,width,params.namering,params.nameringmask)
+        if params.flagrmsky:
+            line="removing top 80% and bottom 20% of pixels "
+            print(line)
+
+
+
+
+        mean,std, median,rad = SkyCal().GetEllipSky(ImageFile,MaskFile,xx,yy,
+                                                    thetadeg,q,Rinit,width,params.namering,
+                                                    params.nameringmask,params.flagrmsky)
 
         line="Total sky:  mean = {:.2f}; std={:.2f}; median = {:.2f} ".format(mean,std,median)
         print(line)
@@ -166,13 +175,22 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
         line="using Rad = {:.2f}, box size= {}, number of boxes = {}".format(Rinit,box,num)
         print(line)
 
+        if params.flagrmsky:
+            line="removing top 80% and bottom 20% of pixels "
+            print(line)
+
+
+
+
         ##
         if params.flagskyRadmax:
             Rmax = params.skyRadmax
-            mean,std, median = SkyCal().RandBox(ImageFile,MaskFile,xx,yy,thetadeg,q,Rinit,box,num,Rmax)
+            mean,std, median = SkyCal().RandBox(ImageFile,MaskFile,xx,yy,
+                                                thetadeg,q,Rinit,box,num,Rmax,params.flagrmsky)
         else:
             Rmax = 0
-            mean,std, median = SkyCal().RandBox(ImageFile,MaskFile,xx,yy,thetadeg,q,Rinit,box,num,Rmax)
+            mean,std, median = SkyCal().RandBox(ImageFile,MaskFile,xx,yy,
+                                                thetadeg,q,Rinit,box,num,Rmax,params.flagrmsky)
         #
 
         line="Total sky:  mean = {:.2f}; std = {:.2f}; median = {:.2f}".format(mean,std,median)

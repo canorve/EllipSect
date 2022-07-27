@@ -7,7 +7,7 @@ from ellipsect import *
 class SkyCal:
     "This class compute the sky using two methods: random boxes and sky gradient"
 
-    def RandBox(self,ImageFile,MaskFile,xx,yy,thetadeg,q,Rinit,box,num,Rmax):
+    def RandBox(self,ImageFile,MaskFile,xx,yy,thetadeg,q,Rinit,box,num,Rmax,flagrmsky):
         "random box method to compute sky"
 
         self.xx = xx 
@@ -20,6 +20,8 @@ class SkyCal:
        
         self.box = box 
         self.num = num
+
+        self.flagrmsky = flagrmsky
 
         ###
 
@@ -240,7 +242,8 @@ class SkyCal:
             top=round(.8*tot)
             bot=round(.2*tot)
             
-            imgpatch=flatimg[bot:top]
+            #imgpatch=flatimg[bot:top]
+            imgpatch=flatimg#[bot:top]
 
             linebox = "Box:{}   xinit/fin: {}-{}; yinit/fin: {}-{}  ".format(item+1,xinit,xfin,yinit,yfin)
 
@@ -328,7 +331,10 @@ class SkyCal:
             top=round(.8*tot)
             bot=round(.2*tot)
             
-            imgpatch=flatimg[bot:top]
+            if self.flagrmsky:   # eliminate top 80% and bottom 20%
+                imgpatch=flatimg[bot:top]
+            else:
+                imgpatch=flatimg
 
             boximg.append(imgpatch) #save for later
             N=np.append(N,imgpatch.size) #save for later
@@ -515,7 +521,7 @@ class SkyCal:
         ######
 
 
-    def GetEllipSky(self, ImageFile, MaskFile, xx, yy, thetadeg, q, Rinit, width,namering,ringmask):
+    def GetEllipSky(self, ImageFile, MaskFile, xx, yy, thetadeg, q, Rinit, width,namering,ringmask,flagrmsky):
         "Gradient sky method"
 
         self.xx = xx 
@@ -530,6 +536,8 @@ class SkyCal:
         self.NumRings = 5  # number of rings per loop # read this from function?
 
         self.ringmask = ringmask 
+
+        self.flagrmsky = flagrmsky
 
         ###
 
@@ -644,7 +652,10 @@ class SkyCal:
             bot=round(.2*tot)
 
 
-            imgpatch=flatimg[bot:top]
+            if self.flagrmsky:   # eliminate top 80% and bottom 20%
+                imgpatch=flatimg[bot:top]
+            else:
+                imgpatch=flatimg
 
             mean=np.mean(imgpatch)
             std=np.std(imgpatch)

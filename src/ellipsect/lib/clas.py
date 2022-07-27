@@ -59,6 +59,9 @@ class InputParams:
 
     flagcent = False 
 
+    flagrmsky=False
+
+
 
     #init
     xc = 1 

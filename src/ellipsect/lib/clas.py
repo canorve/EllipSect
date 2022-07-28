@@ -59,7 +59,7 @@ class InputParams:
 
     flagcent = False 
 
-    flagrmsky=False
+    flagrmsky=True
 
 
 

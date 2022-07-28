@@ -114,7 +114,7 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
         print(line)
 
         if params.flagrmsky:
-            line="removing top 80% and bottom 20% of pixels "
+            line="removing top 80% and bottom 20% of sky pixels "
             print(line)
 
 
@@ -177,7 +177,7 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
         print(line)
 
         if params.flagrmsky:
-            line="removing top 80% and bottom 20% of pixels "
+            line="removing top 80% and bottom 20% of sky pixels "
             print(line)
 
 

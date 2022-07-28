@@ -740,8 +740,8 @@ def PassArgs(args):
     if args.galax:
         params.flagalax=True
 
-    if args.rmskyout:
-        params.flagrmsky=True
+    if args.allskypx:
+        params.flagrmsky=False
 
 
 

@@ -7,7 +7,7 @@ from ellipsect import *
 class SkyCal:
     "This class compute the sky using two methods: random boxes and sky gradient"
 
-    def RandBox(self,ImageFile,MaskFile,xx,yy,thetadeg,q,Rinit,box,num,Rmax,outliers=False):
+    def RandBox(self,ImageFile,MaskFile,xx,yy,thetadeg,q,Rinit,box,num,Rmax,outliers=True):
         "random box method to compute sky"
 
         self.xx = xx 

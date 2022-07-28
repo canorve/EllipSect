@@ -121,8 +121,9 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
 
 
         mean,std, median,rad = SkyCal().GetEllipSky(ImageFile,MaskFile,xx,yy,
-                                                    thetadeg,q,Rinit,width,params.namering,
-                                                    params.nameringmask,params.flagrmsky)
+                                                    thetadeg,q,Rinit,width,
+                                                    params.namering,params.nameringmask,
+                                                    outliers=params.flagrmsky)
 
         line="Total sky:  mean = {:.2f}; std={:.2f}; median = {:.2f} ".format(mean,std,median)
         print(line)
@@ -180,17 +181,15 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
             print(line)
 
 
-
-
         ##
         if params.flagskyRadmax:
             Rmax = params.skyRadmax
-            mean,std, median = SkyCal().RandBox(ImageFile,MaskFile,xx,yy,
-                                                thetadeg,q,Rinit,box,num,Rmax,params.flagrmsky)
         else:
             Rmax = 0
-            mean,std, median = SkyCal().RandBox(ImageFile,MaskFile,xx,yy,
-                                                thetadeg,q,Rinit,box,num,Rmax,params.flagrmsky)
+
+        mean,std, median = SkyCal().RandBox(ImageFile,MaskFile,xx,yy,
+                                                thetadeg,q,Rinit,box,num,Rmax,
+                                                outliers=params.flagrmsky)
         #
 
         line="Total sky:  mean = {:.2f}; std = {:.2f}; median = {:.2f}".format(mean,std,median)

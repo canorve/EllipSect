@@ -52,7 +52,7 @@ def InitParsing():
     parser.add_argument("-k","--keep", action="store_true", help="use existing file to compute subcomponents")
     parser.add_argument("-gx","--galax", action="store_true", help="only the galaxy surface brightness is shown in the plot")
     parser.add_argument("-rso","--rmskyout", action="store_true", 
-                        help="removes sky pixels with top .80 and bottom .20 for gradsky and randsky")
+                        help="removes sky pixels with top %%80 and bottom %%20 for gradsky and randsky")
  
     #options with arguments
     parser.add_argument("-cn","--center",nargs=2,action="store", type=float, help="galaxy's center ")

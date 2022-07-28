@@ -7,7 +7,7 @@ from ellipsect import *
 class SkyCal:
     "This class compute the sky using two methods: random boxes and sky gradient"
 
-    def RandBox(self,ImageFile,MaskFile,xx,yy,thetadeg,q,Rinit,box,num,Rmax,flagrmsky):
+    def RandBox(self,ImageFile,MaskFile,xx,yy,thetadeg,q,Rinit,box,num,Rmax,outliers=False):
         "random box method to compute sky"
 
         self.xx = xx 
@@ -21,7 +21,7 @@ class SkyCal:
         self.box = box 
         self.num = num
 
-        self.flagrmsky = flagrmsky
+        self.outliers = outliers
 
         ###
 
@@ -331,7 +331,7 @@ class SkyCal:
             top=round(.8*tot)
             bot=round(.2*tot)
             
-            if self.flagrmsky:   # eliminate top 80% and bottom 20%
+            if self.outliers:   # eliminate top 80% and bottom 20%
                 imgpatch=flatimg[bot:top]
             else:
                 imgpatch=flatimg
@@ -521,7 +521,7 @@ class SkyCal:
         ######
 
 
-    def GetEllipSky(self, ImageFile, MaskFile, xx, yy, thetadeg, q, Rinit, width,namering,ringmask,flagrmsky):
+    def GetEllipSky(self, ImageFile, MaskFile, xx, yy, thetadeg, q, Rinit, width,namering,ringmask,outliers=False):
         "Gradient sky method"
 
         self.xx = xx 
@@ -537,7 +537,7 @@ class SkyCal:
 
         self.ringmask = ringmask 
 
-        self.flagrmsky = flagrmsky
+        self.outliers = outliers
 
         ###
 
@@ -652,7 +652,7 @@ class SkyCal:
             bot=round(.2*tot)
 
 
-            if self.flagrmsky:   # eliminate top 80% and bottom 20%
+            if self.outliers:   # eliminate top 80% and bottom 20%
                 imgpatch=flatimg[bot:top]
             else:
                 imgpatch=flatimg

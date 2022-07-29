@@ -90,6 +90,8 @@ def SectorsGalfit(args):
     print("red angle at upper-right in multi-plot is measured from the Y-axis (same as GALFIT)\n")
 
 
+    print("In multi-plot, each color represents the same as the ones in the single-plot's legend")
+
     #names of the output files based on prefix of galfit output
 
     #(tmp)=galpar.outimage.split(".")

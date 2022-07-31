@@ -521,7 +521,7 @@ class SkyCal:
         ######
 
 
-    def GetEllipSky(self, ImageFile, MaskFile, xx, yy, thetadeg, q, Rinit, width,namering,ringmask,outliers=False):
+    def GetEllipSky(self, ImageFile, MaskFile, xx, yy, thetadeg, q, Rinit, width,namering,ringmask,outliers=True):
         "Gradient sky method"
 
         self.xx = xx 
@@ -640,7 +640,7 @@ class SkyCal:
         for ind, item in enumerate(Rings):
 
 
-            maskring=self.GetRingMask(masksky[ymin - 1:ymax, xmin - 1:xmax],idx)
+            maskring,idx=self.GetRingMask(masksky[ymin - 1:ymax, xmin - 1:xmax],idx)
 
 
             flatimg=self.img[ymin - 1:ymax, xmin - 1:xmax][maskring].flatten()  
@@ -682,7 +682,7 @@ class SkyCal:
                 if (sky[1:-1][gradmask].any()): 
                     
                     savidx=tempidx[0][0]
-                    maskring =self.GetRingMask(masksky[ymin - 1:ymax, xmin - 1:xmax],savidx)
+                    maskring,none =self.GetRingMask(masksky[ymin - 1:ymax, xmin - 1:xmax],savidx)
 
 
                     print("sky computed in ring {} ".format(savidx+2))
@@ -711,13 +711,39 @@ class SkyCal:
 
     def GetRingMask(self,masksky,idx):
         ''' obtains the ring selected by index idx'''
+
         ring= idx + 1
 
         maskring = masksky == ring 
 
         maskring=maskring*self.invpatch
 
-        return maskring
+        ringcont=0
+
+        while( not(maskring.any()) and (ringcont < 10)):
+
+            if (ringcont == 0):
+                    print("Selecting next ring ")
+
+            idx += 1
+            ring= idx + 1
+
+            maskring = masksky == ring 
+
+            maskring=maskring*self.invpatch
+
+
+            ringcont+=1 # avoid eternal loop
+
+        if (ringcont == 10):
+            print("max. iteration reached. I couldn't find a ring") 
+            return 0,0 # It couldn't found any ring ending 
+ 
+
+
+
+
+        return maskring,idx
 
 
     def CorSize(self,xell,yell):

@@ -160,12 +160,12 @@ I’m open to new ideas that can benefit the software *EllipSect* and the
 The code is under the license of **GNU**
 
 
---------------
-
-**Cite as **
 -----------
 
+**Cite as**
+-----------
 
+If you find this code useful, please cite as:
 
 Añorve, Christopher, Ríos-López, Emmanuel, Reyes-Amador, 
 Ulises, & López-Cruz, Omar. (2022). canorve/EllipSect: 

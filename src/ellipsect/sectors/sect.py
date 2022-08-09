@@ -8,7 +8,6 @@ from ellipsect.lib.clas import GalfitComps
 from ellipsect.lib.clas import PhotAPI 
 
 from ellipsect.inout.read import ReadGALFITout 
-from ellipsect.inout.prt import printWelcome 
 
 from ellipsect.inout.read import ReadNComp 
 from ellipsect.inout.plots import ShowCube 
@@ -26,8 +25,6 @@ def SectorsGalfit(args):
 
     params = PassArgs(args) # from now on, params is used instead of args
 
-
-    printWelcome() # print version and description 
 
     #class for GALFIT's parameters
     galpar=GalfitParams()

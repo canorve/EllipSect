@@ -286,8 +286,8 @@ def printWelcome():
 
     print("check 'ellipsect -h' for full options \n")
 
-    print("EllipSect will create SB plots based on sectors ")
-    print("of an ellipse with the following properties: \n")
+    #print("EllipSect will create SB plots based on sectors ")
+    #print("of an ellipse with the following properties: \n")
 
 
 

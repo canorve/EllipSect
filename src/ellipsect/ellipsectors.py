@@ -4,12 +4,16 @@
 
 from ellipsect.lib.libs import *
 
+from ellipsect.inout.prt import printWelcome 
 
 from ellipsect.inout.read import ArgParsing
 from ellipsect.sectors.sect import SectorsGalfit
 
 
 def run():
+
+
+    printWelcome() # print version and description 
 
     # read user's input 
     args = ArgParsing(sys.argv[1:])

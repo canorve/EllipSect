@@ -159,6 +159,19 @@ I’m open to new ideas that can benefit the software *EllipSect* and the
 
 The code is under the license of **GNU**
 
+
+--------------
+
+**Cite as **
+-----------
+
+
+
+Añorve, Christopher, Ríos-López, Emmanuel, Reyes-Amador, 
+Ulises, & López-Cruz, Omar. (2022). canorve/EllipSect: 
+EllipSect v2.7.5 (v2.7.5). Zenodo. https://doi.org/10.5281/zenodo.6975592
+
+
 --------------
 
 **References**

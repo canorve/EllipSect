@@ -134,7 +134,8 @@ class InputParams:
 
     distmax = 10
 
-    frac = 0.2
+    brightness = 33 
+    contrast = 0.98
 
     cmap="viridis"
 

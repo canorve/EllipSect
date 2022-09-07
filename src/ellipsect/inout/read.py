@@ -6,6 +6,7 @@ from ellipsect.inout.gfits import GetAxis
 from ellipsect.inout.gfits import GetFits
 
 
+from astropy.wcs import WCS
 
 import argparse
 
@@ -87,10 +88,15 @@ def InitParsing():
 
 
 
-    parser.add_argument("-fr","--frac", type=float, help="value to use as a fraction  to change the value of vmin, vmax of imshow for the cube image ",default=0.2)
+    #parser.add_argument("-fr","--frac", type=float, help="value to use as a fraction  to change the value of vmin, vmax of imshow for the cube image ",default=0.2)
 
 
-    parser.add_argument("-cm","--cmap", type=str, help="cmap used for imshow for the cube image ",default="viridis")
+    parser.add_argument("-br","--brightness", type=float, help="brightness of the image. Default = 33",default=33)
+    parser.add_argument("-co","--contrast", type=float, help="contrast of the image. Default = 0.98",default=0.98)
+
+
+
+    parser.add_argument("-cm","--cmap", type=str, help="cmap to be used for the cube image ",default="viridis")
 
     return parser
 
@@ -567,7 +573,7 @@ def ReadNComp(inputf,X,Y,galcomps,distmax):
 
 
 class xy2fits:
-
+    ''' class function that converts the mask ascii file to fits file'''
 
     def MakeFits(self,ImageFile, AsciiFile, Value):
         
@@ -639,5 +645,12 @@ class xy2fits:
         hdu.writeto(ImageFits,overwrite=True)
         hdu.close()
 
+
+def GetWCS(Image):
+    "Get World Cordinate System info"
+    hdu = fits.open(Image)[0]
+    wcs = WCS(hdu.header)
+
+    return wcs 
 
 

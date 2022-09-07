@@ -8,8 +8,9 @@ from ellipsect.lib.clas import GalfitComps
 from ellipsect.lib.clas import PhotAPI 
 
 from ellipsect.inout.read import ReadGALFITout 
-
+from ellipsect.inout.read import GetWCS
 from ellipsect.inout.read import ReadNComp 
+
 from ellipsect.inout.plots import ShowCube 
 
 from ellipsect.sectors.ellip import EllipSectors
@@ -212,12 +213,16 @@ def SectorsGalfit(args):
 
     if (params.flagcomp):
 
-        ell = Comp2Ellip(galpar,galcomps,linewidth)
+        ell = Comp2Ellip(galpar, galcomps, linewidth)
     else:
         ell=[]
 
 
-    ShowCube(galpar.outimage,namepng=params.namecube,dpival=params.dpival,frac=params.frac,cmap=params.cmap,ellipse=ell)
+    wcs = GetWCS(galpar.outimage)
+
+    ShowCube(galpar.outimage, wcs, namepng = params.namecube, dpival 
+             = params.dpival, bri = params.brightness, con = params.contrast, 
+             cmap = params.cmap, ellipse = ell)
 
     if params.dplot:
         plt.pause(1.5)
@@ -846,8 +851,13 @@ def PassArgs(args):
         params.flagfwhm= True
         params.fwhm= args.fwhm
 
-    if args.frac:
-        params.frac = args.frac
+    if args.brightness:
+        params.brightness = args.brightness
+
+
+    if args.contrast:
+        params.contrast = args.contrast
+
 
     if args.cmap:
         params.cmap = args.cmap

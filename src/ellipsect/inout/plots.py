@@ -223,7 +223,8 @@ def PlotSub(xradq,ysbq,nsub,axsec,namec,colorval):
 
 class ShowCube:
 
-    def __init__(self, cubeimg: str,namepng="cubeout.png",dpival=100,frac= 0.2,cmap='viridis',ellipse=[]):
+    def __init__(self, cubeimg: str, wcs, namepng="cubeout.png", dpival=100, 
+                bri = 33, con = 0.98, cmap='viridis', ellipse=[]):
         """
         This routine shows the GALFIT output cube image: galaxy, model and residual    
         """
@@ -246,19 +247,19 @@ class ShowCube:
         restop=round(.9*restot)
         resbot=round(.1*restot)
 
-        modimgpatch=flatmodimg#[modbot:modtop]
+        modimgpatch=flatmodimg
         resimgpatch=flatresimg[resbot:restop]
 
         modmin = np.min(modimgpatch)
         modmax = np.max(modimgpatch)
 
-        if frac  < 1:
-            modmin = (1-frac)*modmin 
-            modmax = frac*modmax
+        #if frac  < 1:
+        #    modmin = (1-frac)*modmin 
+        #    modmax = frac*modmax
 
 
-        if (modmin > modmax):
-            modmin, modmax = modmax, modmin
+        #if (modmin > modmax):
+        #    modmin, modmax = modmax, modmin
 
 
         resmin = np.min(resimgpatch)
@@ -268,11 +269,16 @@ class ShowCube:
         mask=data < 0 
         data[mask] = 1 # avoids problems in log
      
-        fig, (ax1, ax2, ax3) = plt.subplots(figsize=(14, 5), nrows=1, ncols=3)
+        fig, (ax1, ax2, ax3) = plt.subplots(figsize=(14, 5), nrows = 1, ncols = 3)
         fig.subplots_adjust(left=0.04, right=0.98, bottom=0.02, top=0.98)
 
-        #ax1.imshow(data, origin='lower',vmin=modmin, vmax=modmax,cmap=cmap)
-        ax1.imshow(data, origin='lower',norm=colors.LogNorm(vmin=modmin, vmax=modmax),cmap=cmap)
+        #ax1=fig.add_subplot(131, projection = wcs)
+        #ax2=fig.add_subplot(projection = wcs)
+        #ax3=fig.add_subplot(projection = wcs)
+
+        ax1.imshow(con*data + bri, origin ='lower', norm 
+                    = colors.LogNorm(vmin=modmin, vmax=modmax), cmap = cmap)
+
         ax1.set_title('Data')
 
 
@@ -280,15 +286,23 @@ class ShowCube:
             ax1.add_patch(ell)
 
 
-        ax2.imshow(model, origin='lower',norm=colors.LogNorm(vmin=modmin, vmax=modmax),cmap=cmap)
-        #ax2.imshow(model, origin='lower',vmin=modmin, vmax=modmax,cmap=cmap)
+        ax2.imshow(con*model + bri, origin='lower', norm 
+                    = colors.LogNorm(vmin = modmin, vmax = modmax), cmap = cmap)
         ax2.set_title('GALFIT Model')
 
-        ax3.imshow(residual, origin='lower',vmin=resmin, vmax=resmax,cmap=cmap)
+        ax3.imshow(residual, origin='lower', vmin = resmin, vmax = resmax, cmap = cmap)
         ax3.set_title('Residual')
 
-        plt.savefig(namepng,dpi=dpival)
-     
+
+        #ax1.set_xlabel('Right Ascension')
+        #ax1.set_ylabel('Declination')
+        #ax1.grid(color='black', ls='solid', alpha=0.1)
+
+
+
+        plt.savefig(namepng, dpi = dpival)
+    
+
         #plt.show()
 
 

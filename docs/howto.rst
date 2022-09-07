@@ -289,39 +289,30 @@ components in separated files:
 
        ellipsect galfit.46 --comp --sbout 
 
--  You can change the contrast of the cube image with the -fr option:
+-  You can change the contrast and brightness of the cube image with the -co
+   and -br options respectivelly:
 
 ::
 
-       ellipsect galfit.46 --fr 0.4
+       ellipsect galfit.46 --co 0.4 -br 22
 
 .. figure:: ../img/A85.con-cub.png
    :alt: A85
 
-
-**Note**: the contrast of the image is done by setting the vmin and vmax
-of the colors.LogNorm function of matplotlib. vmax is taken as the
-fraction (“fr” parameter) of the maximum value of the counts in the
-model for vmax. On the contrary vmin is taken as “1 - fr”. So far, this
-is the best way I have found to display the images, if you have a better
-way write to me.
-
-Residual image is just the max and min value of the residual. So far
-this work fine.
 
 -  Also with the -cp option it display the ellipse of each component on
    the galaxy panel of the cube image:
 
 ::
 
-      ellipsect galfit.46 --fr 0.5 -cp
+      ellipsect galfit.46 --co 0.5 -cp
 
 .. figure:: ../img/A85.ell-cub.png
    :alt: A85
 
 
 **Note**: the ellipse’s axis ratio corresponds to the radius of the “4)”
-component as it is. If the component is a Sersic model, then it is the
+component. If the component is a Sersic model, then it is the
 effective radius (pix); if it is a gaussian, then it is the FWHM (pix),
 and so on.
 

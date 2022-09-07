@@ -223,7 +223,7 @@ def PlotSub(xradq,ysbq,nsub,axsec,namec,colorval):
 
 class ShowCube:
 
-    def __init__(self, cubeimg: str, wcs, namepng="cubeout.png", dpival=100, 
+    def __init__(self, cubeimg: str, namepng="cubeout.png", dpival=100, 
                 bri = 33, con = 0.98, cmap='viridis', ellipse=[]):
         """
         This routine shows the GALFIT output cube image: galaxy, model and residual    
@@ -272,10 +272,6 @@ class ShowCube:
         fig, (ax1, ax2, ax3) = plt.subplots(figsize=(14, 5), nrows = 1, ncols = 3)
         fig.subplots_adjust(left=0.04, right=0.98, bottom=0.02, top=0.98)
 
-        #ax1=fig.add_subplot(131, projection = wcs)
-        #ax2=fig.add_subplot(projection = wcs)
-        #ax3=fig.add_subplot(projection = wcs)
-
         ax1.imshow(con*data + bri, origin ='lower', norm 
                     = colors.LogNorm(vmin=modmin, vmax=modmax), cmap = cmap)
 
@@ -293,10 +289,6 @@ class ShowCube:
         ax3.imshow(residual, origin='lower', vmin = resmin, vmax = resmax, cmap = cmap)
         ax3.set_title('Residual')
 
-
-        #ax1.set_xlabel('Right Ascension')
-        #ax1.set_ylabel('Declination')
-        #ax1.grid(color='black', ls='solid', alpha=0.1)
 
 
 

@@ -8,7 +8,7 @@ from ellipsect.lib.clas import GalfitComps
 from ellipsect.lib.clas import PhotAPI 
 
 from ellipsect.inout.read import ReadGALFITout 
-from ellipsect.inout.read import GetWCS
+#from ellipsect.inout.read import GetWCS
 from ellipsect.inout.read import ReadNComp 
 
 from ellipsect.inout.plots import ShowCube 
@@ -218,9 +218,9 @@ def SectorsGalfit(args):
         ell=[]
 
 
-    wcs = GetWCS(galpar.outimage)
+    #wcs = GetWCS(galpar.outimage) #removed
 
-    ShowCube(galpar.outimage, wcs, namepng = params.namecube, dpival 
+    ShowCube(galpar.outimage, namepng = params.namecube, dpival 
              = params.dpival, bri = params.brightness, con = params.contrast, 
              cmap = params.cmap, ellipse = ell)
 

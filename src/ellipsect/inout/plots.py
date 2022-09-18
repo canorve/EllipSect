@@ -224,7 +224,7 @@ def PlotSub(xradq,ysbq,nsub,axsec,namec,colorval):
 class ShowCube:
 
     def __init__(self, cubeimg: str, namepng="cubeout.png", dpival=100, 
-                bri = 33, con = 0.98, cmap='viridis', ellipse=[]):
+                bri = 33, con = 0.98, frac = 1, cmap='viridis', ellipse=[]):
         """
         This routine shows the GALFIT output cube image: galaxy, model and residual    
         """
@@ -253,13 +253,13 @@ class ShowCube:
         modmin = np.min(modimgpatch)
         modmax = np.max(modimgpatch)
 
-        #if frac  < 1:
-        #    modmin = (1-frac)*modmin 
-        #    modmax = frac*modmax
+        if frac  < 1:
+            #modmin = (1-frac)*modmin 
+            modmax = frac*modmax
 
 
-        #if (modmin > modmax):
-        #    modmin, modmax = modmax, modmin
+        if (modmin > modmax):
+            modmin, modmax = modmax, modmin
 
 
         resmin = np.min(resimgpatch)

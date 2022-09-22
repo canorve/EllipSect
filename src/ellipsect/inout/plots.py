@@ -254,7 +254,7 @@ class ShowCube:
         modmax = np.max(modimgpatch)
 
         if frac  < 1:
-            #modmin = (1-frac)*modmin 
+            modmin = (1-frac)*modmin 
             modmax = frac*modmax
 
 

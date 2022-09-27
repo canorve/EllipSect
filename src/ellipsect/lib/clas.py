@@ -139,6 +139,9 @@ class InputParams:
 
     cmap="viridis"
 
+    frac = 1
+    fracmax = 1
+
 #io/class.py
 ### class for Galfit parameters
 class GalfitParams:

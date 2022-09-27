@@ -222,7 +222,7 @@ def SectorsGalfit(args):
 
     ShowCube(galpar.outimage, namepng = params.namecube, dpival 
              = params.dpival, bri = params.brightness, con = params.contrast, 
-             frac = params.frac, cmap = params.cmap, ellipse = ell)
+             frac = params.frac, fracmax = params.fracmax,  cmap = params.cmap, ellipse = ell)
 
     if params.dplot:
         plt.pause(1.5)
@@ -861,6 +861,9 @@ def PassArgs(args):
 
     if args.frac:
         params.frac = args.frac
+
+    if args.fracmax:
+        params.fracmax = args.fracmax
 
 
 

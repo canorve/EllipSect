@@ -39,6 +39,8 @@ The python libraries required are:
 -  matplotlib
 -  mgefit
 
+Install GALFIT if you haven't done so.
+
 Download the latest release, and installed it via
 
 ::
@@ -52,6 +54,15 @@ or
 
    cd ellipsect
    python setup.py install
+
+
+Also, you can install it via pip:
+
+::
+
+   pip install EllipSect
+
+
 
 Run the automated tests:
 
@@ -72,7 +83,7 @@ the command line. Otherwise the automated tests will fail.
 
 --------------
 
-For linux, just run ellipsect in the command line:
+For Linux or Mac, just run ellipsect in the command line:
 
 ::
 

@@ -99,7 +99,7 @@ and that’s it!!
 **easy run:**
 ^^^^^^^^^^^^^
 
-Once installed, run *ellsec.py* in the same directory that you run
+Once installed, run *ellipsect* in the same directory that you run
 GALFIT. It only requires the latest GALFIT’s output file. *The easiest
 way to run the program is:*
 

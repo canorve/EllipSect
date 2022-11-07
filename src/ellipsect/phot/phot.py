@@ -15,6 +15,7 @@ from ellipsect.sectors.num import KronRadius
 from ellipsect.sectors.num import solvePet
 
 #phot/phot.py
+#note check how to import this dictionary from other file
 ### Dictionary for Absolute mag of the Sun taken from Willmer 2018
 SunMag = {
         "U":5.61,"B":5.44,"V": 4.81,"R":4.43,"I":4.1,
@@ -32,6 +33,8 @@ SunMag = {
 def OutPhot(params, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi):
     """ Output photometry for further analysis """
 
+
+    #note check how to simplify this with the new refactorizacion of classes
 
     # masks to identify components: 
 
@@ -369,6 +372,10 @@ def OutPhot(params, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi):
 
 
 
+    #note separate this in three functions one for the header
+    # other for the output variables
+    # and other for the output component variables 
+    
     #######  file output:  ######
 
     print("Creating output photometry file: ",params.output)
@@ -437,6 +444,7 @@ def OutPhot(params, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi):
     lineout = "# Check references in NED file {} \n\n".format(params.namened)
     OUTPHOT.write(lineout)
 
+    #note this below goes in another function
 
     lineout = "total apparent mag of the galaxy (using ellipse aperture on image) = {:.3f}  \n".format(magalaper)
     OUTPHOT.write(lineout)
@@ -554,6 +562,7 @@ def OutPhot(params, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi):
     OUTPHOT.write(lineout)
 
     #############################
+    #note this goes in another functions
 
     lineout = "#########################################\n"  
     OUTPHOT.write(lineout)
@@ -582,6 +591,7 @@ def OutPhot(params, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi):
     OUTPHOT.close()
 
     # save variables for output class
+    #note this goes in another function. evaluate this
 
     photapi.aell =aell
     photapi.bell =bell 

@@ -25,6 +25,8 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
     ysberrm = []
 
 
+    #this section of galax and model move each one to a function or class
+
     # galax 
 
     stidxg = np.argsort(sectgalax.radius)
@@ -65,6 +67,7 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
     #######################################
     ############## SKY ####################
     #######################################
+    #note: move the sky section to a function
 
     #  gradient sky method:
     if params.flagradsky:
@@ -236,7 +239,8 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
     xradm, ysbm, ysberrm = FindSB(xarcm, ymgem, n_sectors)
 
     ##### Plotting
-
+    #note separate the galax and model in two separated functions
+    # or class, evaluate
     limx,limy,axsec=PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,params,galpar.scale)
 
 
@@ -384,7 +388,7 @@ def MulEllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps):
     dn = int(round(n/6.))
     nrows = (n-1)//dn + 1 # integer division
 
-
+    #note separate here in another function
     #begin plotting
     plt.clf()
 

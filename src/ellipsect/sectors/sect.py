@@ -269,7 +269,6 @@ def SectorsGalfit(args):
         #sectcomps=SectPhotComp(galpar, params, galcomps, n_sectors=numsectors, minlevel=minlevel)
         sectcomps=SectPhotComp(galpar, params, galcomps, n_sectors=numsectors, minlevel=0)
 
-    #lastmod
 
     print("creating plots..")
 
@@ -294,6 +293,7 @@ def SectorsGalfit(args):
 
     print("creating multi-plots..")
 
+    #note separate here in one for computation and other for plotting
     MulEllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps)
 
 
@@ -322,6 +322,7 @@ def SectorsGalfit(args):
         os.remove(galpar.tempmask) # removing temp mask file
 
 
+    #note evalue how to eliminate the most class and variables
     PassVars(photapi,params,galpar,galcomps)    
 
     return photapi

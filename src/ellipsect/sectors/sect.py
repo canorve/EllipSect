@@ -24,7 +24,11 @@ from ellipsect.lib.clas import InputParams
 def SectorsGalfit(args):
 
 
+    #note: remove this function
     params = PassArgs(args) # from now on, params is used instead of args
+
+    #note: change this class for two class: one for the galfit header
+    # and other for the galfit components
 
 
     #class for GALFIT's parameters
@@ -33,12 +37,16 @@ def SectorsGalfit(args):
     #class for GALFIT's components
     galcomps=GalfitComps()
 
+    #note: change for one class 
     #class for output photometry 
     photapi=PhotAPI()
 
+    #note: make one class for the ellipsect configuration
 
     ######################################
     ####### Read Galfit File #############
+    #note: use two: one for the header and other for the components
+    # create a class for reading
     ReadGALFITout(params,galpar)
     ######################################
     ######################################
@@ -53,6 +61,8 @@ def SectorsGalfit(args):
     if params.flagsky:
         galpar.skylevel=params.insky
 
+
+    #note: make one function to print all the configuration:
     str = "q = {} ".format(galpar.q)
     print(str)
 
@@ -92,7 +102,8 @@ def SectorsGalfit(args):
 
     #names of the output files based on prefix of galfit output
 
-    #(tmp)=galpar.outimage.split(".")
+
+    #note: make one function to save all the names: 
     root_ext = os.path.splitext(galpar.outimage)
 
     params.namefile = root_ext[0]
@@ -140,12 +151,12 @@ def SectorsGalfit(args):
         msg="output photometry file: {} ".format(params.output)
         print(msg)
 
-
+    #note: refactor this function move it above below reading the galfit header
     # read all the object components of the model in galfit.XX
     ReadNComp(params.galfile,galpar.xc,galpar.yc,galcomps,params.distmax)
     print("Number of components = ",len(galcomps.N))
 
-
+    #note: move the ifs below to a function. Consider to create a class for reading
     #reading galaxy and model images from file
     errmsg="file {} does not exist".format(galpar.outimage)
 
@@ -204,7 +215,7 @@ def SectorsGalfit(args):
     else:
         galpar.mask=None
     ####
-
+    #note: move to a function?
     ######################
     #shows the image cube#
     ######################{
@@ -248,6 +259,7 @@ def SectorsGalfit(args):
     sectgalax=sectmodel=sectcomps=[]
 
     #call to sectors_photometry for galaxy and model
+    #note: divide the function below in two separated:
     sectgalax,sectmodel=SectPhot(galpar, params, n_sectors=numsectors, minlevel=minlevel)
 
     
@@ -257,7 +269,7 @@ def SectorsGalfit(args):
         #sectcomps=SectPhotComp(galpar, params, galcomps, n_sectors=numsectors, minlevel=minlevel)
         sectcomps=SectPhotComp(galpar, params, galcomps, n_sectors=numsectors, minlevel=0)
 
-
+    #lastmod
 
     print("creating plots..")
 

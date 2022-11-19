@@ -17,6 +17,16 @@ def test_exit():
     assert e.type == SystemExit 
     assert e.value.code == 2 
 
+
+def test_galfit():
+
+    runcmd="galfit"
+    err = sp.run([runcmd],shell=True,stdout=sp.PIPE,stderr=sp.PIPE,universal_newlines=True)  
+
+    assert err.returncode == 0, "is GALFIT installed?"
+
+
+
 # checking the creation of files
 def test_files():
 

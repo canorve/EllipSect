@@ -60,7 +60,7 @@ def InitParsing():
                         help=linehelp)
  
     #options with arguments
-    parser.add_argument("-cn","--center",nargs=2,action="store", type=float, help="galaxy's center ")
+    parser.add_argument("-cn","--center",nargs=2,action="store", type=float, help="galaxy's center (x y positions) ")
 
     parser.add_argument("-q","--axisrat", type=float, help="galaxy axis ratio ")
     parser.add_argument("-pa","--posangle", type=float, help="position angle (same as GALFIT)  ",default=0)

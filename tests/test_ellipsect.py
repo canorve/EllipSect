@@ -3,6 +3,7 @@
 import pytest
 import os
 
+import subprocess as sp
 
 from ellipsect import ellipsectors 
 
@@ -20,7 +21,7 @@ def test_exit():
 
 def test_galfit():
 
-    runcmd="galfit"
+    runcmd="galfit -help"
     err = sp.run([runcmd],shell=True,stdout=sp.PIPE,stderr=sp.PIPE,universal_newlines=True)  
 
     assert err.returncode == 0, "is GALFIT installed?"

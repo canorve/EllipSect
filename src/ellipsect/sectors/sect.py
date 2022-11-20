@@ -18,14 +18,14 @@ from ellipsect.sectors.ellip import MulEllipSectors
 
 from ellipsect.phot.phot import OutPhot
 
-from ellipsect.lib.clas import InputParams
+from ellipsect.lib.clas import EllipSectConfig
 
 
 def SectorsGalfit(args):
 
 
     #note: remove this function
-    params = PassArgs(args) # from now on, params is used instead of args
+    ellconf = PassArgs(args) # from now on, ellconf is used instead of args
 
     #note: change this class for two class: one for the galfit header
     # and other for the galfit components
@@ -47,19 +47,19 @@ def SectorsGalfit(args):
     ####### Read Galfit File #############
     #note: use two: one for the header and other for the components
     # create a class for reading
-    ReadGALFITout(params,galpar)
+    ReadGALFITout(ellconf,galpar)
     ######################################
     ######################################
 
-    if params.flagq == True:
-        galpar.q=params.qarg
+    if ellconf.flagq == True:
+        galpar.q=ellconf.qarg
 
-    if params.flagpa == True:
-        galpar.ang=params.parg
+    if ellconf.flagpa == True:
+        galpar.ang=ellconf.parg
 
 
-    if params.flagsky:
-        galpar.skylevel=params.insky
+    if ellconf.flagsky:
+        galpar.skylevel=ellconf.insky
 
 
     #note: make one function to print all the configuration:
@@ -70,7 +70,7 @@ def SectorsGalfit(args):
     print(str)
 
     ##
-    str = "number of sectors = {}  ".format(params.sectors)
+    str = "number of sectors = {}  ".format(ellconf.sectors)
     print(str)
 
     print("\nother parameters: \n")
@@ -85,12 +85,12 @@ def SectorsGalfit(args):
     print(str)
 
     ##
-    str = "minlevel = {} ".format(params.minlevel)
+    str = "minlevel = {} ".format(ellconf.minlevel)
     print(str)
 
 
     ##
-    str = "for plots dpi = {} ".format(params.dpival)
+    str = "for plots dpi = {} ".format(ellconf.dpival)
     print(str)
     ##
 
@@ -106,54 +106,54 @@ def SectorsGalfit(args):
     #note: make one function to save all the names: 
     root_ext = os.path.splitext(galpar.outimage)
 
-    params.namefile = root_ext[0]
+    ellconf.namefile = root_ext[0]
 
     # names for the different png
 
-    params.namepng = params.namefile + ".png"
-    params.namesec = params.namefile + "-gal.png"
-    params.namemod = params.namefile + "-mod.png"
-    params.namemul = params.namefile + "-mul.png"
-    params.namesub = params.namefile + "-comp.fits"
+    ellconf.namepng = ellconf.namefile + ".png"
+    ellconf.namesec = ellconf.namefile + "-gal.png"
+    ellconf.namemod = ellconf.namefile + "-mod.png"
+    ellconf.namemul = ellconf.namefile + "-mul.png"
+    ellconf.namesub = ellconf.namefile + "-comp.fits"
 
-    params.namesig = params.namefile + "-sig.fits"
-
-
-    params.sboutput = params.namefile + "-sbout"
-    params.output = params.namefile + "-out.txt"
-
-    params.namened = params.namefile + "-ned.xml"
+    ellconf.namesig = ellconf.namefile + "-sig.fits"
 
 
+    ellconf.sboutput = ellconf.namefile + "-sbout"
+    ellconf.output = ellconf.namefile + "-out.txt"
 
-    params.namesnr = params.namefile + "-snr.fits"
+    ellconf.namened = ellconf.namefile + "-ned.xml"
 
-    params.namecheck = params.namefile + "-check.fits"
+
+
+    ellconf.namesnr = ellconf.namefile + "-snr.fits"
+
+    ellconf.namecheck = ellconf.namefile + "-check.fits"
     
-    params.namering = params.namefile + "-ring.fits"
+    ellconf.namering = ellconf.namefile + "-ring.fits"
     
-    params.nameringmask = params.namefile + "-ringmask.fits"
+    ellconf.nameringmask = ellconf.namefile + "-ringmask.fits"
 
-    params.namecube = params.namefile + "-cub.png"
+    ellconf.namecube = ellconf.namefile + "-cub.png"
 
 
 
-    if params.flagsbout == True: 
+    if ellconf.flagsbout == True: 
 
         if not os.path.exists("sbfiles"):
             print("Creating directory for  output photometry ... ")
             os.makedirs("sbfiles")
 
-        msg="prefix for surface brightness output file: {} ".format(params.sboutput)
+        msg="prefix for surface brightness output file: {} ".format(ellconf.sboutput)
         print(msg)
 
-    if params.flagphot == True: 
-        msg="output photometry file: {} ".format(params.output)
+    if ellconf.flagphot == True: 
+        msg="output photometry file: {} ".format(ellconf.output)
         print(msg)
 
     #note: refactor this function move it above below reading the galfit header
     # read all the object components of the model in galfit.XX
-    ReadNComp(params.galfile,galpar.xc,galpar.yc,galcomps,params.distmax)
+    ReadNComp(ellconf.galfile,galpar.xc,galpar.yc,galcomps,ellconf.distmax)
     print("Number of components = ",len(galcomps.N))
 
     #note: move the ifs below to a function. Consider to create a class for reading
@@ -162,7 +162,7 @@ def SectorsGalfit(args):
 
     assert os.path.isfile(galpar.outimage), errmsg
 
-    if params.flagmodel == False:
+    if ellconf.flagmodel == False:
         # hdu 1 => image   hdu 2 => model
         hdu = fits.open(galpar.outimage)
         galpar.img = (hdu[1].data.copy()).astype(float)
@@ -183,7 +183,7 @@ def SectorsGalfit(args):
 
         hdu.close()
 
-        hdu = fits.open(params.inputmodel)
+        hdu = fits.open(ellconf.inputmodel)
         galpar.model = (hdu[0].data).astype(float)
         hdu.close()
 
@@ -201,7 +201,7 @@ def SectorsGalfit(args):
         errmsg="file {} does not exist".format(galpar.tempmask)
         assert os.path.isfile(galpar.tempmask), errmsg
 
-        if params.flagmodel == False:
+        if ellconf.flagmodel == False:
             hdu = fits.open(galpar.tempmask)
             mask = hdu[0].data
             galpar.mask=np.array(mask,dtype=bool)
@@ -222,7 +222,7 @@ def SectorsGalfit(args):
 
     linewidth = 1.2
 
-    if (params.flagcomp):
+    if (ellconf.flagcomp):
 
         ell = Comp2Ellip(galpar, galcomps, linewidth)
     else:
@@ -231,11 +231,11 @@ def SectorsGalfit(args):
 
     #wcs = GetWCS(galpar.outimage) #removed
 
-    ShowCube(galpar.outimage, namepng = params.namecube, dpival 
-             = params.dpival, bri = params.brightness, con = params.contrast, 
-             frac = params.frac, fracmax = params.fracmax,  cmap = params.cmap, ellipse = ell)
+    ShowCube(galpar.outimage, namepng = ellconf.namecube, dpival 
+             = ellconf.dpival, bri = ellconf.brightness, con = ellconf.contrast, 
+             frac = ellconf.frac, fracmax = ellconf.fracmax,  cmap = ellconf.cmap, ellipse = ell)
 
-    if params.dplot:
+    if ellconf.dplot:
         plt.pause(1.5)
  
     plt.close()
@@ -249,32 +249,32 @@ def SectorsGalfit(args):
 
     #   numsectors=19
     #   numsectors=15
-    numsectors=params.sectors
+    numsectors=ellconf.sectors
 
     # minlevel=-100  # minimun value for sky
     # minlevel=15  # minimun value for sky
-    minlevel=params.minlevel  # minimun value for sky
+    minlevel=ellconf.minlevel  # minimun value for sky
 
     # initial values for image matrixes 
     sectgalax=sectmodel=sectcomps=[]
 
     #call to sectors_photometry for galaxy and model
     #note: divide the function below in two separated:
-    sectgalax,sectmodel=SectPhot(galpar, params, n_sectors=numsectors, minlevel=minlevel)
+    sectgalax,sectmodel=SectPhot(galpar, ellconf, n_sectors=numsectors, minlevel=minlevel)
 
     
-    if params.flagcomp:
+    if ellconf.flagcomp:
         #Note: sectors photometry for components always finished 
         # in minlevel = 0 regardless of the input -minlevel
-        #sectcomps=SectPhotComp(galpar, params, galcomps, n_sectors=numsectors, minlevel=minlevel)
-        sectcomps=SectPhotComp(galpar, params, galcomps, n_sectors=numsectors, minlevel=0)
+        #sectcomps=SectPhotComp(galpar, ellconf, galcomps, n_sectors=numsectors, minlevel=minlevel)
+        sectcomps=SectPhotComp(galpar, ellconf, galcomps, n_sectors=numsectors, minlevel=0)
 
 
     print("creating plots..")
 
-    limx,limy=EllipSectors(params, galpar, galcomps, sectgalax,sectmodel, sectcomps,n_sectors=numsectors)
+    limx,limy=EllipSectors(ellconf, galpar, galcomps, sectgalax,sectmodel, sectcomps,n_sectors=numsectors)
 
-    print("plot file: ", params.namepng)
+    print("plot file: ", ellconf.namepng)
  
 
 
@@ -282,9 +282,9 @@ def SectorsGalfit(args):
     ##############################################
     ##############################################
 
-    if params.dplot:
+    if ellconf.dplot:
         plt.pause(1.5)
-    plt.savefig(params.namepng,dpi=params.dpival)
+    plt.savefig(ellconf.namepng,dpi=ellconf.dpival)
     #plt.close()
 
     ########################################################
@@ -294,16 +294,16 @@ def SectorsGalfit(args):
     print("creating multi-plots..")
 
     #note separate here in one for computation and other for plotting
-    MulEllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps)
+    MulEllipSectors(ellconf, galpar, galcomps, sectgalax, sectmodel, sectcomps)
 
 
-    print("multi-plot file: ", params.namemul)
+    print("multi-plot file: ", ellconf.namemul)
 
 
-    if params.dplot:
+    if ellconf.dplot:
         plt.pause(1.5)
 
-    plt.savefig(params.namemul,dpi=params.dpival)
+    plt.savefig(ellconf.namemul,dpi=ellconf.dpival)
     plt.close()
 
 
@@ -312,10 +312,10 @@ def SectorsGalfit(args):
     ########################################################
 
 
-    if params.flagphot:
+    if ellconf.flagphot:
         print("Computing output photometry ... ")
 
-        OutPhot(params, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi)
+        OutPhot(ellconf, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi)
 
 
     if galpar.tempmask != None:
@@ -323,7 +323,7 @@ def SectorsGalfit(args):
 
 
     #note evalue how to eliminate the most class and variables
-    PassVars(photapi,params,galpar,galcomps)    
+    PassVars(photapi,ellconf,galpar,galcomps)    
 
     return photapi
 
@@ -331,7 +331,7 @@ def SectorsGalfit(args):
 
 
 
-def SectPhot(galpar, params, n_sectors=19, minlevel=0):
+def SectPhot(galpar, ellconf, n_sectors=19, minlevel=0):
     """ calls to function sectors_photometry for galaxy and model """
 
 
@@ -340,14 +340,14 @@ def SectPhot(galpar, params, n_sectors=19, minlevel=0):
 
     eps=1-galpar.q
 
-    if params.dplot:
+    if ellconf.dplot:
         plt.clf()
         print("")
 
     ############
     # I have to switch x and y values because they are different axes for
     # numpy:
-    if params.flagmodel == False:
+    if ellconf.flagmodel == False:
         yctemp=galpar.xc
         xctemp=galpar.yc
     else:
@@ -365,27 +365,27 @@ def SectPhot(galpar, params, n_sectors=19, minlevel=0):
 
 
     sectgalax = sectors_photometry(galpar.img, eps, angsec, xctemp, yctemp, minlevel=minlevel,
-            plot=params.dplot, badpixels=maskb, n_sectors=n_sectors)
+            plot=ellconf.dplot, badpixels=maskb, n_sectors=n_sectors)
 
 
-    if params.dplot:
+    if ellconf.dplot:
         plt.pause(1)  # Allow plot to appear on the screen
-        plt.savefig(params.namesec)
+        plt.savefig(ellconf.namesec)
 
     ###################################################
     
     #  model: 
     # user input minlevel
     #sectmodel = sectors_photometry(galpar.model, eps, angsec, xctemp, yctemp,minlevel=minlevel,
-    #        plot=params.dplot, badpixels=maskb, n_sectors=n_sectors)
+    #        plot=ellconf.dplot, badpixels=maskb, n_sectors=n_sectors)
     # minlevel =0
     sectmodel = sectors_photometry(galpar.model, eps, angsec, xctemp, yctemp,minlevel=0,
-            plot=params.dplot, badpixels=maskb, n_sectors=n_sectors)
+            plot=ellconf.dplot, badpixels=maskb, n_sectors=n_sectors)
 
 
-    if params.dplot:
+    if ellconf.dplot:
         plt.pause(1)  # Allow plot to appear on the screen
-        plt.savefig(params.namemod)
+        plt.savefig(ellconf.namemod)
 
 
 
@@ -393,80 +393,80 @@ def SectPhot(galpar, params, n_sectors=19, minlevel=0):
 
 
 #sectors/sect.py
-def SectPhotComp(galpar, params, galcomps, n_sectors=19, minlevel=0):
+def SectPhotComp(galpar, ellconf, galcomps, n_sectors=19, minlevel=0):
     """ calls to function sectors_photometry for subcomponents """
 
-    if (params.flagphot) and (not(os.path.isfile(params.namesig))):
+    if (ellconf.flagphot) and (not(os.path.isfile(ellconf.namesig))):
 
-        if ((os.path.isfile(params.namesub)) and (params.flagkeep)):
+        if ((os.path.isfile(ellconf.namesub)) and (ellconf.flagkeep)):
             print("using existing subcomponent model image file *-comp.fits")
 
             print("running galfit to create sigma image ...")
 
-            rungal = "galfit -outsig {}".format(params.galfile)
+            rungal = "galfit -outsig {}".format(ellconf.galfile)
             errgal = sp.run([rungal], shell=True, stdout=sp.PIPE, stderr=sp.PIPE,
                 universal_newlines=True)
 
             # changing name to sigma image
-            runchg = "mv sigma.fits {}".format(params.namesig)
+            runchg = "mv sigma.fits {}".format(ellconf.namesig)
             errchg = sp.run([runchg], shell=True, stdout=sp.PIPE, stderr=sp.PIPE,
                 universal_newlines=True)
 
-            errmsg="file {} does not exist".format(params.namesig)
-            assert os.path.isfile(params.namesig), errmsg
+            errmsg="file {} does not exist".format(ellconf.namesig)
+            assert os.path.isfile(ellconf.namesig), errmsg
 
         else:
 
             print("running galfit to create sigma image and individual model images...")
 
-            rungal = "galfit -o3 -outsig {}".format(params.galfile)
+            rungal = "galfit -o3 -outsig {}".format(ellconf.galfile)
             errgal = sp.run([rungal], shell=True, stdout=sp.PIPE, stderr=sp.PIPE,
                 universal_newlines=True)
 
             # changing name to subcomponents
-            runchg = "mv subcomps.fits {}".format(params.namesub)
+            runchg = "mv subcomps.fits {}".format(ellconf.namesub)
             errchg = sp.run([runchg], shell=True, stdout=sp.PIPE, stderr=sp.PIPE,
                 universal_newlines=True)
 
-            errmsg="file {} does not exist".format(params.namesub)
-            assert os.path.isfile(params.namesub), errmsg
+            errmsg="file {} does not exist".format(ellconf.namesub)
+            assert os.path.isfile(ellconf.namesub), errmsg
 
             # changing name to sigma image
 
-            runchg = "mv sigma.fits {}".format(params.namesig)
+            runchg = "mv sigma.fits {}".format(ellconf.namesig)
             errchg = sp.run([runchg], shell=True, stdout=sp.PIPE, stderr=sp.PIPE,
                 universal_newlines=True)
 
-            errmsg="file {} does not exist".format(params.namesig)
-            assert os.path.isfile(params.namesig), errmsg
+            errmsg="file {} does not exist".format(ellconf.namesig)
+            assert os.path.isfile(ellconf.namesig), errmsg
 
     else: 
 
-        if ((os.path.isfile(params.namesub)) and (params.flagkeep)):
+        if ((os.path.isfile(ellconf.namesub)) and (ellconf.flagkeep)):
             print("using existing subcomponent model image file *-comp.fits")
         else:
 
             print("running galfit to create individual model images...")
 
-            rungal = "galfit -o3 {}".format(params.galfile)
+            rungal = "galfit -o3 {}".format(ellconf.galfile)
             errgal = sp.run([rungal], shell=True, stdout=sp.PIPE, stderr=sp.PIPE,
                 universal_newlines=True)
 
             # changing name to subcomponents
-            runchg = "mv subcomps.fits {}".format(params.namesub)
+            runchg = "mv subcomps.fits {}".format(ellconf.namesub)
             errchg = sp.run([runchg], shell=True, stdout=sp.PIPE, stderr=sp.PIPE,
                 universal_newlines=True)
 
-            errmsg="file {} does not exist".format(params.namesub)
-            assert os.path.isfile(params.namesub), errmsg
+            errmsg="file {} does not exist".format(ellconf.namesub)
+            assert os.path.isfile(ellconf.namesub), errmsg
 
 
-        if (os.path.isfile(params.namesig) and (params.flagphot)):
+        if (os.path.isfile(ellconf.namesig) and (ellconf.flagphot)):
             print("using existing sigma image")
 
     ##
 
-    hdu = fits.open(params.namesub)
+    hdu = fits.open(ellconf.namesub)
 
     subimgs=[]
 
@@ -516,7 +516,7 @@ def SectPhotComp(galpar, params, galcomps, n_sectors=19, minlevel=0):
         angsec=90-galcomps.PosAng[n]
 
 
-        if params.flagcheck:
+        if ellconf.flagcheck:
             scmp = sectors_photometry(subim, eps, angsec, xctemp, yctemp,minlevel=minlevel,plot=1, badpixels=maskb, n_sectors=n_sectors)
             plt.savefig("Comp"+str(n)+".png")
         else:
@@ -584,44 +584,44 @@ def Comp2Ellip(galpar,galcomps,lw=1):
 
 
 
-def PassVars(photapi,params,galpar,galcomps):
+def PassVars(photapi,ellconf,galpar,galcomps):
 
     #################
     #from InputParams
-    #params=InputParams()
+    #ellconf=InputParams()
 
     #input file
-    photapi.galfile=params.galfile 
+    photapi.galfile=ellconf.galfile 
 
     #sb output file
-    photapi.sboutput =params.sboutput
+    photapi.sboutput =ellconf.sboutput
 
     #output file
-    photapi.output =params.output
+    photapi.output =ellconf.output
 
     # input image model
-    photapi.inputmodel=params.inputmodel
+    photapi.inputmodel=ellconf.inputmodel
 
 
     # object name to search in NED
-    photapi.objname=params.objname
-    photapi.namefile=params.namefile
-    photapi.namepng=params.namepng
-    photapi.namesec=params.namesec
-    photapi.namemod=params.namemod
-    photapi.namemul=params.namemul
-    photapi.namesub=params.namesub
-    photapi.namesig=params.namesig
-    photapi.namesnr=params.namesnr
-    photapi.namened=params.namened
-    photapi.namecheck=params.namecheck
-    photapi.namering=params.namering
-    photapi.nedfile=params.nedfile
+    photapi.objname=ellconf.objname
+    photapi.namefile=ellconf.namefile
+    photapi.namepng=ellconf.namepng
+    photapi.namesec=ellconf.namesec
+    photapi.namemod=ellconf.namemod
+    photapi.namemul=ellconf.namemul
+    photapi.namesub=ellconf.namesub
+    photapi.namesig=ellconf.namesig
+    photapi.namesnr=ellconf.namesnr
+    photapi.namened=ellconf.namened
+    photapi.namecheck=ellconf.namecheck
+    photapi.namering=ellconf.namering
+    photapi.nedfile=ellconf.nedfile
 
 
     #################
     #from GalfitParams
-    #galpar=GalfitParams()
+    #galpar=Galfitellconf()
 
 
     photapi.xc=galpar.xc
@@ -695,198 +695,198 @@ def PassVars(photapi,params,galpar,galcomps):
 
 
 def PassArgs(args):
-    '''function to pass arguments from args to params'''
+    '''function to pass arguments from args to ellconf'''
 
     # Note: This function shouldn't exist, but since 
     # I didn't know about the argparse library when 
-    # I start this project, I have to create this function
+    # I started this project, I have to create this function
     # to pass the arguments from argparse to my old parsing arguments
     # this is the minimum thing to do without modifying the rest 
     # of the code.
 
     #class for user's parameters
-    params=InputParams()
+    ellconf = EllipSectConfig()
 
-    # passing to params
+    # passing to ellconf
     ##########################
-    params.galfile= args.GalFile 
+    ellconf.galfile = args.GalFile 
     ##########################
 
     #options without arguments
 
     if args.logx:
-        params.flaglogx=True
+        ellconf.flaglogx=True
 
     if args.comp:
-        params.flagcomp=True
+        ellconf.flagcomp=True
  
     if args.pix:
-        params.flagpix=True
+        ellconf.flagpix=True
  
     if args.grid:
-        params.flagrid=True
+        ellconf.flagrid=True
  
     if args.sbout:
-        params.flagsbout=True
+        ellconf.flagsbout=True
  
     if args.noplot:
-        params.flagnoplot=True
-        params.dplot=False
+        ellconf.flagnoplot=True
+        ellconf.dplot=False
 
     if args.phot:
-        params.flagphot=True
+        ellconf.flagphot=True
  
     if args.checkimg:
-        params.flagcheck=True
+        ellconf.flagcheck=True
  
     if args.noned:
-        params.flagned=True
+        ellconf.flagned=True
  
     if args.gradsky:
-        params.flagradsky=True
+        ellconf.flagradsky=True
 
     if args.randsky:
-        params.flagrandboxsky=True
+        ellconf.flagrandboxsky=True
 
     if args.snr:
-        params.flagsnr=True
+        ellconf.flagsnr=True
  
     if args.keep:
-        params.flagkeep=True
+        ellconf.flagkeep=True
 
     if args.galax:
-        params.flagalax=True
+        ellconf.flagalax=True
 
     if args.allskypx:
-        params.flagrmsky=False
+        ellconf.flagrmsky=False
 
 
 
     #options with arguments
 
     if args.center:
-        params.flagcent = True
-        params.xc = args.center[0]
-        params.yc = args.center[1]
+        ellconf.flagcent = True
+        ellconf.xc = args.center[0]
+        ellconf.yc = args.center[1]
 
 
     if args.axisrat:
-        params.flagq = True
-        params.qarg = args.axisrat  
+        ellconf.flagq = True
+        ellconf.qarg = args.axisrat  
 
     if args.posangle:
-        params.flagpa= True
-        params.parg = args.posangle  
+        ellconf.flagpa= True
+        ellconf.parg = args.posangle  
 
 
     if args.ranx:
-        params.flagranx=True
-        params.ranx=args.ranx
+        ellconf.flagranx=True
+        ellconf.ranx=args.ranx
 
     if args.rany:
-        params.flagrany=True
-        params.rany=args.rany
+        ellconf.flagrany=True
+        ellconf.rany=args.rany
 
 
     if args.dotsinch:
-        params.flagdpi = True
-        params.dpival = args.dotsinch
+        ellconf.flagdpi = True
+        ellconf.dpival = args.dotsinch
 
     if args.minlevel:
-        params.flagminlevel= True
-        params.minlevel= args.minlevel
+        ellconf.flagminlevel= True
+        ellconf.minlevel= args.minlevel
 
     if args.sectors:
-        params.flagsectors= True
-        params.sectors= args.sectors
+        ellconf.flagsectors= True
+        ellconf.sectors= args.sectors
 
     if args.object:
-        params.flagobj= True
-        params.objname= args.object
+        ellconf.flagobj= True
+        ellconf.objname= args.object
 
     if args.filter:
-        params.flagband= True
-        params.band= args.filter
+        ellconf.flagband= True
+        ellconf.band= args.filter
 
     if args.distmod:
-        params.flagmod = True
-        params.InDistMod = args.distmod
+        ellconf.flagmod = True
+        ellconf.InDistMod = args.distmod
 
     if args.magcor:
-        params.flagmag= True
-        params.InMagCor= args.magcor
+        ellconf.flagmag= True
+        ellconf.InMagCor= args.magcor
 
     if args.scalekpc:
-        params.flagscale= True
-        params.InScale= args.scalekpc
+        ellconf.flagscale= True
+        ellconf.InScale= args.scalekpc
 
     if args.sbdim:
-        params.flagdim= True
-        params.InSbDim= args.sbdim
+        ellconf.flagdim= True
+        ellconf.InSbDim= args.sbdim
 
     if args.model:
-        params.flagmodel= True
-        params.inputmodel= args.model
+        ellconf.flagmodel= True
+        ellconf.inputmodel= args.model
 
     if args.sky:
-        params.flagsky= True
-        params.insky= args.sky
+        ellconf.flagsky= True
+        ellconf.insky= args.sky
 
     if args.ned:
-        params.flagnedfile= True
-        params.nedfile= args.ned
+        ellconf.flagnedfile= True
+        ellconf.nedfile= args.ned
 
     if args.radinit:
-        params.flagskyRad= True
-        params.skyRad= args.radinit
+        ellconf.flagskyRad= True
+        ellconf.skyRad= args.radinit
 
     if args.skyradmax:
-        params.flagskyRadmax= True
-        params.skyRadmax= args.skyradmax
+        ellconf.flagskyRadmax= True
+        ellconf.skyRadmax= args.skyradmax
 
     if args.skybox:
-        params.flagskybox= True
-        params.skybox= args.skybox
+        ellconf.flagskybox= True
+        ellconf.skybox= args.skybox
   
     if args.skynum:
-        params.flagskynum= True
-        params.skynum= args.skynum
+        ellconf.flagskynum= True
+        ellconf.skynum= args.skynum
 
     if args.skywidth:
-        params.flagskywidth= True
-        params.skywidth= args.skywidth
+        ellconf.flagskywidth= True
+        ellconf.skywidth= args.skywidth
 
     if args.distmax:
-        params.flagdistmax= True
-        params.distmax= args.distmax
+        ellconf.flagdistmax= True
+        ellconf.distmax= args.distmax
    
     if args.fwhm:
-        params.flagfwhm= True
-        params.fwhm= args.fwhm
+        ellconf.flagfwhm= True
+        ellconf.fwhm= args.fwhm
 
     if args.brightness:
-        params.brightness = args.brightness
+        ellconf.brightness = args.brightness
 
 
     if args.contrast:
-        params.contrast = args.contrast
+        ellconf.contrast = args.contrast
 
 
     if args.frac:
-        params.frac = args.frac
+        ellconf.frac = args.frac
 
     if args.fracmax:
-        params.fracmax = args.fracmax
+        ellconf.fracmax = args.fracmax
 
 
 
 
     if args.cmap:
-        params.cmap = args.cmap
+        ellconf.cmap = args.cmap
 
 
 
-    return params
+    return ellconf
 
 
 

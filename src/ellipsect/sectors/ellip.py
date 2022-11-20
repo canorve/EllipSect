@@ -17,7 +17,7 @@ from ellipsect.inout.prt import PrintFilesComps
 
 from ellipsect.sky.sky import SkyCal
 
-def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sectors=19, minlevel=0):
+def EllipSectors(ellconf, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sectors=19, minlevel=0):
 
 
     xradm = []
@@ -70,7 +70,7 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
     #note: move the sky section to a function
 
     #  gradient sky method:
-    if params.flagradsky:
+    if ellconf.flagradsky:
 
         # computing sky with the gradient method
         print("Computing sky as a reference. This won't be used for output photometry")
@@ -85,23 +85,23 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
         #e = 1 - galpar.q
         q = galpar.q
 
-        width = params.skywidth
+        width = ellconf.skywidth
 
 
         ###
         Rinit = 1
 
-        if not(params.flagskyRad):
+        if not(ellconf.flagskyRad):
 
             rad90= Re90(galpar.rad,galpar.serind) 
             Rinit = 1*rad90 # 1 times the R 90% of light radius
 
             if (Rinit < 50): # Rinit can not be less than the default value 
                 Rinit = 50 
-            params.skyRad = Rinit # save value for output
+            ellconf.skyRad = Rinit # save value for output
 
         else:
-            Rinit = params.skyRad
+            Rinit = ellconf.skyRad
             
 
 
@@ -116,7 +116,7 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
         line="using xx = {} yy  = {}".format(xx,yy)
         print(line)
 
-        if params.flagrmsky:
+        if ellconf.flagrmsky:
             line="removing top 80% and bottom 20% of sky pixels for every ring "
             print(line)
 
@@ -125,8 +125,8 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
 
         mean,std, median,rad = SkyCal().GetEllipSky(ImageFile,MaskFile,xx,yy,
                                                     thetadeg,q,Rinit,width,
-                                                    params.namering,params.nameringmask,
-                                                    outliers=params.flagrmsky)
+                                                    ellconf.namering,ellconf.nameringmask,
+                                                    outliers=ellconf.flagrmsky)
 
         line="Total sky:  mean = {:.2f}; std={:.2f}; median = {:.2f} ".format(mean,std,median)
         print(line)
@@ -138,7 +138,7 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
 
 
     #  random sky method:
-    if params.flagrandboxsky:
+    if ellconf.flagrandboxsky:
 
         # computing sky  using random boxes across the image
         print("Computing sky as a reference. This won't be used for output photometry")
@@ -155,23 +155,23 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
 
         ###
 
-        box = params.skybox
-        num = params.skynum
+        box = ellconf.skybox
+        num = ellconf.skynum
 
 
         ###
         Rinit = 1
 
-        if not(params.flagskyRad):
+        if not(ellconf.flagskyRad):
 
             rad90= Re90(galpar.rad,galpar.serind) 
             Rinit = 2.5*rad90 # 2 times the R 90% of light radius
 
             if (Rinit < 100): # Rinit can not be less than the default value 
                 Rinit = 100 
-            params.skyRad = Rinit # save value for output
+            ellconf.skyRad = Rinit # save value for output
         else:
-            Rinit = params.skyRad
+            Rinit = ellconf.skyRad
 
 
         print("computing sky with the random box method")
@@ -179,20 +179,20 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
         line="using Rad = {:.2f}, box size= {}, number of boxes = {}".format(Rinit,box,num)
         print(line)
 
-        if params.flagrmsky:
+        if ellconf.flagrmsky:
             line="removing top 80% and bottom 20% of sky pixels for every box "
             print(line)
 
 
         ##
-        if params.flagskyRadmax:
-            Rmax = params.skyRadmax
+        if ellconf.flagskyRadmax:
+            Rmax = ellconf.skyRadmax
         else:
             Rmax = 0
 
         mean,std, median = SkyCal().RandBox(ImageFile,MaskFile,xx,yy,
                                                 thetadeg,q,Rinit,box,num,Rmax,
-                                                outliers=params.flagrmsky)
+                                                outliers=ellconf.flagrmsky)
         #
 
         line="Total sky:  mean = {:.2f}; std = {:.2f}; median = {:.2f}".format(mean,std,median)
@@ -241,22 +241,22 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
     ##### Plotting
     #note separate the galax and model in two separated functions
     # or class, evaluate
-    limx,limy,axsec=PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,params,galpar.scale)
+    limx,limy,axsec=PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,ellconf,galpar.scale)
 
 
     ### surface brightness output file
 
-    if params.flagsbout == True: 
+    if ellconf.flagsbout == True: 
 
         #print to file    
-        PrintEllFilesGax(params,galpar,xradq,ysbq,ysberrq,xradm,ysbm,ysberrm)
+        PrintEllFilesGax(ellconf,galpar,xradq,ysbq,ysberrq,xradm,ysbm,ysberrm)
 
 
     #### Creating Subcomponents images with Galfit
 
-    if params.flagcomp:
+    if ellconf.flagcomp:
 
-        xradq,ysbq,n=SubComp(params, galpar, galcomps, sectcomps, axsec, n_sectors=n_sectors)
+        xradq,ysbq,n=SubComp(ellconf, galpar, galcomps, sectcomps, axsec, n_sectors=n_sectors)
 
 
     axsec.legend(loc=1)
@@ -264,7 +264,7 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
     return limx,limy
 
 #sectors/ellipsectors.py
-def MulEllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps):
+def MulEllipSectors(ellconf, galpar, galcomps, sectgalax, sectmodel, sectcomps):
 
   
     fignum=1
@@ -273,11 +273,11 @@ def MulEllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps):
     eps=1-galpar.q
 
 
-    if params.flagranx == True:
-        (xmin,xmax)=params.ranx[0], params.ranx[1]
+    if ellconf.flagranx == True:
+        (xmin,xmax)=ellconf.ranx[0], ellconf.ranx[1]
 
-    if params.flagrany == True:
-        (ymin,ymax)=params.rany[0], params.rany[1]
+    if ellconf.flagrany == True:
+        (ymin,ymax)=ellconf.rany[0], ellconf.rany[1]
 
 
 
@@ -329,7 +329,7 @@ def MulEllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps):
     mgemodsb= galpar.mgzpt - 2.5*np.log10(mgemodcount/galpar.exptime) + 2.5*np.log10(galpar.scale**2) + 0.1
 
 
-    if params.flagcomp:
+    if ellconf.flagcomp:
 
         angtemp=[]
         mgesbsub=[]
@@ -396,7 +396,7 @@ def MulEllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps):
     fig.subplots_adjust(hspace=0.01)
 
 
-    if params.flagpix:
+    if ellconf.flagpix:
         axpix = axsec[0,0].twiny()
         axpix2 = axsec[0,1].twiny()
 
@@ -406,9 +406,9 @@ def MulEllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps):
     axsec[-1, 0].set_xlabel("radius ('')")
     axsec[-1, 1].set_xlabel("radius ('')")
 
-    if params.flaglogx == True:
+    if ellconf.flaglogx == True:
         axsec[-1, 0].xaxis.set_major_locator(LogLocator(base=10.0, numticks=15))
-        if params.flagpix:
+        if ellconf.flagpix:
             axpix.set_xscale("log")
             axpix2.set_xscale("log")
 
@@ -419,7 +419,7 @@ def MulEllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps):
     axsec[-1, 0].tick_params(which='major', length=7)
     axsec[-1, 0].tick_params(which='minor', length=4, color='r')
 
-    if params.flaglogx == True:
+    if ellconf.flaglogx == True:
         axsec[-1, 0].xaxis.set_major_locator(LogLocator(base=10.0, numticks=15))
     else:
         axsec[-1, 0].xaxis.set_minor_locator(AutoMinorLocator())
@@ -463,20 +463,20 @@ def MulEllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps):
         txtminor= "minor axis"
         txtmajor= "major axis"
 
-        if params.flagranx == True:
+        if ellconf.flagranx == True:
             axsec[row, 0].set_xlim(xmin,xmax)
         else:
             axsec[row, 0].set_xlim(xran)
 
-        if params.flagrany == True:
+        if ellconf.flagrany == True:
             axsec[row, 0].set_ylim(ymax,ymin) #inverted
         else:
             axsec[row, 0].set_ylim(yran)
 
 
         #begin psf fwhm 
-        if params.flagfwhm: 
-            xpos = params.fwhm*galpar.scale
+        if ellconf.flagfwhm: 
+            xpos = ellconf.fwhm*galpar.scale
             axsec[row, 0].axvline(x=xpos,  linestyle='--', color='k', linewidth=2)
         # end 
 
@@ -484,13 +484,13 @@ def MulEllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps):
 
 
 
-        if params.flaglogx == False:
+        if ellconf.flaglogx == False:
 
             #axsec[row, 0].plot(r, mgesb[angal], 'C3o') 
             #change lines instead of dots
             axsec[row, 0].plot(r, mgesb[angal], 'C3-',linewidth=2)
 
-            if params.flagalax == False:
+            if ellconf.flagalax == False:
                 axsec[row, 0].plot(r2, mgemodsb[angmod], 'C0-', linewidth=1.5)
 
         else:
@@ -499,17 +499,17 @@ def MulEllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps):
             #change lines instead of dots
             axsec[row, 0].semilogx(r, mgesb[angal], 'C3-', linewidth=2)
 
-            if params.flagalax == False:
+            if ellconf.flagalax == False:
                 axsec[row, 0].semilogx(r2, mgemodsb[angmod], 'C0-', linewidth=1.5)
 
-        if params.flagsbout == True: 
+        if ellconf.flagsbout == True: 
 
             rtxtang=np.int32(np.round(txtang)) 
 
-            PrintFilesGax(params,galpar,rtxtang,r,mgesb,angal,r2,mgemodsb,angmod)
+            PrintFilesGax(ellconf,galpar,rtxtang,r,mgesb,angal,r2,mgemodsb,angmod)
 
 
-        if params.flagrid == True:
+        if ellconf.flagrid == True:
             # Customize the major grid
             axsec[row,0].grid(which='major', linestyle='-', linewidth='0.7', color='black')
             # Customize the minor grid
@@ -517,7 +517,7 @@ def MulEllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps):
 
             #  axsec[row,0].grid(True)
 
-        if params.flagcomp == True:
+        if ellconf.flagcomp == True:
             ii=0
                 #color value
             values = range(len(galcomps.N))
@@ -571,18 +571,18 @@ def MulEllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps):
                 rtemp = mgeradsub[ii][angtemp]
 
                 colorval = scalarMap.to_rgba(values[ii])
-                if params.flaglogx == False:
+                if ellconf.flaglogx == False:
                 #    axsec[row, 0].plot(rtemp, mgesbsub[ii][angtemp],'--',color='skyblue', linewidth=2)
                     axsec[row, 0].plot(rtemp, mgesbsub[ii][angtemp],'--',color=colorval, linewidth=1.5)
                 else:
                     axsec[row, 0].semilogx(rtemp, mgesbsub[ii][angtemp], '--',color=colorval, linewidth=1.5)
 
                 #introduce output 
-                if params.flagsbout == True:
+                if ellconf.flagsbout == True:
                     ncomp=ii+1
                     ncomp=str(ncomp)
 
-                    PrintFilesComps(params,galpar,galcomps,rtxtang,ncomp,diffangle,rtemp,mgesbsub,ii,angtemp)
+                    PrintFilesComps(ellconf,galpar,galcomps,rtxtang,ncomp,diffangle,rtemp,mgesbsub,ii,angtemp)
 
                 ii+=1
 
@@ -624,7 +624,7 @@ def MulEllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps):
             axsec[row, 1].text(0.98, 0.10, txtminor,fontweight='bold',fontsize=8.5, ha='right', va='bottom', transform=axsec[row, 1].transAxes)
 
 
-        if params.flagranx == True:
+        if ellconf.flagranx == True:
             axsec[row, 1].set_xlim(xmin,xmax)
         else:
             axsec[row, 1].set_xlim(xran)
@@ -650,12 +650,12 @@ def MulEllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps):
         row += 1
 
 
-    if params.flagpix == True:
+    if ellconf.flagpix == True:
         axpix.set_xlabel("(pixels)")
      
         #x1, x2 = axsec[7,0].get_xlim() ## buggy for some data have to change it for code below:
         
-        if params.flagranx == True:
+        if ellconf.flagranx == True:
             x1=xmin
             x2=xmax
         else:
@@ -670,7 +670,7 @@ def MulEllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps):
         axpix2.figure.canvas.draw()
 
         ##
-        if params.flaglogx == True:
+        if ellconf.flaglogx == True:
             axpix.xaxis.set_major_locator(LogLocator(base=10.0, numticks=15))
         else:
             axpix.xaxis.set_minor_locator(AutoMinorLocator())
@@ -679,7 +679,7 @@ def MulEllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps):
         axpix.tick_params(which='major', length=7)
         axpix.tick_params(which='minor', length=4, color='r')
 
-        if params.flaglogx == True:
+        if ellconf.flaglogx == True:
             axpix2.xaxis.set_major_locator(LogLocator(base=10.0, numticks=15))
         else:
             axpix2.xaxis.set_minor_locator(AutoMinorLocator())

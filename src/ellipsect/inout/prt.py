@@ -6,11 +6,11 @@ from ellipsect import *
 import ellipsect
 
 
-def PrintEllFilesGax(params,galpar,xradq,ysbq,ysberrq,xradm,ysbm,ysberrm):
+def PrintEllFilesGax(ellconf,galpar,xradq,ysbq,ysberrq,xradm,ysbm,ysberrm):
     "print surface brightness of galaxy and model to file"
 
     # output for galaxy
-    filegal=params.sboutput+".gal.txt"
+    filegal=ellconf.sboutput+".gal.txt"
     OUTFH = open (filegal,"w")
 
     lineout= "#        sectors_photometry used with q={} and pa={} (same as GALFIT) \n".format(galpar.q,galpar.ang)
@@ -42,7 +42,7 @@ def PrintEllFilesGax(params,galpar,xradq,ysbq,ysberrq,xradm,ysbm,ysberrm):
     OUTFH.close()
 
     # output for model 
-    filemodel=params.sboutput+".mod.txt"
+    filemodel=ellconf.sboutput+".mod.txt"
     OUTFH = open (filemodel,"w")
 
     lineout= "#        sectors_photometry used with q={} and pa={} (same as GALFIT) \n".format(galpar.q,galpar.ang)
@@ -85,11 +85,11 @@ def PrintEllFilesGax(params,galpar,xradq,ysbq,ysberrq,xradm,ysbm,ysberrm):
                        stderr=sp.PIPE, universal_newlines=True)
 
 #io/print.py
-def PrintEllFilesComps(params,galpar,namecomp,ncomp,xradq,ysbq,ysberrq):
+def PrintEllFilesComps(ellconf,galpar,namecomp,ncomp,xradq,ysbq,ysberrq):
     "Print surface brigthness of components to file "
     #subcomponent model 
 
-    filesub = params.sboutput+".comp-"+ncomp+".txt"
+    filesub = ellconf.sboutput+".comp-"+ncomp+".txt"
     OUTFH = open (filesub,"w")
 
     lineout= "# sectors_photometry used with  q = {} and pa = {} (same as GALFIT) \n".format(galpar.q,galpar.ang)
@@ -128,11 +128,11 @@ def PrintEllFilesComps(params,galpar,namecomp,ncomp,xradq,ysbq,ysberrq):
 
 
 #io/print.py
-def PrintFilesGax(params,galpar,rtxtang,r,mgesb,angal,r2,mgemodsb,angmod):
+def PrintFilesGax(ellconf,galpar,rtxtang,r,mgesb,angal,r2,mgemodsb,angmod):
     "Print surface parameters of galaxy and model to outfile "
 
     # galaxy
-    filegalax=params.sboutput+"-"+str(rtxtang)+".gal.txt"
+    filegalax=ellconf.sboutput+"-"+str(rtxtang)+".gal.txt"
     OUTFH = open (filegalax,"w")
 
     lineout= "# Surface brigthness profiles measured in ang = {} from major axis (0 deg)\n".format(rtxtang)
@@ -169,7 +169,7 @@ def PrintFilesGax(params,galpar,rtxtang,r,mgesb,angal,r2,mgemodsb,angmod):
     OUTFH.close()
 
     #model
-    filemodel=params.sboutput+"-"+str(rtxtang)+".mod.txt"
+    filemodel=ellconf.sboutput+"-"+str(rtxtang)+".mod.txt"
     OUTFH = open (filemodel,"w")
 
     lineout= "# Surface brigthness profiles measured in ang = {} from major axis (0 deg)\n".format(rtxtang)
@@ -215,11 +215,11 @@ def PrintFilesGax(params,galpar,rtxtang,r,mgesb,angal,r2,mgemodsb,angmod):
 
 
 #io/print.py
-def PrintFilesComps(params,galpar,galcomps,rtxtang,ncomp,diffangle,rtemp,mgesbsub,ii,angtemp):
+def PrintFilesComps(ellconf,galpar,galcomps,rtxtang,ncomp,diffangle,rtemp,mgesbsub,ii,angtemp):
 
     #subcomponent model 
 
-    filesub=params.sboutput+"-"+str(rtxtang)+".comp-"+ncomp+".txt"
+    filesub=ellconf.sboutput+"-"+str(rtxtang)+".comp-"+ncomp+".txt"
     OUTFH = open (filesub,"w")
 
     lineout= "# Surface brigthness profiles measured in ang = {} from major axis (0 deg)\n".format(rtxtang)

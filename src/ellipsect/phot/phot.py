@@ -30,7 +30,7 @@ SunMag = {
 
 
 
-def OutPhot(params, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi):
+def OutPhot(ellconf, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi):
     """ Output photometry for further analysis """
 
 
@@ -167,22 +167,22 @@ def OutPhot(params, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi):
 
 
     # create sigma image
-    if(not(os.path.isfile(params.namesig))):
+    if(not(os.path.isfile(ellconf.namesig))):
 
         print("running galfit to create sigma image...")
 
-        rungal = "galfit -o2 -outsig {} ".format(params.galfile) 
+        rungal = "galfit -o2 -outsig {} ".format(ellconf.galfile) 
         errgal = sp.run([rungal], shell=True, stdout=sp.PIPE, stderr=sp.PIPE,
             universal_newlines=True)
 
-        runchg = "mv sigma.fits {}".format(params.namesig)
+        runchg = "mv sigma.fits {}".format(ellconf.namesig)
         errchg = sp.run([runchg], shell=True, stdout=sp.PIPE, stderr=sp.PIPE,
             universal_newlines=True)
 
-        errmsg="file {} does not exist".format(params.namesig)
-        assert os.path.isfile(params.namesig), errmsg
+        errmsg="file {} does not exist".format(ellconf.namesig)
+        assert os.path.isfile(ellconf.namesig), errmsg
     else:
-        if not(params.flagcomp):
+        if not(ellconf.flagcomp):
             print("using existing sigma image ")
 
 
@@ -192,7 +192,7 @@ def OutPhot(params, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi):
 
 
     # call to Tidal
-    (tidal,objchinu,bump,snr,stdsnr,totsnr,rss,ndof,magalaper,magmodaper)=Tidal(params, galpar, galcomps, sectgalax, 2)
+    (tidal,objchinu,bump,snr,stdsnr,totsnr,rss,ndof,magalaper,magmodaper)=Tidal(ellconf, galpar, galcomps, sectgalax, 2)
 
     # returns warnings to normal
     if not sys.warnoptions:
@@ -222,51 +222,51 @@ def OutPhot(params, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi):
 
 
 
-    if not(params.flagobj):
+    if not(ellconf.flagobj):
         if "OBJECT" in header: 
-            params.objname=header["OBJECT"] 
-            params.flagobj=True
-            print("using object name: {} to search in NED ".format(params.objname))            
+            ellconf.objname=header["OBJECT"] 
+            ellconf.flagobj=True
+            print("using object name: {} to search in NED ".format(ellconf.objname))            
 
         elif "TARGNAME" in header:  
-            params.objname=header["TARGNAME"] 
-            params.flagobj=True
-            print("using object name: {} to search in NED ".format(params.objname))            
+            ellconf.objname=header["TARGNAME"] 
+            ellconf.flagobj=True
+            print("using object name: {} to search in NED ".format(ellconf.objname))            
         else:
             print("WARNING: name for object not found in header nor it was provided by user") 
             print("Luminosity and absolute magnitude will not be computed") 
             print("Luminosity and absolute magnitude for individual components will have wrong quantities ") 
 
     else:
-        print("using object name: {} to search in NED ".format(params.objname))            
+        print("using object name: {} to search in NED ".format(ellconf.objname))            
 
 
-    if not(params.flagband):
+    if not(ellconf.flagband):
         if "BAND" in header: 
-            params.flagband = True
-            params.band=header["BAND"] 
+            ellconf.flagband = True
+            ellconf.band=header["BAND"] 
         elif "FILTER" in header: 
-            params.flagband = True
-            params.band=header["FILTER"] 
+            ellconf.flagband = True
+            ellconf.band=header["FILTER"] 
         elif "FILTNAM" in header: 
-            params.flagband = True
-            params.band=header["FILTNAM"] 
+            ellconf.flagband = True
+            ellconf.band=header["FILTNAM"] 
         elif "FILTNAM1" in header: 
-            params.flagband = True
-            params.band=header["FILTNAM1"] 
+            ellconf.flagband = True
+            ellconf.band=header["FILTNAM1"] 
         else:
-            print("WARNING: filter not found. Using default filter: ",params.band) 
+            print("WARNING: filter not found. Using default filter: ",ellconf.band) 
             print("use --filter option to change band") 
     else:
-        print("using {} band to correct for galactic extinction ".format(params.band)) 
+        print("using {} band to correct for galactic extinction ".format(ellconf.band)) 
 
-    if (params.flagobj and not(params.flagned)): 
-        (GalExt,DistMod,DistMod2,Scalekpc,SbDim)=NED(params, galpar, galcomps)
+    if (ellconf.flagobj and not(ellconf.flagned)): 
+        (GalExt,DistMod,DistMod2,Scalekpc,SbDim)=NED(ellconf, galpar, galcomps)
     else:
-        if params.flagned: 
+        if ellconf.flagned: 
             print("No search in NED because it is indicated by the user")
             print("Lum and abs Mag will not be computed")
-        elif not(params.flagobj):
+        elif not(ellconf.flagobj):
             print("No search in NED. Object name not provided or not found in Header")
             print("Lum and abs Mag will not be computed")
 
@@ -292,8 +292,8 @@ def OutPhot(params, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi):
         #No K correction applied:
         galcomps.AbsMag[maskmag] = CompCorMag - DistMod2 # AbsMag using distance modulus independent of z 
 
-        if params.band in SunMag:
-            MSun = SunMag[params.band]
+        if ellconf.band in SunMag:
+            MSun = SunMag[ellconf.band]
 
             #Lum = 10**((MSun - AbsMag)/2.5) Luminosity will  now be computed using AbsMag2
             Lum = 10**((MSun - AbsMag2)/2.5)
@@ -301,14 +301,14 @@ def OutPhot(params, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi):
             galcomps.Lum[maskmag]= 10**((MSun - galcomps.AbsMag[maskmag])/2.5)
 
         else:
-            print("Absolute Magnitude for Band {} was not found. Check filter name ".format(params.band))
+            print("Absolute Magnitude for Band {} was not found. Check filter name ".format(ellconf.band))
             print("Luminosity will not be computed.")
 
             Lum = 0
 
         #print("Magnitud Absoluta",AbsMag)
         #print("Magnitud Absoluta using Distance Modulus independen of z ",AbsMag2)
-        #print("check references in ",params.namened)
+        #print("check references in ",ellconf.namened)
 
     else:
 
@@ -319,7 +319,7 @@ def OutPhot(params, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi):
 
     if maskgalax.any():
 
-        #if (params.flagweb and params.flagobj and not(params.flagned)):
+        #if (ellconf.flagweb and ellconf.flagobj and not(ellconf.flagned)):
 
         galcomps.Rad50kpc[maskgalax] = galcomps.Rad50[maskgalax] * galpar.scale * Scalekpc
 
@@ -357,7 +357,7 @@ def OutPhot(params, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi):
 
     #    ; BIC = chi^2 * APSF + k * ln(n/APSF)
 
-    APSF = np.pi * params.fwhm**2
+    APSF = np.pi * ellconf.fwhm**2
 
     BICres = objchinu * ndof   + freepar * np.log(npix/APSF)
 
@@ -378,9 +378,9 @@ def OutPhot(params, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi):
     
     #######  file output:  ######
 
-    print("Creating output photometry file: ",params.output)
+    print("Creating output photometry file: ",ellconf.output)
 
-    OUTPHOT = open (params.output,"w")
+    OUTPHOT = open (ellconf.output,"w")
 
     lineout= "#   Output photometry for {} file \n".format(galpar.outimage)
     OUTPHOT.write(lineout)
@@ -388,10 +388,10 @@ def OutPhot(params, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi):
     lineout= "#\n"
     OUTPHOT.write(lineout)
 
-    lineout = "# Photometry for object: {} (use -object option to change it) \n".format(params.objname)
+    lineout = "# Photometry for object: {} (use -object option to change it) \n".format(ellconf.objname)
     OUTPHOT.write(lineout)
 
-    lineout = "# All photometric quantities are computed for filter {} (use -filter option to change it) \n".format(params.band)
+    lineout = "# All photometric quantities are computed for filter {} (use -filter option to change it) \n".format(ellconf.band)
     OUTPHOT.write(lineout)
 
     lineout = "# Magnitudes are not corrected by K-Correction \n"
@@ -416,14 +416,14 @@ def OutPhot(params, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi):
     lineout = "# This ellipse has axis a = {:.2f} and b = {:.2f} centered at xc, yc \n".format(aell,bell)
     OUTPHOT.write(lineout)
 
-    lineout = "# To see this ellipse check the file {} \n".format(params.namecheck)
+    lineout = "# To see this ellipse check the file {} \n".format(ellconf.namecheck)
     OUTPHOT.write(lineout)
 
 
     lineout= "#\n"
     OUTPHOT.write(lineout)
 
-    lineout= "# sectors_photometry was used with q={}, pa={} and minlevel = {} \n".format(galpar.q,galpar.ang,params.minlevel)
+    lineout= "# sectors_photometry was used with q={}, pa={} and minlevel = {} \n".format(galpar.q,galpar.ang,ellconf.minlevel)
     OUTPHOT.write(lineout)
 
     lineout= "# OutImage = {}  MgZpt = {}  \n".format(galpar.outimage,galpar.mgzpt)
@@ -441,7 +441,7 @@ def OutPhot(params, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi):
     lineout = "# cosmology corrected scale = {} kpc/arcsec; Surface brightness dimming (mag) = {} \n".format(Scalekpc,SbDim)
     OUTPHOT.write(lineout)
 
-    lineout = "# Check references in NED file {} \n\n".format(params.namened)
+    lineout = "# Check references in NED file {} \n\n".format(ellconf.namened)
     OUTPHOT.write(lineout)
 
     #note this below goes in another function
@@ -503,7 +503,7 @@ def OutPhot(params, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi):
     if maskmag.any():
 
 
-        if (params.flagweb and params.flagobj and not(params.flagned)):
+        if (ellconf.flagweb and ellconf.flagobj and not(ellconf.flagned)):
 
             #CorMag = totMag - GalExt # corrected by galactic extinction 
             
@@ -537,7 +537,7 @@ def OutPhot(params, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi):
 
     ############################
 
-    if params.flagradsky:
+    if ellconf.flagradsky:
 
         mean = galpar.gradskymean
         std = galpar.gradskystd
@@ -548,7 +548,7 @@ def OutPhot(params, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi):
 
         OUTPHOT.write(lineout)
  
-    if params.flagrandboxsky:
+    if ellconf.flagrandboxsky:
 
         mean = galpar.randskymean
         std = galpar.randskystd

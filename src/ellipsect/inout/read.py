@@ -109,10 +109,10 @@ def InitParsing():
 
 
 #io/read.py
-def ReadGALFITout(params,galpar):
+def ReadGALFITout(ellconf,galpar):
 
-    inputf = params.galfile 
-    distmax = params.distmax
+    inputf = ellconf.galfile 
+    distmax = ellconf.distmax
 
     flagfirst = True
 
@@ -190,9 +190,9 @@ def ReadGALFITout(params,galpar):
 
                 if tmp[0] == "1)":   # center
 
-                    if(params.flagcent):
-                        galpar.xc=params.xc  
-                        galpar.yc=params.yc  
+                    if(ellconf.flagcent):
+                        galpar.xc=ellconf.xc  
+                        galpar.yc=ellconf.yc  
                     else:
                         galpar.xc=float(tmp[1])
                         galpar.yc=float(tmp[2])

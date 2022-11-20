@@ -5,7 +5,7 @@ from ellipsect import *
 
 
 
-def PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,params,scale):
+def PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,ellconf,scale):
     """  Produces final best-fitting plot  """
 
     # subplot for arc sec axis
@@ -20,11 +20,11 @@ def PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,params,scale):
     #ULISES end 
 
 
-    if params.flagranx == True:
-        (xmin,xmax)=params.ranx[0], params.ranx[1]
+    if ellconf.flagranx == True:
+        (xmin,xmax)=ellconf.ranx[0], ellconf.ranx[1]
 
-    if params.flagrany == True:
-        (ymin,ymax)=params.rany[0], params.rany[1]
+    if ellconf.flagrany == True:
+        (ymin,ymax)=ellconf.rany[0], ellconf.rany[1]
 
 
     minrad = np.min(xradq)
@@ -45,16 +45,16 @@ def PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,params,scale):
     axsec.errorbar(xradq, ysbq,yerr=ysberrq,fmt='o-',capsize=2,color='red',markersize=0.7,label="galaxy",linewidth=2)
 
 
-    if params.flagalax == False:
+    if ellconf.flagalax == False:
         axsec.errorbar(xradm, ysbm,yerr=ysberrm,fmt='o-',capsize=2,color='blue',markersize=0.7,label="Model",linewidth=2)
 
 
-    if params.flagrany == True:
+    if ellconf.flagrany == True:
         axsec.set_ylim(ymax,ymin) #inverted
     else:
         axsec.set_ylim(yran)
 
-    if params.flaglogx == True:
+    if ellconf.flaglogx == True:
 
         axsec.set_xscale("log")
 
@@ -76,8 +76,8 @@ def PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,params,scale):
 
 
     #begin psf fwhm 
-    if params.flagfwhm: 
-        xpos = params.fwhm*scale
+    if ellconf.flagfwhm: 
+        xpos = ellconf.fwhm*scale
         axsec.axvline(x=xpos,  linestyle='--', color='k', linewidth=2)
     # end 
 
@@ -131,7 +131,7 @@ def PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,params,scale):
     # ULISES end
 
 
-    if params.flaglogx == True:
+    if ellconf.flaglogx == True:
 
         axred.set_xscale("log")
 
@@ -151,7 +151,7 @@ def PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,params,scale):
     axred.tick_params(which='major', length=7)
     axred.tick_params(which='minor', length=4, color='r')
 
-    if params.flagranx == True:
+    if ellconf.flagranx == True:
         axsec.set_xlim(xmin,xmax)
         axred.set_xlim(xmin,xmax) #ulises plot
     else:
@@ -161,7 +161,7 @@ def PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,params,scale):
 
 
 
-    if params.flagpix == True:
+    if ellconf.flagpix == True:
 
         axpix = axsec.twiny()
 
@@ -173,7 +173,7 @@ def PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,params,scale):
         axpix.figure.canvas.draw()
 
 
-        if params.flaglogx == True:
+        if ellconf.flaglogx == True:
             axpix.set_xscale("log")
             locmaj = LogLocator(base=10,numticks=12)
             axpix.xaxis.set_major_locator(locmaj)
@@ -193,7 +193,7 @@ def PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,params,scale):
     else:
         axret=axsec
 
-    if params.flagrid == True:
+    if ellconf.flagrid == True:
         # Customize the major grid
         axsec.grid(which='major', linestyle='-', linewidth='0.7', color='black')
         # Customize the minor grid

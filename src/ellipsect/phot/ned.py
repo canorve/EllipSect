@@ -7,42 +7,42 @@ from ellipsect import *
 
 
 
-def NED(params, galpar, galcomps):
+def NED(ellconf, galpar, galcomps):
     "connect to NED database to obtain Gal Extinction and other variables"
     
-    objname=params.objname
-    band=params.band
+    objname=ellconf.objname
+    band=ellconf.band
 
     # ignore warnings from lecture of XML file
     if not sys.warnoptions:
         warnings.simplefilter("ignore")
 
 
-    params.flagweb=True
+    ellconf.flagweb=True
 
-    objname=params.objname
+    objname=ellconf.objname
 
     nedweb="https://ned.ipac.caltech.edu/cgi-bin/nph-objsearch?extend=no&of=xml_all&objname="
 
-    if params.flagnedfile:
-        filened = params.nedfile
+    if ellconf.flagnedfile:
+        filened = ellconf.nedfile
     else:
-        filened=params.namened
+        filened=ellconf.namened
 
-    if params.flagmod or params.flagmag or params.flagscale or params.flagdim:
+    if ellconf.flagmod or ellconf.flagmag or ellconf.flagscale or ellconf.flagdim:
 
-        GalExt=params.InMagCor
-        DistMod=params.InDistMod
-        DistMod2=params.InDistMod
-        Scalekpc=params.InScale
-        SbDim=params.InSbDim
+        GalExt=ellconf.InMagCor
+        DistMod=ellconf.InDistMod
+        DistMod2=ellconf.InDistMod
+        Scalekpc=ellconf.InScale
+        SbDim=ellconf.InSbDim
     else:
         #checar si el archivo existe para no hacer conexion a internet
         if(not(os.path.isfile(filened))):
 
-            if params.flagnedfile:
+            if ellconf.flagnedfile:
                 print("can't find user's ned {} file ".format(filened))
-                params.flagweb=False
+                ellconf.flagweb=False
             else:
                 # command for wget
                 #wget -O NED_51.xml "https://ned.ipac.caltech.edu/cgi-bin/nph-objsearch?extend=no&of=xml_all&objname=m+51"
@@ -55,9 +55,9 @@ def NED(params, galpar, galcomps):
                 if errwg.returncode != 0:
                     print("can't connect to NED webserver. Is your internet connection working? ")
                     print("Luminosity and absolute magnitude will not be computed") 
-                    params.flagweb=False
+                    ellconf.flagweb=False
         else:
-            if (params.flagnedfile):
+            if (ellconf.flagnedfile):
                 print("using existing user's {} file ".format(filened))
             else:
                 print("using existing {} file ".format(filened))
@@ -74,10 +74,10 @@ def NED(params, galpar, galcomps):
             print("I can't read file or object name can be found in file")
             print("check object name or delete NED file for a new web search")
             print("luminosity and absolute magnitude will not be computed")
-            params.flagweb=False 
+            ellconf.flagweb=False 
 
 
-        if params.flagweb==True:
+        if ellconf.flagweb==True:
             # si flag == True
             tablephot=votable.get_table_by_id("NED_DerivedValuesTable") 
 

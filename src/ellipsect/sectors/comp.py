@@ -6,7 +6,7 @@ from ellipsect.inout.prt import PrintEllFilesComps
 from ellipsect.inout.plots import PlotSub 
 
 
-def SubComp(params, galpar, galcomps, sectcomps, axsec, n_sectors=19):
+def SubComp(ellconf, galpar, galcomps, sectcomps, axsec, n_sectors=19):
 
     N=len(galcomps.N)
 
@@ -61,11 +61,11 @@ def SubComp(params, galpar, galcomps, sectcomps, axsec, n_sectors=19):
         PlotSub(xradq,ysbq,n,axsec,namec,colorVal)
 
 
-        if params.flagsbout == True:
+        if ellconf.flagsbout == True:
             ncomp=n+1
             ncomp=str(ncomp)
 
-            PrintEllFilesComps(params,galpar,namec,ncomp,xradq,ysbq,ysberrq)
+            PrintEllFilesComps(ellconf,galpar,namec,ncomp,xradq,ysbq,ysberrq)
 
 
         n=n+1

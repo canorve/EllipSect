@@ -4,7 +4,7 @@ from ellipsect.lib.libs import *
 from ellipsect import *
 
 
-def Tidal(params, galpar, galcomps, sectgalax, rmin):
+def Tidal(ellconf, galpar, galcomps, sectgalax, rmin):
     "Computes Tidal  values as defined in Tal et al. 2009 AJ. It algo computes Bumpiness"
     "(Blakeslee 2006 ApJ) value defined between rmin and radius"
 
@@ -81,7 +81,7 @@ def Tidal(params, galpar, galcomps, sectgalax, rmin):
     #angle computed from y-axis to x-axis  
     Theta=galpar.ang + 90
 
-    if params.flagmodel == False:
+    if ellconf.flagmodel == False:
 
         (xlo, xhi, ylo, yhi) = GetSize(galpar.xc, galpar.yc, aell, Theta, ab, NCol, NRow)
 
@@ -111,12 +111,12 @@ def Tidal(params, galpar, galcomps, sectgalax, rmin):
     immask = galpar.mask
 
 
-    hdu = fits.open(params.namesig)
+    hdu = fits.open(ellconf.namesig)
     header=hdu[0].header  
     galpar.sigma=hdu[0].data
     #hdu.close()
 
-    if params.flagmodel == False:
+    if ellconf.flagmodel == False:
         imsigma = galpar.sigma.astype(float)
     else:
         imsigma = np.sqrt(np.abs(galpar.img)) #wrong but approx.
@@ -129,7 +129,7 @@ def Tidal(params, galpar, galcomps, sectgalax, rmin):
     # creates a new image for snr 
     #NCol=len(galpar.img[0])
     #NRow=len(galpar.img)
-    #MakeImage(params.namesnr, NCol, NRow):
+    #MakeImage(ellconf.namesnr, NCol, NRow):
 
 
     header['TypeIMG'] = ('SNR', 'Signal to Noise Ratio image')
@@ -146,9 +146,9 @@ def Tidal(params, galpar, galcomps, sectgalax, rmin):
     
     hdu[0].data = galpar.imsnr
 
-    if params.flagsnr:
-        hdu.writeto(params.namesnr, overwrite=True)
-        print("SNR image created.. ",params.namesnr)
+    if ellconf.flagsnr:
+        hdu.writeto(ellconf.namesnr, overwrite=True)
+        print("SNR image created.. ",ellconf.namesnr)
     hdu.close()
 
 
@@ -230,7 +230,7 @@ def Tidal(params, galpar, galcomps, sectgalax, rmin):
     #if galpar.tempmask!=None:
     hdu = fits.open(galpar.tempmask)
     #else:
-    #    hdu = fits.open(params.namesig)
+    #    hdu = fits.open(ellconf.namesig)
 
     header=hdu[0].header  
 
@@ -239,7 +239,7 @@ def Tidal(params, galpar, galcomps, sectgalax, rmin):
 
 
     hdu[0].data = (~maskm).astype("int")*100
-    hdu.writeto(params.namecheck, overwrite=True)
+    hdu.writeto(ellconf.namecheck, overwrite=True)
     hdu.close()
 
 

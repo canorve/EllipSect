@@ -5,7 +5,7 @@ from ellipsect.lib.libs import *
 
 
 ## class for parameters
-class InputParams:
+class EllipSectConfig:
 
     #flags
     flaglogx=False

@@ -6,6 +6,9 @@ from ellipsect.inout.gfits import GetAxis
 from ellipsect.inout.gfits import GetFits
 
 
+from ellipsect.inout.galfit import SelectGal 
+
+
 from astropy.wcs import WCS
 
 import argparse
@@ -101,296 +104,73 @@ def InitParsing():
 
     parser.add_argument("-cm","--cmap", type=str, help="cmap to be used for the cube image ",default="viridis")
 
+
+    parser.add_argument("-nc","--numcomp", type=int, help="component number to 
+                        select for galaxy center. Default = first component. The 
+                        component order follows as it is shown in galfit file ",default=1)
+
+
+    # every new parameter added here must be
+    # also added in function PassArgs() in ellipsect/sectors/sect.py
+
+
     return parser
 
 
 
 
 
-
 #io/read.py
-def ReadGALFITout(ellconf,galpar):
+def ReadGALFITout(ellconf,galhead,galcomps):
 
-    inputf = ellconf.galfile 
-    distmax = ellconf.distmax
 
-    flagfirst = True
+    galcomps = SelectGal(galcomps,ellconf.distmax,ellconf.numcomp)
+ 
+    errmsg="file {} does not exist".format(galhead.inputimage)
+    assert os.path.isfile(galhead.inputimage), errmsg
 
-    maskimage = ""
-    #    skylevel=0
+    galhead.exptime = GetExpTime(galhead.inputimage,galhead.imgidx,galhead.flagidx,
+                                    galhead.num,galhead.flagnum)
 
-    GalfitFile = open(inputf,"r")
 
-    # All lines including the blank ones
-    lines = (line.rstrip() for line in GalfitFile)
-    lines = (line.split('#', 1)[0] for line in lines)  # remove comments
-    # remove lines containing only comments
-    lines = (line.rstrip() for line in lines)
-    lines = (line for line in lines if line)  # Non-blank lines
+    GetEllInfo(ellconf, galcomps) 
 
-    lines = list(lines)
-    index = 0
 
-    while index < len(lines):
-
-        #================================================================================
-        # IMAGE and GALFIT CONTROL PARAMETERS
-        #A) tempfits/A2399-3-2.fits      # Input data image (FITS file)
-        #B) A2399-215615.96-m073822.7-337-out.fits      # Output data image block
-        #C) tempfits/none-3-2.fits      # Sigma image name (made from data if blank or "none")
-        #D) psfs/PSF-1309-721.fits          # Input PSF image and (optional) diffusion kernel
-        #E) 1                   # PSF fine sampling factor relative to data
-        #F) mask-337            # Bad pixel mask (FITS image or ASCII coord list)
-        #G) constraints         # File with parameter constraints (ASCII file)
-        #H) 129  809  265  809  # Image region to fit (xmin xmax ymin ymax)
-        #I) 60     60           # Size of the convolution box (x y)
-        #J) 21.672              # Magnitude photometric zeropoint
-        #K) 0.680  0.680        # Plate scale (dx dy)   [arcsec per pixel]
-        #O) regular             # Display type (regular, curses, both)
-        #P) 0                   # Choose: 0=optimize, 1=model, 2=imgblock, 3=subcomps
-
-        line = lines[index]
-        (tmp) = line.split()
-        if tmp[0] == "A)":     # input image
-            galpar.inputimage=tmp[1]
-
-        if tmp[0] == "B)":     # out image
-            galpar.outimage=tmp[1]
-
-        if tmp[0] == "F)":     # mask image
-            try:
-                galpar.maskimage=tmp[1]
-            except IndexError:
-                galpar.maskimage="None"
-
-
-        if tmp[0] == "H)":     # region fit box
-            galpar.xmin=int(tmp[1])
-            galpar.xmax=int(tmp[2])
-            galpar.ymin=int(tmp[3])
-            galpar.ymax=int(tmp[4])
-
-        if tmp[0] == "J)":     # mgzpt
-            galpar.mgzpt=float(tmp[1])
-
-        if tmp[0] == "K)":     # plate scale
-            galpar.scale=float(tmp[1])
-
-
-        # first component
-        if tmp[0] == "0)" and flagfirst == True:     # plate scale
-
-            flagfirst=False
-
-            while (tmp[0] != "Z)"):
-
-                index += 1
-                line = lines[index]
-                (tmp) = line.split()
-
-                if tmp[0] == "1)":   # center
-
-                    if(ellconf.flagcent):
-                        galpar.xc=ellconf.xc  
-                        galpar.yc=ellconf.yc  
-                    else:
-                        galpar.xc=float(tmp[1])
-                        galpar.yc=float(tmp[2])
-
-                if tmp[0] == "4)":    # Effective radius
-                    galpar.rad=float(tmp[1])
-
-                if tmp[0] == "5)":    # Sersic index 
-                    galpar.serind=float(tmp[1])
-
-
-                if tmp[0] == "9)":    # axis ratio
-                    galpar.q=float(tmp[1])
-
-                if tmp[0] == "10)": # position angle
-                    galpar.ang=float(tmp[1])
-
-        # sersic component
-        if tmp[0] == "0)" and tmp[1] == "sersic":     # plate scale
-
-            while (tmp[0] != "Z)"):
-
-                index += 1
-                line = lines[index]
-                (tmp) = line.split()
-
-                if tmp[0] == "1)":   # center
-                    xcser=float(tmp[1])
-                    ycser=float(tmp[2])
-
-                    if flagfirst == False:
-                        dist = np.sqrt((galpar.xc-xcser)**2+(galpar.yc-ycser)**2)
-
-
-                if tmp[0] == "4)" and (dist < distmax):    # Effective radius
-                    galpar.rad=float(tmp[1])
-
-                if tmp[0] == "5)" and (dist < distmax):    # Sersic index 
-                    galpar.serind=float(tmp[1])
-
-
-
-                if tmp[0] == "9)" and (dist < distmax ):    # axis ratio
-                    galpar.q=float(tmp[1])
-
-                if tmp[0] == "10)" and (dist < distmax): # position angle
-                    galpar.ang=float(tmp[1])
-
-        # second component exponential model
-        if tmp[0] == "0)" and tmp[1] == "expdisk" :     # plate scale
-
-            while (tmp[0] != "Z)"):
-
-                index += 1
-                line = lines[index]
-                (tmp) = line.split()
-
-                if tmp[0] == "1)":   # center
-                    xcexp=float(tmp[1])
-                    ycexp=float(tmp[2])
-
-                    if flagfirst == False:
-                        dist = np.sqrt((galpar.xc-xcexp)**2+(galpar.yc-ycexp)**2)
-
-
-                if tmp[0] == "4)" and (dist < distmax):    # Effective radius
-                    galpar.rad=float(tmp[1])
-                    galpar.rad=1.678*galpar.rad
-
-                #if tmp[0] == "5)" and (dist < distmax):    # Sersic index 
-                    galpar.serind=1
-
-
-
-                if (tmp[0] == "9)") and (dist < distmax):    # axis ratio
-                    galpar.q=float(tmp[1])
-
-                if (tmp[0] == "10)") and (dist < distmax): # position angle
-                    galpar.ang=float(tmp[1])
-
-
-        if tmp[0] == "0)" and tmp[1] == "gaussian":
-
-            while (tmp[0] != "Z)"):
-
-                index += 1
-                line = lines[index]
-                (tmp) = line.split()
-
-                if tmp[0] == "1)":   # center
-                    xcgauss=float(tmp[1])
-                    ycgauss=float(tmp[2])
-
-                    if flagfirst == False:
-                        dist = np.sqrt((galpar.xc-xcgauss)**2+(galpar.yc-ycgauss)**2)
-
-
-                if tmp[0] == "4)" and (dist < distmax):    # Effective radius
-                    galpar.rad=float(tmp[1])
-                    galpar.rad=0.8325546*galpar.rad
-
-                #if tmp[0] == "5)":    # Sersic index 
-                    galpar.serind=0.5
-
-
-
-                if (tmp[0] == "9)") and (dist < distmax):    # axis ratio
-                    galpar.q=float(tmp[1])
-
-                if (tmp[0] == "10)") and (dist < distmax): # position angle
-                    galpar.ang=float(tmp[1])
-
-
-        if tmp[0] == "0)" and tmp[1] == "sky" :     # plate scale
-
-            while (tmp[0] != "Z)"):
-
-                index += 1
-                line = lines[index]
-                (tmp) = line.split()
-
-                if tmp[0] == "1)":    # axis ratio
-                    galpar.skylevel=float(tmp[1])
-
-        index += 1
-
-    GalfitFile.close()
-
-    ###################
-    chars = set('[]') 
-    numbers=set('1234567890')
-    if any((c in chars) for c in galpar.inputimage): 
-        print("Ext Found") 
-        galpar.flagidx=True
-        (filename,imgidxc) = galpar.inputimage.split("[")
-        (imgidx,trash)=imgidxc.split("]")
-
-        if any((n in numbers) for n in imgidx):
-            galpar.flagnum=True
-            (imgidx,num)=imgidx.split(",")
-            num=int(num)
-
-        galpar.inputimage=filename
-        galpar.imgidx=imgidx
-        galpar.num=num
-
-    #    else: 
-    #       print("Not found") 
-    
-    ####################
-
-    errmsg="file {} does not exist".format(galpar.inputimage)
-    assert os.path.isfile(galpar.inputimage), errmsg
-
-    galpar.exptime=GetExpTime(galpar.inputimage,galpar.imgidx,galpar.flagidx,galpar.num,galpar.flagnum)
-
-
-    #errmsg="xc and yc are unknown "
-    #assert ("xc" in locals()) and ("yc" in locals())  , errmsg
-
-    print("center is at xc, yc = {}, {} ".format(galpar.xc,galpar.yc))
-
-    galpar.inxc=galpar.xc
-    galpar.inyc=galpar.yc
+    ellconf.inxc = ellconf.xc
+    ellconf.inyc = ellconf.yc
 
     # correcting coordinates
-    galpar.xc=galpar.xc-galpar.xmin+1
-    galpar.yc=galpar.yc-galpar.ymin+1
+    ellconf.xc = ellconf.xc - galhead.xmin + 1
+    ellconf.yc = ellconf.yc - galhead.ymin + 1
 
 
-    flagaxis=False
-    if (os.path.isfile(galpar.maskimage)):
-        col1,row1=GetAxis(galpar.maskimage,"none",False,1,False)
+    flagaxis = False
+    if (os.path.isfile(galhead.maskimage)):
+        col1, row1 = GetAxis(galhead.maskimage,"none",False,1,False)
     else:
-        col1=row1=0
+        col1 = row1 =0
     
-    col2,row2=GetAxis(galpar.inputimage,galpar.imgidx,galpar.flagidx,galpar.num,galpar.flagnum)
+    col2, row2 = GetAxis(galhead.inputimage, galhead.imgidx, galhead.flagidx,
+                        galhead.num, galhead.flagnum)
 
     if (col1 != col2 or row1 != row2):
-        flagaxis=True
+        flagaxis = True
 
-
-    if (os.path.isfile(galpar.maskimage)) and (flagaxis==False):
-        mime=mimetypes.guess_type(galpar.maskimage)
+    if (os.path.isfile(galhead.maskimage)) and (flagaxis == False):
+        mime=mimetypes.guess_type(galhead.maskimage)
 
         flagbm = not(mime[0] == "text/plain")
 
-        #errmsg="Sorry the mask file: {}  must be binary, not ASCII ".format(maskimage)
-        #assert flagbm is True, errmsg
 
         if flagbm is False:
 
             print("Converting mask ascii to mask FITS ")
-            Value = 100
-            galpar.maskimage = xy2fits().MakeFits(galpar.inputimage, galpar.maskimage, Value)
+            Value = 100  # default value for fits mask
+            galhead.maskimage = xy2fits().MakeFits(galhead.inputimage, 
+                                                    galhead.maskimage, Value)
 
-
-        GetFits(galpar.maskimage, galpar.tempmask, galpar.xmin, galpar.xmax, galpar.ymin, galpar.ymax)
+        GetFits(galhead.maskimage, galhead.tempmask, galhead.xmin, galhead.xmax, 
+                galhead.ymin, galhead.ymax)
 
     else:
         if flagaxis == True:
@@ -400,24 +180,40 @@ def ReadGALFITout(ellconf,galpar):
             errmsg="Unable to find Mask file"
             print(errmsg)
 
-
         
         #creates empty mask
-        hdu = fits.open(galpar.outimage)
+        hdu = fits.open(galhead.outimage)
         tempimg = (hdu[1].data.copy()).astype(float)
         hdu.close()
 
-        yaxis=tempimg.shape[0]
-        xaxis=tempimg.shape[1]
+        yaxis = tempimg.shape[0]
+        xaxis = tempimg.shape[1]
 
-        data = np.zeros((yaxis , xaxis ), dtype=np.float64)
-        hdu = fits.PrimaryHDU(data=data)
-        hdu.writeto(galpar.tempmask, overwrite=True)
-
-
+        data = np.zeros((yaxis, xaxis ), dtype=np.float64)
+        hdu = fits.PrimaryHDU(data = data)
+        hdu.writeto(galhead.tempmask, overwrite=True)
 
 
-    #return xc,yc,q,pa,skylevel,scale,outimage,mgzpt,exptime,mask
+def GetEllInfo(ellconf,galcomps):
+    '''Gets geometry information from the last component''' 
+
+
+    maskactive = (galcomps.Activate == True) 
+
+    if ellconf.flagq == False:
+        ellconf.qarg = galcomps.AxRat[maskactive][-1]
+
+    if ellconf.flagpa == False:
+        ellconf.parg = galcomps.PosAng[maskactive][-1]
+
+    if ellconf.flagcent == False:
+        ellconf.xc = galcomps.PosX[maskactive][-1]
+        ellconf.yc = galcomps.PosY[maskactive][-1]
+
+
+
+    return True
+
 
 #inout/read.py
 def ReadNComp(inputf,X,Y,galcomps,distmax):
@@ -656,4 +452,42 @@ def GetWCS(Image):
 
     return wcs 
 
+
+def prefixNames(ellconf, outimage):
+    '''names of the output files based on prefix of galfit output'''
+
+    #note: make one function to save all the names: 
+    root_ext = os.path.splitext(outimage)
+
+    ellconf.namefile = root_ext[0]
+
+    # names for the different png
+    ellconf.namepng = ellconf.namefile + ".png"
+    ellconf.namesec = ellconf.namefile + "-gal.png"
+    ellconf.namemod = ellconf.namefile + "-mod.png"
+    ellconf.namemul = ellconf.namefile + "-mul.png"
+    ellconf.namesub = ellconf.namefile + "-comp.fits"
+
+    ellconf.namesig = ellconf.namefile + "-sig.fits"
+
+
+    ellconf.sboutput = ellconf.namefile + "-sbout"
+    ellconf.output = ellconf.namefile + "-out.txt"
+
+    ellconf.namened = ellconf.namefile + "-ned.xml"
+
+
+
+    ellconf.namesnr = ellconf.namefile + "-snr.fits"
+
+    ellconf.namecheck = ellconf.namefile + "-check.fits"
+    
+    ellconf.namering = ellconf.namefile + "-ring.fits"
+    
+    ellconf.nameringmask = ellconf.namefile + "-ringmask.fits"
+
+    ellconf.namecube = ellconf.namefile + "-cub.png"
+
+
+    return True
 

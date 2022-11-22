@@ -221,6 +221,80 @@ def PlotSub(xradq,ysbq,nsub,axsec,namec,colorval):
     #axsec.plot(xradq, ysbq,'--',color=colorval,linewidth=1.5,markersize=0.7,label=substr)
 
 
+def plotCube(ellconf, galhead, galcomps):
+
+    ######################
+    #shows the image cube#
+    ######################{
+
+    linewidth = 1.2
+
+    if (ellconf.flagcomp):
+        ell = Comp2Ellip(galhead, galcomps, ellconf.tot, linewidth)
+    else:
+        ell=[]
+
+
+    ShowCube(galhead.outimage, namepng = ellconf.namecube, dpival 
+             = ellconf.dpival, bri = ellconf.brightness, con = ellconf.contrast, 
+             frac = ellconf.frac, fracmax = ellconf.fracmax,  cmap = ellconf.cmap, 
+             ellipse = ell)
+
+
+    if ellconf.dplot:
+        plt.pause(1.5)
+ 
+    plt.close()
+
+    #}
+    #####################
+
+
+def Comp2Ellip(galhead, galcomps, N, lw=1):
+    ''' converts galfit component parameter into an Ellipse object''' 
+
+
+    ellipses = [] 
+
+    #color value
+    values = range(N)
+    jet = cm = plt.get_cmap('jet') 
+    cNorm  = colors.Normalize(vmin=0, vmax=values[-1])
+    scalarMap = cmx.ScalarMappable(norm=cNorm, cmap=jet)
+
+    
+    for idx, item in enumerate(galcomps.N):
+
+        if galcomps.Activate[idx] == True:
+            # correcting coordinates
+            xc = galcomps.PosX[idx] - galhead.xmin + 1
+            yc = galcomps.PosY[idx] - galhead.ymin + 1
+
+
+            pa = galcomps.PosAng[idx] + 90
+
+            w = galcomps.Rad[idx]
+            h = galcomps.Rad[idx]*galcomps.AxRat[idx]
+
+
+            colorVal = scalarMap.to_rgba(values[idx])
+
+
+            ell=Ellipse((xc, yc), width = w, height = h, angle = pa,
+                         edgecolor = colorVal,
+                         facecolor = 'none',
+                         linewidth = lw)
+
+            ellipses.append(ell)
+
+
+    return ellipses
+
+
+
+
+
+
 class ShowCube:
 
     def __init__(self, cubeimg: str, namepng="cubeout.png", dpival=100, 

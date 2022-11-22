@@ -290,7 +290,49 @@ def printWelcome():
     #print("of an ellipse with the following properties: \n")
 
 
+def printEllinfo(ellconf, galhead):
 
+
+
+    print("center is at xc, yc = {}, {} ".format(ellconf.xc, ellconf.yc))
+
+    str = "q = {} ".format(ellconf.qarg)
+    print(str)
+
+    str = "pa = {} ".format(ellconf.parg)
+    print(str)
+
+
+    ##
+    str = "number of sectors = {}  ".format(ellconf.sectors)
+    print(str)
+
+    print("\nother parameters: \n")
+
+    str = "Mag zeropoint = {} ".format(galhead.mgzpt)
+    print(str)
+
+    str = "Plate Scale = {} ".format(galhead.scale)
+    print(str)
+
+    str = "sky = {} ".format(ellconf.skylevel)
+    print(str)
+
+    ##
+    str = "minlevel = {} ".format(ellconf.minlevel)
+    print(str)
+
+
+    ##
+    str = "for plots dpi = {} ".format(ellconf.dpival)
+    print(str)
+    ##
+
+    print("grey angle at lower-bottom in multi-plot is measured from the galaxy's major axis ")
+    print("red angle at upper-right in multi-plot is measured from the Y-axis (same as GALFIT)\n")
+
+
+    print("In multi-plot, each color represents the same as the ones in the single-plot's legend")
 
 
 

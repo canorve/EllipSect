@@ -9,9 +9,9 @@ from ellipsect.lib.clas import PhotAPI
 
 from ellipsect.inout.read import ReadGALFITout 
 #from ellipsect.inout.read import GetWCS
-from ellipsect.inout.read import ReadNComp 
+#from ellipsect.inout.read import ReadNComp 
 
-from ellipsect.inout.plots import ShowCube 
+from ellipsect.inout.plots import plotCube 
 
 from ellipsect.sectors.ellip import EllipSectors
 from ellipsect.sectors.ellip import MulEllipSectors
@@ -21,127 +21,66 @@ from ellipsect.phot.phot import OutPhot
 from ellipsect.lib.clas import EllipSectConfig
 
 
+from ellipsect.inout.galfit  import Galfit 
+from ellipsect.inout.galfit  import numComps
+
+from ellipsect.inout.prt import printEllinfo
+
+
 def SectorsGalfit(args):
 
 
-    #note: remove this function
     ellconf = PassArgs(args) # from now on, ellconf is used instead of args
 
     #note: change this class for two class: one for the galfit header
     # and other for the galfit components
 
-
     #class for GALFIT's parameters
-    galpar=GalfitParams()
+    #galpar=GalfitParams()
 
     #class for GALFIT's components
-    galcomps=GalfitComps()
+    #galcomps=GalfitComps()
 
     #note: change for one class 
     #class for output photometry 
     photapi=PhotAPI()
 
-    #note: make one class for the ellipsect configuration
 
     ######################################
     ####### Read Galfit File #############
     #note: use two: one for the header and other for the components
     # create a class for reading
-    ReadGALFITout(ellconf,galpar)
+
+    galhead = Galfit().ReadHead(ellconf.galfile)
+    galcomps = Galfit().ReadComps(ellconf.galfile)
+    galsky = Galfit().ReadSky(ellconf.galfile)
+
+    if ellconf.flagsky == False:
+
+        ellconf.skylevel = galsky.sky
+
+
+
+    ReadGALFITout(ellconf, galhead, galcomps) 
     ######################################
     ######################################
 
-    if ellconf.flagq == True:
-        galpar.q=ellconf.qarg
+    printEllinfo(ellconf, galhead) #print parameter info
 
-    if ellconf.flagpa == True:
-        galpar.ang=ellconf.parg
+    N = numComps(galcomps)
+    print("Number of components = ",N)
 
+    ellconf.tot = N
 
-    if ellconf.flagsky:
-        galpar.skylevel=ellconf.insky
-
-
-    #note: make one function to print all the configuration:
-    str = "q = {} ".format(galpar.q)
-    print(str)
-
-    str = "pa = {} ".format(galpar.ang)
-    print(str)
-
-    ##
-    str = "number of sectors = {}  ".format(ellconf.sectors)
-    print(str)
-
-    print("\nother parameters: \n")
-
-    str = "Mag zeropoint = {} ".format(galpar.mgzpt)
-    print(str)
-
-    str = "Plate Scale = {} ".format(galpar.scale)
-    print(str)
-
-    str = "sky = {} ".format(galpar.skylevel)
-    print(str)
-
-    ##
-    str = "minlevel = {} ".format(ellconf.minlevel)
-    print(str)
-
-
-    ##
-    str = "for plots dpi = {} ".format(ellconf.dpival)
-    print(str)
-    ##
-
-    print("grey angle at lower-bottom in multi-plot is measured from the galaxy's major axis ")
-    print("red angle at upper-right in multi-plot is measured from the Y-axis (same as GALFIT)\n")
-
-
-    print("In multi-plot, each color represents the same as the ones in the single-plot's legend")
-
-    #names of the output files based on prefix of galfit output
-
-
-    #note: make one function to save all the names: 
-    root_ext = os.path.splitext(galpar.outimage)
-
-    ellconf.namefile = root_ext[0]
-
-    # names for the different png
-
-    ellconf.namepng = ellconf.namefile + ".png"
-    ellconf.namesec = ellconf.namefile + "-gal.png"
-    ellconf.namemod = ellconf.namefile + "-mod.png"
-    ellconf.namemul = ellconf.namefile + "-mul.png"
-    ellconf.namesub = ellconf.namefile + "-comp.fits"
-
-    ellconf.namesig = ellconf.namefile + "-sig.fits"
-
-
-    ellconf.sboutput = ellconf.namefile + "-sbout"
-    ellconf.output = ellconf.namefile + "-out.txt"
-
-    ellconf.namened = ellconf.namefile + "-ned.xml"
-
-
-
-    ellconf.namesnr = ellconf.namefile + "-snr.fits"
-
-    ellconf.namecheck = ellconf.namefile + "-check.fits"
-    
-    ellconf.namering = ellconf.namefile + "-ring.fits"
-    
-    ellconf.nameringmask = ellconf.namefile + "-ringmask.fits"
-
-    ellconf.namecube = ellconf.namefile + "-cub.png"
+    #creates names of the output files based on prefix of galfit output
+    prefixNames(ellconf, galhead.outimage)
 
 
 
     if ellconf.flagsbout == True: 
 
         if not os.path.exists("sbfiles"):
-            print("Creating directory for  output photometry ... ")
+            print("Creating directory for output photometry ... ")
             os.makedirs("sbfiles")
 
         msg="prefix for surface brightness output file: {} ".format(ellconf.sboutput)
@@ -151,99 +90,18 @@ def SectorsGalfit(args):
         msg="output photometry file: {} ".format(ellconf.output)
         print(msg)
 
-    #note: refactor this function move it above below reading the galfit header
-    # read all the object components of the model in galfit.XX
-    ReadNComp(ellconf.galfile,galpar.xc,galpar.yc,galcomps,ellconf.distmax)
-    print("Number of components = ",len(galcomps.N))
 
-    #note: move the ifs below to a function. Consider to create a class for reading
-    #reading galaxy and model images from file
-    errmsg="file {} does not exist".format(galpar.outimage)
 
-    assert os.path.isfile(galpar.outimage), errmsg
-
-    if ellconf.flagmodel == False:
-        # hdu 1 => image   hdu 2 => model
-        hdu = fits.open(galpar.outimage)
-        galpar.img = (hdu[1].data.copy()).astype(float)
-        galpar.model = (hdu[2].data.copy()).astype(float)
-        galpar.imres = (hdu[3].data.copy()).astype(float)
-        hdu.close()
-
-    else:
-        hdu = fits.open(galpar.inputimage)
-
-        if galpar.flagidx:
-            if galpar.flagnum:
-                galpar.img = (hdu[galpar.imgidx,galpar.num].data).astype(float)
-            else:    
-                galpar.img = (hdu[galpar.imgidx].data).astype(float)
-        else:
-            galpar.img = (hdu[0].data).astype(float)
-
-        hdu.close()
-
-        hdu = fits.open(ellconf.inputmodel)
-        galpar.model = (hdu[0].data).astype(float)
-        hdu.close()
-
-        galpar.imres = galpar.img - galpar.model
+    dataimg = readDataImg(ellconf, galhead)
 
     # removing background from galaxy and model images 
-    galpar.img = galpar.img - galpar.skylevel
-    galpar.model = galpar.model - galpar.skylevel
+    dataimg.img = dataimg.img - ellconf.skylevel
+    dataimg.model = dataimg.model - ellconf.skylevel
 
 
-    ### reading mask image from file
+    plotCube(ellconf, galhead, galcomps) #plots the cube image
 
-    if galpar.tempmask is not None:
-
-        errmsg="file {} does not exist".format(galpar.tempmask)
-        assert os.path.isfile(galpar.tempmask), errmsg
-
-        if ellconf.flagmodel == False:
-            hdu = fits.open(galpar.tempmask)
-            mask = hdu[0].data
-            galpar.mask=np.array(mask,dtype=bool)
-            hdu.close()
-        else:
-            hdu = fits.open(galpar.maskimage)
-            mask = hdu[0].data
-            galpar.mask=np.array(mask,dtype=bool)
-            hdu.close()
-
-    else:
-        galpar.mask=None
-    ####
-    #note: move to a function?
-    ######################
-    #shows the image cube#
-    ######################{
-
-    linewidth = 1.2
-
-    if (ellconf.flagcomp):
-
-        ell = Comp2Ellip(galpar, galcomps, linewidth)
-    else:
-        ell=[]
-
-
-    #wcs = GetWCS(galpar.outimage) #removed
-
-    ShowCube(galpar.outimage, namepng = ellconf.namecube, dpival 
-             = ellconf.dpival, bri = ellconf.brightness, con = ellconf.contrast, 
-             frac = ellconf.frac, fracmax = ellconf.fracmax,  cmap = ellconf.cmap, ellipse = ell)
-
-    if ellconf.dplot:
-        plt.pause(1.5)
- 
-    plt.close()
-
-
-    #}
-    #####################
-    #####################
+    #lastmod 
 
 
 
@@ -536,53 +394,6 @@ def SectPhotComp(galpar, ellconf, galcomps, n_sectors=19, minlevel=0):
     return sectcomps
 
 
-def Comp2Ellip(galpar,galcomps,lw=1):
-    ''' converts galfit component parameter into an Ellipse object''' 
-
-
-    ellipses = [] 
-    #col = 'red'
-
-    N=len(galcomps.N)
-
-    #color value
-    values = range(N)
-    jet = cm = plt.get_cmap('jet') 
-    cNorm  = colors.Normalize(vmin=0, vmax=values[-1])
-    scalarMap = cmx.ScalarMappable(norm=cNorm, cmap=jet)
-
-
-
-    
-    for idx, item in enumerate(galcomps.N):
-
-
-        # correcting coordinates
-        xc=galcomps.PosX[idx] - galpar.xmin + 1
-        yc=galcomps.PosY[idx] - galpar.ymin + 1
-
-
-        pa = galcomps.PosAng[idx] + 90
-
-        w = galcomps.Rad[idx]
-        h = galcomps.Rad[idx]*galcomps.AxRat[idx]
-
-
-        colorVal = scalarMap.to_rgba(values[idx])
-
-
-        ell=Ellipse((xc, yc), width=w, height=h,angle=pa,
-                     edgecolor=colorVal,
-                     facecolor='none',
-                     linewidth=lw)
-
-        ellipses.append(ell)
-
-
-    return ellipses
-
-
-
 
 def PassVars(photapi,ellconf,galpar,galcomps):
 
@@ -829,8 +640,8 @@ def PassArgs(args):
         ellconf.inputmodel= args.model
 
     if args.sky:
-        ellconf.flagsky= True
-        ellconf.insky= args.sky
+        ellconf.flagsky = True
+        ellconf.skylevel = args.sky
 
     if args.ned:
         ellconf.flagnedfile= True
@@ -883,6 +694,10 @@ def PassArgs(args):
 
     if args.cmap:
         ellconf.cmap = args.cmap
+
+    if args.numcomp:
+        ellconf.numcomp = args.numcomp
+
 
 
 

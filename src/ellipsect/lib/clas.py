@@ -66,7 +66,9 @@ class EllipSectConfig:
     #init
     xc = 1 
     yc = 1 
-
+    inxc=1    #same as above xc but used for input image
+    inyc=1    #same as above yc but used for input image
+ 
     qarg=1
     parg=0
     ranx=1
@@ -123,7 +125,8 @@ class EllipSectConfig:
 
 
     # sky parameters:
-    insky = 0
+    skylevel = 0
+
 
     skyRad = 50 # minimum radius
     skybox = 20
@@ -142,8 +145,12 @@ class EllipSectConfig:
     frac = 1
     fracmax = 1
 
+    numcomp = 1
+    tot = 0 # total number of components
+
 #io/class.py
 ### class for Galfit parameters
+#remove this after refactorization 
 class GalfitParams:
 
     xc=1        #for sectors_photometry
@@ -198,6 +205,7 @@ class GalfitParams:
 
 
 ### class for Galfit components
+#remove this after refacto
 class GalfitComps:
 
     # init sub values

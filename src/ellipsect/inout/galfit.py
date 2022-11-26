@@ -285,6 +285,7 @@ class Galfit():
 
     def ReadComps(File: str) -> GalComps:
         '''reads all the components in the galfit file'''
+
         galcomps = GalComps()
          
         GalfitFile = open(File,"r")

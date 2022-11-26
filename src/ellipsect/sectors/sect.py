@@ -23,6 +23,7 @@ from ellipsect.lib.clas import EllipSectConfig
 
 from ellipsect.inout.galfit  import Galfit 
 from ellipsect.inout.galfit  import numComps
+from ellipsect.inout.galfit  import readDataImg
 
 from ellipsect.inout.prt import printEllinfo
 
@@ -101,27 +102,22 @@ def SectorsGalfit(args):
 
     plotCube(ellconf, galhead, galcomps) #plots the cube image
 
-    #lastmod 
 
 
 
     #   numsectors=19
     #   numsectors=15
-    numsectors=ellconf.sectors
+    numsectors = ellconf.sectors
 
     # minlevel=-100  # minimun value for sky
     # minlevel=15  # minimun value for sky
-    minlevel=ellconf.minlevel  # minimun value for sky
-
-    # initial values for image matrixes 
-    sectgalax=sectmodel=sectcomps=[]
+    minlevel = ellconf.minlevel  # minimun value for sky
 
     #call to sectors_photometry for galaxy and model
-    #note: divide the function below in two separated:
     #note check for galpar elimination
 
-    sectgalax = SectPhot(galpar, ellconf, n_sectors=numsectors, minlevel=minlevel)
-    sectmodel = SectPhot(galpar, ellconf, n_sectors=numsectors, minlevel=minlevel)
+    sectgalax = SectPhot(ellconf, dataimg, n_sectors = numsectors, minlevel = minlevel, fit='gal')
+    sectmodel = SectPhot(ellconf, dataimg, n_sectors = numsectors, minlevel = minlevel, fit='mod' )
 
     
     #note check for galpar elimination
@@ -129,12 +125,15 @@ def SectorsGalfit(args):
         #Note: sectors photometry for components always finished 
         # in minlevel = 0 regardless of the input -minlevel
         #sectcomps=SectPhotComp(galpar, ellconf, galcomps, n_sectors=numsectors, minlevel=minlevel)
-        sectcomps = SectPhotComp(galpar, ellconf, galcomps, n_sectors=numsectors, minlevel=0)
 
+        sectcomps = SectPhotComp(ellconf, dataimg, galcomps, n_sectors = numsectors, minlevel = 0)
+
+
+    #lastmod 
 
     print("creating plots..")
 
-    limx,limy=EllipSectors(ellconf, galpar, galcomps, sectgalax,sectmodel, sectcomps,n_sectors=numsectors)
+    limx, limy = EllipSectors(ellconf, galpar, galcomps, sectgalax, sectmodel, sectcomps, n_sectors = numsectors)
 
     print("plot file: ", ellconf.namepng)
  
@@ -195,14 +194,13 @@ def SectorsGalfit(args):
 
 
 
-def SectPhot(galpar, ellconf, n_sectors=19, minlevel=0):
+def SectPhot(ellconf, dataimg, n_sectors = 19, minlevel = 0, fit = 'gal'):
     """ calls to function sectors_photometry for galaxy and model """
 
 
-    maskb=galpar.mask
+    maskb = dataimg.mask
 
-
-    eps=1-galpar.q
+    eps = 1 - ellconf.qarg
 
     if ellconf.dplot:
         plt.clf()
@@ -212,52 +210,48 @@ def SectPhot(galpar, ellconf, n_sectors=19, minlevel=0):
     # I have to switch x and y values because they are different axes for
     # numpy:
     if ellconf.flagmodel == False:
-        yctemp=galpar.xc
-        xctemp=galpar.yc
+        yctemp = ellconf.xc
+        xctemp = ellconf.yc
     else:
-        yctemp=galpar.inxc
-        xctemp=galpar.inyc
+        yctemp = ellconf.inxc
+        xctemp = ellconf.inyc
 
 
     # and angle is different as well:
-    angsec=90-galpar.ang
+    angsec = 90 - ellconf.parg
     #    angsec=ang
 
 
-    ###############################
+    ###################################################
+    if fit == 'gal':
     #  galaxy:
 
+        sectimg = sectors_photometry(dataimg.img, eps, angsec, xctemp, yctemp, minlevel = minlevel,
+                plot = ellconf.dplot, badpixels = maskb, n_sectors = n_sectors)
 
-    sectgalax = sectors_photometry(galpar.img, eps, angsec, xctemp, yctemp, minlevel=minlevel,
-            plot=ellconf.dplot, badpixels=maskb, n_sectors=n_sectors)
+
+        if ellconf.dplot:
+            plt.pause(1)  # Allow plot to appear on the screen
+            plt.savefig(ellconf.namesec)
 
 
-    if ellconf.dplot:
-        plt.pause(1)  # Allow plot to appear on the screen
-        plt.savefig(ellconf.namesec)
-
-    ###################################################
-    
+    if fit == 'mod':
     #  model: 
-    # user input minlevel
-    #sectmodel = sectors_photometry(galpar.model, eps, angsec, xctemp, yctemp,minlevel=minlevel,
-    #        plot=ellconf.dplot, badpixels=maskb, n_sectors=n_sectors)
-    # minlevel =0
-    sectmodel = sectors_photometry(galpar.model, eps, angsec, xctemp, yctemp,minlevel=0,
-            plot=ellconf.dplot, badpixels=maskb, n_sectors=n_sectors)
+        sectimg = sectors_photometry(dataimg.model, eps, angsec, xctemp, yctemp,minlevel=0,
+                plot = ellconf.dplot, badpixels = maskb, n_sectors = n_sectors)
 
 
-    if ellconf.dplot:
-        plt.pause(1)  # Allow plot to appear on the screen
-        plt.savefig(ellconf.namemod)
+        if ellconf.dplot:
+            plt.pause(1)  # Allow plot to appear on the screen
+            plt.savefig(ellconf.namemod)
 
 
 
-    return sectgalax,sectmodel
+    return sectimg
 
 
 #sectors/sect.py
-def SectPhotComp(galpar, ellconf, galcomps, n_sectors=19, minlevel=0):
+def SectPhotComp(ellconf, dataimg, galcomps, n_sectors=19, minlevel=0):
     """ calls to function sectors_photometry for subcomponents """
 
     if (ellconf.flagphot) and (not(os.path.isfile(ellconf.namesig))):
@@ -332,70 +326,81 @@ def SectPhotComp(galpar, ellconf, galcomps, n_sectors=19, minlevel=0):
 
     hdu = fits.open(ellconf.namesub)
 
-    subimgs=[]
+    subimgs = []
 
-    mac=platform.system()
+    mac = platform.system()
 
-    if mac == 'Darwin':
-        initcomp=1
+    if mac == 'Darwin':  #probably remove this part of the code
+        initcomp = 1
     else:
-        initcomp=2 #old galfit version
-        initcomp=1 #new galfit version init subcomponents in 1
+        initcomp = 2 #old galfit version
+        initcomp = 1 #new galfit version init subcomponents in 1
 
-    cnt=0  # image =0 do not count
-    while(cnt<len(galcomps.Comps)):
-        if galcomps.Comps[cnt] == True:
-            img = hdu[cnt+initcomp].data.astype(float)
+    cnt=0  # image = 0 do not count
+
+
+    while(cnt < len(galcomps.N)):
+        if galcomps.Activate[cnt] == True:
+            img = hdu[cnt + initcomp].data.astype(float)
             subimgs.append(img)
-        cnt=cnt+1
+        cnt = cnt + 1
     hdu.close()
 
 
-    maskb=galpar.mask
+    maskb = dataimg.mask
 
 
-    eps=1-galpar.q
+    eps = 1 - ellconf.qarg
 
     ############
     # I have to switch x and y values because they are different axes for
     # numpy:
-    yctemp=galpar.xc
-    xctemp=galpar.yc
+    yctemp = ellconf.xc
+    xctemp = ellconf.yc
     # and angle is different as well:
-    angsec=90-galpar.ang
+    angsec = 90 - ellconf.parg
 
-    epsmul=eps
-    angsecmul=angsec
-    #print("eps,angle mul ",epsmul,angsecmul)
+    epsmul = eps
+    angsecmul = angsec
     #############
     sectcomps=[]
-    #sectmulcomps=[]
-    n=0
-
-    while(n<len(galcomps.N)):
-
-        subim=subimgs[n]
-
-        eps=1-galcomps.AxRat[n]
-        angsec=90-galcomps.PosAng[n]
+    n = 0
 
 
-        if ellconf.flagcheck:
-            scmp = sectors_photometry(subim, eps, angsec, xctemp, yctemp,minlevel=minlevel,plot=1, badpixels=maskb, n_sectors=n_sectors)
-            plt.savefig("Comp"+str(n)+".png")
-        else:
-            scmp = sectors_photometry(subim, eps, angsec, xctemp, yctemp,minlevel=minlevel,plot=0, badpixels=maskb, n_sectors=n_sectors)
+    #masksel = galcomps.Activate == True 
+
+    i = 0
+
+    while(n < len(galcomps.N)):
 
 
-        #scmpmul = sectors_photometry(subim, epsmul, angsecmul, xctemp, yctemp,minlevel=minlevel,plot=0, badpixels=maskb, n_sectors=n_sectors)
-        #plt.savefig("Cmul"+str(n)+".png")
+        subim = subimgs[i]
 
-        sectcomps.append(scmp)
+        if galcomps.Activate[n] == True:
 
-        #sectmulcomps.append(scmpmul)
 
-        n=n+1
+            eps = 1 - galcomps.AxRat[n]
+            angsec = 90 - galcomps.PosAng[n]
 
+
+            if ellconf.flagcheck:
+
+                scmp = sectors_photometry(subim, eps, angsec, xctemp, yctemp, minlevel = minlevel, 
+                                            plot = 1, badpixels = maskb, n_sectors = n_sectors)
+
+                plt.savefig("Comp"+str(n)+".png")
+
+            else:
+                scmp = sectors_photometry(subim, eps, angsec, xctemp, yctemp, minlevel = minlevel, 
+                                            plot = 0, badpixels = maskb, n_sectors = n_sectors)
+
+
+
+            sectcomps.append(scmp)
+
+            i = i + 1
+
+        n = n + 1
 
     return sectcomps
 
@@ -477,7 +482,7 @@ def PassVars(photapi,ellconf,galpar,galcomps):
 
     # init sub values
     # todos estos son arrays
-    photapi.Comps=galcomps.Comps.copy()
+    #photapi.Comps=galcomps.Comps.copy()
     photapi.N=galcomps.N.copy()
 
     photapi.NameComp=galcomps.NameComp.copy()
@@ -592,7 +597,7 @@ def PassArgs(args):
         ellconf.qarg = args.axisrat  
 
     if args.posangle:
-        ellconf.flagpa= True
+        ellconf.flagpa = True
         ellconf.parg = args.posangle  
 
 

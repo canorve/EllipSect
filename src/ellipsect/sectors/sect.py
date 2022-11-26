@@ -118,14 +118,18 @@ def SectorsGalfit(args):
 
     #call to sectors_photometry for galaxy and model
     #note: divide the function below in two separated:
-    sectgalax,sectmodel=SectPhot(galpar, ellconf, n_sectors=numsectors, minlevel=minlevel)
+    #note check for galpar elimination
+
+    sectgalax = SectPhot(galpar, ellconf, n_sectors=numsectors, minlevel=minlevel)
+    sectmodel = SectPhot(galpar, ellconf, n_sectors=numsectors, minlevel=minlevel)
 
     
+    #note check for galpar elimination
     if ellconf.flagcomp:
         #Note: sectors photometry for components always finished 
         # in minlevel = 0 regardless of the input -minlevel
         #sectcomps=SectPhotComp(galpar, ellconf, galcomps, n_sectors=numsectors, minlevel=minlevel)
-        sectcomps=SectPhotComp(galpar, ellconf, galcomps, n_sectors=numsectors, minlevel=0)
+        sectcomps = SectPhotComp(galpar, ellconf, galcomps, n_sectors=numsectors, minlevel=0)
 
 
     print("creating plots..")
@@ -172,6 +176,8 @@ def SectorsGalfit(args):
 
     if ellconf.flagphot:
         print("Computing output photometry ... ")
+        #note check how to simplify with the new variables
+        # galpar will dissapear
 
         OutPhot(ellconf, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi)
 

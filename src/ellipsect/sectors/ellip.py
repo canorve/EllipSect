@@ -20,6 +20,7 @@ from ellipsect.sky.sky import SkyCal
 def EllipSectors(ellconf, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sectors=19, minlevel=0):
 
 
+    #lastmod
     xradm = []
     ysbm = []
     ysberrm = []
@@ -61,6 +62,8 @@ def EllipSectors(ellconf, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_se
 
     #xradq, ysbq, ysberrq    = FindSB(xarcg, ymgeg, n_sectors)
 
+    #note check if ysbc and ysbcerr are not used anymore if this is not, erased
+    #consider to use FindSB instead
     xradq, ysbq, ysberrq, ysbc, ysbcerr  = FindSBCounts(xarcg, ymgeg, ymgec, n_sectors)
 
 

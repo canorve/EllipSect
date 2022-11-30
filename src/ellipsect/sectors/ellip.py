@@ -143,8 +143,15 @@ def EllipSectors(params, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sec
         ImageFile = galpar.inputimage
         MaskFile = galpar.maskimage
 
-        xx = galpar.xc
-        yy = galpar.yc
+        #removed bug: 
+        #please remove this comments after testing random box 
+        #xx = galpar.xc 
+        #yy = galpar.yc
+
+        xx = galpar.inxc
+        yy = galpar.inyc
+
+
 
         thetadeg = galpar.ang
         #e = 1 - galpar.q

@@ -148,6 +148,19 @@ class EllipSectConfig:
     numcomp = 1
     tot = 0 # total number of components
 
+
+    # for computed gradsky
+    gradskymean = 0
+    gradskystd = 0
+    gradskymed = 0
+
+    randskymean = 0
+    randskystd = 0
+    randskymed = 0
+
+
+
+
 #io/class.py
 ### class for Galfit parameters
 #remove this after refactorization 

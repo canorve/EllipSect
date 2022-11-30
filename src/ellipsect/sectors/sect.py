@@ -27,6 +27,7 @@ from ellipsect.inout.galfit  import readDataImg
 
 from ellipsect.inout.prt import printEllinfo
 
+from ellipsect.sky.sky import skyCall
 
 def SectorsGalfit(args):
 
@@ -44,7 +45,8 @@ def SectorsGalfit(args):
 
     #note: change for one class 
     #class for output photometry 
-    photapi=PhotAPI()
+
+    photapi = PhotAPI()
 
 
     ######################################
@@ -103,8 +105,6 @@ def SectorsGalfit(args):
     plotCube(ellconf, galhead, galcomps) #plots the cube image
 
 
-
-
     #   numsectors=19
     #   numsectors=15
     numsectors = ellconf.sectors
@@ -120,6 +120,7 @@ def SectorsGalfit(args):
     sectmodel = SectPhot(ellconf, dataimg, n_sectors = numsectors, minlevel = minlevel, fit='mod' )
 
     
+    sectcomps=[]
     #note check for galpar elimination
     if ellconf.flagcomp:
         #Note: sectors photometry for components always finished 
@@ -127,6 +128,10 @@ def SectorsGalfit(args):
         #sectcomps=SectPhotComp(galpar, ellconf, galcomps, n_sectors=numsectors, minlevel=minlevel)
 
         sectcomps = SectPhotComp(ellconf, dataimg, galcomps, n_sectors = numsectors, minlevel = 0)
+
+
+    #computing sky
+    skyCall(ellconf, galhead, galcomps)
 
 
     #lastmod 

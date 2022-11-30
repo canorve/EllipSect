@@ -3,6 +3,166 @@ from ellipsect.lib.libs import *
 
 from ellipsect import *
 
+from ellipsect.sectors.num import Re90
+
+
+
+def skyCall(ellconf, galhead, galcomps):
+    '''call SkyCal class routine'''
+    #######################################
+    ############## SKY ####################
+    #######################################
+    #note: move the sky section to a function
+
+    #  gradient sky method:
+    if ellconf.flagradsky:
+
+        # computing sky with the gradient method
+        print("Computing sky as a reference. This won't be used for output photometry")
+
+        ImageFile = galhead.inputimage
+        MaskFile = galhead.maskimage
+
+        xx = ellconf.inxc
+        yy = ellconf.inyc
+
+        thetadeg = ellconf.parg
+        #e = 1 - galpar.q
+        q = ellconf.qarg
+
+        width = ellconf.skywidth
+
+
+        ###
+        Rinit = 1
+
+        if not(ellconf.flagskyRad):
+
+            maskgal = galcomps.Activate == True            
+
+            rad90= Re90(galcomps[maskgal][0].Rad, galcomps[maskgal][0].Exp) 
+            Rinit = 1*rad90 # 1 times the R 90% of light radius
+
+            if (Rinit < 50): # Rinit can not be less than the default value 
+                Rinit = 50 
+            ellconf.skyRad = Rinit # save value for output
+
+        else:
+            Rinit = ellconf.skyRad
+            
+
+
+        print("computing sky with the gradient method")
+
+        line="using Rinit = {:.2f} width = {}".format(Rinit, width)
+        print(line)
+
+        line="using thetadeg = {:.2f} q = {}".format(thetadeg, ellconf.qarg)
+        print(line)
+        
+        line="using xx = {} yy  = {}".format(xx, yy)
+        print(line)
+
+        if ellconf.flagrmsky:
+            line="removing top 80% and bottom 20% of sky pixels for every ring "
+            print(line)
+
+
+
+
+        mean,std, median,rad = SkyCal().GetEllipSky(ImageFile,MaskFile,xx,yy,
+                                                    thetadeg,q,Rinit,width,
+                                                    ellconf.namering,ellconf.nameringmask,
+                                                    outliers=ellconf.flagrmsky)
+
+        line="Total sky:  mean = {:.2f}; std={:.2f}; median = {:.2f} ".format(mean,std,median)
+        print(line)
+
+        #saving for output
+        ellconf.gradskymean = mean  
+        ellconf.gradskystd = std
+        ellconf.gradskymed = median
+
+
+    #  random sky method:
+    if ellconf.flagrandboxsky:
+
+        # computing sky  using random boxes across the image
+        print("Computing sky as a reference. This won't be used for output photometry")
+
+        ImageFile = galhead.inputimage
+        MaskFile = galhead.maskimage
+
+        xx = ellconf.xc #check if these are the appropiate one or inxc
+        yy = ellconf.yc
+
+        thetadeg = ellconf.parg
+        #e = 1 - galpar.q
+        q = ellconf.qarg
+
+        ###
+
+        box = ellconf.skybox
+        num = ellconf.skynum
+
+
+        ###
+        Rinit = 1
+
+        if not(ellconf.flagskyRad):
+
+            maskgal = galcomps.Activate == True            
+            rad90= Re90(galcomps[maskgal][0].Rad, galcomps[maskgal][0].Exp) 
+ 
+            Rinit = 2.5*rad90 # 2 times the R 90% of light radius
+
+            if (Rinit < 100): # Rinit can not be less than the default value 
+                Rinit = 100 
+            ellconf.skyRad = Rinit # save value for output
+        else:
+            Rinit = ellconf.skyRad
+
+
+        print("computing sky with the random box method")
+
+        line="using Rad = {:.2f}, box size= {}, number of boxes = {}".format(Rinit, box, num)
+        print(line)
+
+        if ellconf.flagrmsky:
+            line="removing top 80% and bottom 20% of sky pixels for every box "
+            print(line)
+
+
+        ##
+        if ellconf.flagskyRadmax:
+            Rmax = ellconf.skyRadmax
+        else:
+            Rmax = 0
+
+        mean, std, median = SkyCal().RandBox(ImageFile,MaskFile,xx,yy,
+                                                thetadeg,q,Rinit,box,num,Rmax,
+                                                outliers=ellconf.flagrmsky)
+        #
+
+        line="Total sky:  mean = {:.2f}; std = {:.2f}; median = {:.2f}".format(mean,std,median)
+        print(line)
+
+        #saving for output
+        ellconf.randskymean = mean  
+        ellconf.randskystd = std
+        ellconf.randskymed = median
+
+
+
+    #######################################
+    ############## SKY End ################
+    #######################################
+
+
+
+
+
+
 
 class SkyCal:
     "This class compute the sky using two methods: random boxes and sky gradient"

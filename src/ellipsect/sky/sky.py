@@ -93,8 +93,8 @@ def skyCall(ellconf, galhead, galcomps):
         ImageFile = galhead.inputimage
         MaskFile = galhead.maskimage
 
-        xx = ellconf.xc #check if these are the appropiate one or inxc
-        yy = ellconf.yc
+        xx = ellconf.inxc # bug removed for initial coordinates
+        yy = ellconf.inyc
 
         thetadeg = ellconf.parg
         #e = 1 - galpar.q

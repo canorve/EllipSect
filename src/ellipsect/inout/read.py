@@ -136,10 +136,11 @@ def ReadGALFITout(ellconf,galhead,galcomps):
     GetEllInfo(ellconf, galcomps) 
 
 
+    #saving coordinates for the large images: input image, mask img, seg img
     ellconf.inxc = ellconf.xc
     ellconf.inyc = ellconf.yc
 
-    # correcting coordinates
+    #coordinates for the output images: galaxy, model, residual
     ellconf.xc = ellconf.xc - galhead.xmin + 1
     ellconf.yc = ellconf.yc - galhead.ymin + 1
 

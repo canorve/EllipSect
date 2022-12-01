@@ -4,6 +4,9 @@ import pytest
 import os
 
 
+import subprocess as sp
+
+
 from ellipsect import ellipsectors 
 
 from ellipsect.inout.read import ArgParsing
@@ -16,6 +19,18 @@ def test_exit():
         ellipsectors.run()
     assert e.type == SystemExit 
     assert e.value.code == 2 
+
+
+#check if galfit is installed
+def test_galfit():
+
+    runcmd="galfit -help"
+    err = sp.run([runcmd],shell=True,stdout=sp.PIPE,stderr=sp.PIPE,universal_newlines=True)  
+
+    assert err.returncode == 0, "is GALFIT installed?"
+
+
+
 
 # checking the creation of files
 def test_files():

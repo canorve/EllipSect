@@ -5,8 +5,9 @@ from ellipsect.lib.libs import *
 from ellipsect.inout.prt import PrintEllFilesComps 
 from ellipsect.inout.plots import PlotSub 
 
+from ellipsect.sectors.ellip import sect2xy
 
-def SubComp(ellconf, galpar, galcomps, sectcomps, axsec, n_sectors=19):
+def SubComp(ellconf, galhead, galcomps, sectcomps, axsec, n_sectors=19):
 
     N=len(galcomps.N)
 
@@ -17,61 +18,37 @@ def SubComp(ellconf, galpar, galcomps, sectcomps, axsec, n_sectors=19):
     scalarMap = cmx.ScalarMappable(norm=cNorm, cmap=jet)
 
     ####################
-    ab=galpar.q
+    ab=ellconf.qarg
     n=0
 
+    maskcomp = galcomps.Activate == True
     while(n<N):
 
-        
-        namec=galcomps.NameComp[n]
+        namec = galcomps.NameComp[maskcomp][n] #check if name coincide, it must be
 
         scmp = sectcomps[n] 
 
 
         ###################################################
 
-        stidxg = np.argsort(scmp.radius)
-
-        mgerad=scmp.radius[stidxg]
-        mgecount=scmp.counts[stidxg]
-        mgeangle=scmp.angle[stidxg]
-        mgeanrad=np.deg2rad(mgeangle)
-
-
-        aellabg= mgerad * np.sqrt((np.sin(mgeanrad)**2)/ab**2 + np.cos(mgeanrad)**2)
-
-        #converting to arcsec
-
-        aellarcg=aellabg*galpar.scale
-
-
-        # formula according to cappellary mge manual
-
-        mgesbg= galpar.mgzpt - 2.5*np.log10(mgecount/galpar.exptime) + 2.5*np.log10(galpar.scale**2) + 0.1
-
-
-        stidxq = np.argsort(aellarcg)
-
-        xarcg = aellarcg[stidxq]
-        ymgeg = mgesbg[stidxq]
-
-        xradq, ysbq, ysberrq    = FindSB(xarcg, ymgeg, n_sectors)
+        xradq, ysbq, ysberrq = sect2xy(scmp, ellconf, galhead)
 
         colorVal = scalarMap.to_rgba(values[n])
-        PlotSub(xradq,ysbq,n,axsec,namec,colorVal)
+
+        PlotSub(xradq, ysbq, n, axsec, namec, colorVal)
 
 
         if ellconf.flagsbout == True:
             ncomp=n+1
             ncomp=str(ncomp)
 
-            PrintEllFilesComps(ellconf,galpar,namec,ncomp,xradq,ysbq,ysberrq)
+            PrintEllFilesComps(ellconf, galhead, namec, ncomp, xradq, ysbq, ysberrq)
 
 
         n=n+1
 
 
-    return  xradq,ysbq,n
+    return  xradq, ysbq, n
 
 def FindSB(xarcq, ymgeq, numsectors):
     # the xarcq array must be ordered

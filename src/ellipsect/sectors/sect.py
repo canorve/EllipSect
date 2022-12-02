@@ -134,15 +134,15 @@ def SectorsGalfit(args):
     skyCall(ellconf, galhead, galcomps)
 
 
-    #lastmod 
 
     print("creating plots..")
 
-    limx, limy = EllipSectors(ellconf, galpar, galcomps, sectgalax, sectmodel, sectcomps, n_sectors = numsectors)
+    limx, limy = EllipSectors(ellconf, galhead, galcomps, sectgalax, sectmodel, sectcomps, n_sectors = numsectors)
 
     print("plot file: ", ellconf.namepng)
  
 
+    #lastmod 
 
     ##############################################
     ##############################################

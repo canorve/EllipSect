@@ -17,112 +17,77 @@ from ellipsect.inout.prt import PrintFilesComps
 
 from ellipsect.sky.sky import SkyCal
 
-def EllipSectors(ellconf, galpar, galcomps, sectgalax, sectmodel, sectcomps,n_sectors=19, minlevel=0):
+def EllipSectors(ellconf, galhead, galcomps, sectgalax, sectmodel, sectcomps, n_sectors=19, minlevel=0):
 
 
-    #lastmod
-    xradm = []
-    ysbm = []
-    ysberrm = []
+   
+    #galaxy
+    xradq, ysbq, ysberrq = sect2xy(sectgalax, ellconf, galhead)
 
+    #model
+    xradm, ysbm, ysberrm = sect2xy(sectmodel, ellconf, galhead)
 
-    #this section of galax and model move each one to a function or class
-
-    # galax 
-
-    stidxg = np.argsort(sectgalax.radius)
-
-    mgerad=sectgalax.radius[stidxg]
-    mgecount=sectgalax.counts[stidxg]
-    mgeangle=sectgalax.angle[stidxg]
-    mgeanrad=np.deg2rad(mgeangle)
-
-    ab=galpar.q
-
-    aellabg= mgerad * np.sqrt((np.sin(mgeanrad)**2)/ab**2 + np.cos(mgeanrad)**2)
-
-    #changing to arc sec
-    aellarcg=aellabg*galpar.scale
-
-
-    ####
-    # formula according to cappellary mge manual:
-    mgesbg= galpar.mgzpt - 2.5*np.log10(mgecount/galpar.exptime) + 2.5*np.log10(galpar.scale**2) + 0.1
-    ####
-
-    stidxq = np.argsort(aellarcg)
-
-
-    xarcg = aellarcg[stidxq]
-    ymgeg = mgesbg[stidxq]
-
-    ymgec = mgecount[stidxq] + galpar.skylevel
-
-    #############  Function to order SB along X-axis for galaxy
-
-    #xradq, ysbq, ysberrq    = FindSB(xarcg, ymgeg, n_sectors)
-
-    #note check if ysbc and ysbcerr are not used anymore if this is not, erased
-    #consider to use FindSB instead
-    xradq, ysbq, ysberrq, ysbc, ysbcerr  = FindSBCounts(xarcg, ymgeg, ymgec, n_sectors)
-
-
-    #######################################
-    #######################################
-
-    # model
-    stidxm = np.argsort(sectmodel.radius)
-
-    mgerad=sectmodel.radius[stidxm]
-    mgecount=sectmodel.counts[stidxm]
-    mgeangle=sectmodel.angle[stidxm]
-    mgeanrad=np.deg2rad(mgeangle)
-
-    ab=galpar.q
-
-    aellabm= mgerad * np.sqrt((np.sin(mgeanrad)**2)/ab**2 + np.cos(mgeanrad)**2)
-
-
-    aellarcm=aellabm*galpar.scale
-
-    # formula according to cappellary mge manual
-    mgesbm= galpar.mgzpt - 2.5*np.log10(mgecount/galpar.exptime) + 2.5*np.log10(galpar.scale**2) + 0.1
-    ##
-
-    stidxq = np.argsort(aellarcm)
-
-    xarcm = aellarcm[stidxq]
-    ymgem = mgesbm[stidxq]
-
-
-    ######  Function to order SB along X-axis for model
-
-    xradm, ysbm, ysberrm = FindSB(xarcm, ymgem, n_sectors)
-
-    ##### Plotting
-    #note separate the galax and model in two separated functions
-    # or class, evaluate
-    limx,limy,axsec=PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,ellconf,galpar.scale)
-
+    # Plotting
+    limx,limy, axsec = PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,ellconf,galpar.scale)
 
     ### surface brightness output file
 
     if ellconf.flagsbout == True: 
 
         #print to file    
-        PrintEllFilesGax(ellconf,galpar,xradq,ysbq,ysberrq,xradm,ysbm,ysberrm)
-
+        PrintEllFilesGax(ellconf, galhead, xradq, ysbq, ysberrq, xradm, ysbm, ysberrm)
 
     #### Creating Subcomponents images with Galfit
 
     if ellconf.flagcomp:
 
-        xradq,ysbq,n=SubComp(ellconf, galpar, galcomps, sectcomps, axsec, n_sectors=n_sectors)
+        xradq, ysbq, n = SubComp(ellconf, galhead, galcomps, sectcomps, axsec, n_sectors=n_sectors)
 
 
     axsec.legend(loc=1)
 
     return limx,limy
+
+
+def sect2xy(sect, ellconf, galhead):
+
+    #######################################
+    #######################################
+
+    # model
+    stidx = np.argsort(sect.radius)
+
+    mgerad = sect.radius[stidx]
+    mgecount = sect.counts[stidx]
+    mgeangle = sect.angle[stidx]
+    mgeanrad = np.deg2rad(mgeangle)
+
+    ab = ellconf.qarg
+
+    aellab = mgerad * np.sqrt((np.sin(mgeanrad)**2)/ab**2 + np.cos(mgeanrad)**2)
+
+
+    aellarc = aellab*galhead.scale
+
+    # formula according to cappellary mge manual
+    mgesb = galhead.mgzpt - 2.5*np.log10(mgecount/galhead.exptime) + 2.5*np.log10(galhead.scale**2) + 0.1
+    ##
+
+    stidxq = np.argsort(aellarc)
+
+    xarc = aellarc[stidxq]
+    ymge = mgesb[stidxq]
+
+
+    ######  Function to order SB along X-axis for model
+
+    xrad, ysb, ysberr = FindSB(xarc, ymge, n_sectors)
+
+
+    return xrad, ysb, ysberr
+
+
+
 
 #sectors/ellipsectors.py
 def MulEllipSectors(ellconf, galpar, galcomps, sectgalax, sectmodel, sectcomps):

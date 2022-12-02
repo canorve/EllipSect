@@ -6,24 +6,24 @@ from ellipsect import *
 import ellipsect
 
 
-def PrintEllFilesGax(ellconf,galpar,xradq,ysbq,ysberrq,xradm,ysbm,ysberrm):
+def PrintEllFilesGax(ellconf, galhead, xradq,ysbq,ysberrq,xradm,ysbm,ysberrm):
     "print surface brightness of galaxy and model to file"
 
     # output for galaxy
     filegal=ellconf.sboutput+".gal.txt"
     OUTFH = open (filegal,"w")
 
-    lineout= "#        sectors_photometry used with q={} and pa={} (same as GALFIT) \n".format(galpar.q,galpar.ang)
+    lineout= "#        sectors_photometry used with q={} and pa={} (same as GALFIT) \n".format(ellconf.qarg, ellconf.parg)
     OUTFH.write(lineout)
 
-    lineout= "#  OutImage = {}  magzpt = {} \n".format(galpar.outimage,galpar.mgzpt)
+    lineout= "#  OutImage = {}  magzpt = {} \n".format(galhead.outimage, galhead.mgzpt)
     OUTFH.write(lineout)
 
-    lineout= "#  exptime = {}  plate scale = {} [arcsec per pixel] \n".format(galpar.exptime,galpar.scale)
+    lineout= "#  exptime = {}  plate scale = {} [arcsec per pixel] \n".format(galhead.exptime,galhead.scale)
     OUTFH.write(lineout)
 
 
-    lineout= "#  xc = {:.2f}  yc = {:.2f}  sky = {}   \n".format(galpar.xc, galpar.yc, galpar.skylevel)
+    lineout= "#  xc = {:.2f}  yc = {:.2f}  sky = {}   \n".format(ellconf.xc, ellconf.yc, ellconf.skylevel)
     OUTFH.write(lineout)
 
     lineout= "#            Galaxy                                   \n"
@@ -45,17 +45,17 @@ def PrintEllFilesGax(ellconf,galpar,xradq,ysbq,ysberrq,xradm,ysbm,ysberrm):
     filemodel=ellconf.sboutput+".mod.txt"
     OUTFH = open (filemodel,"w")
 
-    lineout= "#        sectors_photometry used with q={} and pa={} (same as GALFIT) \n".format(galpar.q,galpar.ang)
+    lineout= "#        sectors_photometry used with q={} and pa={} (same as GALFIT) \n".format(ellconf.qarg, ellconf.parg)
     OUTFH.write(lineout)
 
-    lineout= "#  OutImage = {}  magzpt = {} \n".format(galpar.outimage,galpar.mgzpt)
+    lineout= "#  OutImage = {}  magzpt = {} \n".format(galhead.outimage,galhead.mgzpt)
     OUTFH.write(lineout)
 
-    lineout= "#  exptime = {}  plate scale = {} [arcsec per pixel] \n".format(galpar.exptime,galpar.scale)
+    lineout= "#  exptime = {}  plate scale = {} [arcsec per pixel] \n".format(galhead.exptime,galhead.scale)
     OUTFH.write(lineout)
 
 
-    lineout= "#  xc = {:.2f}  yc = {:.2f}  sky = {}   \n".format(galpar.xc, galpar.yc, galpar.skylevel)
+    lineout= "#  xc = {:.2f}  yc = {:.2f}  sky = {}   \n".format(ellconf.xc, ellconf.yc, ellconf.skylevel)
     OUTFH.write(lineout)
 
     lineout= "#           Surface Brightness   Model                \n"
@@ -85,24 +85,24 @@ def PrintEllFilesGax(ellconf,galpar,xradq,ysbq,ysberrq,xradm,ysbm,ysberrm):
                        stderr=sp.PIPE, universal_newlines=True)
 
 #io/print.py
-def PrintEllFilesComps(ellconf,galpar,namecomp,ncomp,xradq,ysbq,ysberrq):
+def PrintEllFilesComps(ellconf,galhead,namecomp,ncomp,xradq,ysbq,ysberrq):
     "Print surface brigthness of components to file "
     #subcomponent model 
 
     filesub = ellconf.sboutput+".comp-"+ncomp+".txt"
     OUTFH = open (filesub,"w")
 
-    lineout= "# sectors_photometry used with  q = {} and pa = {} (same as GALFIT) \n".format(galpar.q,galpar.ang)
+    lineout= "# sectors_photometry used with  q = {} and pa = {} (same as GALFIT) \n".format(ellconf.qarg,ellconf.parg)
     OUTFH.write(lineout)
 
-    lineout= "#  OutImage = {}  magzpt = {}  \n".format(galpar.outimage,galpar.mgzpt)
+    lineout= "#  OutImage = {}  magzpt = {}  \n".format(galhead.outimage,galhead.mgzpt)
     OUTFH.write(lineout)
 
-    lineout= "#  exptime = {}  plate scale = {} [arcsec per pixel] \n".format(galpar.exptime,galpar.scale)
+    lineout= "#  exptime = {}  plate scale = {} [arcsec per pixel] \n".format(galhead.exptime,galhead.scale)
     OUTFH.write(lineout)
 
 
-    lineout= "#  xc = {:.2f}  yc = {:.2f}  sky = {}   \n".format(galpar.xc, galpar.yc, galpar.skylevel)
+    lineout= "#  xc = {:.2f}  yc = {:.2f}  sky = {}   \n".format(ellconf.xc, ellconf.yc, ellconf.skylevel)
     OUTFH.write(lineout)
 
     lineout= "#        Model  {}   component {}            \n".format(namecomp,ncomp)
@@ -128,7 +128,7 @@ def PrintEllFilesComps(ellconf,galpar,namecomp,ncomp,xradq,ysbq,ysberrq):
 
 
 #io/print.py
-def PrintFilesGax(ellconf,galpar,rtxtang,r,mgesb,angal,r2,mgemodsb,angmod):
+def PrintFilesGax(ellconf,galhead,rtxtang,r,mgesb,angal,r2,mgemodsb,angmod):
     "Print surface parameters of galaxy and model to outfile "
 
     # galaxy
@@ -138,17 +138,17 @@ def PrintFilesGax(ellconf,galpar,rtxtang,r,mgesb,angal,r2,mgemodsb,angmod):
     lineout= "# Surface brigthness profiles measured in ang = {} from major axis (0 deg)\n".format(rtxtang)
     OUTFH.write(lineout)
 
-    lineout= "# sectors_photometry used with  q = {} and pa = {} (same as GALFIT) \n".format(galpar.q,galpar.ang)
+    lineout= "# sectors_photometry used with  q = {} and pa = {} (same as GALFIT) \n".format(ellconf.qarg, ellconf.parg)
     OUTFH.write(lineout)
 
-    lineout= "#  OutImage = {}  magzpt = {} \n".format(galpar.outimage,galpar.mgzpt)
+    lineout= "#  OutImage = {}  magzpt = {} \n".format(galhead.outimage,galhead.mgzpt)
     OUTFH.write(lineout)
 
-    lineout= "#  exptime = {}  plate scale = {} [arcsec per pixel]\n".format(galpar.exptime,galpar.scale)
+    lineout= "#  exptime = {}  plate scale = {} [arcsec per pixel]\n".format(galhead.exptime,galhead.scale)
     OUTFH.write(lineout)
 
 
-    lineout= "#  xc = {:.2f}  yc = {:.2f}  sky = {}   \n".format(galpar.xc, galpar.yc, galpar.skylevel)
+    lineout= "#  xc = {:.2f}  yc = {:.2f}  sky = {}   \n".format(ellconf.xc, ellconf.yc, ellconf.skylevel)
     OUTFH.write(lineout)
 
     lineout= "#            Galaxy                                   \n"
@@ -175,17 +175,17 @@ def PrintFilesGax(ellconf,galpar,rtxtang,r,mgesb,angal,r2,mgemodsb,angmod):
     lineout= "# Surface brigthness profiles measured in ang = {} from major axis (0 deg)\n".format(rtxtang)
     OUTFH.write(lineout)
 
-    lineout= "# sectors_photometry used with  q = {} and pa = {} (same as GALFIT) \n".format(galpar.q,galpar.ang)
+    lineout= "# sectors_photometry used with  q = {} and pa = {} (same as GALFIT) \n".format(ellconf.qarg, ellconf.parg)
     OUTFH.write(lineout)
 
-    lineout= "#  OutImage = {}  magzpt = {} \n".format(galpar.outimage,galpar.mgzpt)
+    lineout= "#  OutImage = {}  magzpt = {} \n".format(galhead.outimage,galhead.mgzpt)
     OUTFH.write(lineout)
 
-    lineout= "#  exptime = {}  plate scale = {} [arcsec per pixel] \n".format(galpar.exptime,galpar.scale)
+    lineout= "#  exptime = {}  plate scale = {} [arcsec per pixel] \n".format(galhead.exptime,galhead.scale)
     OUTFH.write(lineout)
 
 
-    lineout= "#  xc = {:.2f}  yc = {:.2f}  sky = {}   \n".format(galpar.xc, galpar.yc, galpar.skylevel)
+    lineout= "#  xc = {:.2f}  yc = {:.2f}  sky = {}   \n".format(ellconf.xc, ellconf.yc, ellconf.skylevel)
     OUTFH.write(lineout)
 
     lineout= "#        Model                \n"
@@ -215,7 +215,7 @@ def PrintFilesGax(ellconf,galpar,rtxtang,r,mgesb,angal,r2,mgemodsb,angmod):
 
 
 #io/print.py
-def PrintFilesComps(ellconf,galpar,galcomps,rtxtang,ncomp,diffangle,rtemp,mgesbsub,ii,angtemp):
+def PrintFilesComps(ellconf,galhead,galcomps,rtxtang,ncomp,diffangle,rtemp,mgesbsub,ii,angtemp):
 
     #subcomponent model 
 
@@ -240,14 +240,14 @@ def PrintFilesComps(ellconf,galpar,galcomps,rtxtang,ncomp,diffangle,rtemp,mgesbs
     lineout= "# for the galaxy and individual components.\n"
     OUTFH.write(lineout)
 
-    lineout= "#  OutImage = {}  magzpt = {}  \n".format(galpar.outimage,galpar.mgzpt)
+    lineout= "#  OutImage = {}  magzpt = {}  \n".format(galhead.outimage,galhead.mgzpt)
     OUTFH.write(lineout)
 
-    lineout= "# exptime = {} plate scale = {} [arcsec per pixel] \n".format(galpar.exptime,galpar.scale)
+    lineout= "# exptime = {} plate scale = {} [arcsec per pixel] \n".format(galhead.exptime,galhead.scale)
     OUTFH.write(lineout)
 
 
-    lineout= "#  xc = {:.2f}  yc = {:.2f}  sky = {}   \n".format(galpar.xc, galpar.yc, galpar.skylevel)
+    lineout= "#  xc = {:.2f}  yc = {:.2f}  sky = {}   \n".format(ellconf.xc, ellconf.yc, ellconf.skylevel)
     OUTFH.write(lineout)
 
     lineout= "#        Model {} component {}            \n".format(galcomps.NameComp[ii],ncomp)

@@ -28,7 +28,7 @@ def EllipSectors(ellconf, galhead, galcomps, sectgalax, sectmodel, sectcomps, n_
     xradm, ysbm, ysberrm = sect2xy(sectmodel, ellconf, galhead)
 
     # Plotting
-    limx,limy, axsec = PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,ellconf,galpar.scale)
+    limx,limy, axsec = PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,ellconf,galhead.scale)
 
     ### surface brightness output file
 
@@ -90,35 +90,36 @@ def sect2xy(sect, ellconf, galhead):
 
 
 #sectors/ellipsectors.py
-def MulEllipSectors(ellconf, galpar, galcomps, sectgalax, sectmodel, sectcomps):
+def MulEllipSectors(ellconf, galhead, galcomps, sectgalax, sectmodel, sectcomps):
 
   
     fignum=1
 
 
-    eps=1-galpar.q
+    eps = 1 - ellconf.qarg
 
 
     if ellconf.flagranx == True:
-        (xmin,xmax)=ellconf.ranx[0], ellconf.ranx[1]
+        (xmin,xmax) = ellconf.ranx[0], ellconf.ranx[1]
 
     if ellconf.flagrany == True:
-        (ymin,ymax)=ellconf.rany[0], ellconf.rany[1]
+        (ymin,ymax) = ellconf.rany[0], ellconf.rany[1]
 
 
 
 
-    yctemp=galpar.xc
-    xctemp=galpar.yc
+    yctemp = ellconf.xc
+    xctemp = ellconf.yc
 
 
-    angsec=90-galpar.ang
+    angsec = 90 - ellconf.parg
 
     ######################
 
     sg = sectgalax
 
     sm = sectmodel
+
     ###################################################
 
     stidx = np.argsort(sg.radius)
@@ -144,15 +145,15 @@ def MulEllipSectors(ellconf, galpar, galcomps, sectgalax, sectmodel, sectcomps):
 
     # converting to pixels
 
-    mgerad=mgerad*galpar.scale
-    mgemodrad=mgemodrad*galpar.scale
+    mgerad = mgerad*galhead.scale
+    mgemodrad = mgemodrad*galhead.scale
 
 
     # formula according to cappellary mge manual
     # galaxy:
-    mgesb= galpar.mgzpt - 2.5*np.log10(mgecount/galpar.exptime) + 2.5*np.log10(galpar.scale**2) + 0.1
+    mgesb = galhead.mgzpt - 2.5*np.log10(mgecount/galhead.exptime) + 2.5*np.log10(galhead.scale**2) + 0.1
     # Model:
-    mgemodsb= galpar.mgzpt - 2.5*np.log10(mgemodcount/galpar.exptime) + 2.5*np.log10(galpar.scale**2) + 0.1
+    mgemodsb= galhead.mgzpt - 2.5*np.log10(mgemodcount/galhead.exptime) + 2.5*np.log10(galhead.scale**2) + 0.1
 
 
     if ellconf.flagcomp:
@@ -165,7 +166,7 @@ def MulEllipSectors(ellconf, galpar, galcomps, sectgalax, sectmodel, sectcomps):
 
         ###############################
         
-        ab=galpar.q
+        ab = ellconf.qarg
         ni=0
         while(ni<len(galcomps.N)):
 
@@ -174,10 +175,10 @@ def MulEllipSectors(ellconf, galpar, galcomps, sectgalax, sectmodel, sectcomps):
 
             subidx = np.argsort(subcmp.radius)
 
-            temprad=subcmp.radius[subidx]
+            temprad = subcmp.radius[subidx]
 
             #converting to arcsec
-            temprad=temprad*galpar.scale
+            temprad = temprad*galhead.scale
 
             mgecountsub=subcmp.counts[subidx]
 
@@ -186,7 +187,7 @@ def MulEllipSectors(ellconf, galpar, galcomps, sectgalax, sectmodel, sectcomps):
 
 
             # formula according to cappellary mge manual
-            tempmge= galpar.mgzpt - 2.5*np.log10(mgecountsub/galpar.exptime) + 2.5*np.log10(galpar.scale**2) + 0.1
+            tempmge= galhead.mgzpt - 2.5*np.log10(mgecountsub/galhead.exptime) + 2.5*np.log10(galhead.scale**2) + 0.1
             
 
             tempsectorsub = np.unique(tempangle)
@@ -208,7 +209,7 @@ def MulEllipSectors(ellconf, galpar, galcomps, sectgalax, sectmodel, sectcomps):
     yran = minsb * (maxsb/minsb)**np.array([+1.05,-0.05]) #inverted axis
 
 
-
+    #from here copy
     sectors = np.unique(mgeangle)
     n = sectors.size
     dn = int(round(n/6.))
@@ -275,9 +276,9 @@ def MulEllipSectors(ellconf, galpar, galcomps, sectgalax, sectmodel, sectcomps):
 
         r2 = mgemodrad[angmod]
 
-        #angsec=90-galpar.ang
-        txtang= sectors[j]
-        txtangsky= sectors[j] + galpar.ang #angle measured from sky north. Same as GALFIT
+        #angsec=90-ellconf.parg
+        txtang = sectors[j]
+        txtangsky = sectors[j] + ellconf.parg #angle measured from sky north. Same as GALFIT
 
         if txtangsky > 90:
             txtangsky=txtangsky - 180 
@@ -302,7 +303,7 @@ def MulEllipSectors(ellconf, galpar, galcomps, sectgalax, sectmodel, sectcomps):
 
         #begin psf fwhm 
         if ellconf.flagfwhm: 
-            xpos = ellconf.fwhm*galpar.scale
+            xpos = ellconf.fwhm*galhead.scale
             axsec[row, 0].axvline(x=xpos,  linestyle='--', color='k', linewidth=2)
         # end 
 
@@ -332,7 +333,7 @@ def MulEllipSectors(ellconf, galpar, galcomps, sectgalax, sectmodel, sectcomps):
 
             rtxtang=np.int32(np.round(txtang)) 
 
-            PrintFilesGax(ellconf,galpar,rtxtang,r,mgesb,angal,r2,mgemodsb,angmod)
+            PrintFilesGax(ellconf,galhead,rtxtang,r,mgesb,angal,r2,mgemodsb,angmod)
 
 
         if ellconf.flagrid == True:
@@ -408,7 +409,7 @@ def MulEllipSectors(ellconf, galpar, galcomps, sectgalax, sectmodel, sectcomps):
                     ncomp=ii+1
                     ncomp=str(ncomp)
 
-                    PrintFilesComps(ellconf,galpar,galcomps,rtxtang,ncomp,diffangle,rtemp,mgesbsub,ii,angtemp)
+                    PrintFilesComps(ellconf,galhead,galcomps,rtxtang,ncomp,diffangle,rtemp,mgesbsub,ii,angtemp)
 
                 ii+=1
 
@@ -488,11 +489,11 @@ def MulEllipSectors(ellconf, galpar, galcomps, sectgalax, sectmodel, sectcomps):
             x1= xran[0]
             x2= xran[1]
  
-        axpix.set_xlim(x1/galpar.scale, x2/galpar.scale)
+        axpix.set_xlim(x1/galhead.scale, x2/galhead.scale)
         axpix.figure.canvas.draw()
 
         axpix2.set_xlabel("(pixels)")
-        axpix2.set_xlim(x1/galpar.scale, x2/galpar.scale)
+        axpix2.set_xlim(x1/galhead.scale, x2/galhead.scale)
         axpix2.figure.canvas.draw()
 
         ##

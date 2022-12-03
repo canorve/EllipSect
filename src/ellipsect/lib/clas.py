@@ -410,7 +410,30 @@ class PhotAPI:
 
 
 
- 
+class DataMge:
+
+    rad = 0 
+
+    count = 0 
+    angle = 0 
+    anrad = 0 
+    
+    sb = 0 
+
+
+ class DataMgeComp:
+
+    rad = []
+
+    count = []
+    angle = []
+    anrad = []
+    
+    sb = []
+
+    sector = []
+
+
 ##### end of classes
 
 

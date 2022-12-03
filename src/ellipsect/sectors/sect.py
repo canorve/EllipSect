@@ -156,7 +156,6 @@ def SectorsGalfit(args):
     ################ Multiplots: ###########################
     ########################################################
 
-    #lastmod 
 
 
     print("creating multi-plots..")
@@ -179,6 +178,7 @@ def SectorsGalfit(args):
     ############ Computing output photometry ###############
     ########################################################
 
+    #lastmod 
 
     if ellconf.flagphot:
         print("Computing output photometry ... ")

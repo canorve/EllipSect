@@ -365,19 +365,35 @@ class ShowCube:
         #plt.show()
 
 
+def PlotMul(ellconf, galcomps, mgegal, mgemod, mgecom):
 
-def PlotMul(ellconf, galcomps ,mgeangle, mgerad, mgemodangle, mgemodrad, xmin, 
-            xmax, xran, yran, mgesb, mgemodsb, mgeanglesub, mgeradsub, sectorsub, rtemp, mgesbsub):
-    '''makes the multiples plot'''
+    fignum = 1
+
+    minrad = np.min(mgegal.rad)
+    maxrad = np.max(mgegal.rad)
+
+    minsb = np.min(mgegal.sb)
+    maxsb = np.max(mgegal.sb)
+    xran = minrad * (maxrad/minrad)**np.array([-0.02, +1.02])
+    yran = minsb * (maxsb/minsb)**np.array([+1.05,-0.05]) #inverted axis
 
 
-    sectors = np.unique(mgeangle)
+    sectors = np.unique(mgegal.angle)
     n = sectors.size
     dn = int(round(n/6.))
     nrows = (n-1)//dn + 1 # integer division
 
 
-    #begin plotting
+
+
+    if ellconf.flagranx == True:
+        (xmin,xmax) = ellconf.ranx[0], ellconf.ranx[1]
+
+    if ellconf.flagrany == True:
+        (ymin,ymax) = ellconf.rany[0], ellconf.rany[1]
+
+
+
     plt.clf()
 
     fig, axsec = plt.subplots(nrows, 2, sharex=True, sharey='col', num=fignum)
@@ -421,13 +437,13 @@ def PlotMul(ellconf, galcomps ,mgeangle, mgerad, mgemodangle, mgemodrad, xmin,
     row = 0  # major axis in first row
 
     for j in range(0, n, dn):
-        angal = np.nonzero(mgeangle == sectors[j])[0]
+        angal = np.nonzero(mgegal.angle == sectors[j])[0]
 
-        angal = angal[np.argsort(mgerad[angal])]
-        r = mgerad[angal]
+        angal = angal[np.argsort(mgegal.rad[angal])]
+        r = mgegal.rad[angal]
 
-        angmod = np.nonzero(mgemodangle == sectors[j])[0]
-        angmod = angmod[np.argsort(mgemodrad[angmod])]
+        angmod = np.nonzero(mgemod.angle == sectors[j])[0]
+        angmod = angmod[np.argsort(mgemod.rad[angmod])]
 
         #if (len(mgemodrad) < len(mgerad)):
         #    r2 = mgemodrad[angmod]
@@ -435,14 +451,14 @@ def PlotMul(ellconf, galcomps ,mgeangle, mgerad, mgemodangle, mgemodrad, xmin,
         #    angmod=w
         #    r2 = mgemodrad[angmod]
 
-        r2 = mgemodrad[angmod]
+        r2 = mgemod.rad[angmod]
 
         #angsec=90-ellconf.parg
         txtang = sectors[j]
         txtangsky = sectors[j] + ellconf.parg #angle measured from sky north. Same as GALFIT
 
         if txtangsky > 90:
-            txtangsky=txtangsky - 180 
+            txtangsky = txtangsky - 180 
 
 
         txt = r"$%.f^\circ$" % txtang
@@ -452,12 +468,12 @@ def PlotMul(ellconf, galcomps ,mgeangle, mgerad, mgemodangle, mgemodrad, xmin,
         txtmajor= "major axis"
 
         if ellconf.flagranx == True:
-            axsec[row, 0].set_xlim(xmin,xmax)
+            axsec[row, 0].set_xlim(xmin, xmax)
         else:
             axsec[row, 0].set_xlim(xran)
 
         if ellconf.flagrany == True:
-            axsec[row, 0].set_ylim(ymax,ymin) #inverted
+            axsec[row, 0].set_ylim(ymax, ymin) #inverted
         else:
             axsec[row, 0].set_ylim(yran)
 
@@ -465,7 +481,7 @@ def PlotMul(ellconf, galcomps ,mgeangle, mgerad, mgemodangle, mgemodrad, xmin,
         #begin psf fwhm 
         if ellconf.flagfwhm: 
             xpos = ellconf.fwhm*galhead.scale
-            axsec[row, 0].axvline(x=xpos,  linestyle='--', color='k', linewidth=2)
+            axsec[row, 0].axvline(x=xpos, linestyle='--', color='k', linewidth=2)
         # end 
 
 
@@ -476,25 +492,25 @@ def PlotMul(ellconf, galcomps ,mgeangle, mgerad, mgemodangle, mgemodrad, xmin,
 
             #axsec[row, 0].plot(r, mgesb[angal], 'C3o') 
             #change lines instead of dots
-            axsec[row, 0].plot(r, mgesb[angal], 'C3-',linewidth=2)
+            axsec[row, 0].plot(r, mgegal.sb[angal], 'C3-',linewidth=2)
 
             if ellconf.flagalax == False:
-                axsec[row, 0].plot(r2, mgemodsb[angmod], 'C0-', linewidth=1.5)
+                axsec[row, 0].plot(r2, mgemod.sb[angmod], 'C0-', linewidth=1.5)
 
         else:
 
             #axsec[row, 0].semilogx(r, mgesb[angal], 'C3o')
             #change lines instead of dots
-            axsec[row, 0].semilogx(r, mgesb[angal], 'C3-', linewidth=2)
+            axsec[row, 0].semilogx(r, mgegal.sb[angal], 'C3-', linewidth=2)
 
             if ellconf.flagalax == False:
-                axsec[row, 0].semilogx(r2, mgemodsb[angmod], 'C0-', linewidth=1.5)
+                axsec[row, 0].semilogx(r2, mgemod.sb[angmod], 'C0-', linewidth=1.5)
 
         if ellconf.flagsbout == True: 
 
             rtxtang=np.int32(np.round(txtang)) 
 
-            PrintFilesGax(ellconf,galhead,rtxtang,r,mgesb,angal,r2,mgemodsb,angmod)
+            PrintFilesGax(ellconf,galhead,rtxtang,r,mgegal.sb,angal,r2,mgemod.sb,angmod)
 
 
         if ellconf.flagrid == True:
@@ -505,10 +521,11 @@ def PlotMul(ellconf, galcomps ,mgeangle, mgerad, mgemodangle, mgemodrad, xmin,
 
             #  axsec[row,0].grid(True)
 
+        maskgal = galcomps.Activate == True 
         if ellconf.flagcomp == True:
             ii=0
                 #color value
-            maskgal = galcomps.Activate == True
+
             values = range(len(galcomps[maskgal].N))
             jet = cm = plt.get_cmap('jet') 
             cNorm  = colors.Normalize(vmin=0, vmax=values[-1])
@@ -520,7 +537,7 @@ def PlotMul(ellconf, galcomps ,mgeangle, mgerad, mgemodangle, mgemodrad, xmin,
         
                 ######################## Patch for angle :############  
                 alpha = sectors[j]
-                angsec2= 90-galcomps[maskgal].PosAng[ii]
+                angsec2 = 90 - galcomps[maskgal].PosAng[ii]
                 if angsec < 0:
                     angsec = 360 + angsec
                 if angsec2 < 0:
@@ -539,9 +556,9 @@ def PlotMul(ellconf, galcomps ,mgeangle, mgerad, mgemodangle, mgemodrad, xmin,
 
 
                 # search for the nearest angle for subcomponent:
-                jj=(np.abs(sectorsub[ii]-alpha2)).argmin()  
+                jj=(np.abs(mgecom.sector[ii] - alpha2)).argmin()  
 
-                diffangle =  sectorsub[ii][jj] - alpha2
+                diffangle =  mgecom.sector[ii][jj] - alpha2
 
                 # alpha: angle from major axis of galaxy
                 # angsec: position angle of the galaxy
@@ -553,25 +570,25 @@ def PlotMul(ellconf, galcomps ,mgeangle, mgerad, mgemodangle, mgemodrad, xmin,
                 ###############################################
                 
                 #angtemp = np.nonzero(mgeanglesub[ii] == sectorsub[ii][j])[0]
-                angtemp = np.nonzero(mgeanglesub[ii] == sectorsub[ii][jj])[0]
-                angtemp = angtemp[np.argsort(mgeradsub[ii][angtemp])]
+                angtemp = np.nonzero(mgecom.angle[ii] == mgecom.sector[ii][jj])[0]
+                angtemp = angtemp[np.argsort(mgecom.rad[ii][angtemp])]
 
       
-                rtemp = mgeradsub[ii][angtemp]
+                rtemp = mgecom.rad[ii][angtemp]
 
                 colorval = scalarMap.to_rgba(values[ii])
                 if ellconf.flaglogx == False:
                 #    axsec[row, 0].plot(rtemp, mgesbsub[ii][angtemp],'--',color='skyblue', linewidth=2)
-                    axsec[row, 0].plot(rtemp, mgesbsub[ii][angtemp],'--',color=colorval, linewidth=1.5)
+                    axsec[row, 0].plot(rtemp, mgecom.sb[ii][angtemp],'--',color=colorval, linewidth=1.5)
                 else:
-                    axsec[row, 0].semilogx(rtemp, mgesbsub[ii][angtemp], '--',color=colorval, linewidth=1.5)
+                    axsec[row, 0].semilogx(rtemp, mgecom.sb[ii][angtemp], '--',color=colorval, linewidth=1.5)
 
-                #introduce output 
                 if ellconf.flagsbout == True:
                     ncomp=ii+1
                     ncomp=str(ncomp)
 
-                    PrintFilesComps(ellconf,galhead,galcomps,rtxtang,ncomp,diffangle,rtemp,mgesbsub,ii,angtemp)
+                    PrintFilesComps(ellconf,galhead,galcomps,rtxtang,ncomp,
+                                    diffangle,rtemp,mgecom.sb,ii,angtemp)
 
                 ii+=1
 
@@ -579,10 +596,10 @@ def PlotMul(ellconf, galcomps ,mgeangle, mgerad, mgemodangle, mgemodrad, xmin,
         axsec[row, 0].text(0.98, 0.95, txtsky, color='red',ha='right', va='top', transform=axsec[row, 0].transAxes)
         axsec[row, 0].text(0, 0, txt, ha='left', va='bottom', color='grey', transform=axsec[row, 0].transAxes)
 
-        if (len(mgemodrad) > len(mgerad)):
+        if (len(mgemod.rad) > len(mgegal.rad)):
 
-            mgemodsbnew,smooth_flag = Interpol(r2,mgemodsb[angmod],r)
-            sberr=1-mgemodsbnew/mgesb[angal]
+            mgemodsbnew, smooth_flag = Interpol(r2,mgemod.sb[angmod],r)
+            sberr = 1 - mgemodsbnew/mgegal.sb[angal]
             axsec[row, 1].plot(r, sberr*100, 'C0o')
             if(smooth_flag):
                 print("smoothing interpolation was used for angle: ",np.int32(np.round(txtang)))
@@ -590,13 +607,12 @@ def PlotMul(ellconf, galcomps ,mgeangle, mgerad, mgemodangle, mgemodrad, xmin,
 
         else:
 
-            mgesbnew,smooth_flag = Interpol(r,mgesb[angal],r2)
+            mgesbnew, smooth_flag = Interpol(r,mgegal.sb[angal],r2)
             sberr=1-mgemodsb[angmod]/mgesbnew
             axsec[row, 1].plot(r2, sberr*100, 'C0o')
 
             if(smooth_flag):
                 print("smoothing interpolation was used for angle: ",np.int32(np.round(txtang)))
-
 
         axsec[row, 1].axhline(linestyle='--', color='C1', linewidth=2)
         axsec[row, 1].yaxis.tick_right()
@@ -604,13 +620,22 @@ def PlotMul(ellconf, galcomps ,mgeangle, mgerad, mgemodangle, mgemodrad, xmin,
         axsec[row, 1].set_ylim([-19.5, 20])
         # axsec[row, 1].set_ylim([-20, 20])
         #axsec[row, 1].text(0.98, 0.95, txt, ha='right', va='top', transform=axsec[row, 1].transAxes)
-        axsec[row, 1].text(0.98, 0.95, txtsky,fontweight='bold', color='red',ha='right', va='top', transform=axsec[row, 1].transAxes)
-        axsec[row, 1].text(0, 0, txt, ha='left', va='bottom',color='grey', transform=axsec[row, 1].transAxes)
+        axsec[row, 1].text(0.98, 0.95, txtsky, fontweight='bold', 
+                            color='red',ha='right', va='top', 
+                            transform = axsec[row, 1].transAxes)
+
+        axsec[row, 1].text(0, 0, txt, ha='left', va='bottom',
+                            color='grey', transform=axsec[row, 1].transAxes)
+
         if (txtang == 0):
-            axsec[row, 1].text(0.98, 0.10, txtmajor,fontweight='bold',fontsize=8.5, ha='right', va='bottom', transform=axsec[row, 1].transAxes)
+            axsec[row, 1].text(0.98, 0.10, txtmajor, fontweight='bold',
+                                fontsize=8.5, ha='right', va='bottom', 
+                                transform = axsec[row, 1].transAxes)
 
         if (txtang == 90):
-            axsec[row, 1].text(0.98, 0.10, txtminor,fontweight='bold',fontsize=8.5, ha='right', va='bottom', transform=axsec[row, 1].transAxes)
+            axsec[row, 1].text(0.98, 0.10, txtminor, fontweight='bold',
+                                fontsize=8.5, ha='right', va='bottom', 
+                                transform=axsec[row, 1].transAxes)
 
 
         if ellconf.flagranx == True:
@@ -672,14 +697,10 @@ def PlotMul(ellconf, galcomps ,mgeangle, mgerad, mgemodangle, mgemodrad, xmin,
             axpix2.xaxis.set_major_locator(LogLocator(base=10.0, numticks=15))
         else:
             axpix2.xaxis.set_minor_locator(AutoMinorLocator())
+
         axpix2.tick_params(which='both', width=2)
         axpix2.tick_params(which='major', length=7)
         axpix2.tick_params(which='minor', length=4, color='r')
-
-
-
-        #lastmod: check variables
-
 
 
 

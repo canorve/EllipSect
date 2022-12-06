@@ -30,7 +30,7 @@ SunMag = {
 
 
 
-def OutPhot(ellconf, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi):
+def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps, photapi):
     """ Output photometry for further analysis """
 
 
@@ -55,9 +55,9 @@ def OutPhot(ellconf, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi)
 
     if maskmag.any():
 
-        galcomps.Flux[maskmag]=10**((galpar.mgzpt - galcomps.Mag[maskmag])/2.5)
+        galcomps.Flux[maskmag]=10**((galhead.mgzpt - galcomps.Mag[maskmag])/2.5)
         totFlux=galcomps.Flux[maskmag].sum()
-        totMag=-2.5*np.log10(totFlux) + galpar.mgzpt
+        totMag=-2.5*np.log10(totFlux) + galhead.mgzpt
         #print("total magnitud = ",totMag)
         #print("total Flux = ",totFlux)
     #else:
@@ -68,8 +68,8 @@ def OutPhot(ellconf, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi)
 
 
     if maskdisk.any():
-        BulgeFlux = 10**((galpar.mgzpt -  galcomps.Mag[maskbulge])/2.5)
-        DiskFlux  = 10**((galpar.mgzpt -  galcomps.Mag[maskdisk])/2.5)
+        BulgeFlux = 10**((galhead.mgzpt -  galcomps.Mag[maskbulge])/2.5)
+        DiskFlux  = 10**((galhead.mgzpt -  galcomps.Mag[maskdisk])/2.5)
         totBulgeF = BulgeFlux.sum()
         totDiskF =  DiskFlux.sum()
         BulgeToTotal= totBulgeF / (totBulgeF + totDiskF)
@@ -105,7 +105,7 @@ def OutPhot(ellconf, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi)
     ################
     # computing Rad 90% light with aproximation taken from my Thesis
 
-    galcomps.Rad50sec[maskgalax] = galcomps.Rad50[maskgalax] * galpar.scale 
+    galcomps.Rad50sec[maskgalax] = galcomps.Rad50[maskgalax] * galhead.scale 
 
     #galcomps.Rad90[maskgalax] = galcomps.Rad50[maskgalax] * (1.53 + 0.73 * galcomps.SerInd[maskgalax] + 0.07 * galcomps.SerInd[maskgalax]**2) 
     galcomps.Rad90[maskgalax] = Re90(galcomps.Rad50[maskgalax],galcomps.SerInd[maskgalax] )
@@ -192,7 +192,8 @@ def OutPhot(ellconf, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi)
 
 
     # call to Tidal
-    (tidal,objchinu,bump,snr,stdsnr,totsnr,rss,ndof,magalaper,magmodaper)=Tidal(ellconf, galpar, galcomps, sectgalax, 2)
+    #note use a dataclass for return
+    (tidal,objchinu,bump,snr,stdsnr,totsnr,rss,ndof,magalaper,magmodaper)=Tidal(ellconf, dataimg, galhead, galcomps, sectgalax, 2)
 
     # returns warnings to normal
     if not sys.warnoptions:
@@ -214,8 +215,8 @@ def OutPhot(ellconf, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi)
     #print("Residual sum of squares =  ",rss)  
     #print("degrees of freedom = ",ndof)  
    
-    header = fits.getheader(galpar.inputimage)
-    #hdu = fits.open(galpar.inputimage)
+    header = fits.getheader(galhead.inputimage)
+    #hdu = fits.open(galhead.inputimage)
     #header = hdu[0].header
     #hdu.close()
 
@@ -261,7 +262,7 @@ def OutPhot(ellconf, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi)
         print("using {} band to correct for galactic extinction ".format(ellconf.band)) 
 
     if (ellconf.flagobj and not(ellconf.flagned)): 
-        (GalExt,DistMod,DistMod2,Scalekpc,SbDim)=NED(ellconf, galpar, galcomps)
+        (GalExt,DistMod,DistMod2,Scalekpc,SbDim) = NED(ellconf,  galcomps)
     else:
         if ellconf.flagned: 
             print("No search in NED because it is indicated by the user")
@@ -321,7 +322,7 @@ def OutPhot(ellconf, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi)
 
         #if (ellconf.flagweb and ellconf.flagobj and not(ellconf.flagned)):
 
-        galcomps.Rad50kpc[maskgalax] = galcomps.Rad50[maskgalax] * galpar.scale * Scalekpc
+        galcomps.Rad50kpc[maskgalax] = galcomps.Rad50[maskgalax] * galhead.scale * Scalekpc
 
         galcomps.mme[maskgalax] = galcomps.mme[maskgalax] - GalExt - SbDim
         galcomps.me[maskgalax] = galcomps.me[maskgalax] - GalExt - SbDim
@@ -368,7 +369,7 @@ def OutPhot(ellconf, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi)
     mgerad=sectgalax.radius[stidxg]
 
     aell = mgerad.max() 
-    bell = mgerad.max() * galpar.q
+    bell = mgerad.max() * ellconf.qarg
 
 
 
@@ -382,7 +383,7 @@ def OutPhot(ellconf, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi)
 
     OUTPHOT = open (ellconf.output,"w")
 
-    lineout= "#   Output photometry for {} file \n".format(galpar.outimage)
+    lineout= "#   Output photometry for {} file \n".format(galhead.outimage)
     OUTPHOT.write(lineout)
 
     lineout= "#\n"
@@ -423,16 +424,17 @@ def OutPhot(ellconf, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi)
     lineout= "#\n"
     OUTPHOT.write(lineout)
 
-    lineout= "# sectors_photometry was used with q={}, pa={} and minlevel = {} \n".format(galpar.q,galpar.ang,ellconf.minlevel)
+    lineout= "# sectors_photometry was used with q={}, pa={} and minlevel = {} \n".format(ellconf.qarg, 
+                                                                                            ellconf.parg, ellconf.minlevel)
     OUTPHOT.write(lineout)
 
-    lineout= "# OutImage = {}  MgZpt = {}  \n".format(galpar.outimage,galpar.mgzpt)
+    lineout= "# OutImage = {}  MgZpt = {}  \n".format(galhead.outimage,galhead.mgzpt)
     OUTPHOT.write(lineout)
 
-    lineout= "# exptime = {}  plate scale = {} ''/pix \n".format(galpar.exptime,galpar.scale)
+    lineout= "# exptime = {}  plate scale = {} ''/pix \n".format(galhead.exptime,galhead.scale)
     OUTPHOT.write(lineout)
 
-    lineout= "# xc = {:.2f}  yc = {:.2f}  sky = {:.2f} \n".format(galpar.xc, galpar.yc, galpar.skylevel)
+    lineout= "# xc = {:.2f}  yc = {:.2f}  sky = {:.2f} \n".format(ellconf.xc, ellconf.yc, ellconf.skylevel)
     OUTPHOT.write(lineout)
     
     lineout = "# Gal. Extinction = {}; Distance Mod. = {}; Distance Mod. (z independent) = {} \n".format(GalExt,DistMod,DistMod2)
@@ -454,9 +456,9 @@ def OutPhot(ellconf, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi)
 
 
     if maskmag.any():
-        #Flux=10**((galpar.mgzpt -  galcomps.Mag[maskmag])/2.5)
+        #Flux=10**((galhead.mgzpt -  galcomps.Mag[maskmag])/2.5)
         #totFlux=Flux.sum()
-        #totMag=-2.5*np.log10(totFlux) + galpar.mgzpt
+        #totMag=-2.5*np.log10(totFlux) + galhead.mgzpt
 
         lineout = "total apparent mag from model parameters (without corrections) = {:.3f}  \n".format(totMag)
         OUTPHOT.write(lineout)
@@ -539,9 +541,9 @@ def OutPhot(ellconf, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi)
 
     if ellconf.flagradsky:
 
-        mean = galpar.gradskymean
-        std = galpar.gradskystd
-        median = galpar.gradskymed
+        mean = ellconf.gradskymean
+        std = ellconf.gradskystd
+        median = ellconf.gradskymed
 
 
         lineout="computed sky with the gradient method:  mean = {:.2f} , std = {:.2f}, median = {} \n".format(mean,std,median)
@@ -550,9 +552,9 @@ def OutPhot(ellconf, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi)
  
     if ellconf.flagrandboxsky:
 
-        mean = galpar.randskymean
-        std = galpar.randskystd
-        median = galpar.randskymed
+        mean = ellconf.randskymean
+        std = ellconf.randskystd
+        median = ellconf.randskymed
 
         lineout="computed sky with the random box method:  mean = {:.2f} , std = {:.2f}, median = {} \n".format(mean,std,median)
         OUTPHOT.write(lineout)

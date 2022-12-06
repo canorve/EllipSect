@@ -4,7 +4,7 @@ from ellipsect.lib.libs import *
 from ellipsect import *
 
 
-def Tidal(ellconf, galpar, galcomps, sectgalax, rmin):
+def Tidal(ellconf, dataimg, galhead, galcomps, sectgalax, rmin):
     "Computes Tidal  values as defined in Tal et al. 2009 AJ. It algo computes Bumpiness"
     "(Blakeslee 2006 ApJ) value defined between rmin and radius"
 
@@ -58,7 +58,7 @@ def Tidal(ellconf, galpar, galcomps, sectgalax, rmin):
 
 
 
-    ab=galpar.q
+    ab=ellconf.qarg
 
     ell=1-ab
 
@@ -67,59 +67,60 @@ def Tidal(ellconf, galpar, galcomps, sectgalax, rmin):
     bell = mgerad.max() * ab
 
     #changing to arc sec
-    aellarc=aell*galpar.scale
+    aellarc=aell*galhead.scale
 
     #print("major axis, minor axis (pix) ",aell,bell)
 
-    NCol=len(galpar.img[0])
-    NRow=len(galpar.img)
+    NCol=len(dataimg.img[0])
+    NRow=len(dataimg.img)
 
     #print("max size ",NCol,NRow)
 
     #Obj.Angle = Obj.Theta - 90
 
     #angle computed from y-axis to x-axis  
-    Theta=galpar.ang + 90
+    Theta=galhead.parg + 90
 
     if ellconf.flagmodel == False:
 
-        (xlo, xhi, ylo, yhi) = GetSize(galpar.xc, galpar.yc, aell, Theta, ab, NCol, NRow)
+        (xlo, xhi, ylo, yhi) = GetSize(ellconf.xc, ellconf.yc, aell, Theta, ab, NCol, NRow)
 
         #print("size box ",xmin, xmax, ymin, ymax)
 
 
-        xser=galpar.xc
-        yser=galpar.yc
+        xser = ellconf.xc
+        yser = ellconf.yc
     else:
-        (xlo, xhi, ylo, yhi) = GetSize(galpar.inxc, galpar.inyc, aell, Theta, ab, NCol, NRow)
+        #note: Ncol and Nrow are wrong in this situation because correspond to the large img
+        (xlo, xhi, ylo, yhi) = GetSize(ellconf.inxc, ellconf.inyc, aell, Theta, ab, NCol, NRow)
 
-        xser=galpar.inxc
-        yser=galpar.inyc
-
-
-
-
-    imgal = galpar.img
+        xser = ellconf.inxc
+        yser = ellconf.inyc
 
 
-    immodel = galpar.model
 
 
-    imres = galpar.imres
+    imgal = dataimg.img
 
 
-    immask = galpar.mask
+    immodel = dataimg.model
+
+
+    imres = dataimg.imres
+
+
+    immask = dataimg.mask
 
 
     hdu = fits.open(ellconf.namesig)
     header=hdu[0].header  
-    galpar.sigma=hdu[0].data
+    dataimg.sigma=hdu[0].data
     #hdu.close()
 
     if ellconf.flagmodel == False:
-        imsigma = galpar.sigma.astype(float)
+        imsigma = dataimg.sigma.astype(float)
     else:
-        imsigma = np.sqrt(np.abs(galpar.img)) #wrong but approx.
+        imsigma = np.sqrt(np.abs(dataimg.img)) #wrong but approx.
         masksigma = imsigma <= 0
         imsigma[masksigma] = 1 # avoiding division by zero
         print("I can't compute SNR. ")
@@ -127,8 +128,8 @@ def Tidal(ellconf, galpar, galcomps, sectgalax, rmin):
 
 
     # creates a new image for snr 
-    #NCol=len(galpar.img[0])
-    #NRow=len(galpar.img)
+    #NCol=len(dataimg.img[0])
+    #NRow=len(dataimg.img)
     #MakeImage(ellconf.namesnr, NCol, NRow):
 
 
@@ -138,13 +139,13 @@ def Tidal(ellconf, galpar, galcomps, sectgalax, rmin):
 
     if imgal.shape == imsigma.shape:
 
-        galpar.imsnr=imgal/imsigma
+        dataimg.imsnr=imgal/imsigma
 
     else:
         print("WARNING: SNR can not be computed because galaxy and sigma images have different shapes")
-        galpar.imsnr=np.ones(imgal.shape)
+        dataimg.imsnr=np.ones(imgal.shape)
     
-    hdu[0].data = galpar.imsnr
+    hdu[0].data = dataimg.imsnr
 
     if ellconf.flagsnr:
         hdu.writeto(ellconf.namesnr, overwrite=True)
@@ -152,7 +153,7 @@ def Tidal(ellconf, galpar, galcomps, sectgalax, rmin):
     hdu.close()
 
 
-    #if galpar.tempmask!=None:
+    #if galhead.tempmask!=None:
     imell=immask.copy()
     #else:
     #    imell=imgal.copy()
@@ -164,7 +165,7 @@ def Tidal(ellconf, galpar, galcomps, sectgalax, rmin):
         #    for objchinu, Tidal and SNR
         #    maskm = dat[ylo - 1:yhi, xlo - 1:xhi] == num  # big image coordinates
         #maskm =immask[ylo - 1:yhi, xlo - 1:xhi] == False  # big image coordinates
-    #if galpar.tempmask!=None:
+    #if galhead.tempmask!=None:
     maskm =immask == False  # big image coordinates
     #else:
     #    maskm =imell == False  # big image coordinates
@@ -175,7 +176,7 @@ def Tidal(ellconf, galpar, galcomps, sectgalax, rmin):
         #   mask including rmin for Bumpiness only
         #    maskbum = dat[ylo - 1:yhi, xlo - 1:xhi] == num  # big image coordinates
         #maskbum = immask[ylo - 1:yhi, xlo - 1:xhi] == False  # big image coordinates
-    #if galpar.tempmask!=None:
+    #if galhead.tempmask!=None:
     maskbum = immask == False  # big image coordinates
     #else:
     #    maskbum = imell == False  # big image coordinates
@@ -227,8 +228,8 @@ def Tidal(ellconf, galpar, galcomps, sectgalax, rmin):
     maskbum=maskbum*imell
 
 
-    #if galpar.tempmask!=None:
-    hdu = fits.open(galpar.tempmask)
+    #if galhead.tempmask!=None:
+    hdu = fits.open(galhead.tempmask)
     #else:
     #    hdu = fits.open(ellconf.namesig)
 
@@ -318,19 +319,19 @@ def Tidal(ellconf, galpar, galcomps, sectgalax, rmin):
 
 
         # snr
-        #if(np.size(galpar.imsnr[ylo - 1:yhi, xlo - 1:xhi][maskm]) > 0):
+        #if(np.size(dataimg.imsnr[ylo - 1:yhi, xlo - 1:xhi][maskm]) > 0):
 
-         #   totsnr=galpar.imsnr[ylo - 1:yhi, xlo - 1:xhi][maskm].sum()
+         #   totsnr=dataimg.imsnr[ylo - 1:yhi, xlo - 1:xhi][maskm].sum()
 
-          #  snr=galpar.imsnr[ylo - 1:yhi, xlo - 1:xhi][maskm].mean()
-           # stdsnr=galpar.imsnr[ylo - 1:yhi, xlo - 1:xhi][maskm].std()
+          #  snr=dataimg.imsnr[ylo - 1:yhi, xlo - 1:xhi][maskm].mean()
+           # stdsnr=dataimg.imsnr[ylo - 1:yhi, xlo - 1:xhi][maskm].std()
 
-        if(np.size(galpar.imsnr[maskm]) > 0):
+        if(np.size(dataimg.imsnr[maskm]) > 0):
 
-            totsnr=galpar.imsnr[maskm].sum()
+            totsnr = dataimg.imsnr[maskm].sum()
 
-            snr=galpar.imsnr[maskm].mean()
-            stdsnr=galpar.imsnr[maskm].std()
+            snr = dataimg.imsnr[maskm].mean()
+            stdsnr = dataimg.imsnr[maskm].std()
 
 
         else:
@@ -390,8 +391,8 @@ def Tidal(ellconf, galpar, galcomps, sectgalax, rmin):
 
     #computing magnitud for galaxy and model using aperture. 
 
-    magalaper= galpar.mgzpt - 2.5*np.log10(sumflux/galpar.exptime)  #+ 0.1
-    magmodaper = galpar.mgzpt - 2.5*np.log10(sumfluxmod/galpar.exptime) # + 0.1
+    magalaper= galhead.mgzpt - 2.5*np.log10(sumflux/galhead.exptime)  #+ 0.1
+    magmodaper = galhead.mgzpt - 2.5*np.log10(sumfluxmod/galhead.exptime) # + 0.1
 
 
   

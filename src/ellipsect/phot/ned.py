@@ -7,7 +7,7 @@ from ellipsect import *
 
 
 
-def NED(ellconf, galpar, galcomps):
+def NED(ellconf, galcomps):
     "connect to NED database to obtain Gal Extinction and other variables"
     
     objname=ellconf.objname

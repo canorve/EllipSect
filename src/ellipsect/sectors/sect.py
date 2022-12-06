@@ -185,7 +185,7 @@ def SectorsGalfit(args):
         #note check how to simplify with the new variables
         # galpar will dissapear
 
-        OutPhot(ellconf, galpar, galcomps, sectgalax, sectmodel, sectcomps, photapi)
+        OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps, photapi)
 
 
     if galpar.tempmask != None:

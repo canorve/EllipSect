@@ -38,7 +38,7 @@ def skyCall(ellconf, galhead, galcomps):
 
         if not(ellconf.flagskyRad):
 
-            maskgal = galcomps.Activate == True            
+            maskgal = galcomps.Active == True            
 
             rad90= Re90(galcomps[maskgal][0].Rad, galcomps[maskgal][0].Exp) 
             Rinit = 1*rad90 # 1 times the R 90% of light radius
@@ -111,7 +111,7 @@ def skyCall(ellconf, galhead, galcomps):
 
         if not(ellconf.flagskyRad):
 
-            maskgal = galcomps.Activate == True            
+            maskgal = galcomps.Active == True            
             rad90= Re90(galcomps[maskgal][0].Rad, galcomps[maskgal][0].Exp) 
  
             Rinit = 2.5*rad90 # 2 times the R 90% of light radius

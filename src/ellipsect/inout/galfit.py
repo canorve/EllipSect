@@ -55,7 +55,7 @@ class GalComps:
     PosAng = np.array([])          #10) position angle
     skip = np.array([])            #z)  skip model
 
-    Activate = np.array([])            #activate component  for galaxy
+    Active = np.array([])            #activate component  for galaxy
 
     # store the flags related to parameters
     FreePosX = np.array([])            #1)   
@@ -388,7 +388,7 @@ class Galfit():
                 galcomps.AxRat = np.append(galcomps.AxRat, AxRat)
                 galcomps.PosAng = np.append(galcomps.PosAng, PosAng)
                 galcomps.skip = np.append(galcomps.skip, skip)
-                galcomps.Activate = np.append(galcomps.Activate, flagcomp)
+                galcomps.Active = np.append(galcomps.Active, flagcomp)
 
 
                 galcomps.FreePosX = np.append(galcomps.FreePosX, freeX)
@@ -498,12 +498,12 @@ def numComps(galcomps: GalComps, name: str = 'none') -> int:
 
     if name == 'none':
 
-        nummask = (galcomps.Activate == True) 
-        N = galcomps.Activate[nummask].size
+        nummask = (galcomps.Active == True) 
+        N = galcomps.Active[nummask].size
 
     else:
-        nummask = (galcomps.Activate == True) & (galcomps.NameComp == name)
-        N = galcomps.Activate[nummask].size
+        nummask = (galcomps.Active == True) & (galcomps.NameComp == name)
+        N = galcomps.Active[nummask].size
 
     return N
 
@@ -513,7 +513,7 @@ def SelectGal(galcomps: GalComps, distmax: float, n_comp: int) -> GalComps:
     '''changes Flag to true for those components who belongs
         to the same galaxy of n_comp'''
 
-    galcomps.Activate.fill(False)
+    galcomps.Active.fill(False)
 
     idx = np.where(galcomps.N ==  n_comp)
 
@@ -522,7 +522,7 @@ def SelectGal(galcomps: GalComps, distmax: float, n_comp: int) -> GalComps:
     n_idx = idx[0].item(0)
 
 
-    galcomps.Activate[n_idx] = True #main component
+    galcomps.Active[n_idx] = True #main component
 
     posx = galcomps.PosX[n_idx] 
     posy = galcomps.PosY[n_idx]      
@@ -534,7 +534,7 @@ def SelectGal(galcomps: GalComps, distmax: float, n_comp: int) -> GalComps:
 
     maskdist = (dist <= distmax ) 
 
-    galcomps.Activate[maskdist] = True
+    galcomps.Active[maskdist] = True
 
     return galcomps
  

@@ -256,7 +256,7 @@ def Comp2Ellip(galhead, galcomps, N, lw=1):
     
     for idx, item in enumerate(galcomps.N):
 
-        if galcomps.Activate[idx] == True:
+        if galcomps.Active[idx] == True:
             # correcting coordinates
             xc = galcomps.PosX[idx] - galhead.xmin + 1
             yc = galcomps.PosY[idx] - galhead.ymin + 1
@@ -521,7 +521,7 @@ def PlotMul(ellconf, galcomps, mgegal, mgemod, mgecom):
 
             #  axsec[row,0].grid(True)
 
-        maskgal = galcomps.Activate == True 
+        maskgal = galcomps.Active == True 
         if ellconf.flagcomp == True:
             ii=0
                 #color value

@@ -165,7 +165,7 @@ def MulEllipSectors(ellconf, galhead, galcomps, sectgalax, sectmodel, sectcomps)
         
         ab = ellconf.qarg
         ni=0
-        maskgal = galcomps.Activate == True
+        maskgal = galcomps.Active == True
         while(ni<len(galcomps[maskgal].N)):
 
             subcmp = sectcomps[ni]

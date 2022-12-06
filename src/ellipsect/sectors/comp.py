@@ -21,7 +21,7 @@ def SubComp(ellconf, galhead, galcomps, sectcomps, axsec, n_sectors=19):
     ab=ellconf.qarg
     n=0
 
-    maskcomp = galcomps.Activate == True
+    maskcomp = galcomps.Active == True
     while(n<N):
 
         namec = galcomps.NameComp[maskcomp][n] #check if name coincide, it must be

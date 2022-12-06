@@ -199,7 +199,7 @@ def GetEllInfo(ellconf,galcomps):
     '''Gets geometry information from the last component''' 
 
 
-    maskactive = (galcomps.Activate == True) 
+    maskactive = (galcomps.Active == True) 
 
     if ellconf.flagq == False:
         ellconf.qarg = galcomps.AxRat[maskactive][-1]

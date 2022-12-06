@@ -347,7 +347,7 @@ def SectPhotComp(ellconf, dataimg, galcomps, n_sectors=19, minlevel=0):
 
 
     while(cnt < len(galcomps.N)):
-        if galcomps.Activate[cnt] == True:
+        if galcomps.Active[cnt] == True:
             img = hdu[cnt + initcomp].data.astype(float)
             subimgs.append(img)
         cnt = cnt + 1
@@ -374,7 +374,7 @@ def SectPhotComp(ellconf, dataimg, galcomps, n_sectors=19, minlevel=0):
     n = 0
 
 
-    #masksel = galcomps.Activate == True 
+    #masksel = galcomps.Active == True 
 
     i = 0
 
@@ -383,7 +383,7 @@ def SectPhotComp(ellconf, dataimg, galcomps, n_sectors=19, minlevel=0):
 
         subim = subimgs[i]
 
-        if galcomps.Activate[n] == True:
+        if galcomps.Active[n] == True:
 
 
             eps = 1 - galcomps.AxRat[n]

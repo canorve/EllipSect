@@ -411,7 +411,7 @@ class PhotAPI:
 
 
 class DataMge:
-
+    ''' class for sector_photometry'''
     rad = 0 
 
     count = 0 
@@ -422,7 +422,7 @@ class DataMge:
 
 
  class DataMgeComp:
-
+    '''class for sector_photometry per component'''
     rad = []
 
     count = []
@@ -432,6 +432,21 @@ class DataMge:
     sb = []
 
     sector = []
+
+
+class DataTidal:
+''' class for tidal function '''
+    tidal = 0
+    objchinu =0 
+    bump = 0
+    snr = 0
+    stdsnr = 0 
+    totsnr = 0
+    rss = 0
+    ndof = 0
+    magalaper = 0
+    magmodaper = 0
+
 
 
 ##### end of classes

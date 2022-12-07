@@ -37,7 +37,8 @@ def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps
     #note check how to simplify this with the new refactorizacion of classes
 
     # masks to identify components: 
-
+    #check the names in NameComp
+    #note agregar a estas la componente active
     maskmag=(galcomps.NameComp != "ferrer") & (galcomps.NameComp != "nuker") & (galcomps.NameComp != "edgedisk") & (galcomps.NameComp != "king") 
     maskgalax = (galcomps.NameComp == "sersic") | (galcomps.NameComp == "devauc") | (galcomps.NameComp == "expdisk")  | (galcomps.NameComp == "gaussian") 
 
@@ -51,7 +52,7 @@ def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps
     masknuker=(galcomps.NameComp == "nuker")
 
 
-
+    #note check the name Flux in galcomps add it to the class?
 
     if maskmag.any():
 
@@ -96,6 +97,7 @@ def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps
 
 
     # effective radius
+    #check the name rad50 y Rad add it to the class?
     galcomps.Rad50[masksersic] = galcomps.Rad[masksersic] 
     galcomps.Rad50[maskdevauc] = galcomps.Rad[maskdevauc] 
 
@@ -193,7 +195,8 @@ def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps
 
     # call to Tidal
     #note use a dataclass for return
-    (tidal,objchinu,bump,snr,stdsnr,totsnr,rss,ndof,magalaper,magmodaper)=Tidal(ellconf, dataimg, galhead, galcomps, sectgalax, 2)
+    datatidal = Tidal(ellconf, dataimg, galhead, galcomps, sectgalax, 2)
+
 
     # returns warnings to normal
     if not sys.warnoptions:
@@ -202,8 +205,8 @@ def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps
 
 
 
-    print("galaxy mag using sectors_photometry aperture = {:.3f} ".format(magalaper))
-    print("Model mag using sectors_photometry aperture = {:.3f}".format(magmodaper))
+    print("galaxy mag using sectors_photometry aperture = {:.3f} ".format(datatidal.magalaper))
+    print("Model mag using sectors_photometry aperture = {:.3f}".format(datatidal.magmodaper))
 
 
     #print("Tidal = ",tidal)  
@@ -339,18 +342,18 @@ def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps
 
     freepar=int(galcomps.freepar.sum())
 
-    npix = ndof + freepar
+    npix = datatidal.ndof + freepar
 
     #    ;  AKAIKE INFORMATION CRITERION
     #    ; AIC = chi^2 + 2k
 
-    AICrit = objchinu * ndof + 2*freepar
+    AICrit = datatidal.objchinu * datatidal.ndof + 2*freepar
     
 
     #    ; BAYESIAN INFORMATION CRITERION
     #    ; BIC = chi^2 + k * ln(n)
 
-    BICrit = objchinu * ndof + freepar * np.log(npix)
+    BICrit = datatidal.objchinu * datatidal.ndof + freepar * np.log(npix)
 
 
     #    ; BAYESIAN INFORMATION CRITERION limited by  
@@ -360,7 +363,7 @@ def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps
 
     APSF = np.pi * ellconf.fwhm**2
 
-    BICres = objchinu * ndof   + freepar * np.log(npix/APSF)
+    BICres = datatidal.objchinu * datatidal.ndof   + freepar * np.log(npix/APSF)
 
 
     ## for output only: 
@@ -376,7 +379,8 @@ def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps
     #note separate this in three functions one for the header
     # other for the output variables
     # and other for the output component variables 
-    
+
+    #separate this in another function
     #######  file output:  ######
 
     print("Creating output photometry file: ",ellconf.output)
@@ -448,10 +452,10 @@ def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps
 
     #note this below goes in another function
 
-    lineout = "total apparent mag of the galaxy (using ellipse aperture on image) = {:.3f}  \n".format(magalaper)
+    lineout = "total apparent mag of the galaxy (using ellipse aperture on image) = {:.3f}  \n".format(datatidal.magalaper)
     OUTPHOT.write(lineout)
 
-    lineout = "total apparent mag of the model (using ellipse aperture on image) = {:.3f}  \n".format(magmodaper)
+    lineout = "total apparent mag of the model (using ellipse aperture on image) = {:.3f}  \n".format(datatidal.magmodaper)
     OUTPHOT.write(lineout)
 
 
@@ -473,28 +477,28 @@ def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps
     lineout="Bulge To Total Ratio = {:.3f} \n".format(BulgeToTotal)
     OUTPHOT.write(lineout)
 
-    lineout="Tidal = {:.3f} \n".format(tidal)
+    lineout="Tidal = {:.3f} \n".format(datatidal.tidal)
     OUTPHOT.write(lineout)
 
-    lineout="Local Chinu = {:.3f} \n".format(objchinu)
+    lineout="Local Chinu = {:.3f} \n".format(datatidal.objchinu)
     OUTPHOT.write(lineout)
 
-    lineout="Bumpiness = {:.3f} \n".format(bump)
+    lineout="Bumpiness = {:.3f} \n".format(datatidal.bump)
     OUTPHOT.write(lineout)
 
-    lineout = "mean SNR = {:.3f} \n".format(snr)
+    lineout = "mean SNR = {:.3f} \n".format(datatidal.snr)
     OUTPHOT.write(lineout)
 
-    lineout = "std SNR = {:.3f} \n".format(stdsnr)
+    lineout = "std SNR = {:.3f} \n".format(datatidal.stdsnr)
     OUTPHOT.write(lineout)
 
-    lineout = "total SNR sum = {:.3f} \n".format(totsnr)  
+    lineout = "total SNR sum = {:.3f} \n".format(datatidal.totsnr)  
     OUTPHOT.write(lineout)
 
-    lineout = "Residual sum of squares (RSS) = {:.3f}  \n".format(rss)  
+    lineout = "Residual sum of squares (RSS) = {:.3f}  \n".format(datatidal.rss)  
     OUTPHOT.write(lineout)
 
-    lineout= "degrees of freedom = {} \n".format(ndof)  
+    lineout= "degrees of freedom = {} \n".format(datatidal.ndof)  
     OUTPHOT.write(lineout)
 
 
@@ -603,20 +607,20 @@ def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps
 
     photapi.Scalekpc =Scalekpc
     photapi.SbDim = SbDim 
-    photapi.magalaper =magalaper
-    photapi.magmodaper=magmodaper 
+    photapi.magalaper = datatidal.magalaper
+    photapi.magmodaper=datatidal.magmodaper 
 
     photapi.totFlux = totFlux 
     photapi.totMag = totMag 
     photapi.BulgeToTotal =BulgeToTotal
-    photapi.tidal = tidal 
-    photapi.objchinu = objchinu
-    photapi.bump = bump 
-    photapi.snr = snr
-    photapi.stdsnr =stdsnr 
-    photapi.totsnr =totsnr 
-    photapi.rss   = rss 
-    photapi.ndof   = ndof 
+    photapi.tidal = datatidal.tidal 
+    photapi.objchinu = datatidal.objchinu
+    photapi.bump = datatidal.bump 
+    photapi.snr = datatidal.snr
+    photapi.stdsnr = datatidal.stdsnr 
+    photapi.totsnr = datatidal.totsnr 
+    photapi.rss   = datatidal.rss 
+    photapi.ndof   = datatidal.ndof 
     photapi.AbsMag = AbsMag 
     photapi.AbsMag2 = AbsMag2 
     photapi.Lum = Lum 

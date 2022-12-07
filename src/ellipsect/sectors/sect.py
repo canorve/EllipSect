@@ -46,7 +46,7 @@ def SectorsGalfit(args):
     #note: change for one class 
     #class for output photometry 
 
-    photapi = PhotAPI()
+    photapi = PhotAPI() #move this to outphot
 
 
     ######################################

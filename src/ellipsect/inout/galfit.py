@@ -69,6 +69,28 @@ class GalComps:
     FreeAxRat = np.array([])           #9)  AxisRatio
     FreePosAng = np.array([])          #10) position angle
 
+    # computed parameters:
+    Rad50 = np.array([])
+    SerInd = np.array([])
+    Rad50kpc = np.array([])
+    Rad50sec = np.array([])
+    Rad90 = np.array([])
+    AbsMag = np.array([])
+    Lum = np.array([])
+    Flux = np.array([])
+    PerLight = np.array([])
+    me = np.array([])
+    mme = np.array([])
+    kser = np.array([])
+
+
+    KronRad = np.array([])
+    PetRad = np.array([])
+
+
+
+
+
 class GalSky:
     '''stores the value of the GALFIT file'''
 

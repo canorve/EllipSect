@@ -3,10 +3,8 @@ from ellipsect.lib.libs import *
 
 from ellipsect import *
 
-from ellipsect.lib.clas import DataTidal()
 
-
-def Tidal(ellconf, dataimg, galhead, galcomps, sectgalax, rmin):
+def Tidal(datatidal, ellconf, dataimg, galhead, galcomps, sectgalax, rmin):
     "Computes Tidal  values as defined in Tal et al. 2009 AJ. It algo computes Bumpiness"
     "(Blakeslee 2006 ApJ) value defined between rmin and radius"
 
@@ -396,8 +394,6 @@ def Tidal(ellconf, dataimg, galhead, galcomps, sectgalax, rmin):
     magalaper= galhead.mgzpt - 2.5*np.log10(sumflux/galhead.exptime)  #+ 0.1
     magmodaper = galhead.mgzpt - 2.5*np.log10(sumfluxmod/galhead.exptime) # + 0.1
 
-
-    datatidal = DataTidal()
 
     datatidal.tidal = tidal
     datatidal.objchinu = objchinu

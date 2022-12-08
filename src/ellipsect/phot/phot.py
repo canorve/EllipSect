@@ -13,6 +13,7 @@ from ellipsect.sectors.num import RadGamma
 
 from ellipsect.sectors.num import KronRadius
 from ellipsect.sectors.num import solvePet
+from ellipsect.lib.clas import DataTidal
 
 #phot/phot.py
 #note check how to import this dictionary from other file
@@ -29,7 +30,6 @@ SunMag = {
 
 
 
-
 def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps, photapi):
     """ Output photometry for further analysis """
 
@@ -37,46 +37,53 @@ def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps
     #note check how to simplify this with the new refactorizacion of classes
 
     # masks to identify components: 
-    #check the names in NameComp
-    #note agregar a estas la componente active
-    maskmag=(galcomps.NameComp != "ferrer") & (galcomps.NameComp != "nuker") & (galcomps.NameComp != "edgedisk") & (galcomps.NameComp != "king") 
-    maskgalax = (galcomps.NameComp == "sersic") | (galcomps.NameComp == "devauc") | (galcomps.NameComp == "expdisk")  | (galcomps.NameComp == "gaussian") 
+    maskmag = (galcomps.NameComp != "ferrer") & (galcomps.NameComp != "nuker") & 
+                (galcomps.NameComp != "edgedisk") & (galcomps.NameComp != "king")  & 
+                (galcomps.Active == True)
+
+    maskgalax = ((galcomps.NameComp == "sersic") | (galcomps.NameComp == "devauc") | 
+                (galcomps.NameComp == "expdisk")  | (galcomps.NameComp == "gaussian")) &
+                (galcomps.Active == True)
 
 
-    maskdisk = (galcomps.NameComp == "expdisk") # ignore this at the moment: #| (galcomps.NameComp == "edgedisk") 
-    maskbulge = (galcomps.NameComp == "sersic") | (galcomps.NameComp == "devauc") | (galcomps.NameComp == "moffat") | (galcomps.NameComp == "ferrer") | (galcomps.NameComp == "king") | (galcomps.NameComp == "gaussian") | (galcomps.NameComp == "psf")
-    masksersic = (galcomps.NameComp == "sersic") 
-    maskexp= (galcomps.NameComp == "expdisk")
-    maskdevauc=(galcomps.NameComp == "devauc")
-    maskgauss=(galcomps.NameComp == "gaussian")
-    masknuker=(galcomps.NameComp == "nuker")
+    maskdisk = (galcomps.NameComp == "expdisk") & (galcomps.Active == True)
+    # ignore this at the moment: #| (galcomps.NameComp == "edgedisk") 
+    maskbulge = ((galcomps.NameComp == "sersic") | (galcomps.NameComp == "devauc") | 
+                (galcomps.NameComp == "moffat") | (galcomps.NameComp == "ferrer") | 
+                (galcomps.NameComp == "king") | (galcomps.NameComp == "gaussian") | 
+                (galcomps.NameComp == "psf")) & (galcompos.Active == True)
 
+    masksersic = (galcomps.NameComp == "sersic")  & (galcompos.Active == True)
+    maskexp = (galcomps.NameComp == "expdisk") & (galcompos.Active == True)
+    maskdevauc = (galcomps.NameComp == "devauc") & (galcompos.Active == True)
+    maskgauss = (galcomps.NameComp == "gaussian") & (galcompos.Active == True)
+    masknuker = (galcomps.NameComp == "nuker") & (galcompos.Active == True)
 
-    #note check the name Flux in galcomps add it to the class?
+    datatidal = DataTidal()
+
 
     if maskmag.any():
 
-        galcomps.Flux[maskmag]=10**((galhead.mgzpt - galcomps.Mag[maskmag])/2.5)
-        totFlux=galcomps.Flux[maskmag].sum()
-        totMag=-2.5*np.log10(totFlux) + galhead.mgzpt
-        #print("total magnitud = ",totMag)
-        #print("total Flux = ",totFlux)
-    #else:
-    #    print("Total magnitud can not be computed with the actual galfit functions")
+        galcomps.Flux[maskmag] = 10**((galhead.mgzpt - galcomps.Mag[maskmag])/2.5)
+        datatidal.totFlux = galcomps.Flux[maskmag].sum()
+        datatidal.totMag = -2.5*np.log10(datatidal.totFlux) + galhead.mgzpt
+
     else:
-        totFlux = 0
-        totMag = 99
+
+        datatidal.totFlux = 0
+        datatidal.totMag = 99
 
 
     if maskdisk.any():
+
         BulgeFlux = 10**((galhead.mgzpt -  galcomps.Mag[maskbulge])/2.5)
         DiskFlux  = 10**((galhead.mgzpt -  galcomps.Mag[maskdisk])/2.5)
         totBulgeF = BulgeFlux.sum()
         totDiskF =  DiskFlux.sum()
-        BulgeToTotal= totBulgeF / (totBulgeF + totDiskF)
+        datatidal.BulgeToTotal = totBulgeF / (totBulgeF + totDiskF)
         #print("BulgeToTotal = ",BulgeToTotal)
     else:
-        BulgeToTotal = 1
+        datatidal.BulgeToTotal = 1
         #print("BulgeToTotal = 1")
 
 
@@ -110,10 +117,12 @@ def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps
     galcomps.Rad50sec[maskgalax] = galcomps.Rad50[maskgalax] * galhead.scale 
 
     #galcomps.Rad90[maskgalax] = galcomps.Rad50[maskgalax] * (1.53 + 0.73 * galcomps.SerInd[maskgalax] + 0.07 * galcomps.SerInd[maskgalax]**2) 
-    galcomps.Rad90[maskgalax] = Re90(galcomps.Rad50[maskgalax],galcomps.SerInd[maskgalax] )
+    galcomps.Rad90[maskgalax] = Re90(galcomps.Rad50[maskgalax], galcomps.SerInd[maskgalax] )
     print("Rad90 is the radius at 90% of total light  ")
 
-    galcomps.KronRad[maskgalax] = KronRadius(galcomps.Rad50[maskgalax],galcomps.Rad50[maskgalax],galcomps.SerInd[maskgalax] )
+    galcomps.KronRad[maskgalax] = KronRadius(galcomps.Rad50[maskgalax], 
+                                            galcomps.Rad50[maskgalax], galcomps.SerInd[maskgalax])
+
     print("Kron Radius is computed at Re ")
 
 
@@ -125,7 +134,8 @@ def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps
  
        
         # if the component is Nuker, galcomps.Rad90 represents  the gamma radius
-        galcomps.Rad90[masknuker] = RadGamma(galcomps.Rad[masknuker],galcomps.Exp[masknuker],galcomps.Exp2[masknuker],galcomps.Exp3[masknuker])
+        galcomps.Rad90[masknuker] = RadGamma(galcomps.Rad[masknuker], galcomps.Exp[masknuker], 
+                                            galcomps.Exp2[masknuker],galcomps.Exp3[masknuker])
 
 
         print("For Nuker component, Rad90 is the gamma radius ")
@@ -137,35 +147,29 @@ def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps
     galcomps.kser[maskgalax]  = GetK(galcomps.SerInd[maskgalax])
 
     # computing meanme and me 
-    galcomps.mme[maskgalax]  = galcomps.Mag[maskgalax]  + 2.5 * np.log10(2 * np.pi * galcomps.AxRat[maskgalax] * galcomps.Rad50sec[maskgalax]**2 )
+    galcomps.mme[maskgalax] = galcomps.Mag[maskgalax] + 2.5*np.log10(2*np.pi*galcomps.AxRat[maskgalax]* 
+                                                                            galcomps.Rad50sec[maskgalax]**2)
 
 
-    fn = (( galcomps.AxRat[maskgalax] * galcomps.SerInd[maskgalax] * np.exp( galcomps.kser[maskgalax])) / (galcomps.kser[maskgalax] ** (2 * galcomps.SerInd[maskgalax] )) ) * ( np.exp(sc.gammaln(2*galcomps.SerInd[maskgalax])) )
+    fn = ((galcomps.AxRat[maskgalax]*galcomps.SerInd[maskgalax]* 
+            np.exp(galcomps.kser[maskgalax]))/(galcomps.kser[maskgalax]**
+                                            (2*galcomps.SerInd[maskgalax])))*
+            (np.exp(sc.gammaln(2*galcomps.SerInd[maskgalax])))
 
-    galcomps.me[maskgalax] = galcomps.mme[maskgalax] +  2.5 * np.log10( fn )
+    galcomps.me[maskgalax] = galcomps.mme[maskgalax] + 2.5*np.log10(fn)
 
 
 
-    Num=len(galcomps.Flux[maskmag])
+    Num = len(galcomps.Flux[maskmag])
 
 
     if (Num > 0):
 
-        galcomps.PerLight[maskmag]= (galcomps.Flux[maskmag] / totFlux )
-        namecomp=galcomps.NameComp[maskmag]
-        N=galcomps.N[maskmag]
+        galcomps.PerLight[maskmag] = (galcomps.Flux[maskmag]/datatidal.totFlux)
+        namecomp = galcomps.NameComp[maskmag]
+        N = galcomps.N[maskmag]
 
         N=N.astype(int)
-
-    #n=0
-    #while(n<Num):
-
-    #    print("Num, componente, %perlight ",N[n],namecomp[n],galcomps.PerLight[n])
-
-    #    n+=1
-
-   
-    #print("Number of free params: ",int(galcomps.freepar.sum()))
 
 
     # create sigma image
@@ -194,36 +198,20 @@ def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps
 
 
     # call to Tidal
-    #note use a dataclass for return
-    datatidal = Tidal(ellconf, dataimg, galhead, galcomps, sectgalax, 2)
+    datatidal = Tidal(datatidal, ellconf, dataimg, galhead, galcomps, sectgalax, 2)
 
 
-    # returns warnings to normal
+    # returns warnings msgs to normal
     if not sys.warnoptions:
         warnings.simplefilter("default")
 
 
 
-
-    print("galaxy mag using sectors_photometry aperture = {:.3f} ".format(datatidal.magalaper))
+    print("galaxy mag using sectors_photometry aperture = {:.3f}".format(datatidal.magalaper))
     print("Model mag using sectors_photometry aperture = {:.3f}".format(datatidal.magmodaper))
 
-
-    #print("Tidal = ",tidal)  
-    #print("Local Chinu = ",objchinu)  
-    #print("Bumpiness = ",bump)  
-    #print("mean SNR = ",snr)  
-    #print("std SNR = ",stdsnr)  
-    #print("total SNR sum over area = ",totsnr)  
-    #print("Residual sum of squares =  ",rss)  
-    #print("degrees of freedom = ",ndof)  
-   
+  
     header = fits.getheader(galhead.inputimage)
-    #hdu = fits.open(galhead.inputimage)
-    #header = hdu[0].header
-    #hdu.close()
-
-
 
 
     if not(ellconf.flagobj):
@@ -264,8 +252,9 @@ def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps
     else:
         print("using {} band to correct for galactic extinction ".format(ellconf.band)) 
 
+
     if (ellconf.flagobj and not(ellconf.flagned)): 
-        (GalExt,DistMod,DistMod2,Scalekpc,SbDim) = NED(ellconf,  galcomps)
+        dataned = NED(ellconf, galcomps)
     else:
         if ellconf.flagned: 
             print("No search in NED because it is indicated by the user")
@@ -274,33 +263,33 @@ def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps
             print("No search in NED. Object name not provided or not found in Header")
             print("Lum and abs Mag will not be computed")
 
-        GalExt=0
-        DistMod=0
-        DistMod2=0
-        Scalekpc=0
-        SbDim=0
+        dataned.GalExt = 0
+        dataned.DistMod = 0
+        dataned.DistMod2 = 0
+        dataned.Scalekpc = 0
+        dataned.SbDim = 0
 
 
     if maskmag.any():
 
 
-        CorMag = totMag - GalExt # corrected by galactic extinction 
+        CorMag = datatidal.totMag - dataned.GalExt # corrected by galactic extinction 
             
-        AbsMag=CorMag - DistMod # No K correction applied
+        datatidal.AbsMag=CorMag - dataned.DistMod # No K correction applied
 
-        AbsMag2=CorMag - DistMod2 # No K correction applied
+        datatidal.AbsMag2=CorMag - dataned.DistMod2 # No K correction applied
 
         # per component: 
-        CompCorMag = galcomps.Mag[maskmag] - GalExt # corrected by galactic extinction 
+        CompCorMag = galcomps.Mag[maskmag] - dataned.GalExt # corrected by galactic extinction 
         #galcomps.AbsMag[maskmag] = CompCorMag - DistMod # No K correction applied
         #No K correction applied:
-        galcomps.AbsMag[maskmag] = CompCorMag - DistMod2 # AbsMag using distance modulus independent of z 
+        galcomps.AbsMag[maskmag] = CompCorMag - dataned.DistMod2 # AbsMag using distance modulus independent of z 
 
         if ellconf.band in SunMag:
             MSun = SunMag[ellconf.band]
 
             #Lum = 10**((MSun - AbsMag)/2.5) Luminosity will  now be computed using AbsMag2
-            Lum = 10**((MSun - AbsMag2)/2.5)
+            datatidal.Lum = 10**((MSun - datatidal.AbsMag2)/2.5)
             # per component 
             galcomps.Lum[maskmag]= 10**((MSun - galcomps.AbsMag[maskmag])/2.5)
 
@@ -308,7 +297,7 @@ def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps
             print("Absolute Magnitude for Band {} was not found. Check filter name ".format(ellconf.band))
             print("Luminosity will not be computed.")
 
-            Lum = 0
+            datatidal.Lum = 0
 
         #print("Magnitud Absoluta",AbsMag)
         #print("Magnitud Absoluta using Distance Modulus independen of z ",AbsMag2)
@@ -316,19 +305,19 @@ def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps
 
     else:
 
-        AbsMag = 99
-        AbsMag2 = 99
-        Lum = 0
+        datatidal.AbsMag = 99
+        datatidal.AbsMag2 = 99
+        datatidal.Lum = 0
 
 
     if maskgalax.any():
 
         #if (ellconf.flagweb and ellconf.flagobj and not(ellconf.flagned)):
 
-        galcomps.Rad50kpc[maskgalax] = galcomps.Rad50[maskgalax] * galhead.scale * Scalekpc
+        galcomps.Rad50kpc[maskgalax] = galcomps.Rad50[maskgalax] * galhead.scale * dataned.Scalekpc
 
-        galcomps.mme[maskgalax] = galcomps.mme[maskgalax] - GalExt - SbDim
-        galcomps.me[maskgalax] = galcomps.me[maskgalax] - GalExt - SbDim
+        galcomps.mme[maskgalax] = galcomps.mme[maskgalax] - dataned.GalExt - dataned.SbDim
+        galcomps.me[maskgalax] = galcomps.me[maskgalax] - dataned.GalExt - dataned.SbDim
  
         #else:
         #    print("mean surface brightness at Re is not corrected for galactic extintion nor surface brightness dimming ")
@@ -339,21 +328,21 @@ def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps
 
     ################  INFORMATION CRITERIA ####################
 
-
-    freepar=int(galcomps.freepar.sum())
+    maskfreegal = galcomps.Active == True
+    freepar = int(galcomps[maskfreegal].freepar.sum())
 
     npix = datatidal.ndof + freepar
 
     #    ;  AKAIKE INFORMATION CRITERION
     #    ; AIC = chi^2 + 2k
 
-    AICrit = datatidal.objchinu * datatidal.ndof + 2*freepar
+    datatidal.AICrit = datatidal.objchinu * datatidal.ndof + 2*freepar
     
 
     #    ; BAYESIAN INFORMATION CRITERION
     #    ; BIC = chi^2 + k * ln(n)
 
-    BICrit = datatidal.objchinu * datatidal.ndof + freepar * np.log(npix)
+    datatidal.BICrit = datatidal.objchinu * datatidal.ndof + freepar * np.log(npix)
 
 
     #    ; BAYESIAN INFORMATION CRITERION limited by  
@@ -361,24 +350,27 @@ def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps
 
     #    ; BIC = chi^2 * APSF + k * ln(n/APSF)
 
-    APSF = np.pi * ellconf.fwhm**2
+    APSF = np.pi*ellconf.fwhm**2
 
-    BICres = datatidal.objchinu * datatidal.ndof   + freepar * np.log(npix/APSF)
+    datatidal.BICres = datatidal.objchinu * datatidal.ndof   + freepar * np.log(npix/APSF)
 
+
+
+    #separate from here
 
     ## for output only: 
     stidxg = np.argsort(sectgalax.radius)
 
-    mgerad=sectgalax.radius[stidxg]
+    mgerad = sectgalax.radius[stidxg]
 
     aell = mgerad.max() 
-    bell = mgerad.max() * ellconf.qarg
+    bell = mgerad.max()*ellconf.qarg
 
 
 
     #note separate this in three functions one for the header
-    # other for the output variables
-    # and other for the output component variables 
+    # other for the output variables for file
+    # and other for the output component variables for the class
 
     #separate this in another function
     #######  file output:  ######
@@ -441,10 +433,12 @@ def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps
     lineout= "# xc = {:.2f}  yc = {:.2f}  sky = {:.2f} \n".format(ellconf.xc, ellconf.yc, ellconf.skylevel)
     OUTPHOT.write(lineout)
     
-    lineout = "# Gal. Extinction = {}; Distance Mod. = {}; Distance Mod. (z independent) = {} \n".format(GalExt,DistMod,DistMod2)
+    lineout = "# Gal. Extinction = {}; Distance Mod. = {}; Distance Mod. (z independent) = {} \n".format(
+                    dataned.GalExt, dataned.DistMod, dataned.DistMod2)
     OUTPHOT.write(lineout)
 
-    lineout = "# cosmology corrected scale = {} kpc/arcsec; Surface brightness dimming (mag) = {} \n".format(Scalekpc,SbDim)
+    lineout = "# cosmology corrected scale = {} kpc/arcsec; Surface brightness dimming (mag) = {} \n".format(
+                        dataned.Scalekpc, dataned.SbDim)
     OUTPHOT.write(lineout)
 
     lineout = "# Check references in NED file {} \n\n".format(ellconf.namened)
@@ -462,19 +456,19 @@ def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps
     if maskmag.any():
         #Flux=10**((galhead.mgzpt -  galcomps.Mag[maskmag])/2.5)
         #totFlux=Flux.sum()
-        #totMag=-2.5*np.log10(totFlux) + galhead.mgzpt
+        #datatidal.totMag=-2.5*np.log10(totFlux) + galhead.mgzpt
 
-        lineout = "total apparent mag from model parameters (without corrections) = {:.3f}  \n".format(totMag)
+        lineout = "total apparent mag from model parameters (without corrections) = {:.3f}  \n".format(datatidal.totMag)
         OUTPHOT.write(lineout)
 
-        lineout = "total flux (without corrections) = {:.3f}  \n".format(totFlux)
+        lineout = "total flux (without corrections) = {:.3f}  \n".format(datatidal.totFlux)
         OUTPHOT.write(lineout)
     else:
         lineout="Total magnitude can not be computed with the actual galfit functions \n"
         OUTPHOT.write(lineout)
 
 
-    lineout="Bulge To Total Ratio = {:.3f} \n".format(BulgeToTotal)
+    lineout="Bulge To Total Ratio = {:.3f} \n".format(datatidal.BulgeToTotal)
     OUTPHOT.write(lineout)
 
     lineout="Tidal = {:.3f} \n".format(datatidal.tidal)
@@ -517,24 +511,24 @@ def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps
 
             #AbsMag2=CorMag - DistMod2 # No K correction applied
 
-            lineout="Absolute Mag = {:.3f} \n".format(AbsMag)
+            lineout="Absolute Mag = {:.3f} \n".format(datatidal.AbsMag)
             OUTPHOT.write(lineout)
 
-            lineout="Absolute Mag using Dist Mod independent of z = {:.3f} \n".format(AbsMag2)
+            lineout="Absolute Mag using Dist Mod independent of z = {:.3f} \n".format(datatidal.AbsMag2)
             OUTPHOT.write(lineout)
 
-            lineout="Luminosity = {:.3f} (10^10 solar lum) using Dist Mod independent of z  \n".format(Lum/1e10)
+            lineout="Luminosity = {:.3f} (10^10 solar lum) using Dist Mod independent of z  \n".format(datatidal.Lum/1e10)
             OUTPHOT.write(lineout)
 
 
 
-    lineout= "Akaike Information Criterion = {:.3f} \n".format(AICrit)  
+    lineout= "Akaike Information Criterion = {:.3f} \n".format(datatidal.AICrit)  
     OUTPHOT.write(lineout)
 
-    lineout = "Bayesian Information Criterion = {:.3f} \n".format(BICrit)  
+    lineout = "Bayesian Information Criterion = {:.3f} \n".format(datatidal.BICrit)  
     OUTPHOT.write(lineout)
 
-    lineout = "Bayesian Information Criterion using nres = n / Area_psf = {:.3f} \n".format(BICres)  
+    lineout = "Bayesian Information Criterion using nres = n / Area_psf = {:.3f} \n".format(datatidal.BICres)  
     OUTPHOT.write(lineout)
 
 
@@ -599,20 +593,20 @@ def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps
     # save variables for output class
     #note this goes in another function. evaluate this
 
-    photapi.aell =aell
-    photapi.bell =bell 
-    photapi.GalExt =GalExt 
-    photapi.DistMod=DistMod
-    photapi.DistMod2 = DistMod2
+    photapi.aell = aell
+    photapi.bell = bell 
+    photapi.GalExt = dataned.GalExt 
+    photapi.DistMod = dataned.DistMod
+    photapi.DistMod2 = dataned.DistMod2
 
-    photapi.Scalekpc =Scalekpc
-    photapi.SbDim = SbDim 
+    photapi.Scalekpc = dataned.Scalekpc
+    photapi.SbDim = dataned.SbDim 
     photapi.magalaper = datatidal.magalaper
     photapi.magmodaper=datatidal.magmodaper 
 
-    photapi.totFlux = totFlux 
-    photapi.totMag = totMag 
-    photapi.BulgeToTotal =BulgeToTotal
+    photapi.totFlux = datatidal.totFlux 
+    photapi.totMag = datatidal.totMag 
+    photapi.BulgeToTotal = datatidal.BulgeToTotal
     photapi.tidal = datatidal.tidal 
     photapi.objchinu = datatidal.objchinu
     photapi.bump = datatidal.bump 
@@ -621,17 +615,17 @@ def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps
     photapi.totsnr = datatidal.totsnr 
     photapi.rss   = datatidal.rss 
     photapi.ndof   = datatidal.ndof 
-    photapi.AbsMag = AbsMag 
-    photapi.AbsMag2 = AbsMag2 
-    photapi.Lum = Lum 
-    photapi.AICrit   = AICrit 
-    photapi.BICrit = BICrit
+    photapi.AbsMag = datatidal.AbsMag 
+    photapi.AbsMag2 = datatidal.AbsMag2 
+    photapi.Lum = datatidal.Lum 
+    photapi.AICrit   = datatidal.AICrit 
+    photapi.BICrit = datatidal.BICrit
 
-    photapi.BICres = BICres
+    photapi.BICres = datatidal.BICres
 
 
-    photapi.KronRad=galcomps.KronRad.copy()
-    photapi.PetRad=galcomps.PetRad.copy()
+    photapi.KronRad = galcomps.KronRad.copy()
+    photapi.PetRad = galcomps.PetRad.copy()
 
 
 

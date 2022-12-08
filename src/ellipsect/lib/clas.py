@@ -435,7 +435,8 @@ class DataMge:
 
 
 class DataTidal:
-''' class for tidal function '''
+''' class for tidal function and other variables '''
+
     tidal = 0
     objchinu =0 
     bump = 0
@@ -444,8 +445,28 @@ class DataTidal:
     totsnr = 0
     rss = 0
     ndof = 0
-    magalaper = 0
-    magmodaper = 0
+    magalaper = 99  
+    magmodaper = 99 
+
+
+    totFlux = 0
+    totMag = 99  
+    BulgeToTotal = 0
+
+    AbsMag = 99
+    AbsMag2 = 99
+    Lum = 0
+    AICrit   = 0
+    BICrit = 0
+    BICres = 0
+
+class DataNed:
+
+    GalExt = 0
+    DistMod = 0
+    DistMod2 = 0
+    Scalekpc = 0 
+    SbDim = 0
 
 
 

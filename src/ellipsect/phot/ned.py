@@ -5,11 +5,14 @@ from ellipsect import *
 
 
 
-
+from ellipsect.lib.clas import DataNed
 
 def NED(ellconf, galcomps):
     "connect to NED database to obtain Gal Extinction and other variables"
-    
+
+    dataned = DataNed()
+
+
     objname=ellconf.objname
     band=ellconf.band
 
@@ -144,9 +147,13 @@ def NED(ellconf, galcomps):
     if not sys.warnoptions:
         warnings.simplefilter("default")
 
+    dataned.GalExt = GalExt
+    dataned.DistMod = DistMod
+    dataned.DistMod2 = DistMod2
+    dataned.Scalekpc = Scalekpc
+    dataned.SbDim = SbDim
 
-
-    return (GalExt,DistMod,DistMod2,Scalekpc,SbDim)
+    return dataned 
 
 
 

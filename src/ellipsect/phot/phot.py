@@ -15,6 +15,10 @@ from ellipsect.sectors.num import KronRadius
 from ellipsect.sectors.num import solvePet
 from ellipsect.lib.clas import DataTidal
 
+
+from ellipsect.inout.prt import printPhot
+
+
 #phot/phot.py
 #note check how to import this dictionary from other file
 ### Dictionary for Absolute mag of the Sun taken from Willmer 2018
@@ -34,7 +38,6 @@ def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps
     """ Output photometry for further analysis """
 
 
-    #note check how to simplify this with the new refactorizacion of classes
 
     # masks to identify components: 
     maskmag = (galcomps.NameComp != "ferrer") & (galcomps.NameComp != "nuker") & 
@@ -342,7 +345,7 @@ def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps
     #    ; BAYESIAN INFORMATION CRITERION
     #    ; BIC = chi^2 + k * ln(n)
 
-    datatidal.BICrit = datatidal.objchinu * datatidal.ndof + freepar * np.log(npix)
+    datatidal.BICrit = datatidal.objchinu * datatidal.ndof + freepar*np.log(npix)
 
 
     #    ; BAYESIAN INFORMATION CRITERION limited by  
@@ -352,243 +355,13 @@ def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps
 
     APSF = np.pi*ellconf.fwhm**2
 
-    datatidal.BICres = datatidal.objchinu * datatidal.ndof   + freepar * np.log(npix/APSF)
+    datatidal.BICres = datatidal.objchinu*datatidal.ndof + freepar*np.log(npix/APSF)
 
 
 
-    #separate from here
+    #prints photometric variables into a file:
+    printPhot(ellconf, galhead, galcomps, dataned, datatidal, sectgalax)
 
-    ## for output only: 
-    stidxg = np.argsort(sectgalax.radius)
-
-    mgerad = sectgalax.radius[stidxg]
-
-    aell = mgerad.max() 
-    bell = mgerad.max()*ellconf.qarg
-
-
-
-    #note separate this in three functions one for the header
-    # other for the output variables for file
-    # and other for the output component variables for the class
-
-    #separate this in another function
-    #######  file output:  ######
-
-    print("Creating output photometry file: ",ellconf.output)
-
-    OUTPHOT = open (ellconf.output,"w")
-
-    lineout= "#   Output photometry for {} file \n".format(galhead.outimage)
-    OUTPHOT.write(lineout)
-
-    lineout= "#\n"
-    OUTPHOT.write(lineout)
-
-    lineout = "# Photometry for object: {} (use -object option to change it) \n".format(ellconf.objname)
-    OUTPHOT.write(lineout)
-
-    lineout = "# All photometric quantities are computed for filter {} (use -filter option to change it) \n".format(ellconf.band)
-    OUTPHOT.write(lineout)
-
-    lineout = "# Magnitudes are not corrected by K-Correction \n"
-    OUTPHOT.write(lineout)
-
-    lineout= "# Total magnitude and other variables are NOT computed for: \n"
-    OUTPHOT.write(lineout)
-
-    lineout= "# ferrer, nuker, edgedisk and king components.  \n"
-    OUTPHOT.write(lineout)
-
-    if masknuker.any():
- 
-        lineout= "# For Nuker component, Rad90 is the gamma radius   \n"
-        OUTPHOT.write(lineout)
-
-
-
-    lineout = "# Some photometric variables are computed within an ellipse defined by sectors_photometry \n"
-    OUTPHOT.write(lineout)
-
-    lineout = "# This ellipse has axis a = {:.2f} and b = {:.2f} centered at xc, yc \n".format(aell,bell)
-    OUTPHOT.write(lineout)
-
-    lineout = "# To see this ellipse check the file {} \n".format(ellconf.namecheck)
-    OUTPHOT.write(lineout)
-
-
-    lineout= "#\n"
-    OUTPHOT.write(lineout)
-
-    lineout= "# sectors_photometry was used with q={}, pa={} and minlevel = {} \n".format(ellconf.qarg, 
-                                                                                            ellconf.parg, ellconf.minlevel)
-    OUTPHOT.write(lineout)
-
-    lineout= "# OutImage = {}  MgZpt = {}  \n".format(galhead.outimage,galhead.mgzpt)
-    OUTPHOT.write(lineout)
-
-    lineout= "# exptime = {}  plate scale = {} ''/pix \n".format(galhead.exptime,galhead.scale)
-    OUTPHOT.write(lineout)
-
-    lineout= "# xc = {:.2f}  yc = {:.2f}  sky = {:.2f} \n".format(ellconf.xc, ellconf.yc, ellconf.skylevel)
-    OUTPHOT.write(lineout)
-    
-    lineout = "# Gal. Extinction = {}; Distance Mod. = {}; Distance Mod. (z independent) = {} \n".format(
-                    dataned.GalExt, dataned.DistMod, dataned.DistMod2)
-    OUTPHOT.write(lineout)
-
-    lineout = "# cosmology corrected scale = {} kpc/arcsec; Surface brightness dimming (mag) = {} \n".format(
-                        dataned.Scalekpc, dataned.SbDim)
-    OUTPHOT.write(lineout)
-
-    lineout = "# Check references in NED file {} \n\n".format(ellconf.namened)
-    OUTPHOT.write(lineout)
-
-    #note this below goes in another function
-
-    lineout = "total apparent mag of the galaxy (using ellipse aperture on image) = {:.3f}  \n".format(datatidal.magalaper)
-    OUTPHOT.write(lineout)
-
-    lineout = "total apparent mag of the model (using ellipse aperture on image) = {:.3f}  \n".format(datatidal.magmodaper)
-    OUTPHOT.write(lineout)
-
-
-    if maskmag.any():
-        #Flux=10**((galhead.mgzpt -  galcomps.Mag[maskmag])/2.5)
-        #totFlux=Flux.sum()
-        #datatidal.totMag=-2.5*np.log10(totFlux) + galhead.mgzpt
-
-        lineout = "total apparent mag from model parameters (without corrections) = {:.3f}  \n".format(datatidal.totMag)
-        OUTPHOT.write(lineout)
-
-        lineout = "total flux (without corrections) = {:.3f}  \n".format(datatidal.totFlux)
-        OUTPHOT.write(lineout)
-    else:
-        lineout="Total magnitude can not be computed with the actual galfit functions \n"
-        OUTPHOT.write(lineout)
-
-
-    lineout="Bulge To Total Ratio = {:.3f} \n".format(datatidal.BulgeToTotal)
-    OUTPHOT.write(lineout)
-
-    lineout="Tidal = {:.3f} \n".format(datatidal.tidal)
-    OUTPHOT.write(lineout)
-
-    lineout="Local Chinu = {:.3f} \n".format(datatidal.objchinu)
-    OUTPHOT.write(lineout)
-
-    lineout="Bumpiness = {:.3f} \n".format(datatidal.bump)
-    OUTPHOT.write(lineout)
-
-    lineout = "mean SNR = {:.3f} \n".format(datatidal.snr)
-    OUTPHOT.write(lineout)
-
-    lineout = "std SNR = {:.3f} \n".format(datatidal.stdsnr)
-    OUTPHOT.write(lineout)
-
-    lineout = "total SNR sum = {:.3f} \n".format(datatidal.totsnr)  
-    OUTPHOT.write(lineout)
-
-    lineout = "Residual sum of squares (RSS) = {:.3f}  \n".format(datatidal.rss)  
-    OUTPHOT.write(lineout)
-
-    lineout= "degrees of freedom = {} \n".format(datatidal.ndof)  
-    OUTPHOT.write(lineout)
-
-
-    lineout="Number of free params = {} \n".format(int(galcomps.freepar.sum()))
-    OUTPHOT.write(lineout)
-   
-
-    if maskmag.any():
-
-
-        if (ellconf.flagweb and ellconf.flagobj and not(ellconf.flagned)):
-
-            #CorMag = totMag - GalExt # corrected by galactic extinction 
-            
-            #AbsMag=CorMag - DistMod # No K correction applied
-
-            #AbsMag2=CorMag - DistMod2 # No K correction applied
-
-            lineout="Absolute Mag = {:.3f} \n".format(datatidal.AbsMag)
-            OUTPHOT.write(lineout)
-
-            lineout="Absolute Mag using Dist Mod independent of z = {:.3f} \n".format(datatidal.AbsMag2)
-            OUTPHOT.write(lineout)
-
-            lineout="Luminosity = {:.3f} (10^10 solar lum) using Dist Mod independent of z  \n".format(datatidal.Lum/1e10)
-            OUTPHOT.write(lineout)
-
-
-
-    lineout= "Akaike Information Criterion = {:.3f} \n".format(datatidal.AICrit)  
-    OUTPHOT.write(lineout)
-
-    lineout = "Bayesian Information Criterion = {:.3f} \n".format(datatidal.BICrit)  
-    OUTPHOT.write(lineout)
-
-    lineout = "Bayesian Information Criterion using nres = n / Area_psf = {:.3f} \n".format(datatidal.BICres)  
-    OUTPHOT.write(lineout)
-
-
-    lineout= "\n"
-    OUTPHOT.write(lineout)
-
-    ############################
-
-    if ellconf.flagradsky:
-
-        mean = ellconf.gradskymean
-        std = ellconf.gradskystd
-        median = ellconf.gradskymed
-
-
-        lineout="computed sky with the gradient method:  mean = {:.2f} , std = {:.2f}, median = {} \n".format(mean,std,median)
-
-        OUTPHOT.write(lineout)
- 
-    if ellconf.flagrandboxsky:
-
-        mean = ellconf.randskymean
-        std = ellconf.randskystd
-        median = ellconf.randskymed
-
-        lineout="computed sky with the random box method:  mean = {:.2f} , std = {:.2f}, median = {} \n".format(mean,std,median)
-        OUTPHOT.write(lineout)
-
-
-    lineout = "\n"  
-    OUTPHOT.write(lineout)
-
-    #############################
-    #note this goes in another functions
-
-    lineout = "#########################################\n"  
-    OUTPHOT.write(lineout)
-
-    lineout = "# Photometric properties per component: #\n"  
-    OUTPHOT.write(lineout)
-
-    lineout = "#########################################\n"  
-    OUTPHOT.write(lineout)
-
-    lineout= "\n"
-    OUTPHOT.write(lineout)
-
-
-    lineout = "#   N      Component   FractionLight    me        <me>        AbsMag      Luminosity      Rad90       Re      KronRadius   PetroRad \n"  
-    OUTPHOT.write(lineout)
-
-    lineout = "#                                    (mag/'')   (mag/'')      (mag)    (10^10 SolarLum)   (pix)      (kpc)      (pix)       (Re)    \n"  
-    OUTPHOT.write(lineout)
-
-
-    for idx, item in enumerate(galcomps.N) :
-        lineout= "    {0:^2} {1:^17} {2:^10.3f} {3:^10.3f} {4:^10.3f} {5:^14.3f} {6:^14.3f} {7:^10.3f} {8:^10.3f} {9:^10.3f}  {10:^10.3f}  \n".format(galcomps.N[idx],galcomps.NameComp[idx],galcomps.PerLight[idx],galcomps.me[idx],galcomps.mme[idx],galcomps.AbsMag[idx],galcomps.Lum[idx]/1e10,galcomps.Rad90[idx],galcomps.Rad50kpc[idx],galcomps.KronRad[idx],galcomps.PetRad[idx])
-        OUTPHOT.write(lineout)
-
-    OUTPHOT.close()
 
     # save variables for output class
     #note this goes in another function. evaluate this

@@ -178,7 +178,6 @@ def SectorsGalfit(args):
     ############ Computing output photometry ###############
     ########################################################
 
-    #lastmod 
 
     if ellconf.flagphot:
         print("Computing output photometry ... ")
@@ -187,6 +186,7 @@ def SectorsGalfit(args):
 
         OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps, photapi)
 
+    #lastmod 
 
     if galpar.tempmask != None:
         os.remove(galpar.tempmask) # removing temp mask file

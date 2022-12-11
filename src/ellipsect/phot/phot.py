@@ -13,30 +13,19 @@ from ellipsect.sectors.num import RadGamma
 
 from ellipsect.sectors.num import KronRadius
 from ellipsect.sectors.num import solvePet
-from ellipsect.lib.clas import DataTidal
 
+from ellipsect.lib.clas import DataTidal
+from ellipsect.lib.clas import SunMag
 
 from ellipsect.inout.prt import printPhot
 
 
 #phot/phot.py
-#note check how to import this dictionary from other file
-### Dictionary for Absolute mag of the Sun taken from Willmer 2018
-SunMag = {
-        "U":5.61,"B":5.44,"V": 4.81,"R":4.43,"I":4.1,
-        "J": 3.67,"H": 3.32,"K": 3.27,
-        "u":5.49,"g":5.23,"r": 4.53,"i":4.19,"z":4.01,
-        "L":3.26
-        } 
-
-####
-
 
 
 
 def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps, photapi):
     """ Output photometry for further analysis """
-
 
 
     # masks to identify components: 
@@ -364,19 +353,23 @@ def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps
 
 
     # save variables for output class
-    #note this goes in another function. evaluate this
+    passPhotVar(photapi, dataned, datatidal, galcomps ,aell, bell)
+
+
+
+def passPhotVar(photapi, dataned, datatidal, galcomps ,aell, bell):
 
     photapi.aell = aell
     photapi.bell = bell 
+
     photapi.GalExt = dataned.GalExt 
     photapi.DistMod = dataned.DistMod
     photapi.DistMod2 = dataned.DistMod2
-
     photapi.Scalekpc = dataned.Scalekpc
     photapi.SbDim = dataned.SbDim 
+
     photapi.magalaper = datatidal.magalaper
     photapi.magmodaper=datatidal.magmodaper 
-
     photapi.totFlux = datatidal.totFlux 
     photapi.totMag = datatidal.totMag 
     photapi.BulgeToTotal = datatidal.BulgeToTotal
@@ -393,7 +386,6 @@ def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps
     photapi.Lum = datatidal.Lum 
     photapi.AICrit   = datatidal.AICrit 
     photapi.BICrit = datatidal.BICrit
-
     photapi.BICres = datatidal.BICres
 
 

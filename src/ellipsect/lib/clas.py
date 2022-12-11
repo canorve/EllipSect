@@ -472,4 +472,14 @@ class DataNed:
 
 ##### end of classes
 
+### Dictionary for Absolute mag of the Sun taken from Willmer 2018
+SunMag = {
+        "U":5.61,"B":5.44,"V": 4.81,"R":4.43,"I":4.1,
+        "J": 3.67,"H": 3.32,"K": 3.27,
+        "u":5.49,"g":5.23,"r": 4.53,"i":4.19,"z":4.01,
+        "L":3.26
+        } 
+
+####
+
 

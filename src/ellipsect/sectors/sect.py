@@ -5,7 +5,6 @@ from ellipsect import *
 
 from ellipsect.lib.clas import GalfitParams
 from ellipsect.lib.clas import GalfitComps 
-from ellipsect.lib.clas import PhotAPI 
 
 from ellipsect.inout.read import ReadGALFITout 
 #from ellipsect.inout.read import GetWCS
@@ -34,25 +33,10 @@ def SectorsGalfit(args):
 
     ellconf = PassArgs(args) # from now on, ellconf is used instead of args
 
-    #note: change this class for two class: one for the galfit header
-    # and other for the galfit components
-
-    #class for GALFIT's parameters
-    #galpar=GalfitParams()
-
-    #class for GALFIT's components
-    #galcomps=GalfitComps()
-
-    #note: change for one class 
-    #class for output photometry 
-
-    photapi = PhotAPI() #move this to outphot
 
 
     ######################################
     ####### Read Galfit File #############
-    #note: use two: one for the header and other for the components
-    # create a class for reading
 
     galhead = Galfit().ReadHead(ellconf.galfile)
     galcomps = Galfit().ReadComps(ellconf.galfile)
@@ -114,18 +98,15 @@ def SectorsGalfit(args):
     minlevel = ellconf.minlevel  # minimun value for sky
 
     #call to sectors_photometry for galaxy and model
-    #note check for galpar elimination
 
     sectgalax = SectPhot(ellconf, dataimg, n_sectors = numsectors, minlevel = minlevel, fit='gal')
     sectmodel = SectPhot(ellconf, dataimg, n_sectors = numsectors, minlevel = minlevel, fit='mod' )
 
     
     sectcomps=[]
-    #note check for galpar elimination
     if ellconf.flagcomp:
         #Note: sectors photometry for components always finished 
         # in minlevel = 0 regardless of the input -minlevel
-        #sectcomps=SectPhotComp(galpar, ellconf, galcomps, n_sectors=numsectors, minlevel=minlevel)
 
         sectcomps = SectPhotComp(ellconf, dataimg, galcomps, n_sectors = numsectors, minlevel = 0)
 
@@ -160,8 +141,7 @@ def SectorsGalfit(args):
 
     print("creating multi-plots..")
 
-    #note separate here in one for computation and other for plotting
-    MulEllipSectors(ellconf, galpar, galcomps, sectgalax, sectmodel, sectcomps)
+    MulEllipSectors(ellconf, galhead, galcomps, sectgalax, sectmodel, sectcomps)
 
 
     print("multi-plot file: ", ellconf.namemul)
@@ -181,19 +161,15 @@ def SectorsGalfit(args):
 
     if ellconf.flagphot:
         print("Computing output photometry ... ")
-        #note check how to simplify with the new variables
-        # galpar will dissapear
 
-        OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps, photapi)
-
-    #lastmod 
-
-    if galpar.tempmask != None:
-        os.remove(galpar.tempmask) # removing temp mask file
+        photapi = OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps)
 
 
-    #note evalue how to eliminate the most class and variables
-    PassVars(photapi,ellconf,galpar,galcomps)    
+    if galhead.tempmask != None:
+        os.remove(galhead.tempmask) # removing temp mask file
+
+
+    PassVars(photapi, ellconf, galhead, galcomps)    
 
     return photapi
 
@@ -413,93 +389,90 @@ def SectPhotComp(ellconf, dataimg, galcomps, n_sectors=19, minlevel=0):
 
 
 
-def PassVars(photapi,ellconf,galpar,galcomps):
+def PassVars(photapi, ellconf, galhead, galcomps):
 
     #################
     #from InputParams
     #ellconf=InputParams()
 
     #input file
-    photapi.galfile=ellconf.galfile 
+    photapi.galfile = ellconf.galfile 
 
     #sb output file
-    photapi.sboutput =ellconf.sboutput
+    photapi.sboutput = ellconf.sboutput
 
     #output file
-    photapi.output =ellconf.output
+    photapi.output = ellconf.output
 
     # input image model
-    photapi.inputmodel=ellconf.inputmodel
+    photapi.inputmodel = ellconf.inputmodel
 
 
     # object name to search in NED
-    photapi.objname=ellconf.objname
-    photapi.namefile=ellconf.namefile
-    photapi.namepng=ellconf.namepng
-    photapi.namesec=ellconf.namesec
-    photapi.namemod=ellconf.namemod
-    photapi.namemul=ellconf.namemul
-    photapi.namesub=ellconf.namesub
-    photapi.namesig=ellconf.namesig
-    photapi.namesnr=ellconf.namesnr
-    photapi.namened=ellconf.namened
-    photapi.namecheck=ellconf.namecheck
-    photapi.namering=ellconf.namering
-    photapi.nedfile=ellconf.nedfile
+    photapi.objname = ellconf.objname
+    photapi.namefile = ellconf.namefile
+    photapi.namepng = ellconf.namepng
+    photapi.namesec = ellconf.namesec
+    photapi.namemod = ellconf.namemod
+    photapi.namemul = ellconf.namemul
+    photapi.namesub = ellconf.namesub
+    photapi.namesig = ellconf.namesig
+    photapi.namesnr = ellconf.namesnr
+    photapi.namened = ellconf.namened
+    photapi.namecheck = ellconf.namecheck
+    photapi.namering = ellconf.namering
+    photapi.nedfile = ellconf.nedfile
 
 
     #################
-    #from GalfitParams
-    #galpar=Galfitellconf()
+    #from Galhead and ellconf
 
 
-    photapi.xc=galpar.xc
-    photapi.yc=galpar.yc
-    photapi.q=galpar.q
-    photapi.ang=galpar.ang
-    photapi.skylevel=galpar.skylevel
-    photapi.scale=galpar.scale
-    photapi.inputimage=galpar.inputimage
-    photapi.outimage=galpar.outimage
-    photapi.maskimage=galpar.maskimage
-    photapi.mgzpt=galpar.mgzpt
-    photapi.exptime=galpar.exptime
-    photapi.tempmask=galpar.tempmask
-    photapi.xmin=galpar.xmin
-    photapi.xmax=galpar.xmax
-    photapi.ymin=galpar.ymin
-    photapi.ymax=galpar.ymax
-    photapi.band=galpar.band
-    photapi.inputimage=galpar.inputimage
+    photapi.xc = ellconf.xc
+    photapi.yc = ellconf.yc
+    photapi.q = ellconf.qarg
+    photapi.ang = ellconf.parg
+    photapi.skylevel = ellconf.skylevel
+    photapi.scale = galhead.scale
+    photapi.inputimage = galhead.inputimage
+    photapi.outimage = galhead.outimage
+    photapi.maskimage = galhead.maskimage
+    photapi.mgzpt = galhead.mgzpt
+    photapi.exptime = galhead.exptime
+    photapi.tempmask = galhead.tempmask
+    photapi.xmin = galhead.xmin
+    photapi.xmax = galhead.xmax
+    photapi.ymin = galhead.ymin
+    photapi.ymax = galhead.ymax
+    photapi.band = galhead.band
 
 
     # from gradsky
-    photapi.gradskymean =galpar.gradskymean
-    photapi.gradskystd =galpar.gradskystd
-    photapi.gradskymed =galpar.gradskymed
+    photapi.gradskymean = ellconf.gradskymean
+    photapi.gradskystd = ellconf.gradskystd
+    photapi.gradskymed = ellconf.gradskymed
 
     # from randboxsky
-    photapi.randskymean =galpar.randskymean
-    photapi.randskystd =galpar.randskystd
-    photapi.randskymed =galpar.randskymed
+    photapi.randskymean = ellconf.randskymean
+    photapi.randskystd = ellconf.randskystd
+    photapi.randskymed = ellconf.randskymed
 
     #################
     # from GalfitComps
     #galcomps=GalfitComps()
 
     # init sub values
-    # todos estos son arrays
     #photapi.Comps=galcomps.Comps.copy()
-    photapi.N=galcomps.N.copy()
+    photapi.N = galcomps.N.copy()
 
-    photapi.NameComp=galcomps.NameComp.copy()
-    photapi.PosX=galcomps.PosX.copy()
-    photapi.PosY=galcomps.PosY.copy()
-    photapi.Mag=galcomps.Mag.copy()
-    photapi.Rad=galcomps.Rad.copy()
-    photapi.Exp=galcomps.Exp.copy()
-    photapi.Exp2=galcomps.Exp2.copy()
-    photapi.Exp3=galcomps.Exp3.copy()
+    photapi.NameComp = galcomps.NameComp.copy()
+    photapi.PosX = galcomps.PosX.copy()
+    photapi.PosY = galcomps.PosY.copy()
+    photapi.Mag = galcomps.Mag.copy()
+    photapi.Rad = galcomps.Rad.copy()
+    photapi.Exp = galcomps.Exp.copy()
+    photapi.Exp2 = galcomps.Exp2.copy()
+    photapi.Exp3 = galcomps.Exp3.copy()
                  
     photapi.AxRat=galcomps.AxRat.copy()
     photapi.PosAng =galcomps.PosAng.copy()
@@ -507,17 +480,17 @@ def PassVars(photapi,ellconf,galpar,galcomps):
     photapi.freepar=galcomps.freepar.copy()
 
     # computed parameters:
-    photapi.Rad50=galcomps.Rad50.copy()
-    photapi.SerInd=galcomps.SerInd.copy()
-    photapi.Rad50kpc=galcomps.Rad50kpc.copy()
-    photapi.Rad50sec=galcomps.Rad50sec.copy()
-    photapi.Rad90=galcomps.Rad90.copy()
-    photapi.AbsMagComp=galcomps.AbsMag.copy()
-    photapi.LumComp=galcomps.Lum.copy()
-    photapi.Flux=galcomps.Flux.copy()
-    photapi.PerLight=galcomps.PerLight.copy()
-    photapi.me=galcomps.me.copy()
-    photapi.mme=galcomps.mme.copy()
+    photapi.Rad50 = galcomps.Rad50.copy()
+    photapi.SerInd = galcomps.SerInd.copy()
+    photapi.Rad50kpc = galcomps.Rad50kpc.copy()
+    photapi.Rad50sec = galcomps.Rad50sec.copy()
+    photapi.Rad90 = galcomps.Rad90.copy()
+    photapi.AbsMagComp = galcomps.AbsMag.copy()
+    photapi.LumComp = galcomps.Lum.copy()
+    photapi.Flux = galcomps.Flux.copy()
+    photapi.PerLight = galcomps.PerLight.copy()
+    photapi.me = galcomps.me.copy()
+    photapi.mme = galcomps.mme.copy()
     photapi.kser = galcomps.kser.copy()
 
 

@@ -19,13 +19,18 @@ from ellipsect.lib.clas import SunMag
 
 from ellipsect.inout.prt import printPhot
 
+from ellipsect.lib.clas import PhotAPI 
+
 
 #phot/phot.py
 
 
 
-def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps, photapi):
+def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps):
     """ Output photometry for further analysis """
+
+
+
 
 
     # masks to identify components: 
@@ -347,14 +352,16 @@ def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps
     datatidal.BICres = datatidal.objchinu*datatidal.ndof + freepar*np.log(npix/APSF)
 
 
-
     #prints photometric variables into a file:
     printPhot(ellconf, galhead, galcomps, dataned, datatidal, sectgalax)
 
-
     # save variables for output class
-    passPhotVar(photapi, dataned, datatidal, galcomps ,aell, bell)
+    photapi = PhotAPI() 
 
+    passPhotVar(photapi, dataned, datatidal, galcomps, aell, bell)
+
+
+    return photapi
 
 
 def passPhotVar(photapi, dataned, datatidal, galcomps ,aell, bell):

@@ -46,7 +46,7 @@ def SectorsGalfit(args):
 
         ellconf.skylevel = galsky.sky
 
-
+     
 
     ReadGALFITout(ellconf, galhead, galcomps) 
     ######################################

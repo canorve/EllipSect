@@ -3,8 +3,6 @@ from ellipsect.lib.libs import *
 
 from ellipsect import *
 
-from ellipsect.lib.clas import GalfitParams
-from ellipsect.lib.clas import GalfitComps 
 
 from ellipsect.inout.read import ReadGALFITout 
 #from ellipsect.inout.read import GetWCS
@@ -46,7 +44,7 @@ def SectorsGalfit(args):
 
         ellconf.skylevel = galsky.sky
 
-     
+    import pdb;pdb.set_trace()     
 
     ReadGALFITout(ellconf, galhead, galcomps) 
     ######################################

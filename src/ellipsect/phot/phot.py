@@ -34,21 +34,21 @@ def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps
 
 
     # masks to identify components: 
-    maskmag = (galcomps.NameComp != "ferrer") & (galcomps.NameComp != "nuker") & 
-                (galcomps.NameComp != "edgedisk") & (galcomps.NameComp != "king")  & 
-                (galcomps.Active == True)
+    maskmag = ((galcomps.NameComp != "ferrer") & (galcomps.NameComp != "nuker") 
+                & (galcomps.NameComp != "edgedisk") & (galcomps.NameComp != "king") 
+                & (galcomps.Active == True))
 
-    maskgalax = ((galcomps.NameComp == "sersic") | (galcomps.NameComp == "devauc") | 
-                (galcomps.NameComp == "expdisk")  | (galcomps.NameComp == "gaussian")) &
-                (galcomps.Active == True)
+    maskgalax = (((galcomps.NameComp == "sersic") | (galcomps.NameComp == "devauc") | 
+                (galcomps.NameComp == "expdisk")  | (galcomps.NameComp == "gaussian")) & 
+                (galcomps.Active == True))
 
 
     maskdisk = (galcomps.NameComp == "expdisk") & (galcomps.Active == True)
     # ignore this at the moment: #| (galcomps.NameComp == "edgedisk") 
-    maskbulge = ((galcomps.NameComp == "sersic") | (galcomps.NameComp == "devauc") | 
+    maskbulge = (((galcomps.NameComp == "sersic") | (galcomps.NameComp == "devauc") | 
                 (galcomps.NameComp == "moffat") | (galcomps.NameComp == "ferrer") | 
                 (galcomps.NameComp == "king") | (galcomps.NameComp == "gaussian") | 
-                (galcomps.NameComp == "psf")) & (galcompos.Active == True)
+                (galcomps.NameComp == "psf")) & (galcompos.Active == True))
 
     masksersic = (galcomps.NameComp == "sersic")  & (galcompos.Active == True)
     maskexp = (galcomps.NameComp == "expdisk") & (galcompos.Active == True)
@@ -148,10 +148,10 @@ def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps
                                                                             galcomps.Rad50sec[maskgalax]**2)
 
 
-    fn = ((galcomps.AxRat[maskgalax]*galcomps.SerInd[maskgalax]* 
+    fn = (((galcomps.AxRat[maskgalax]*galcomps.SerInd[maskgalax]* 
             np.exp(galcomps.kser[maskgalax]))/(galcomps.kser[maskgalax]**
                                             (2*galcomps.SerInd[maskgalax])))*
-            (np.exp(sc.gammaln(2*galcomps.SerInd[maskgalax])))
+            (np.exp(sc.gammaln(2*galcomps.SerInd[maskgalax]))))
 
     galcomps.me[maskgalax] = galcomps.mme[maskgalax] + 2.5*np.log10(fn)
 

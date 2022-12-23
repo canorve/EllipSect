@@ -161,110 +161,6 @@ class EllipSectConfig:
 
 
 
-#io/class.py
-### class for Galfit parameters
-#remove this after refactorization 
-class GalfitParams:
-
-    xc=1        #for sectors_photometry
-    yc=1        #for sectors_photometry
-    inxc=1        #same as above xc but used for input image
-    inyc=1        #same as above yc but used for input image
-    q=1         #for sectors_photometry
-    rad=0         #for sky rad 
-    serind=0         #for sky rad 
-    ang=0       #for sectors_photometry
-    skylevel=0
-    scale=1
-    inputimage="galaxy.fits"
-    outimage="galaxy-out.fits"
-    maskimage="galaxy-mask.fits"
-    mgzpt=25
-    exptime=1
-    tempmask="tempmask.fits"
-    xmin=1
-    xmax=2
-    ymin=1
-    ymax=2
-
-    band="R"
-
-    inputimage="galaxy.fits"
-
-    imgidx="sci"
-    flagidx=False
-    num=1
-    flagnum=False
-
-
-    img = np.array([[1,1],[1,1]])
-    model = np.array([[1,1],[1,1]])
-    imres = np.array([[1,1],[1,1]])
-
-    mask = np.array([[1,1],[1,1]])
-    sigma = np.array([[1,1],[1,1]])
-    imsnr = np.array([[1,1],[1,1]])
-
-
-    # for computed gradsky
-    gradskymean = 0
-    gradskystd = 0
-    gradskymed = 0
-
-    randskymean = 0
-    randskystd = 0
-    randskymed = 0
-
-
-
-### class for Galfit components
-#remove this after refacto
-class GalfitComps:
-
-    # init sub values
-    Comps=np.array([])  #remove this?
-    N=np.array([])
-
-    NameComp=np.array([])  #0)
-    PosX=np.array([])            #1)   
-    PosY=np.array([])            #2)   
-    Mag=np.array([])             #3)
-    Rad=np.array([])             #4)
-    Exp=np.array([])             #5)
-    Exp2=np.array([])            #6)  for moffat
-    Exp3=np.array([])            #7)  for moffat
-                                  #8)  There is No 8 in any galfit model
-    AxRat=np.array([])           #9)  AxisRatio
-    PosAng =np.array([])         #10) position angle
-    skip=np.array([])            #z)  skip model
-    freepar=np.array([])            # Number of free params
-
-    # computed parameters:
-    Rad50=np.array([])
-    SerInd=np.array([])
-    Rad50kpc=np.array([])
-    Rad50sec=np.array([])
-    Rad90=np.array([])
-    AbsMag=np.array([])
-    Lum=np.array([])
-    Flux=np.array([])
-    PerLight=np.array([])
-    me=np.array([])
-    mme=np.array([])
-    kser = np.array([])
-
-
-    KronRad=np.array([])
-    PetRad=np.array([])
-
-    # every new variable must be initialized at 
-    # the end of the function:
-    #inout/read.py:ReadNComp
-    
-    # Also every new variable must be added to the class below
-
-
-
 #class to comunicate externally:
 class PhotAPI:
 
@@ -421,8 +317,8 @@ class DataMge:
     sb = 0 
 
 
- class DataMgeComp:
-    '''class for sector_photometry per component'''
+class DataMgeComp:
+    ''' class for sector_photometry per component'''
     rad = []
 
     count = []
@@ -435,7 +331,7 @@ class DataMge:
 
 
 class DataTidal:
-''' class for tidal function and other variables '''
+    ''' class for tidal function and other variables '''
 
     tidal = 0
     objchinu =0 
@@ -461,6 +357,7 @@ class DataTidal:
     BICres = 0
 
 class DataNed:
+    ''' class for NED info '''
 
     GalExt = 0
     DistMod = 0

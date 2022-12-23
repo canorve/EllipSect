@@ -5,7 +5,7 @@ from ellipsect.lib.libs import *
 from ellipsect.inout.prt import PrintEllFilesComps 
 from ellipsect.inout.plots import PlotSub 
 
-from ellipsect.sectors.ellip import sect2xy
+from ellipsect.sectors import ellip 
 
 def SubComp(ellconf, galhead, galcomps, sectcomps, axsec, n_sectors=19):
 
@@ -31,7 +31,7 @@ def SubComp(ellconf, galhead, galcomps, sectcomps, axsec, n_sectors=19):
 
         ###################################################
 
-        xradq, ysbq, ysberrq = sect2xy(scmp, ellconf, galhead)
+        xradq, ysbq, ysberrq = ellip.sect2xy(scmp, ellconf, galhead)
 
         colorVal = scalarMap.to_rgba(values[n])
 

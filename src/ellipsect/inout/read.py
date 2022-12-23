@@ -105,9 +105,9 @@ def InitParsing():
     parser.add_argument("-cm","--cmap", type=str, help="cmap to be used for the cube image ",default="viridis")
 
 
-    parser.add_argument("-nc","--numcomp", type=int, help="component number to 
-                        select for galaxy center. Default = first component. The 
-                        component order follows as it is shown in galfit file ",default=1)
+    parser.add_argument("-nc","--numcomp", type=int, help="component number to" 
+                        + "select for galaxy center. Default = first component. The "
+                        + "component order follows as it is shown in galfit file ",default=1)
 
 
     # every new parameter added here must be

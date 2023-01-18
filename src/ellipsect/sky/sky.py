@@ -8,11 +8,7 @@ from ellipsect.sectors.num import Re90
 
 
 def skyCall(ellconf, galhead, galcomps):
-    '''call SkyCal class routine'''
-    #######################################
-    ############## SKY ####################
-    #######################################
-    #note: move the sky section to a function
+    '''call SkyComp class routine'''
 
     #  gradient sky method:
     if ellconf.flagradsky:
@@ -70,7 +66,7 @@ def skyCall(ellconf, galhead, galcomps):
 
 
 
-        mean,std, median,rad = SkyCal().GetEllipSky(ImageFile,MaskFile,xx,yy,
+        mean,std, median,rad = SkyComp().GetEllipSky(ImageFile,MaskFile,xx,yy,
                                                     thetadeg,q,Rinit,width,
                                                     ellconf.namering,ellconf.nameringmask,
                                                     outliers=ellconf.flagrmsky)
@@ -139,7 +135,7 @@ def skyCall(ellconf, galhead, galcomps):
         else:
             Rmax = 0
 
-        mean, std, median = SkyCal().RandBox(ImageFile,MaskFile,xx,yy,
+        mean, std, median = SkyComp().RandBox(ImageFile,MaskFile,xx,yy,
                                                 thetadeg,q,Rinit,box,num,Rmax,
                                                 outliers=ellconf.flagrmsky)
         #
@@ -164,7 +160,7 @@ def skyCall(ellconf, galhead, galcomps):
 
 
 
-class SkyCal:
+class SkyComp:
     "This class compute the sky using two methods: random boxes and sky gradient"
 
     def RandBox(self,ImageFile,MaskFile,xx,yy,thetadeg,q,Rinit,box,num,Rmax,outliers=True):

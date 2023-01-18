@@ -351,6 +351,7 @@ def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps
 
     datatidal.BICres = datatidal.objchinu*datatidal.ndof + freepar*np.log(npix/APSF)
 
+    import pdb;pdb.set_trace()
 
     #prints photometric variables into a file:
     printPhot(ellconf, galhead, galcomps, dataned, datatidal, sectgalax)

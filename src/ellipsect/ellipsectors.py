@@ -31,6 +31,8 @@ def run():
 
     printWelcome() # print version and description 
 
+
+    
     # read user's input 
     args = ArgParsing(sys.argv[1:])
 

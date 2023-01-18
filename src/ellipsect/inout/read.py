@@ -126,6 +126,8 @@ def ReadGALFITout(ellconf,galhead,galcomps):
 
     galcomps = SelectGal(galcomps,ellconf.distmax,ellconf.numcomp)
  
+    import pdb;pdb.set_trace()
+
     errmsg="file {} does not exist".format(galhead.inputimage)
     assert os.path.isfile(galhead.inputimage), errmsg
 
@@ -135,6 +137,7 @@ def ReadGALFITout(ellconf,galhead,galcomps):
 
     GetEllInfo(ellconf, galcomps) 
 
+    import pdb;pdb.set_trace()
 
     #saving coordinates for the large images: input image, mask img, seg img
     ellconf.inxc = ellconf.xc

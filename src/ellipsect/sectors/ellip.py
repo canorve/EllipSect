@@ -20,7 +20,6 @@ from ellipsect.inout.plots import PlotMul
 from ellipsect.lib.clas import DataMge
 from ellipsect.lib.clas import DataMgeComp
 
-from ellipsect.sky.sky import SkyCal
 
 def EllipSectors(ellconf, galhead, galcomps, sectgalax, sectmodel, sectcomps, n_sectors=19, minlevel=0):
 

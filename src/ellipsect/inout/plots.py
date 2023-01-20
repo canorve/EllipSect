@@ -3,6 +3,7 @@ from ellipsect.lib.libs import *
 
 from ellipsect import *
 
+from ellipsect.sectors.num import Interpol
 
 
 def PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,ellconf,scale):

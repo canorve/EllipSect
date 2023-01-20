@@ -79,6 +79,7 @@ def skyCall(ellconf, galhead, galcomps):
         ellconf.gradskystd = std
         ellconf.gradskymed = median
 
+        import pdb;pdb.set_trace()
 
     #  random sky method:
     if ellconf.flagrandboxsky:
@@ -148,7 +149,7 @@ def skyCall(ellconf, galhead, galcomps):
         ellconf.randskystd = std
         ellconf.randskymed = median
 
-
+        import pdb;pdb.set_trace()
 
     #######################################
     ############## SKY End ################

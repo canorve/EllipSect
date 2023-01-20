@@ -27,7 +27,6 @@ class GalHead():
     scaley = 1
     display = "regular"
     P = 0
-    S = 0
 
     #extra info  
     imgidx = "sci"
@@ -58,16 +57,16 @@ class GalComps:
     Active = np.array([])            #activate component  for galaxy
 
     # store the flags related to parameters
-    FreePosX = np.array([])            #1)   
-    FreePosY = np.array([])            #2)   
-    FreeMag = np.array([])             #3)
-    FreeRad = np.array([])             #4)
-    FreeExp = np.array([])             #5)
-    FreeExp2 = np.array([])            #6)  for moffat
-    FreeExp3 = np.array([])            #7)  for moffat
+    PosXFree = np.array([])            #1)   
+    PosYFree = np.array([])            #2)   
+    MagFree = np.array([])             #3)
+    RadFree = np.array([])             #4)
+    ExpFree = np.array([])             #5)
+    Exp2Free = np.array([])            #6)  for moffat
+    Exp3Free = np.array([])            #7)  for moffat
                                    #8)  There is No 8 in any galfit model
-    FreeAxRat = np.array([])           #9)  AxisRatio
-    FreePosAng = np.array([])          #10) position angle
+    AxRatFree = np.array([])           #9)  AxisRatio
+    PosAngFree = np.array([])          #10) position angle
 
     # computed parameters:
     Rad50 = np.array([])
@@ -270,9 +269,6 @@ class Galfit():
             if tmp[0] == "P)":     # optional output 
                 galhead.P = int(tmp[1])
 
-            if tmp[0] == "S)":     # optional output 
-                galhead.S = int(tmp[1])
-
 
 
             index += 1
@@ -345,8 +341,8 @@ class Galfit():
 
             flagcomp = False 
 
-            freeX = 1
-            freeY = 1
+            Xfree = 1
+            Yfree = 1
             Magfree = 1
             Radfree = 1
             Expfree = 1
@@ -371,8 +367,8 @@ class Galfit():
                     if tmp[0] == "1)":   # center
                         PosX = float(tmp[1])
                         PosY = float(tmp[2])
-                        freeX = int(tmp[3])
-                        freeY = int(tmp[4])
+                        Xfree = int(tmp[3])
+                        Yfree = int(tmp[4])
                     if tmp[0] == "3)" :    # mag 
                         Mag = float(tmp[1])
                         Magfree = int(tmp[2])
@@ -413,15 +409,15 @@ class Galfit():
                 galcomps.Active = np.append(galcomps.Active, flagcomp)
 
 
-                galcomps.FreePosX = np.append(galcomps.FreePosX, freeX)
-                galcomps.FreePosY = np.append(galcomps.FreePosY, freeY)
-                galcomps.FreeMag = np.append(galcomps.FreeMag, Magfree)
-                galcomps.FreeRad = np.append(galcomps.FreeRad, Radfree)
-                galcomps.FreeExp = np.append(galcomps.FreeExp, Expfree)
-                galcomps.FreeExp2 = np.append(galcomps.FreeExp2, Exp2free)
-                galcomps.FreeExp3 = np.append(galcomps.FreeExp3, Exp3free)
-                galcomps.FreeAxRat = np.append(galcomps.FreeAxRat, AxRatfree)
-                galcomps.FreePosAng = np.append(galcomps.FreePosAng, PosAngfree)
+                galcomps.PosXFree = np.append(galcomps.PosXFree, Xfree)
+                galcomps.PosYFree = np.append(galcomps.PosYFree, Yfree)
+                galcomps.MagFree = np.append(galcomps.MagFree, Magfree)
+                galcomps.RadFree = np.append(galcomps.RadFree, Radfree)
+                galcomps.ExpFree = np.append(galcomps.ExpFree, Expfree)
+                galcomps.Exp2Free = np.append(galcomps.Exp2Free, Exp2free)
+                galcomps.Exp3Free = np.append(galcomps.Exp3Free, Exp3free)
+                galcomps.AxRatFree = np.append(galcomps.AxRatFree, AxRatfree)
+                galcomps.PosAngFree = np.append(galcomps.PosAngFree, PosAngfree)
 
 
 
@@ -464,9 +460,9 @@ class Galfit():
             dskyy = 0
             skip = 0
 
-            freesky = 1
-            freedskyx = 0
-            freedskyy = 0
+            skyfree = 1
+            dskyxfree = 0
+            dskyyfree = 0
 
 
             if (tmp[0] == "0)") and (tmp[1] == NameComp):
@@ -481,13 +477,13 @@ class Galfit():
 
                     if tmp[0] == "1)":   # center
                         sky = float(tmp[1])
-                        freesky = float(tmp[2])
+                        skyfree = float(tmp[2])
                     if tmp[0] == "2)" :    # mag 
                         dskyx = float(tmp[1])
-                        freedskyx = int(tmp[2])
+                        dskyxfree = int(tmp[2])
                     if tmp[0] == "3)" :
                         dskyy = float(tmp[1])
-                        freedskyy = int(tmp[2])
+                        dskyyfree = int(tmp[2])
                     if tmp[0] == "Z)":
                         skip=int(tmp[1])
 

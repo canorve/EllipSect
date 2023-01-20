@@ -5,8 +5,7 @@ from ellipsect import *
 
 
 from ellipsect.inout.read import ReadGALFITout 
-#from ellipsect.inout.read import GetWCS
-#from ellipsect.inout.read import ReadNComp 
+from ellipsect.inout.read import prefixNames
 
 from ellipsect.inout.plots import plotCube 
 
@@ -35,23 +34,21 @@ def SectorsGalfit(args):
     ######################################
     ####### Read Galfit File #############
 
-    galhead = Galfit().ReadHead(ellconf.galfile)
-    galcomps = Galfit().ReadComps(ellconf.galfile)
-    galsky = Galfit().ReadSky(ellconf.galfile)
 
-    import pdb;pdb.set_trace()
+    galhead = Galfit.ReadHead(ellconf.galfile)
+    galcomps = Galfit.ReadComps(ellconf.galfile)
+    galsky = Galfit.ReadSky(ellconf.galfile)
+
 
     if ellconf.flagsky == False:
 
         ellconf.skylevel = galsky.sky
 
-    import pdb;pdb.set_trace()     
 
     ReadGALFITout(ellconf, galhead, galcomps) 
     ######################################
     ######################################
 
-    import pdb;pdb.set_trace()
     printEllinfo(ellconf, galhead) #print parameter info
 
     N = numComps(galcomps)
@@ -62,7 +59,6 @@ def SectorsGalfit(args):
     #creates names of the output files based on prefix of galfit output
     prefixNames(ellconf, galhead.outimage)
 
-    import pdb;pdb.set_trace()
 
 
     if ellconf.flagsbout == True: 
@@ -82,7 +78,6 @@ def SectorsGalfit(args):
 
     dataimg = readDataImg(ellconf, galhead)
 
-    import pdb;pdb.set_trace()
     # removing background from galaxy and model images 
     dataimg.img = dataimg.img - ellconf.skylevel
     dataimg.model = dataimg.model - ellconf.skylevel
@@ -90,7 +85,6 @@ def SectorsGalfit(args):
 
     plotCube(ellconf, galhead, galcomps) #plots the cube image
 
-    import pdb;pdb.set_trace()
 
     #   numsectors=19
     #   numsectors=15
@@ -105,7 +99,6 @@ def SectorsGalfit(args):
     sectgalax = SectPhot(ellconf, dataimg, n_sectors = numsectors, minlevel = minlevel, fit='gal')
     sectmodel = SectPhot(ellconf, dataimg, n_sectors = numsectors, minlevel = minlevel, fit='mod' )
 
-    import pdb;pdb.set_trace()
     
     sectcomps=[]
     if ellconf.flagcomp:
@@ -120,7 +113,6 @@ def SectorsGalfit(args):
     skyCall(ellconf, galhead, galcomps)
 
 
-    import pdb;pdb.set_trace()
 
     print("creating plots..")
 
@@ -129,7 +121,6 @@ def SectorsGalfit(args):
     print("plot file: ", ellconf.namepng)
  
 
-    import pdb;pdb.set_trace()
 
     ##############################################
     ##############################################
@@ -153,7 +144,6 @@ def SectorsGalfit(args):
 
     print("multi-plot file: ", ellconf.namemul)
 
-    import pdb;pdb.set_trace()
 
     if ellconf.dplot:
         plt.pause(1.5)
@@ -166,6 +156,7 @@ def SectorsGalfit(args):
     ############ Computing output photometry ###############
     ########################################################
 
+    import pdb;pdb.set_trace()
 
     if ellconf.flagphot:
         print("Computing output photometry ... ")

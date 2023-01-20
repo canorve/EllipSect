@@ -5,7 +5,6 @@ from ellipsect.lib.libs import *
 from ellipsect.sectors.comp import FindSB
 from ellipsect.inout.plots import PlotSB
 
-from ellipsect.sectors.num import Interpol
 from ellipsect.sectors.num import Re90
 
 from ellipsect.sectors.comp import SubComp
@@ -26,10 +25,10 @@ def EllipSectors(ellconf, galhead, galcomps, sectgalax, sectmodel, sectcomps, n_
 
    
     #galaxy
-    xradq, ysbq, ysberrq = sect2xy(sectgalax, ellconf, galhead)
+    xradq, ysbq, ysberrq = sect2xy(sectgalax, ellconf, galhead, n_sectors)
 
     #model
-    xradm, ysbm, ysberrm = sect2xy(sectmodel, ellconf, galhead)
+    xradm, ysbm, ysberrm = sect2xy(sectmodel, ellconf, galhead, n_sectors)
 
     # Plotting
     limx,limy, axsec = PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,ellconf,galhead.scale)
@@ -53,7 +52,7 @@ def EllipSectors(ellconf, galhead, galcomps, sectgalax, sectmodel, sectcomps, n_
     return limx,limy
 
 
-def sect2xy(sect, ellconf, galhead):
+def sect2xy(sect, ellconf, galhead, n_sectors):
 
     #######################################
     #######################################
@@ -99,7 +98,7 @@ def MulEllipSectors(ellconf, galhead, galcomps, sectgalax, sectmodel, sectcomps)
   
     mgegal = DataMge()
     mgemod = DataMge()
-    mgecom = DataMgeCom()
+    mgecom = DataMgeComp()
 
     eps = 1 - ellconf.qarg
 
@@ -125,7 +124,7 @@ def MulEllipSectors(ellconf, galhead, galcomps, sectgalax, sectmodel, sectcomps)
 
     mgegal.count = sg.counts[stidx]
     mgegal.angle = sg.angle[stidx]
-    mgegal.anrad = np.deg2rad(mgeangle)
+    mgegal.anrad = np.deg2rad(mgegal.angle)
 
 
     # model
@@ -136,7 +135,7 @@ def MulEllipSectors(ellconf, galhead, galcomps, sectgalax, sectmodel, sectcomps)
 
     mgemod.count=sm.counts[stidx]
     mgemod.angle=sm.angle[stidx]
-    mgemod.anrad=np.deg2rad(mgemodangle)
+    mgemod.anrad=np.deg2rad(mgemod.angle)
 
 
     # converting to pixels

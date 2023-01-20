@@ -111,7 +111,6 @@ def SectorsGalfit(args):
 
         sectcomps = SectPhotComp(ellconf, dataimg, galcomps, n_sectors = numsectors, minlevel = 0)
         
-        import pdb;pdb.set_trace()
 
     #computing sky
     skyCall(ellconf, galhead, galcomps)
@@ -160,7 +159,6 @@ def SectorsGalfit(args):
     ############ Computing output photometry ###############
     ########################################################
 
-    import pdb;pdb.set_trace()
 
     # save variables for output class
     photapi = PhotAPI() 

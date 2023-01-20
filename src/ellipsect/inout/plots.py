@@ -432,6 +432,7 @@ def PlotMul(ellconf, galcomps, mgegal, mgemod, mgecom):
     axsec[-1, 1].tick_params(which='major', length=7)
     axsec[-1, 1].tick_params(which='minor', length=4, color='r')
 
+    angsec = 90 - ellconf.parg
 
     #    row = 7 # old values
     #row = nrows -1
@@ -527,18 +528,19 @@ def PlotMul(ellconf, galcomps, mgegal, mgemod, mgecom):
             ii=0
                 #color value
 
-            values = range(len(galcomps[maskgal].N))
+            values = range(len(galcomps.N[maskgal]))
             jet = cm = plt.get_cmap('jet') 
             cNorm  = colors.Normalize(vmin=0, vmax=values[-1])
             scalarMap = cmx.ScalarMappable(norm=cNorm, cmap=jet)
 
-            while(ii<len(galcomps[maskgal].N)):
+            while(ii<len(galcomps.N[maskgal])):
 
                 #angtemp = np.nonzero(mgeanglesub[ii] == sectors[j])[0]
         
                 ######################## Patch for angle :############  
                 alpha = sectors[j]
-                angsec2 = 90 - galcomps[maskgal].PosAng[ii]
+                angsec2 = 90 - galcomps.PosAng[maskgal][ii]
+
                 if angsec < 0:
                     angsec = 360 + angsec
                 if angsec2 < 0:

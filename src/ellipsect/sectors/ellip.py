@@ -20,7 +20,7 @@ from ellipsect.lib.clas import DataMge
 from ellipsect.lib.clas import DataMgeComp
 
 
-def EllipSectors(ellconf, galhead, galcomps, sectgalax, sectmodel, sectcomps, n_sectors=19, minlevel=0):
+def EllipSectors(ellconf, galhead, galcomps, sectgalax, sectmodel, sectcomps, n_sectors = 19, minlevel = 0):
 
 
    
@@ -31,7 +31,7 @@ def EllipSectors(ellconf, galhead, galcomps, sectgalax, sectmodel, sectcomps, n_
     xradm, ysbm, ysberrm = sect2xy(sectmodel, ellconf, galhead, n_sectors)
 
     # Plotting
-    limx,limy, axsec = PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,ellconf,galhead.scale)
+    limx,limy, axsec = PlotSB(xradq, ysbq, ysberrq, xradm, ysbm, ysberrm, ellconf, galhead.scale)
 
     ### surface brightness output file
 
@@ -44,7 +44,7 @@ def EllipSectors(ellconf, galhead, galcomps, sectgalax, sectmodel, sectcomps, n_
 
     if ellconf.flagcomp:
 
-        xradq, ysbq, n = SubComp(ellconf, galhead, galcomps, sectcomps, axsec, n_sectors=n_sectors)
+        xradq, ysbq, n = SubComp(ellconf, galhead, galcomps, sectcomps, axsec, n_sectors = n_sectors)
 
 
     axsec.legend(loc=1)
@@ -107,7 +107,7 @@ def MulEllipSectors(ellconf, galhead, galcomps, sectgalax, sectmodel, sectcomps)
     xctemp = ellconf.yc
 
 
-    angsec = 90 - ellconf.parg
+    #angsec = 90 - ellconf.parg # moved to PlotMul
 
     ######################
 
@@ -164,7 +164,8 @@ def MulEllipSectors(ellconf, galhead, galcomps, sectgalax, sectmodel, sectcomps)
         ab = ellconf.qarg
         ni=0
         maskgal = galcomps.Active == True
-        while(ni<len(galcomps[maskgal].N)):
+
+        while(ni < len(galcomps.N[maskgal])):
 
             subcmp = sectcomps[ni]
 

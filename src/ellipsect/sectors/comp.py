@@ -31,7 +31,7 @@ def SubComp(ellconf, galhead, galcomps, sectcomps, axsec, n_sectors=19):
 
         ###################################################
 
-        xradq, ysbq, ysberrq = ellip.sect2xy(scmp, ellconf, galhead)
+        xradq, ysbq, ysberrq = ellip.sect2xy(scmp, ellconf, galhead, n_sectors)
 
         colorVal = scalarMap.to_rgba(values[n])
 

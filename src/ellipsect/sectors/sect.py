@@ -25,6 +25,10 @@ from ellipsect.inout.prt import printEllinfo
 
 from ellipsect.sky.sky import skyCall
 
+
+from ellipsect.lib.clas import PhotAPI 
+
+
 def SectorsGalfit(args):
 
 
@@ -158,10 +162,14 @@ def SectorsGalfit(args):
 
     import pdb;pdb.set_trace()
 
+    # save variables for output class
+    photapi = PhotAPI() 
+
+
     if ellconf.flagphot:
         print("Computing output photometry ... ")
 
-        photapi = OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps)
+        photapi = OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps,photapi)
         
         import pdb;pdb.set_trace()
 
@@ -172,8 +180,6 @@ def SectorsGalfit(args):
 
     PassVars(photapi, ellconf, galhead, galcomps)    
 
-
-    import pdb;pdb.set_trace()
 
     return photapi
 
@@ -426,7 +432,7 @@ def PassVars(photapi, ellconf, galhead, galcomps):
     photapi.namecheck = ellconf.namecheck
     photapi.namering = ellconf.namering
     photapi.nedfile = ellconf.nedfile
-
+    photapi.band = ellconf.band
 
     #################
     #from Galhead and ellconf
@@ -448,7 +454,7 @@ def PassVars(photapi, ellconf, galhead, galcomps):
     photapi.xmax = galhead.xmax
     photapi.ymin = galhead.ymin
     photapi.ymax = galhead.ymax
-    photapi.band = galhead.band
+
 
 
     # from gradsky
@@ -478,10 +484,25 @@ def PassVars(photapi, ellconf, galhead, galcomps):
     photapi.Exp2 = galcomps.Exp2.copy()
     photapi.Exp3 = galcomps.Exp3.copy()
                  
-    photapi.AxRat=galcomps.AxRat.copy()
-    photapi.PosAng =galcomps.PosAng.copy()
-    photapi.skip=galcomps.skip.copy()
-    photapi.freepar=galcomps.freepar.copy()
+    photapi.AxRat = galcomps.AxRat.copy()
+    photapi.PosAng = galcomps.PosAng.copy()
+    photapi.skip = galcomps.skip.copy()
+
+    photapi.Active = galcomps.Active.copy()    
+
+    # store the flags related to parameters
+    photapi.PosXFree = galcomps.PosXFree.copy()
+    photapi.PosYFree = galcomps.PosYFree.copy()
+    photapi.MagFree = galcomps.MagFree.copy()
+    photapi.RadFree = galcomps.RadFree.copy()
+    photapi.ExpFree = galcomps.ExpFree.copy()
+    photapi.Exp2Free = galcomps.Exp2Free.copy()
+    photapi.Exp3Free = galcomps.Exp3Free.copy()
+    photapi.AxRatFree = galcomps.AxRatFree.copy()
+    photapi.PosAngFree = galcomps.PosAngFree.copy()
+
+
+
 
     # computed parameters:
     photapi.Rad50 = galcomps.Rad50.copy()

@@ -249,7 +249,22 @@ class PhotAPI:
     AxRat=np.array([])           #9)  AxisRatio
     PosAng =np.array([])         #10) position angle
     skip=np.array([])            #z)  skip model
-    freepar=np.array([])            # Number of free params
+
+    #from galfitcomps free parameters
+    Active = np.array([])            #activate component  for galaxy
+
+    # store the flags related to parameters
+    PosXFree = np.array([])            #1)   
+    PosYFree = np.array([])            #2)   
+    MagFree = np.array([])             #3)
+    RadFree = np.array([])             #4)
+    ExpFree = np.array([])             #5)
+    Exp2Free = np.array([])            #6)  for moffat
+    Exp3Free = np.array([])            #7)  for moffat
+                                   #8)  There is No 8 in any galfit model
+    AxRatFree = np.array([])           #9)  AxisRatio
+    PosAngFree = np.array([])          #10) position angle
+
 
     # computed parameters:
     Rad50=np.array([])

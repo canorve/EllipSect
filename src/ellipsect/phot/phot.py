@@ -19,14 +19,13 @@ from ellipsect.lib.clas import SunMag
 
 from ellipsect.inout.prt import printPhot
 
-from ellipsect.lib.clas import PhotAPI 
 
 
 #phot/phot.py
 
 
 
-def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps):
+def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps,photapi):
     """ Output photometry for further analysis """
 
 
@@ -355,9 +354,6 @@ def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps
 
     #prints photometric variables into a file:
     printPhot(ellconf, galhead, galcomps, dataned, datatidal, sectgalax)
-
-    # save variables for output class
-    photapi = PhotAPI() 
 
     passPhotVar(photapi, dataned, datatidal, galcomps, aell, bell)
 

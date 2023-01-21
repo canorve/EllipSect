@@ -1,6 +1,6 @@
 #! /usr/bin/env python3
 
-#    EllipSec: An analysis tool for GALFIT output 
+#    EllipSect: An analysis tool for GALFIT output 
 #    Copyright (C) 2022  Christopher Añorve 
 
 #    This program is free software: you can redistribute it and/or modify

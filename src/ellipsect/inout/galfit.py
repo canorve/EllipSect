@@ -508,6 +508,62 @@ class Galfit():
         return galsky
 
 
+def numParFree(galcomps: GalComps) -> int:
+    '''obtains the number of free parameters'''
+
+    p1 = 0
+    p2 = 0
+    p3 = 0
+    p4 = 0
+    p5 = 0
+    p6 = 0
+    p7 = 0
+    p8 = 0
+    p9 = 0
+    
+    parmask1 = (galcomps.Active == True and galcomps.PosXFree == 1) 
+    parmask2 = (galcomps.Active == True and galcomps.PosYFree == 1) 
+    parmask3 = (galcomps.Active == True and galcomps.MagFree == 1) 
+    parmask4 = (galcomps.Active == True and galcomps.RadFree == 1) 
+    parmask5 = (galcomps.Active == True and galcomps.ExpFree == 1) 
+    parmask6 = (galcomps.Active == True and galcomps.Exp2Free == 1) 
+    parmask7 = (galcomps.Active == True and galcomps.Exp3Free == 1) 
+    parmask8 = (galcomps.Active == True and galcomps.AxRatFree == 1) 
+    parmask9 = (galcomps.Active == True and galcomps.PosAngFree == 1) 
+
+    if parmask1.any():
+        p1 = np.sum(galcomps.PosXFree[parmask1])
+    if parmask2.any():
+        p2 = np.sum(galcomps.PosYFree[parmask2])
+    if parmask3.any():
+        p3 = np.sum(galcomps.MagFree[parmask3])
+    if parmask4.any():
+        p4 = np.sum(galcomps.RadFree[parmask4])
+    if parmask5.any():
+        p5 = np.sum(galcomps.ExpFree[parmask5])
+    if parmask6.any():
+        p6 = np.sum(galcomps.Exp2Free[parmask6])
+    if parmask7.any():
+        p7 = np.sum(galcomps.Exp3Free[parmask7])
+    if parmask8.any():
+        p8 = np.sum(galcomps.AxRatFree[parmask8])
+    if parmask9.any():
+        p9 = np.sum(galcomps.PosAngFree[parmask9])
+
+
+    pt = p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 + p9
+
+    if name == 'none':
+
+        nummask = (galcomps.Active == True) 
+        N = galcomps.Active[nummask].size
+
+    else:
+        nummask = (galcomps.Active == True) & (galcomps.NameComp == name)
+        N = galcomps.Active[nummask].size
+
+    return N
+
 
 
 
@@ -515,7 +571,6 @@ def numComps(galcomps: GalComps, name: str = 'none') -> int:
     '''obtains the number of components'''
 
     if name == 'none':
-
         nummask = (galcomps.Active == True) 
         N = galcomps.Active[nummask].size
 

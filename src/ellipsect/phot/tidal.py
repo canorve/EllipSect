@@ -3,6 +3,7 @@ from ellipsect.lib.libs import *
 
 from ellipsect import *
 
+from ellipsect.inout.galfit  import numParFree
 
 def Tidal(datatidal, ellconf, dataimg, galhead, galcomps, sectgalax, rmin):
     "Computes Tidal  values as defined in Tal et al. 2009 AJ. It algo computes Bumpiness"
@@ -308,10 +309,11 @@ def Tidal(datatidal, ellconf, dataimg, galhead, galcomps, sectgalax, rmin):
         #pixcountchi = np.size(immodel[ylo - 1:yhi, xlo - 1:xhi][maskm])
         pixcountchi = np.size(immodel[maskm])
 
+        totfreepar = numParFree(galcomps) 
 
         if(pixcountchi > 11):
 
-            ndof=pixcountchi - int(galcomps.freepar.sum())
+            ndof=pixcountchi - totfreepar 
             objchinu= chinu / ndof
         else:
             objchinu=-1

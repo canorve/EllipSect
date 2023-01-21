@@ -7,7 +7,7 @@ from ellipsect import *
 
 from ellipsect.lib.clas import DataNed
 
-def NED(ellconf, galcomps):
+def NED(ellconf):
     "connect to NED database to obtain Gal Extinction and other variables"
 
     dataned = DataNed()

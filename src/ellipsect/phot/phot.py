@@ -1,6 +1,6 @@
 
 
-from ellipsect.lib.libs import *
+from ellipsect.lib.libs import  *
 
 
 from ellipsect.sectors.num import GetK
@@ -20,6 +20,7 @@ from ellipsect.lib.clas import SunMag
 from ellipsect.inout.prt import printPhot
 
 
+from ellipsect.inout.galfit  import numParFree
 
 #phot/phot.py
 
@@ -250,7 +251,7 @@ def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps
 
 
     if (ellconf.flagobj and not(ellconf.flagned)): 
-        dataned = NED(ellconf, galcomps)
+        dataned = NED(ellconf)
     else:
         if ellconf.flagned: 
             print("No search in NED because it is indicated by the user")
@@ -310,7 +311,7 @@ def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps
 
         #if (ellconf.flagweb and ellconf.flagobj and not(ellconf.flagned)):
 
-        galcomps.Rad50kpc[maskgalax] = galcomps.Rad50[maskgalax] * galhead.scale * dataned.Scalekpc
+        galcomps.Rad50kpc[maskgalax] = galcomps.Rad50[maskgalax]*galhead.scale*dataned.Scalekpc
 
         galcomps.mme[maskgalax] = galcomps.mme[maskgalax] - dataned.GalExt - dataned.SbDim
         galcomps.me[maskgalax] = galcomps.me[maskgalax] - dataned.GalExt - dataned.SbDim
@@ -324,21 +325,20 @@ def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps
 
     ################  INFORMATION CRITERIA ####################
 
-    maskfreegal = galcomps.Active == True
-    freepar = int(galcomps[maskfreegal].freepar.sum())
 
+    freepar = numParFree(galcomps) 
     npix = datatidal.ndof + freepar
 
     #    ;  AKAIKE INFORMATION CRITERION
     #    ; AIC = chi^2 + 2k
 
-    datatidal.AICrit = datatidal.objchinu * datatidal.ndof + 2*freepar
+    datatidal.AICrit = datatidal.objchinu*datatidal.ndof + 2*freepar
     
 
     #    ; BAYESIAN INFORMATION CRITERION
     #    ; BIC = chi^2 + k * ln(n)
 
-    datatidal.BICrit = datatidal.objchinu * datatidal.ndof + freepar*np.log(npix)
+    datatidal.BICrit = datatidal.objchinu*datatidal.ndof + freepar*np.log(npix)
 
 
     #    ; BAYESIAN INFORMATION CRITERION limited by  

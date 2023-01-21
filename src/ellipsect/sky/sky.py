@@ -28,7 +28,6 @@ def skyCall(ellconf, galhead, galcomps):
 
         width = ellconf.skywidth
 
-
         ###
         Rinit = 1
 
@@ -36,7 +35,7 @@ def skyCall(ellconf, galhead, galcomps):
 
             maskgal = galcomps.Active == True            
 
-            rad90= Re90(galcomps[maskgal][0].Rad, galcomps[maskgal][0].Exp) 
+            rad90= Re90(galcomps.Rad[maskgal][0], galcomps.Exp[maskgal][0]) 
             Rinit = 1*rad90 # 1 times the R 90% of light radius
 
             if (Rinit < 50): # Rinit can not be less than the default value 
@@ -79,7 +78,6 @@ def skyCall(ellconf, galhead, galcomps):
         ellconf.gradskystd = std
         ellconf.gradskymed = median
 
-        import pdb;pdb.set_trace()
 
     #  random sky method:
     if ellconf.flagrandboxsky:
@@ -106,10 +104,12 @@ def skyCall(ellconf, galhead, galcomps):
         ###
         Rinit = 1
 
+        import pdb;pdb.set_trace()
+
         if not(ellconf.flagskyRad):
 
             maskgal = galcomps.Active == True            
-            rad90= Re90(galcomps[maskgal][0].Rad, galcomps[maskgal][0].Exp) 
+            rad90= Re90(galcomps.Rad[maskgal][0], galcomps.Exp[maskgal][0]) 
  
             Rinit = 2.5*rad90 # 2 times the R 90% of light radius
 
@@ -149,7 +149,6 @@ def skyCall(ellconf, galhead, galcomps):
         ellconf.randskystd = std
         ellconf.randskymed = median
 
-        import pdb;pdb.set_trace()
 
     #######################################
     ############## SKY End ################

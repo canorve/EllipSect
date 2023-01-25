@@ -425,6 +425,26 @@ class Galfit():
 
         GalfitFile.close()
 
+        #filling the rest of arrays with zeros: 
+        arsiz = len(galcomps.N)
+
+        galcomps.Rad50 = np.zeros(arsiz)
+        galcomps.SerInd = np.zeros(arsiz)
+        galcomps.Rad50kpc = np.zeros(arsiz)
+        galcomps.Rad50sec = np.zeros(arsiz)
+        galcomps.Rad90 = np.zeros(arsiz)
+        galcomps.AbsMag = np.zeros(arsiz)
+        galcomps.Lum = np.zeros(arsiz)
+        galcomps.Flux = np.zeros(arsiz)
+        galcomps.PerLight = np.zeros(arsiz)
+        galcomps.me = np.zeros(arsiz)
+        galcomps.mme = np.zeros(arsiz)
+        galcomps.kser = np.zeros(arsiz)
+        galcomps.KronRad = np.zeros(arsiz)
+        galcomps.PetRad = np.zeros(arsiz)
+
+
+
         return galcomps 
 
 

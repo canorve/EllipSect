@@ -48,13 +48,13 @@ def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps
     maskbulge = (((galcomps.NameComp == "sersic") | (galcomps.NameComp == "devauc") | 
                 (galcomps.NameComp == "moffat") | (galcomps.NameComp == "ferrer") | 
                 (galcomps.NameComp == "king") | (galcomps.NameComp == "gaussian") | 
-                (galcomps.NameComp == "psf")) & (galcompos.Active == True))
+                (galcomps.NameComp == "psf")) & (galcomps.Active == True))
 
-    masksersic = (galcomps.NameComp == "sersic")  & (galcompos.Active == True)
-    maskexp = (galcomps.NameComp == "expdisk") & (galcompos.Active == True)
-    maskdevauc = (galcomps.NameComp == "devauc") & (galcompos.Active == True)
-    maskgauss = (galcomps.NameComp == "gaussian") & (galcompos.Active == True)
-    masknuker = (galcomps.NameComp == "nuker") & (galcompos.Active == True)
+    masksersic = (galcomps.NameComp == "sersic")  & (galcomps.Active == True)
+    maskexp = (galcomps.NameComp == "expdisk") & (galcomps.Active == True)
+    maskdevauc = (galcomps.NameComp == "devauc") & (galcomps.Active == True)
+    maskgauss = (galcomps.NameComp == "gaussian") & (galcomps.Active == True)
+    masknuker = (galcomps.NameComp == "nuker") & (galcomps.Active == True)
 
     datatidal = DataTidal()
 

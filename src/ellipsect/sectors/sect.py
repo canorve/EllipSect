@@ -167,9 +167,8 @@ def SectorsGalfit(args):
     if ellconf.flagphot:
         print("Computing output photometry ... ")
 
-        photapi = OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps,photapi)
+        photapi = OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps, photapi)
         
-        import pdb;pdb.set_trace()
 
 
     if galhead.tempmask != None:

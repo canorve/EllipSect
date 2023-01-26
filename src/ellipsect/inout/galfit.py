@@ -528,7 +528,7 @@ class Galfit():
         return galsky
 
 
-def numParFree(galcomps: GalComps) -> int:
+def numParFree(galcomps: GalComps, name: str = 'none') -> int:
     '''obtains the number of free parameters'''
 
     p1 = 0
@@ -540,16 +540,17 @@ def numParFree(galcomps: GalComps) -> int:
     p7 = 0
     p8 = 0
     p9 = 0
-    
-    parmask1 = (galcomps.Active == True and galcomps.PosXFree == 1) 
-    parmask2 = (galcomps.Active == True and galcomps.PosYFree == 1) 
-    parmask3 = (galcomps.Active == True and galcomps.MagFree == 1) 
-    parmask4 = (galcomps.Active == True and galcomps.RadFree == 1) 
-    parmask5 = (galcomps.Active == True and galcomps.ExpFree == 1) 
-    parmask6 = (galcomps.Active == True and galcomps.Exp2Free == 1) 
-    parmask7 = (galcomps.Active == True and galcomps.Exp3Free == 1) 
-    parmask8 = (galcomps.Active == True and galcomps.AxRatFree == 1) 
-    parmask9 = (galcomps.Active == True and galcomps.PosAngFree == 1) 
+
+
+    parmask1 = (galcomps.Active == True) & (galcomps.PosXFree == 1) 
+    parmask2 = (galcomps.Active == True) & (galcomps.PosYFree == 1) 
+    parmask3 = (galcomps.Active == True) & (galcomps.MagFree == 1) 
+    parmask4 = (galcomps.Active == True) & (galcomps.RadFree == 1) 
+    parmask5 = (galcomps.Active == True) & (galcomps.ExpFree == 1) 
+    parmask6 = (galcomps.Active == True) & (galcomps.Exp2Free == 1) 
+    parmask7 = (galcomps.Active == True) & (galcomps.Exp3Free == 1) 
+    parmask8 = (galcomps.Active == True) & (galcomps.AxRatFree == 1) 
+    parmask9 = (galcomps.Active == True) & (galcomps.PosAngFree == 1) 
 
     if parmask1.any():
         p1 = np.sum(galcomps.PosXFree[parmask1])
@@ -581,6 +582,7 @@ def numParFree(galcomps: GalComps) -> int:
     else:
         nummask = (galcomps.Active == True) & (galcomps.NameComp == name)
         N = galcomps.Active[nummask].size
+
 
     return N
 

@@ -59,28 +59,28 @@ def Tidal(datatidal, ellconf, dataimg, galhead, galcomps, sectgalax, rmin):
 
 
 
-    ab=ellconf.qarg
+    ab = ellconf.qarg
 
-    ell=1-ab
+    ell = 1 - ab
 
     aell = mgerad.max() 
 
     bell = mgerad.max() * ab
 
     #changing to arc sec
-    aellarc=aell*galhead.scale
+    aellarc = aell*galhead.scale
 
     #print("major axis, minor axis (pix) ",aell,bell)
 
-    NCol=len(dataimg.img[0])
-    NRow=len(dataimg.img)
+    NCol = len(dataimg.img[0])
+    NRow = len(dataimg.img)
 
     #print("max size ",NCol,NRow)
 
     #Obj.Angle = Obj.Theta - 90
 
     #angle computed from y-axis to x-axis  
-    Theta=galhead.parg + 90
+    Theta = ellconf.parg + 90
 
     if ellconf.flagmodel == False:
 
@@ -114,8 +114,8 @@ def Tidal(datatidal, ellconf, dataimg, galhead, galcomps, sectgalax, rmin):
 
 
     hdu = fits.open(ellconf.namesig)
-    header=hdu[0].header  
-    dataimg.sigma=hdu[0].data
+    header = hdu[0].header  
+    dataimg.sigma = hdu[0].data
     #hdu.close()
 
     if ellconf.flagmodel == False:
@@ -313,11 +313,11 @@ def Tidal(datatidal, ellconf, dataimg, galhead, galcomps, sectgalax, rmin):
 
         if(pixcountchi > 11):
 
-            ndof=pixcountchi - totfreepar 
-            objchinu= chinu / ndof
+            ndof = pixcountchi - totfreepar 
+            objchinu = chinu/ndof
         else:
-            objchinu=-1
-            ndof=-1
+            objchinu =- 1
+            ndof =- 1
 
 
         # snr
@@ -344,9 +344,9 @@ def Tidal(datatidal, ellconf, dataimg, galhead, galcomps, sectgalax, rmin):
         # Tidal parameter
 
         tgal = np.abs((galflux)/(modflux) - 1)
-        sumtidal=np.sum(tgal)
+        sumtidal = np.sum(tgal)
         #pixcountid=np.size(immodel[ylo - 1:yhi, xlo - 1:xhi][maskm])
-        pixcountid=np.size(immodel[maskm])
+        pixcountid = np.size(immodel[maskm])
 
 
         if pixcountid > 0:
@@ -363,7 +363,7 @@ def Tidal(datatidal, ellconf, dataimg, galhead, galcomps, sectgalax, rmin):
         numbump  = np.sum(resbump - varres)
 
         #pixcountbum=np.size(immodel[ylo - 1:yhi, xlo - 1:xhi][maskbum])
-        pixcountbum=np.size(immodel[maskbum])
+        pixcountbum = np.size(immodel[maskbum])
 
 
         # Bumpiness
@@ -373,7 +373,7 @@ def Tidal(datatidal, ellconf, dataimg, galhead, galcomps, sectgalax, rmin):
             meanres   = numbump / pixcountbum
 
             if (meanres < 0):
-                meanres=0
+                meanres = 0
 
             bump      = (np.sqrt(meanres)) / meansflux
 
@@ -387,13 +387,13 @@ def Tidal(datatidal, ellconf, dataimg, galhead, galcomps, sectgalax, rmin):
 
     # computing RSS: 
     #rss=(imres[ylo - 1:yhi, xlo - 1:xhi][maskm]**2).sum()
-    rss=(imres[maskm]**2).sum()
+    rss = (imres[maskm]**2).sum()
     
 
 
     #computing magnitud for galaxy and model using aperture. 
 
-    magalaper= galhead.mgzpt - 2.5*np.log10(sumflux/galhead.exptime)  #+ 0.1
+    magalaper = galhead.mgzpt - 2.5*np.log10(sumflux/galhead.exptime)  #+ 0.1
     magmodaper = galhead.mgzpt - 2.5*np.log10(sumfluxmod/galhead.exptime) # + 0.1
 
 

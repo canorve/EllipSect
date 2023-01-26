@@ -5,6 +5,7 @@ from ellipsect import *
 
 import ellipsect
 
+from ellipsect.inout.galfit  import numParFree
 
 def PrintEllFilesGax(ellconf, galhead, xradq,ysbq,ysberrq,xradm,ysbm,ysberrm):
     "print surface brightness of galaxy and model to file"
@@ -337,16 +338,17 @@ def printEllinfo(ellconf, galhead):
 
 
 
-def printPhot(ellconf, galhead, galcomps, dataned, datatidal, sectgalax):
+def printPhot(ellconf, galhead, galcomps, dataned, datatidal, sectgalax, aell, bell):
 
 
-    ## for output only: 
-    stidxg = np.argsort(sectgalax.radius)
+    #redefining the mask again
+    masknuker = (galcomps.NameComp == "nuker") & (galcomps.Active == True)
 
-    mgerad = sectgalax.radius[stidxg]
+    maskmag = ((galcomps.NameComp != "ferrer") & (galcomps.NameComp != "nuker") 
+                & (galcomps.NameComp != "edgedisk") & (galcomps.NameComp != "king") 
+                & (galcomps.Active == True))
 
-    aell = mgerad.max() 
-    bell = mgerad.max()*ellconf.qarg
+
 
 
 
@@ -478,7 +480,10 @@ def printPhot(ellconf, galhead, galcomps, dataned, datatidal, sectgalax):
     OUTPHOT.write(lineout)
 
     maskfreegal = galcomps.Active == True
-    lineout="Number of free params = {} \n".format(int(galcomps[maskfreegal].freepar.sum()))
+
+    totfreepar = numParFree(galcomps) 
+
+    lineout="Number of free params = {} \n".format(totfreepar)
     OUTPHOT.write(lineout)
    
 

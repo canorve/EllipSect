@@ -350,10 +350,18 @@ def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps
 
     datatidal.BICres = datatidal.objchinu*datatidal.ndof + freepar*np.log(npix/APSF)
 
-    import pdb;pdb.set_trace()
+    ## for output only: 
+    stidxg = np.argsort(sectgalax.radius)
+
+    mgerad = sectgalax.radius[stidxg]
+
+    aell = mgerad.max() 
+    bell = mgerad.max()*ellconf.qarg
+
+
 
     #prints photometric variables into a file:
-    printPhot(ellconf, galhead, galcomps, dataned, datatidal, sectgalax)
+    printPhot(ellconf, galhead, galcomps, dataned, datatidal, sectgalax, aell, bell)
 
     passPhotVar(photapi, dataned, datatidal, galcomps, aell, bell)
 
@@ -361,7 +369,7 @@ def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps
     return photapi
 
 
-def passPhotVar(photapi, dataned, datatidal, galcomps ,aell, bell):
+def passPhotVar(photapi, dataned, datatidal, galcomps, aell, bell):
 
     photapi.aell = aell
     photapi.bell = bell 

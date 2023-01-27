@@ -200,7 +200,7 @@ def MulEllipSectors(ellconf, galhead, galcomps, sectgalax, sectmodel, sectcomps)
 
 
     #plotting
-    PlotMul(ellconf, galcomps, mgegal, mgemod, mgecom)
+    PlotMul(ellconf, galhead,galcomps, mgegal, mgemod, mgecom)
 
 
 #sectors/ellipsectors.py

@@ -221,54 +221,56 @@ class Galfit():
 
             line = lines[index]
             (tmp) = line.split()
-            if tmp[0] == "A)":     # input image
-                galhead.inputimage=tmp[1]
 
-            if tmp[0] == "B)":     # out image
-                galhead.outimage = tmp[1]
+            if len(tmp) > 1: #avoids empty options
 
-            if tmp[0] == "C)":   # sigma 
-                galhead.sigimage = tmp[1]
+                if tmp[0] == "A)":     # input image
+                    galhead.inputimage=tmp[1]
 
-            if tmp[0] == "D)":  # psf file 
-                galhead.psfimage = tmp[1]
+                if tmp[0] == "B)":     # out image
+                    galhead.outimage = tmp[1]
 
-            if tmp[0] == "E)":  #psf sampling 
-                galhead.psfsamp = int(tmp[1])
+                if tmp[0] == "C)":   # sigma 
+                    galhead.sigimage = tmp[1]
 
-            if tmp[0] == "F)":     # mask image
-                try:
-                    galhead.maskimage = tmp[1]
-                except IndexError:
-                    galhead.maskimage = "None"
+                if tmp[0] == "D)":  # psf file 
+                    galhead.psfimage = tmp[1]
 
-            if tmp[0] == "G)":  # psf file 
-                galhead.constraints = tmp[1]
+                if tmp[0] == "E)":  #psf sampling 
+                    galhead.psfsamp = int(tmp[1])
+
+                if tmp[0] == "F)":     # mask image
+                    try:
+                        galhead.maskimage = tmp[1]
+                    except IndexError:
+                        galhead.maskimage = "None"
+
+                if tmp[0] == "G)":  # psf file 
+                    galhead.constraints = tmp[1]
 
 
-            if tmp[0] == "H)":     # region fit box
-                galhead.xmin = int(tmp[1])
-                galhead.xmax = int(tmp[2])
-                galhead.ymin = int(tmp[3])
-                galhead.ymax = int(tmp[4])
+                if tmp[0] == "H)":     # region fit box
+                    galhead.xmin = int(tmp[1])
+                    galhead.xmax = int(tmp[2])
+                    galhead.ymin = int(tmp[3])
+                    galhead.ymax = int(tmp[4])
 
-            if tmp[0] == "I)":     # convolution size 
-                galhead.convx = int(tmp[1])
-                galhead.convy = int(tmp[2])
+                if tmp[0] == "I)":     # convolution size 
+                    galhead.convx = int(tmp[1])
+                    galhead.convy = int(tmp[2])
 
-            if tmp[0] == "J)":     # mgzpt
-                galhead.mgzpt = float(tmp[1])
+                if tmp[0] == "J)":     # mgzpt
+                    galhead.mgzpt = float(tmp[1])
 
-            if tmp[0] == "K)":     # plate scale
-                galhead.scale = float(tmp[1])
-                galhead.scaley = float(tmp[2])
+                if tmp[0] == "K)":     # plate scale
+                    galhead.scale = float(tmp[1])
+                    galhead.scaley = float(tmp[2])
 
-            if tmp[0] == "O)":     # display 
-                galhead.display = tmp[1]
+                if tmp[0] == "O)":     # display 
+                    galhead.display = tmp[1]
 
-            if tmp[0] == "P)":     # optional output 
-                galhead.P = int(tmp[1])
-
+                if tmp[0] == "P)":     # optional output 
+                    galhead.P = int(tmp[1])
 
 
             index += 1

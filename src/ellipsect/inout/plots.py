@@ -366,7 +366,7 @@ class ShowCube:
         #plt.show()
 
 
-def PlotMul(ellconf, galcomps, mgegal, mgemod, mgecom):
+def PlotMul(ellconf, galhead, galcomps, mgegal, mgemod, mgecom):
 
     fignum = 1
 

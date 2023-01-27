@@ -104,7 +104,6 @@ def skyCall(ellconf, galhead, galcomps):
         ###
         Rinit = 1
 
-        import pdb;pdb.set_trace()
 
         if not(ellconf.flagskyRad):
 

@@ -147,6 +147,7 @@ def MulEllipSectors(ellconf, galhead, galcomps, sectgalax, sectmodel, sectcomps)
     # formula according to cappellary mge manual
     # galaxy:
     mgegal.sb = galhead.mgzpt - 2.5*np.log10(mgegal.count/galhead.exptime) + 2.5*np.log10(galhead.scale**2) + 0.1
+
     # Model:
     mgemod.sb= galhead.mgzpt - 2.5*np.log10(mgemod.count/galhead.exptime) + 2.5*np.log10(galhead.scale**2) + 0.1
 
@@ -200,7 +201,7 @@ def MulEllipSectors(ellconf, galhead, galcomps, sectgalax, sectmodel, sectcomps)
 
 
     #plotting
-    PlotMul(ellconf, galhead,galcomps, mgegal, mgemod, mgecom)
+    PlotMul(ellconf, galhead, galcomps, mgegal, mgemod, mgecom)
 
 
 #sectors/ellipsectors.py

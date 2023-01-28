@@ -24,25 +24,27 @@ def SubComp(ellconf, galhead, galcomps, sectcomps, axsec, n_sectors=19):
     maskcomp = galcomps.Active == True
     while(n<N):
 
-        namec = galcomps.NameComp[maskcomp][n] #check if name coincide, it must be
 
-        scmp = sectcomps[n] 
+        if galcomps.Active[n] == True:
+            namec = galcomps.NameComp[n] #check if name coincide, it must be
 
-
-        ###################################################
-
-        xradq, ysbq, ysberrq = ellip.sect2xy(scmp, ellconf, galhead, n_sectors)
-
-        colorVal = scalarMap.to_rgba(values[n])
-
-        PlotSub(xradq, ysbq, n, axsec, namec, colorVal)
+            scmp = sectcomps[n] 
 
 
-        if ellconf.flagsbout == True:
-            ncomp=n+1
-            ncomp=str(ncomp)
+            ###################################################
 
-            PrintEllFilesComps(ellconf, galhead, namec, ncomp, xradq, ysbq, ysberrq)
+            xradq, ysbq, ysberrq = ellip.sect2xy(scmp, ellconf, galhead, n_sectors)
+
+            colorVal = scalarMap.to_rgba(values[n])
+
+            PlotSub(xradq, ysbq, n, axsec, namec, colorVal)
+
+
+            if ellconf.flagsbout == True:
+                ncomp=n+1
+                ncomp=str(ncomp)
+
+                PrintEllFilesComps(ellconf, galhead, namec, ncomp, xradq, ysbq, ysberrq)
 
 
         n=n+1

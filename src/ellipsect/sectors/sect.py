@@ -361,13 +361,13 @@ def SectPhotComp(ellconf, dataimg, galcomps, n_sectors=19, minlevel=0):
 
     i = 0
 
+
     while(n < len(galcomps.N)):
 
 
-        subim = subimgs[i]
-
         if galcomps.Active[n] == True:
 
+            subim = subimgs[i]
 
             eps = 1 - galcomps.AxRat[n]
             angsec = 90 - galcomps.PosAng[n]

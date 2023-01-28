@@ -609,9 +609,8 @@ def PlotMul(ellconf, galhead, galcomps, mgegal, mgemod, mgecom):
 
 
         else:
-
             mgesbnew, smooth_flag = Interpol(r,mgegal.sb[angal],r2)
-            sberr=1-mgemodsb[angmod]/mgesbnew
+            sberr=1-mgemod.sb[angmod]/mgesbnew
             axsec[row, 1].plot(r2, sberr*100, 'C0o')
 
             if(smooth_flag):

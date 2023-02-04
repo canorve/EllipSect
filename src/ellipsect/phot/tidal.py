@@ -133,6 +133,9 @@ def Tidal(datatidal, ellconf, dataimg, galhead, galcomps, sectgalax, rmin):
     #NRow=len(dataimg.img)
     #MakeImage(ellconf.namesnr, NCol, NRow):
 
+    ##################################
+    # creation of the  SNR image 
+    ##################################
 
     header['TypeIMG'] = ('SNR', 'Signal to Noise Ratio image')
     hdu[0].header  =header
@@ -143,7 +146,8 @@ def Tidal(datatidal, ellconf, dataimg, galhead, galcomps, sectgalax, rmin):
         dataimg.imsnr=imgal/imsigma
 
     else:
-        print("WARNING: SNR can not be computed because galaxy and sigma images have different shapes")
+        print("WARNING: SNR can not be computed because"
+                + "galaxy and sigma images have different shapes")
         dataimg.imsnr=np.ones(imgal.shape)
     
     hdu[0].data = dataimg.imsnr
@@ -151,11 +155,43 @@ def Tidal(datatidal, ellconf, dataimg, galhead, galcomps, sectgalax, rmin):
     if ellconf.flagsnr:
         hdu.writeto(ellconf.namesnr, overwrite=True)
         print("SNR image created.. ",ellconf.namesnr)
+
+
+    ##################################
+    # creation of the Chi-square image 
+    ##################################
+
+    if ellconf.flagchi:
+        header['TypeIMG'] = ('CHI-SQR', 'Chi-Square image')
+        hdu[0].header  = header
+
+
+        maskchi = immask == True # big image coordinates
+
+
+        if imgal.shape == imsigma.shape:
+            dataimg.imchi = (imgal - immodel)**2 / imsigma**2
+            if maskchi.any():
+                dataimg.imchi[maskchi] = 0
+        else:
+            print("WARNING: Chi-square image can not be computed" +
+                    "because galaxy and sigma images have different shapes")
+            dataimg.imchi = np.ones(imgal.shape)
+        
+        hdu[0].data = dataimg.imchi
+
+        hdu.writeto(ellconf.namechi, overwrite=True)
+        print("Chi square image created.. ", ellconf.namechi)
+
+
+
+
+
     hdu.close()
 
 
     #if galhead.tempmask!=None:
-    imell=immask.copy()
+    imell = immask.copy()
     #else:
     #    imell=imgal.copy()
 
@@ -167,7 +203,7 @@ def Tidal(datatidal, ellconf, dataimg, galhead, galcomps, sectgalax, rmin):
         #    maskm = dat[ylo - 1:yhi, xlo - 1:xhi] == num  # big image coordinates
         #maskm =immask[ylo - 1:yhi, xlo - 1:xhi] == False  # big image coordinates
     #if galhead.tempmask!=None:
-    maskm =immask == False  # big image coordinates
+    maskm = immask == False  # big image coordinates
     #else:
     #    maskm =imell == False  # big image coordinates
 
@@ -219,24 +255,19 @@ def Tidal(datatidal, ellconf, dataimg, galhead, galcomps, sectgalax, rmin):
     ## xlo, xhi, ylo, yhi makes sure that ellipse will not be outside of this range
 
 
-    #maskm=maskm*imell
-    #maskbum=maskbum*imell
-
-    #maskm=maskm[ylo - 1:yhi, xlo - 1:xhi]*imell
-    maskm=maskm*imell
-
-    #maskbum=maskbum[ylo - 1:yhi, xlo - 1:xhi]*imell
-    maskbum=maskbum*imell
+    # future coder: in case you doubt that the 
+    #following two lines are incorrect: These are not. I double check
+    maskm = maskm*imell 
+    maskbum = maskbum*imell
 
 
-    #if galhead.tempmask!=None:
+
     hdu = fits.open(galhead.tempmask)
-    #else:
-    #    hdu = fits.open(ellconf.namesig)
 
     header=hdu[0].header  
 
-    header['TypeIMG'] = ('Check', 'Use this image to check the area where photometry was computed')
+    header['TypeIMG'] = ('Check', 'Use this image to check the' +  
+                            'area where photometry was computed')
     hdu[0].header  =header
 
 
@@ -249,11 +280,6 @@ def Tidal(datatidal, ellconf, dataimg, galhead, galcomps, sectgalax, rmin):
 
     if maskbum.any():
 
-    # for Bumpiness
-
-        #galfluxbum  = imgal[ylo - 1:yhi, xlo - 1:xhi][maskbum]
-        #modfluxbum  = immodel[ylo - 1:yhi, xlo - 1:xhi][maskbum]
-        #sigfluxbum  = imsigma[ylo - 1:yhi, xlo - 1:xhi][maskbum]
         galfluxbum  = imgal[maskbum]
         modfluxbum  = immodel[maskbum]
         if imgal.shape == imsigma.shape:
@@ -273,16 +299,6 @@ def Tidal(datatidal, ellconf, dataimg, galhead, galcomps, sectgalax, rmin):
 
     # for Tidal, SNR, and objchinu
 
-    #        sumflux  = np.sum(imgal[ylo - 1:yhi, xlo - 1:xhi][maskm] - sky)
-        #sumflux  = np.sum(imgal[ylo - 1:yhi, xlo - 1:xhi][maskm])
-        #sumsig   = np.sum(imsigma[ylo - 1:yhi, xlo - 1:xhi][maskm])
-
-        #galflux  = imgal[ylo - 1:yhi, xlo - 1:xhi][maskm]
-        #modflux  = immodel[ylo - 1:yhi, xlo - 1:xhi][maskm]
-
-        #sigflux  = imsigma[ylo - 1:yhi, xlo - 1:xhi][maskm]
-
-
         sumflux  = np.sum(imgal[maskm])
         sumfluxmod  = np.sum(immodel[maskm])
 
@@ -296,17 +312,13 @@ def Tidal(datatidal, ellconf, dataimg, galhead, galcomps, sectgalax, rmin):
 
         resflux = (galflux - modflux)**2
 
-        #rss2=(resflux).sum()
-
-        #print("Residual sum squares ",rss2)
-        
+       
         #  local chinu
 
         varchi = sigflux**2
         chinu  = np.sum(resflux/varchi)
         
 
-        #pixcountchi = np.size(immodel[ylo - 1:yhi, xlo - 1:xhi][maskm])
         pixcountchi = np.size(immodel[maskm])
 
         totfreepar = numParFree(galcomps) 
@@ -319,14 +331,6 @@ def Tidal(datatidal, ellconf, dataimg, galhead, galcomps, sectgalax, rmin):
             objchinu =- 1
             ndof =- 1
 
-
-        # snr
-        #if(np.size(dataimg.imsnr[ylo - 1:yhi, xlo - 1:xhi][maskm]) > 0):
-
-         #   totsnr=dataimg.imsnr[ylo - 1:yhi, xlo - 1:xhi][maskm].sum()
-
-          #  snr=dataimg.imsnr[ylo - 1:yhi, xlo - 1:xhi][maskm].mean()
-           # stdsnr=dataimg.imsnr[ylo - 1:yhi, xlo - 1:xhi][maskm].std()
 
         if(np.size(dataimg.imsnr[maskm]) > 0):
 
@@ -345,7 +349,7 @@ def Tidal(datatidal, ellconf, dataimg, galhead, galcomps, sectgalax, rmin):
 
         tgal = np.abs((galflux)/(modflux) - 1)
         sumtidal = np.sum(tgal)
-        #pixcountid=np.size(immodel[ylo - 1:yhi, xlo - 1:xhi][maskm])
+
         pixcountid = np.size(immodel[maskm])
 
 
@@ -357,12 +361,10 @@ def Tidal(datatidal, ellconf, dataimg, galhead, galcomps, sectgalax, rmin):
         # bumpiness
 
         resbump  = (galfluxbum - modfluxbum)**2
-        # sflux    = np.sum(np.abs(modfluxbum - sky))
         sflux    = np.sum(np.abs(modfluxbum))
         varres   = sigfluxbum * sigfluxbum
         numbump  = np.sum(resbump - varres)
 
-        #pixcountbum=np.size(immodel[ylo - 1:yhi, xlo - 1:xhi][maskbum])
         pixcountbum = np.size(immodel[maskbum])
 
 
@@ -386,7 +388,6 @@ def Tidal(datatidal, ellconf, dataimg, galhead, galcomps, sectgalax, rmin):
         #print("kolmogorov ks, p: ",ks,p)
 
     # computing RSS: 
-    #rss=(imres[ylo - 1:yhi, xlo - 1:xhi][maskm]**2).sum()
     rss = (imres[maskm]**2).sum()
     
 

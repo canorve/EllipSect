@@ -26,6 +26,7 @@ class EllipSectConfig:
     flagband=False
     flagweb=False # to check connection to ned
     flagsnr = False
+    flagchi = False
 
     flagcheck=False
     flagned=False
@@ -105,23 +106,24 @@ class EllipSectConfig:
     InSbDim=0
    
 
-    namefile="none"
-    namepng="none.png"
-    namesec="none-gal.png"
-    namemod="none-mod.png"
-    namemul="none-mul.png"
-    namesub="none-sub.fits"
-    namesig="none-sig.fits"
-    namesnr="none-snr.fits"
-    namened="none-ned.xml"
-    namecheck="none-check.fits"
-    namering="none-ring.fits"
-    nameringmask="none-ringmask.fits"
+    namefile = "none"
+    namepng = "none.png"
+    namesec = "none-gal.png"
+    namemod = "none-mod.png"
+    namemul = "none-mul.png"
+    namesub = "none-sub.fits"
+    namesig = "none-sig.fits"
+    namesnr = "none-snr.fits"
+    namechi = "none-chi.fits"
+    namened = "none-ned.xml"
+    namecheck = "none-check.fits"
+    namering = "none-ring.fits"
+    nameringmask = "none-ringmask.fits"
 
-    namecube="none-cub.png"
+    namecube = "none-cub.png"
 
 
-    nedfile="default.xml"
+    nedfile = "default.xml"
 
 
     # sky parameters:
@@ -190,6 +192,7 @@ class PhotAPI:
     namesub="none-sub.fits"
     namesig="none-sig.fits"
     namesnr="none-snr.fits"
+    namechi="none-chi.fits"
     namened="none-ned.xml"
     namecheck="none-check.fits"
     namering="none-ring.fits"
@@ -218,7 +221,7 @@ class PhotAPI:
     ymax=2
     band="R"
     inputimage="galaxy.fits"
-
+    Aext = 0
 
     # from gradsky
     gradskymean = 0

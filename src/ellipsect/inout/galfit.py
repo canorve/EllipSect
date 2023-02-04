@@ -112,6 +112,7 @@ class DataImg:
     mask = np.array([[1,1],[1,1]])
     sigma = np.array([[1,1],[1,1]])
     imsnr = np.array([[1,1],[1,1]])
+    imchi = np.array([[1,1],[1,1]])
     impsf = np.array([[1,1],[1,1]])
 
 

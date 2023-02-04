@@ -99,8 +99,11 @@ def SectorsGalfit(args):
 
     #call to sectors_photometry for galaxy and model
 
-    sectgalax = SectPhot(ellconf, dataimg, n_sectors = numsectors, minlevel = minlevel, fit='gal')
-    sectmodel = SectPhot(ellconf, dataimg, n_sectors = numsectors, minlevel = minlevel, fit='mod' )
+    sectgalax = SectPhot(ellconf, dataimg, n_sectors = numsectors, 
+                            minlevel = minlevel, fit = 'gal')
+
+    sectmodel = SectPhot(ellconf, dataimg, n_sectors = numsectors, 
+                            minlevel = minlevel, fit = 'mod' )
 
     
     sectcomps=[]
@@ -108,7 +111,8 @@ def SectorsGalfit(args):
         #Note: sectors photometry for components always finished 
         # in minlevel = 0 regardless of the input 'minlevel' option
 
-        sectcomps = SectPhotComp(ellconf, dataimg, galcomps, n_sectors = numsectors, minlevel = 0)
+        sectcomps = SectPhotComp(ellconf, dataimg, galcomps, 
+                                    n_sectors = numsectors, minlevel = 0)
         
 
     #computing sky
@@ -424,6 +428,7 @@ def PassVars(photapi, ellconf, galhead, galcomps):
     photapi.namesub = ellconf.namesub
     photapi.namesig = ellconf.namesig
     photapi.namesnr = ellconf.namesnr
+    photapi.namechi = ellconf.namechi
     photapi.namened = ellconf.namened
     photapi.namecheck = ellconf.namecheck
     photapi.namering = ellconf.namering
@@ -583,7 +588,9 @@ def PassArgs(args):
     if args.allskypx:
         ellconf.flagrmsky=False
 
-
+    if args.chisqr:
+        ellconf.flagchi = True
+ 
 
     #options with arguments
 
@@ -711,7 +718,7 @@ def PassArgs(args):
         ellconf.numcomp = args.numcomp
 
     if args.aext:
-        ellconf.Aext = arg.aext
+        ellconf.Aext = args.aext
 
 
 

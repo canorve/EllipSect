@@ -51,8 +51,8 @@ def InitParsing():
     parser.add_argument("-nn","--noned", action="store_true", help="it avoids to connect to NED")
     parser.add_argument("-gsky","--gradsky", action="store_true", help="computes sky using the gradient method")
     parser.add_argument("-rsky","--randsky", action="store_true", help="computes sky using random boxes")
-    parser.add_argument("-snr","--snr", action="store_true", help="Creates Signal to Noise image")
-    parser.add_argument("-chi","--chisquare", action="store_true", help="Creates Chi-square image")
+    parser.add_argument("-snr","--snr", action="store_true", help="Creates Signal to Noise image if phot is activated")
+    parser.add_argument("-chi","--chisqr", action="store_true", help="Creates Chi-square image if phot is activated")
 
     parser.add_argument("-k","--keep", action="store_true", help="use existing file to compute subcomponents")
     parser.add_argument("-gx","--galax", action="store_true", help="only the galaxy surface brightness is shown in the plot")
@@ -496,6 +496,10 @@ def prefixNames(ellconf, outimage):
     ellconf.nameringmask = ellconf.namefile + "-ringmask.fits"
 
     ellconf.namecube = ellconf.namefile + "-cub.png"
+
+
+    ellconf.namechi = ellconf.namefile + "-chi.fits"
+
 
 
     return True

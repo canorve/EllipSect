@@ -21,6 +21,7 @@ from ellipsect.inout.prt import printPhot
 
 
 from ellipsect.inout.galfit  import numParFree
+from ellipsect.inout.galfit  import GetReff 
 
 #phot/phot.py
 
@@ -357,6 +358,20 @@ def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps
     bell = mgerad.max()*ellconf.qarg
 
 
+    print('computing the effective radius for the whole galaxy')
+    eff = 0.5
+    EffRad = GetReff().GetReSer(galhead, galcomps, eff)
+
+    eff = 0.9
+    EffRad9 = GetReff().GetReSer(galhead, galcomps, eff)
+
+    eff = 0.3
+    EffRad3 = GetReff().GetReSer(galhead, galcomps, eff)
+
+    datatidal.EffRad = EffRad
+    datatidal.EffRad9 = EffRad9
+    datatidal.EffRad3 = EffRad3
+
 
     #prints photometric variables into a file:
     printPhot(ellconf, galhead, galcomps, dataned, datatidal, sectgalax, aell, bell)
@@ -398,6 +413,9 @@ def passPhotVar(photapi, dataned, datatidal, galcomps, aell, bell):
     photapi.BICrit = datatidal.BICrit
     photapi.BICres = datatidal.BICres
 
+    photapi.EffRad = datatidal.EffRad
+    photapi.EffRad9 = datatidal.EffRad9
+    photapi.EffRad3 = datatidal.EffRad3
 
     photapi.KronRad = galcomps.KronRad.copy()
     photapi.PetRad = galcomps.PetRad.copy()

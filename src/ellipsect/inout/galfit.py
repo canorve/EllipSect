@@ -633,4 +633,114 @@ def SelectGal(galcomps: GalComps, distmax: float, n_comp: int) -> GalComps:
     galcomps.Active[maskdist] = True
 
     return galcomps
- 
+
+
+
+### Sersic components 
+class GetReff:
+    '''class to obtain the effective radius for the whole galaxy'''
+
+    def GetReSer(self, galhead: GalHead, galcomps: GalComps, eff: float) -> float:
+
+        comps = self.conver2Sersic(galcomps)
+
+        maskgal = (comps.Active == True) 
+
+        comps.Flux = 10**((galhead.mgzpt - comps.Mag)/2.5)
+
+        
+        totFlux = comps.Flux[maskgal].sum()
+
+        a = 0.1
+        b = comps.Rad[maskgal][-1] * 100  # hope it doesn't crash
+
+
+        Reff = self.solveSerRe(a, b, comps.Rad[maskgal], comps.Exp[maskgal], 
+                                totFlux, eff)
+
+
+        return Reff
+
+
+    def conver2Sersic(self, galcomps: GalComps) -> GalComps:
+        ''' function to convert exponential, gaussian params to Sersic params'''
+
+        comps =  copy.deepcopy(galcomps)
+
+        maskdev = (comps.Active == True) & (comps.NameComp == "devauc")
+        maskexp = (comps.Active == True) & (comps.NameComp == "expdisk")
+        maskgas = (comps.Active == True) & (comps.NameComp == "gaussian")
+
+
+        K_GAUSS = 0.6931471805599455 #constant k for gaussian
+        K_EXP = 1.6783469900166612 # constant k for expdisk
+        SQ2 = np.sqrt(2) 
+
+        #for gaussian functions
+        if maskgas.any():
+            comps.Exp[maskgas] = 0.5 
+            comps.Rad[maskgas] = comps.Rad[maskgas]/2.354 #converting to sigma 
+            comps.Rad[maskgas] = SQ2*(K_GAUSS**0.5)*comps.Rad[maskgas] #converting to Re 
+
+
+        #for de vaucouleurs
+        if maskdev.any():
+            comps.Exp[maskdev] = 4
+
+        #for exponential disks
+        if maskexp.any():
+            comps.Exp[maskexp] = 1
+            comps.Rad[maskexp] = K_EXP*comps.Rad[maskexp] #converting to Re
+
+
+
+        return comps
+
+
+
+
+    def solveSerRe(self, a: float, b: float, rad: list, n: list, totFlux: float, eff: float) -> float:
+        "return the Re of a set of Sersic functions. It uses Bisection"
+
+
+        Re = bisect(self.funReSer, a, b, args=(rad, n, totFlux, eff))
+
+        return Re
+
+    def funReSer(self, R: float, rad: list, n: list, totFlux: float, eff: float) -> float:
+        
+
+        fun = self.Ftotser(R, rad, n, totFlux) - totFlux*eff
+
+        return fun
+     
+    def Ftotser(self, R: float, rad: list, n: list, totFlux: float) -> float:
+
+        ftotR = self.Fser(R, rad, n, totFlux) 
+
+        return ftotR.sum()
+
+
+
+    def Fser(self, R: float, Re: float, n: float, totFlux: float) -> float:
+        '''sersic flux to a determined R'''
+        
+        k = gammaincinv(2*n, 0.5)
+
+        X = k*(R/Re)**(1/n) 
+
+        Fr = totFlux*gammainc(2*n, X) 
+        
+        return Fr
+
+      
+
+
+
+
+
+
+
+
+
+

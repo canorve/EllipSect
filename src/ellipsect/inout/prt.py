@@ -518,6 +518,21 @@ def printPhot(ellconf, galhead, galcomps, dataned, datatidal, sectgalax, aell, b
     lineout = "Bayesian Information Criterion using nres = n / Area_psf = {:.3f} \n".format(datatidal.BICres)  
     OUTPHOT.write(lineout)
 
+    lineout= "\n"
+    OUTPHOT.write(lineout)
+
+
+    lineout= "Radius at 30% of light for the whole galaxy: {:.3f} \n".format(datatidal.EffRad3)  
+    OUTPHOT.write(lineout)
+
+    lineout= "Effective Radius for the whole galaxy: {:.3f} \n".format(datatidal.EffRad)  
+    OUTPHOT.write(lineout)
+
+    lineout= "Radius at 90% of light for the whole galaxy: {:.3f} \n".format(datatidal.EffRad9)  
+    OUTPHOT.write(lineout)
+
+
+
 
     lineout= "\n"
     OUTPHOT.write(lineout)

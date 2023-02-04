@@ -374,6 +374,11 @@ class DataTidal:
     BICrit = 0
     BICres = 0
 
+    EffRad = 0
+    EffRad9 = 0
+    EffRad3 = 0
+
+
 class DataNed:
     ''' class for NED info '''
 

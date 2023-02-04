@@ -52,6 +52,7 @@ def InitParsing():
     parser.add_argument("-gsky","--gradsky", action="store_true", help="computes sky using the gradient method")
     parser.add_argument("-rsky","--randsky", action="store_true", help="computes sky using random boxes")
     parser.add_argument("-snr","--snr", action="store_true", help="Creates Signal to Noise image")
+    parser.add_argument("-chi","--chisquare", action="store_true", help="Creates Chi-square image")
 
     parser.add_argument("-k","--keep", action="store_true", help="use existing file to compute subcomponents")
     parser.add_argument("-gx","--galax", action="store_true", help="only the galaxy surface brightness is shown in the plot")
@@ -79,7 +80,7 @@ def InitParsing():
     parser.add_argument("-sk","--scalekpc", type=float, help="Introduce equivalence of ''/kiloparsec ")
     parser.add_argument("-sd","--sbdim", type=float, help="surface brightness dimming ")
     parser.add_argument("-md","--model",  help="User can introduce its own image model. ")
-    parser.add_argument("-sky","--sky", type=float, help="User can introduce his/her own sky value. ")
+    parser.add_argument("-sky","--sky", type=float, help="Program will use this sky values instead of the GALFIT")
     parser.add_argument("-ned","--ned",  help="user can introduce his/her own ned xml file")
     parser.add_argument("-ri","--radinit", type=float, help="for randsky, it creates a mask for the main target using this radio. For gradsky it is where the program starts to compute the gradient ")
     parser.add_argument("-srm","--skyradmax", type=float, help="for randsky only, maximum radius from main target where randbox can be selected")
@@ -108,6 +109,11 @@ def InitParsing():
     parser.add_argument("-nc","--numcomp", type=int, help="component number to" 
                         + "select for galaxy center. Default = first component. The "
                         + "component order follows as it is shown in galfit file ",default=1)
+
+
+    parser.add_argument("-ae","--aext", type=float, 
+                        help="Surface brightness correction for plots only ", default=0)
+ 
 
 
     # every new parameter added here must be

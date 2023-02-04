@@ -158,7 +158,7 @@ class EllipSectConfig:
     randskystd = 0
     randskymed = 0
 
-
+    Aext = 0  # surface brightness correction for plots
 
 
 #class to comunicate externally:

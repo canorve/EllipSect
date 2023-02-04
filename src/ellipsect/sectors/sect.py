@@ -92,12 +92,9 @@ def SectorsGalfit(args):
     plotCube(ellconf, galhead, galcomps) #plots the cube image
 
 
-    #   numsectors=19
-    #   numsectors=15
+    #   numsectors=19 default
     numsectors = ellconf.sectors
 
-    # minlevel=-100  # minimun value for sky
-    # minlevel=15  # minimun value for sky
     minlevel = ellconf.minlevel  # minimun value for sky
 
     #call to sectors_photometry for galaxy and model
@@ -109,7 +106,7 @@ def SectorsGalfit(args):
     sectcomps=[]
     if ellconf.flagcomp:
         #Note: sectors photometry for components always finished 
-        # in minlevel = 0 regardless of the input -minlevel
+        # in minlevel = 0 regardless of the input 'minlevel' option
 
         sectcomps = SectPhotComp(ellconf, dataimg, galcomps, n_sectors = numsectors, minlevel = 0)
         
@@ -121,7 +118,8 @@ def SectorsGalfit(args):
 
     print("creating plots..")
 
-    limx, limy = EllipSectors(ellconf, galhead, galcomps, sectgalax, sectmodel, sectcomps, n_sectors = numsectors)
+    limx, limy = EllipSectors(ellconf, galhead, galcomps, sectgalax, 
+                                sectmodel, sectcomps, n_sectors = numsectors)
 
     print("plot file: ", ellconf.namepng)
  
@@ -133,8 +131,7 @@ def SectorsGalfit(args):
 
     if ellconf.dplot:
         plt.pause(1.5)
-    plt.savefig(ellconf.namepng,dpi=ellconf.dpival)
-    #plt.close()
+    plt.savefig(ellconf.namepng, dpi = ellconf.dpival)
 
     ########################################################
     ################ Multiplots: ###########################
@@ -229,7 +226,7 @@ def SectPhot(ellconf, dataimg, n_sectors = 19, minlevel = 0, fit = 'gal'):
 
     if fit == 'mod':
     #  model: 
-        sectimg = sectors_photometry(dataimg.model, eps, angsec, xctemp, yctemp,minlevel=0,
+        sectimg = sectors_photometry(dataimg.model, eps, angsec, xctemp, yctemp, minlevel=0,
                 plot = ellconf.dplot, badpixels = maskb, n_sectors = n_sectors)
 
 
@@ -712,6 +709,9 @@ def PassArgs(args):
 
     if args.numcomp:
         ellconf.numcomp = args.numcomp
+
+    if args.aext:
+        ellconf.Aext = arg.aext
 
 
 

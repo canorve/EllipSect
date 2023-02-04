@@ -73,7 +73,8 @@ def sect2xy(sect, ellconf, galhead, n_sectors):
     aellarc = aellab*galhead.scale
 
     # formula according to cappellary mge manual
-    mgesb = galhead.mgzpt - 2.5*np.log10(mgecount/galhead.exptime) + 2.5*np.log10(galhead.scale**2) + 0.1
+    mgesb = galhead.mgzpt - 2.5*np.log10(mgecount/galhead.exptime) 
+            + 2.5*np.log10(galhead.scale**2) + 0.1 - ellconf.Aext
     ##
 
     stidxq = np.argsort(aellarc)

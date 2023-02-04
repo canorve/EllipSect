@@ -120,8 +120,6 @@ def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps
     galcomps.KronRad[maskgalax] = KronRadius(galcomps.Rad50[maskgalax], 
                                             galcomps.Rad50[maskgalax], galcomps.SerInd[maskgalax])
 
-    print("Kron Radius is computed at Re ")
-
 
     galcomps.PetRad[maskgalax]= solvePet(galcomps.SerInd[maskgalax])
     print("Petrosian Radius is computed with 1/nu = 0.2 (in Re units)")

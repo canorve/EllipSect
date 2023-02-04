@@ -534,8 +534,11 @@ class Galfit():
         return galsky
 
 
-def numParFree(galcomps: GalComps, name: str = 'none') -> int:
-    '''obtains the number of free parameters'''
+def numParFree(galcomps: GalComps) -> int:
+    '''obtains the number of free parameters. This function does NOT 
+    count the sky as a free param'''
+
+
 
     p1 = 0
     p2 = 0
@@ -580,17 +583,8 @@ def numParFree(galcomps: GalComps, name: str = 'none') -> int:
 
     pt = p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 + p9
 
-    if name == 'none':
 
-        nummask = (galcomps.Active == True) 
-        N = galcomps.Active[nummask].size
-
-    else:
-        nummask = (galcomps.Active == True) & (galcomps.NameComp == name)
-        N = galcomps.Active[nummask].size
-
-
-    return N
+    return pt
 
 
 

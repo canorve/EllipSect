@@ -180,9 +180,13 @@ def readDataImg(ellconf, galhead):
 
 class Galfit():
 
-    def ReadHead(File: str) -> GalHead:
+    def __init__(self, File: str):
+        self.File = File
+
+
+    def ReadHead(self) -> GalHead:
         '''reads header of galfit file'''
-        inputf = File 
+        inputf = self.File 
 
         galhead = GalHead() # class for header
 
@@ -296,15 +300,13 @@ class Galfit():
       
         ####################
 
-
-
-
         return galhead
 
 
-
-    def ReadComps(File: str) -> GalComps:
+    def ReadComps(self) -> GalComps:
         '''reads all the components in the galfit file'''
+
+        File = self.File
 
         galcomps = GalComps()
          
@@ -450,9 +452,11 @@ class Galfit():
         return galcomps 
 
 
-    def ReadSky(File: str) -> GalSky:
+    def ReadSky(self) -> GalSky:
         '''reads the sky value of the galfit file'''
-        
+
+        File = self.File    
+
         galsky = GalSky()
 
         GalfitFile = open(File,"r")

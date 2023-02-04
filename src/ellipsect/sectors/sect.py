@@ -39,9 +39,11 @@ def SectorsGalfit(args):
     ####### Read Galfit File #############
 
 
-    galhead = Galfit.ReadHead(ellconf.galfile)
-    galcomps = Galfit.ReadComps(ellconf.galfile)
-    galsky = Galfit.ReadSky(ellconf.galfile)
+    galfit = Galfit(ellconf.galfile)
+
+    galhead = galfit.ReadHead()
+    galcomps = galfit.ReadComps()
+    galsky = galfit.ReadSky()
 
 
     if ellconf.flagsky == False:

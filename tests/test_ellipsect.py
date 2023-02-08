@@ -194,6 +194,9 @@ def test_phot():
     std_snr = 3.860 
     aic= 1399.730 
     bic = 1436.107 
+    effrad = 2.623 
+    effrad3 = 1.192
+    effrad9 = 14.914
 
     diffbt =abs(bt-photapi.BulgeToTotal ) 
     difftidal = abs(tidal-photapi.tidal)
@@ -206,6 +209,10 @@ def test_phot():
 
 
 
+    diffeffrad = abs(effrad - photapi.EffRad)
+    diffeffrad9 = abs(effrad9 - photapi.EffRad9) 
+    diffeffrad3 = abs(effrad3 - photapi.EffRad3) 
+
     assert os.path.isfile(filephot)
 
     assert diffbt < tol
@@ -217,6 +224,9 @@ def test_phot():
     assert diffaic < tol
     assert diffbic < tol
 
+    assert diffeffrad < tol
+    assert diffeffrad9 < tol
+    assert diffeffrad3 < tol
 
 
     if os.path.isfile(filepng):

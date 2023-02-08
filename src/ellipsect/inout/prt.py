@@ -524,7 +524,7 @@ def printPhot(ellconf, galhead, galcomps, dataned, datatidal, sectgalax, aell, b
 
 
     lineout= "The following Radius were computed using all the " \
-               + "Sersic (and related) components\n"
+            + "Sersic (and related) components:\n"
     OUTPHOT.write(lineout)
 
 

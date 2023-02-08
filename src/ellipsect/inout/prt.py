@@ -522,13 +522,19 @@ def printPhot(ellconf, galhead, galcomps, dataned, datatidal, sectgalax, aell, b
     OUTPHOT.write(lineout)
 
 
-    lineout= "Radius at 30% of light for the whole galaxy: {:.3f} \n".format(datatidal.EffRad3)  
+
+    lineout= "The following Radius were computed using all the " \
+               + "Sersic (and related) components\n"
     OUTPHOT.write(lineout)
 
-    lineout= "Effective Radius for the whole galaxy: {:.3f} \n".format(datatidal.EffRad)  
+
+    lineout= "Radius at 30% of the total galaxy light: {:.3f} \n".format(datatidal.EffRad3)  
     OUTPHOT.write(lineout)
 
-    lineout= "Radius at 90% of light for the whole galaxy: {:.3f} \n".format(datatidal.EffRad9)  
+    lineout= "Effective Radius of the total galaxy light: {:.3f} \n".format(datatidal.EffRad)  
+    OUTPHOT.write(lineout)
+
+    lineout= "Radius at 90% of the total galaxy light: {:.3f} \n".format(datatidal.EffRad9)  
     OUTPHOT.write(lineout)
 
 

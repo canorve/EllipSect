@@ -119,7 +119,7 @@ def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps
 
     #galcomps.Rad90[maskgalax] = galcomps.Rad50[maskgalax] * (1.53 + 0.73 * galcomps.SerInd[maskgalax] + 0.07 * galcomps.SerInd[maskgalax]**2) 
     galcomps.Rad90[maskgalax] = Re90(galcomps.Rad50[maskgalax], galcomps.SerInd[maskgalax] )
-    print("Rad90 is the radius at 90% of total light  ")
+    print("Rad90 is the radius at 90% of total light of the component")
 
     galcomps.KronRad[maskgalax] = KronRadius(galcomps.Rad50[maskgalax], 
                                             galcomps.Rad50[maskgalax], galcomps.SerInd[maskgalax])

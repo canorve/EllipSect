@@ -264,11 +264,11 @@ def Tidal(datatidal, ellconf, dataimg, galhead, galcomps, sectgalax, rmin):
 
     hdu = fits.open(galhead.tempmask)
 
-    header=hdu[0].header  
+    header = hdu[0].header  
 
     header['TypeIMG'] = ('Check', 'Use this image to check the' +  
                             'area where photometry was computed')
-    hdu[0].header  =header
+    hdu[0].header = header
 
 
     hdu[0].data = (~maskm).astype("int")*100
@@ -429,7 +429,7 @@ def ExtractEllip(imagemat, idn, x, y, R, theta, ell, xmin, xmax, ymin, ymax):
 
     theta = theta * np.pi / 180  # Rads!!!
 
-    ypos, xpos = np.mgrid[ymin - 1:ymax, xmin - 1:xmax]
+    ypos, xpos = np.mgrid[ymin - 1: ymax + 1, xmin - 1: xmax + 1]
 
     dx = xpos - x
     dy = ypos - y
@@ -469,19 +469,20 @@ def GetSize(x, y, R, theta, q, ncol, nrow):
 
     theta = theta * (np.pi / 180)  # rads!!
 
-# getting size
 
-    xmin = x - np.sqrt((R**2) * (np.cos(theta))**2 +
-                       (bim**2) * (np.sin(theta))**2)
+    # getting size
 
-    xmax = x + np.sqrt((R**2) * (np.cos(theta))**2 +
-                       (bim**2) * (np.sin(theta))**2)
+    constx =  np.sqrt((R**2)*(np.cos(theta))**2 + (bim**2)*(np.sin(theta))**2)
+    consty =  np.sqrt((R**2)*(np.sin(theta))**2 + (bim**2)*(np.cos(theta))**2)
 
-    ymin = y - np.sqrt((R**2) * (np.sin(theta))**2 +
-                       (bim**2) * (np.cos(theta))**2)
 
-    ymax = y + np.sqrt((R**2) * (np.sin(theta))**2 +
-                       (bim**2) * (np.cos(theta))**2)
+
+    xmin = x - constx                       
+    xmax = x + constx
+    ymin = y - consty
+    ymax = y + consty
+                    
+
 
     mask = xmin < 1
     if mask.any():

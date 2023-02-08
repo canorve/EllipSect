@@ -16,12 +16,15 @@ from ellipsect.sectors.num import solvePet
 
 from ellipsect.lib.clas import DataTidal
 from ellipsect.lib.clas import SunMag
+from ellipsect.lib.clas import DataNed
 
 from ellipsect.inout.prt import printPhot
 
 
 from ellipsect.inout.galfit  import numParFree
 from ellipsect.inout.galfit  import GetReff 
+
+
 
 #phot/phot.py
 

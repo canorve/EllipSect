@@ -487,10 +487,10 @@ class SkyComp:
     def MakeKron(self,imagemat, idn, x, y, R, theta, q, xmin, xmax, ymin, ymax):
         "This subroutine create a Kron ellipse within a box defined by: xmin, xmax, ymin, ymax"
 
-        xmin = np.int(xmin)
-        xmax = np.int(xmax)
-        ymin = np.int(ymin)
-        ymax = np.int(ymax)
+        xmin = int(xmin)
+        xmax = int(xmax)
+        ymin = int(ymin)
+        ymax = int(ymax)
 
         bim = q * R
 

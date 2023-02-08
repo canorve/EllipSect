@@ -11,13 +11,13 @@ from scipy.special import gamma, gammainc, gammaincinv
 class GalHead():
     '''store the header of galfit file'''
 
-    inputimage = "galaxy.fits"
-    outimage = "galaxy-out.fits"
-    sigimage = "sig.fits"
-    psfimage = "psf.fits"
+    inputimage = "none.fits"
+    outimage = "none-out.fits"
+    sigimage = "none"
+    psfimage = "none"
     psfsamp = 1
-    maskimage = "galaxy-mask.fits"
-    constraints = "constraints"
+    maskimage = "none"
+    constraints = "none"
     xmin = 0
     xmax = 1
     ymin = 0

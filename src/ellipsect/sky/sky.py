@@ -65,10 +65,10 @@ def skyCall(ellconf, galhead, galcomps):
 
 
 
-        mean,std, median,rad = SkyComp().GetEllipSky(ImageFile,MaskFile,xx,yy,
-                                                    thetadeg,q,Rinit,width,
-                                                    ellconf.namering,ellconf.nameringmask,
-                                                    outliers=ellconf.flagrmsky)
+        mean, std, median, rad = SkyComp().GetEllipSky(ImageFile, MaskFile, xx, yy,
+                                                    thetadeg, q, Rinit, width,
+                                                    ellconf.namering, ellconf.nameringmask,
+                                                    outliers = ellconf.flagrmsky)
 
         line="Total sky:  mean = {:.2f}; std={:.2f}; median = {:.2f} ".format(mean,std,median)
         print(line)
@@ -135,9 +135,9 @@ def skyCall(ellconf, galhead, galcomps):
         else:
             Rmax = 0
 
-        mean, std, median = SkyComp().RandBox(ImageFile,MaskFile,xx,yy,
-                                                thetadeg,q,Rinit,box,num,Rmax,
-                                                outliers=ellconf.flagrmsky)
+        mean, std, median = SkyComp().RandBox(ImageFile, MaskFile, xx, yy,
+                                                thetadeg, q, Rinit, box, num, Rmax,
+                                                outliers = ellconf.flagrmsky)
         #
 
         line="Total sky:  mean = {:.2f}; std = {:.2f}; median = {:.2f}".format(mean,std,median)
@@ -180,14 +180,25 @@ class SkyComp:
 
         ###
 
-        hdumask = fits.open(MaskFile)
-        self.maskimg = hdumask[0].data
-        hdumask.close()
-
 
         hdu=fits.open(ImageFile)
         self.img = hdu[0].data
         hdu.close()
+
+
+        if MaskFile != 'none':
+
+            hdumask = fits.open(MaskFile)
+            self.maskimg = hdumask[0].data
+            hdumask.close()
+
+        else:
+            self.maskimg = np.zeros(self.img.shape)
+
+
+
+
+
 
         ####
         
@@ -604,7 +615,7 @@ class SkyComp:
         ######
 
 
-    def GetEllipSky(self, ImageFile, MaskFile, xx, yy, thetadeg, q, Rinit, width,namering,ringmask,outliers=True):
+    def GetEllipSky(self, ImageFile, MaskFile, xx, yy, thetadeg, q, Rinit, width, namering, ringmask, outliers=True):
         "Gradient sky method"
 
         self.xx = xx 
@@ -623,15 +634,20 @@ class SkyComp:
         self.outliers = outliers
 
         ###
-
-        hdumask = fits.open(MaskFile)
-        self.maskimg = hdumask[0].data
-        hdumask.close()
-
+    
 
         hdu = fits.open(ImageFile)
         self.img = hdu[0].data
         hdu.close()
+
+        if MaskFile != 'none':
+            hdumask = fits.open(MaskFile)
+            self.maskimg = hdumask[0].data
+            hdumask.close()
+
+        else:
+            self.maskimg = np.zeros(self.img.shape)
+
 
         ####
        
@@ -659,10 +675,10 @@ class SkyComp:
 
         patch = self.maskimg[ymin - 1:ymax, xmin - 1:xmax] # logical patch mask image
 
-        self.invpatch=np.logical_not(patch)
+        self.invpatch = np.logical_not(patch)
 
 
-        Rings=np.arange(self.Rinit,self.R,self.width) # anillos de tamaño width
+        Rings = np.arange(self.Rinit, self.R, self.width) # anillos de tamaño width
 
         sky = np.array([])
         skymed = np.array([])
@@ -694,7 +710,7 @@ class SkyComp:
             alpha = np.linspace(0,2*np.pi,points)
             for tidx, item in enumerate(range(self.width)):
 
-                bim=(Rings[ridx]+item)*self.q
+                bim = (Rings[ridx]+item)*self.q
 
                 tempxell = self.xx + (Rings[ridx]+item) * np.cos(alpha) * np.cos(theta) - bim * \
                   np.sin(alpha) * np.sin(theta)
@@ -705,15 +721,14 @@ class SkyComp:
                 tempxell = tempxell.round().astype("int")
                 tempyell = tempyell.round().astype("int")
 
-                tempxell,tempyell = self.CorSize(tempxell,tempyell)
+                tempxell, tempyell = self.CorSize(tempxell,tempyell)
                 masksky[tempyell - 1, tempxell - 1] = val
                 
             val += 1 
 
-
-        hdu[0].data=masksky
+        hdu = fits.PrimaryHDU()
+        hdu.data = masksky
         hdu.writeto(self.ringmask,overwrite=True) 
-
         ########################################
         ########################################
 
@@ -783,7 +798,8 @@ class SkyComp:
                 return 0,0,0,0
 
 
-        hdu[0].data=self.img
+        hdu = fits.PrimaryHDU()
+        hdu.data = self.img
         hdu.writeto(namering,overwrite=True) 
 
         finmean,finmedian,finstd,finRad = sky[1:-1][gradmask],skymed[1:-1][gradmask],skystd[1:-1][gradmask],radius[1:-1][gradmask]
@@ -799,9 +815,9 @@ class SkyComp:
 
         maskring = masksky == ring 
 
-        maskring=maskring*self.invpatch
+        maskring = maskring*self.invpatch
 
-        ringcont=0
+        ringcont = 0
 
         while( not(maskring.any()) and (ringcont < 10)):
 
@@ -813,10 +829,10 @@ class SkyComp:
 
             maskring = masksky == ring 
 
-            maskring=maskring*self.invpatch
+            maskring = maskring*self.invpatch
 
 
-            ringcont+=1 # avoid eternal loop
+            ringcont += 1 # avoid eternal loop
 
         if (ringcont == 10):
             print("max. iteration reached. I couldn't find a ring") 

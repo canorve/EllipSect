@@ -5,6 +5,8 @@ from ellipsect.lib.libs import *
 from ellipsect import *
 
 
+import copy
+from scipy.special import gamma, gammainc, gammaincinv
 
 class GalHead():
     '''store the header of galfit file'''

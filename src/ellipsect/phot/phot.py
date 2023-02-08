@@ -259,6 +259,7 @@ def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps
             print("No search in NED. Object name not provided or not found in Header")
             print("Lum and abs Mag will not be computed")
 
+        dataned = DataNed()
         dataned.GalExt = 0
         dataned.DistMod = 0
         dataned.DistMod2 = 0

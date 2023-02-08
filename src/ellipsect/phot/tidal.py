@@ -222,7 +222,7 @@ def Tidal(datatidal, ellconf, dataimg, galhead, galcomps, sectgalax, rmin):
 
     theta = 0
 
-    ypos, xpos = np.mgrid[ylo - 1:yhi, xlo - 1:xhi]
+    ypos, xpos = np.mgrid[ylo - 1: yhi+1, xlo - 1: xhi  +1]
 
     dx = xpos - xser
     dy = ypos - yser
@@ -248,7 +248,7 @@ def Tidal(datatidal, ellconf, dataimg, galhead, galcomps, sectgalax, rmin):
 
     #  correcting for rmin
     
-    maskbum[ylo - 1:yhi, xlo - 1:xhi][mask] = False
+    maskbum[ylo - 1:yhi+1, xlo - 1:xhi+1][mask] = False
 
     ## identifying area to compute photometry: 
     imell = ExtractEllip(imell, True, xser, yser, aell, Theta, ell, xlo, xhi, ylo, yhi)

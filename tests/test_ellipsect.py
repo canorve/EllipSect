@@ -187,13 +187,13 @@ def test_phot():
     tol = 1e-3
 
     bt= 1.000 
-    tidal = 2.011 
-    lchinu = 1.043 
-    bump = 0.129 
-    snr = 1.477 
-    std_snr = 3.860 
-    aic= 1399.730 
-    bic = 1436.107 
+    tidal = 2.052 
+    lchinu = 1.041 
+    bump = 0.128 
+    snr = 1.455 
+    std_snr = 3.836 
+    aic= 1418.811 
+    bic = 1455.297 
     effrad = 2.623 
     effrad3 = 1.192
     effrad9 = 14.914

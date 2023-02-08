@@ -480,4 +480,138 @@ def test_rsky():
 
     if os.path.isfile(filermsky):
         os.remove(filermsky)
+
+
+
+# checking the number of free params 
+def test_freepar():
+
+
+    arg=['tests/galfit.01','--noplot']
+
+    path="tests/"
+
+    filephot = "imgblock-out.txt"
+    filephot= path+filephot
+
+    filecomp = "imgblock-comp.fits"
+    filecomp= path+filecomp
+
+    filepng = "imgblock.png"
+    filemulpng = "imgblock-mul.png"
+
+    filesig = "imgblock-sig.fits"
+    filesig= path+filesig
+
+    filecheck = "imgblock-check.fits"
+    filecheck= path+filecheck
+
+    filecube = "imgblock-cub.png"
+    filecube = path+filecube
+
+    filersky = "imgblock-ring.fits"
+    filersky = path + filersky
+
+    filermsky = "imgblock-ringmask.fits"
+    filermsky = path + filermsky
+
+
+
+    filepng = path+filepng
+    filemulpng = path+filemulpng
+
+    if os.path.isfile(filepng):
+        os.remove(filepng)
+    if os.path.isfile(filemulpng):
+        os.remove(filemulpng)
+
+    if os.path.isfile(filecomp):
+        os.remove(filecomp)
+
+    if os.path.isfile(filephot):
+        os.remove(filephot)
+
+    if os.path.isfile(filesig):
+        os.remove(filesig)
+
+    if os.path.isfile(filecheck):
+        os.remove(filecheck)
+
+    if os.path.isfile(filecube):
+        os.remove(filecube)
+
+    if os.path.isfile(filersky):
+        os.remove(filersky)
+
+    if os.path.isfile(filermsky):
+        os.remove(filermsky)
+ 
+
+    from ellipsect.inout.galfit  import numParFree
+    from ellipsect.inout.galfit  import Galfit 
+    from ellipsect.sectors.sect  import PassArgs 
+    from ellipsect.inout.galfit import SelectGal 
+
+    # read user's input 
+    args = ArgParsing(arg)
+
+    # full program:
+    #photapi = SectorsGalfit(args)
+
+    ellconf = PassArgs(args) # from now on, ellconf is used instead of args
+
+    ######################################
+    ####### Read Galfit File #############
+
+    galfit = Galfit(ellconf.galfile)
+
+    galhead = galfit.ReadHead()
+    galcomps = galfit.ReadComps()
+    galsky = galfit.ReadSky()
+
+    galcomps = SelectGal(galcomps,ellconf.distmax,ellconf.numcomp)
+
+    freepar = numParFree(galcomps)
+
+
+
+
+    #tolerance parameter
+    tol = 1e-2 
+
+    totpar = 7 
+
+    diffpar = abs(totpar - freepar)
+
+
+    assert diffpar < tol
+
+
+
+    if os.path.isfile(filepng):
+        os.remove(filepng)
+
+    if os.path.isfile(filemulpng):
+        os.remove(filemulpng)
+
+    if os.path.isfile(filecomp):
+        os.remove(filecomp)
+
+    if os.path.isfile(filephot):
+        os.remove(filephot)
+
+    if os.path.isfile(filesig):
+        os.remove(filesig)
+
+    if os.path.isfile(filecheck):
+        os.remove(filecheck)
+
+    if os.path.isfile(filecube):
+        os.remove(filecube)
+
+    if os.path.isfile(filersky):
+        os.remove(filersky)
+
+    if os.path.isfile(filermsky):
+        os.remove(filermsky)
  

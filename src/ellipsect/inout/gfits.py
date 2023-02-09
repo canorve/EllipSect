@@ -32,7 +32,7 @@ def GetFits(Image, Imageout, xlo, xhi, ylo, yhi):
                         stderr=sp.PIPE, universal_newlines=True)
 
     hdu = fits.open(Image)
-    dat = hdu[0].data[ylo - 1:yhi+1, xlo - 1:xhi+1]
+    dat = hdu[0].data[ylo - 1: yhi, xlo - 1: xhi]
     hdu[0].data = dat
     try:
         hdu.writeto(Imageout, overwrite=True)

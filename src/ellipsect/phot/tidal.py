@@ -222,7 +222,7 @@ def Tidal(datatidal, ellconf, dataimg, galhead, galcomps, sectgalax, rmin):
 
     theta = 0
 
-    ypos, xpos = np.mgrid[ylo - 1: yhi+1, xlo - 1: xhi  +1]
+    ypos, xpos = np.mgrid[ylo - 1: yhi , xlo - 1: xhi ]
 
     dx = xpos - xser
     dy = ypos - yser
@@ -248,7 +248,7 @@ def Tidal(datatidal, ellconf, dataimg, galhead, galcomps, sectgalax, rmin):
 
     #  correcting for rmin
     
-    maskbum[ylo - 1:yhi+1, xlo - 1:xhi+1][mask] = False
+    maskbum[ylo - 1: yhi, xlo - 1: xhi][mask] = False
 
     ## identifying area to compute photometry: 
     imell = ExtractEllip(imell, True, xser, yser, aell, Theta, ell, xlo, xhi, ylo, yhi)
@@ -429,7 +429,7 @@ def ExtractEllip(imagemat, idn, x, y, R, theta, ell, xmin, xmax, ymin, ymax):
 
     theta = theta * np.pi / 180  # Rads!!!
 
-    ypos, xpos = np.mgrid[ymin - 1: ymax + 1, xmin - 1: xmax + 1]
+    ypos, xpos = np.mgrid[ymin - 1: ymax , xmin - 1: xmax]
 
     dx = xpos - x
     dy = ypos - y
@@ -495,9 +495,9 @@ def GetSize(x, y, R, theta, q, ncol, nrow):
 
     if mask.any():
         if isinstance(xmax,np.ndarray):
-            xmax[mask] = ncol
+            xmax[mask] = ncol - 1 
         else:
-            xmax = ncol
+            xmax = ncol - 1
 
     mask = ymin < 1
     if mask.any():
@@ -509,11 +509,11 @@ def GetSize(x, y, R, theta, q, ncol, nrow):
     mask = ymax > nrow
     if mask.any():
         if isinstance(ymax,np.ndarray):
-            ymax[mask] = nrow
+            ymax[mask] = nrow - 1
         else:
-            ymax = nrow
+            ymax = nrow - 1
 
 
-    return (int(xmin), int(xmax), int(ymin), int(ymax))
+    return (round(xmin), round(xmax), round(ymin), round(ymax))
 
 

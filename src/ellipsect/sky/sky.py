@@ -323,9 +323,9 @@ class SkyComp:
         mask = xmax > self.ncol
         if mask.any():
             if isinstance(xmax,np.ndarray):
-                xmax[mask] = self.ncol
+                xmax[mask] = self.ncol - 1
             else:
-                xmax = self.ncol
+                xmax = self.ncol - 1
 
         mask = ymin < 1
         if mask.any():
@@ -337,14 +337,14 @@ class SkyComp:
         mask = ymax > self.nrow
         if mask.any():
             if isinstance(ymax,np.ndarray):
-                ymax[mask] = self.nrow
+                ymax[mask] = self.nrow - 1
             else:
-                ymax =self.nrow
+                ymax =self.nrow - 1  
 
-        xmin = np.int32(np.round(xmin))
-        ymin = np.int32(np.round(ymin))
-        xmax = np.int32(np.round(xmax))
-        ymax = np.int32(np.round(ymax))
+        xmin = round(xmin)
+        ymin = round(ymin)
+        xmax = round(xmax)
+        ymax = round(ymax)
 
 
         return (xmin, xmax, ymin, ymax, np.int32(R))
@@ -496,7 +496,7 @@ class SkyComp:
 
         theta = theta * np.pi / 180  # Rads!!!
 
-        ypos, xpos = np.mgrid[ymin - 1: ymax + 1, xmin - 1: xmax + 1]
+        ypos, xpos = np.mgrid[ymin - 1: ymax, xmin - 1: xmax]
 
         dx = xpos - x
         dy = ypos - y
@@ -556,9 +556,9 @@ class SkyComp:
 
         if mask.any():
             if isinstance(xmax,np.ndarray):
-                xmax[mask] = ncol
+                xmax[mask] = ncol - 1
             else:
-                xmax = ncol
+                xmax = ncol - 1
 
         mask = ymin < 1
         if mask.any():
@@ -570,14 +570,14 @@ class SkyComp:
         mask = ymax > nrow
         if mask.any():
             if isinstance(ymax,np.ndarray):
-                ymax[mask] = nrow
+                ymax[mask] = nrow - 1
             else:
-                ymax = nrow
+                ymax = nrow - 1 
 
-        xmin=np.int32(np.round(xmin))
-        ymin=np.int32(np.round(ymin))
-        xmax=np.int32(np.round(xmax))
-        ymax=np.int32(np.round(ymax))
+        xmin=round(xmin)
+        ymin=round(ymin)
+        xmax=round(xmax)
+        ymax=round(ymax)
 
 
         return (xmin, xmax, ymin, ymax)
@@ -673,7 +673,7 @@ class SkyComp:
 
         theta = self.thetadeg * np.pi / 180  # Rads!!!
 
-        patch = self.maskimg[ymin - 1: ymax + 1, xmin - 1: xmax + 1] # logical patch mask image
+        patch = self.maskimg[ymin - 1: ymax, xmin - 1: xmax] # logical patch mask image
 
         self.invpatch = np.logical_not(patch)
 
@@ -738,10 +738,10 @@ class SkyComp:
         for ind, item in enumerate(Rings):
 
 
-            maskring,idx=self.GetRingMask(masksky[ymin - 1: ymax + 1, xmin - 1:xmax +1],idx)
+            maskring,idx=self.GetRingMask(masksky[ymin - 1: ymax, xmin - 1:xmax],idx)
 
 
-            flatimg=self.img[ymin - 1:ymax+1, xmin - 1:xmax+1][maskring].flatten()  
+            flatimg=self.img[ymin - 1:ymax, xmin - 1:xmax][maskring].flatten()  
             flatimg.sort()
 
             tot=len(flatimg)
@@ -780,14 +780,14 @@ class SkyComp:
                 if (sky[1:-1][gradmask].any()): 
                     
                     savidx=tempidx[0][0]
-                    maskring,none =self.GetRingMask(masksky[ymin - 1: ymax+1, xmin - 1:xmax+1],savidx)
+                    maskring,none =self.GetRingMask(masksky[ymin - 1: ymax, xmin - 1:xmax],savidx)
 
 
                     print("sky computed in ring {} ".format(savidx+2))
                     
                     print("Ring radius = {:.2f} marked in {} ".format(radius[1:-1][savidx],namering))
                     print("the counts value within ring represent the long axis") 
-                    self.img[ymin - 1:ymax + 1, xmin - 1:xmax + 1][maskring] = radius[1:-1][savidx] 
+                    self.img[ymin - 1:ymax, xmin - 1:xmax ][maskring] = radius[1:-1][savidx] 
                     break
 
             count += 1

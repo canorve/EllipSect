@@ -594,10 +594,10 @@ def PassArgs(args):
 
     #options with arguments
 
-    if args.center:
-        ellconf.flagcent = True
-        ellconf.xc = args.center[0]
-        ellconf.yc = args.center[1]
+    #if args.center: #removed because of number of component is selected
+    #    ellconf.flagcent = True
+    #    ellconf.xc = args.center[0]
+    #    ellconf.yc = args.center[1]
 
 
     if args.axisrat:

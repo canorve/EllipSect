@@ -58,7 +58,7 @@ class EllipSectConfig:
 
     flagfwhm = False
 
-    flagcent = False 
+    #flagcent = False 
 
     flagrmsky=True
 

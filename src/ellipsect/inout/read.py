@@ -64,12 +64,12 @@ def InitParsing():
                         help=linehelp)
  
     #options with arguments
-    parser.add_argument("-cn","--center",nargs=2,action="store", type=float, help="galaxy's center ")
+    #parser.add_argument("-cn","--center",nargs=2,action="store", type=float, help="galaxy's center ")
 
     parser.add_argument("-q","--axisrat", type=float, help="galaxy axis ratio ")
     parser.add_argument("-pa","--posangle", type=float, help="position angle (same as GALFIT)  ",default=0)
-    parser.add_argument("-rx","--ranx",nargs=2, type=float, help="provide a range for x-axis: xmin-xmax ")
-    parser.add_argument("-ry","--rany", nargs=2,type=float, help="provide a range for y-axis: ymin-ymax  ")
+    parser.add_argument("-rx","--ranx",nargs=2, type=float, help="provide a range for x-axis: xmin - xmax ")
+    parser.add_argument("-ry","--rany", nargs=2,type=float, help="provide a range for y-axis: ymin - ymax  ")
     parser.add_argument("-dpi","--dotsinch", type=int, help="dots per inch used for images files ")
     parser.add_argument("-ml","--minlevel", type=float, help="parameter given directly to sectors_photometry. ")
     parser.add_argument("-sc","--sectors", type=int, help="parameter given directly to sectors_photometry. Divide elipse in 'sectors'")
@@ -215,9 +215,9 @@ def GetEllInfo(ellconf,galcomps):
         ellconf.parg = galcomps.PosAng[maskactive][-1]
 
     #for the center, it obtains it from the first component
-    if ellconf.flagcent == False:
-        ellconf.xc = galcomps.PosX[maskactive][0]
-        ellconf.yc = galcomps.PosY[maskactive][0]
+    #if ellconf.flagcent == False:
+    ellconf.xc = galcomps.PosX[maskactive][0]
+    ellconf.yc = galcomps.PosY[maskactive][0]
 
 
 

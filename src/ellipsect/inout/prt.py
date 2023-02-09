@@ -391,7 +391,7 @@ def printPhot(ellconf, galhead, galcomps, dataned, datatidal, sectgalax):
 
 
 
-    lineout = "# Some photometric variables are computed within an ellipse defined by sectors_photometry \n"
+    lineout = "# Some photometric variables are computed within an ellipse containing 90% of total light \n"
     OUTPHOT.write(lineout)
 
     lineout = "# This ellipse has axis a = {:.2f} and b = {:.2f} centered at xc, yc \n".format(datatidal.aell, datatidal.bell)

@@ -201,9 +201,6 @@ def Tidal(datatidal, ellconf, dataimg, galhead, galcomps, sectgalax, rmin):
     imell.fill(False)
 
 
-        #    for objchinu, Tidal and SNR
-        #    maskm = dat[ylo - 1:yhi, xlo - 1:xhi] == num  # big image coordinates
-        #maskm =immask[ylo - 1:yhi, xlo - 1:xhi] == False  # big image coordinates
     #if galhead.tempmask!=None:
     maskm = immask == False  # big image coordinates
     #else:
@@ -213,8 +210,6 @@ def Tidal(datatidal, ellconf, dataimg, galhead, galcomps, sectgalax, rmin):
         #maskm =immask == False  # big image coordinates
 
         #   mask including rmin for Bumpiness only
-        #    maskbum = dat[ylo - 1:yhi, xlo - 1:xhi] == num  # big image coordinates
-        #maskbum = immask[ylo - 1:yhi, xlo - 1:xhi] == False  # big image coordinates
     #if galhead.tempmask!=None:
     maskbum = immask == False  # big image coordinates
     #else:

@@ -378,6 +378,8 @@ class DataTidal:
     EffRad9 = 0
     EffRad3 = 0
 
+    aell = 0
+    bell = 0
 
 class DataNed:
     ''' class for NED info '''

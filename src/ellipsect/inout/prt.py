@@ -338,7 +338,7 @@ def printEllinfo(ellconf, galhead):
 
 
 
-def printPhot(ellconf, galhead, galcomps, dataned, datatidal, sectgalax, aell, bell):
+def printPhot(ellconf, galhead, galcomps, dataned, datatidal, sectgalax):
 
 
     #redefining the mask again
@@ -394,7 +394,7 @@ def printPhot(ellconf, galhead, galcomps, dataned, datatidal, sectgalax, aell, b
     lineout = "# Some photometric variables are computed within an ellipse defined by sectors_photometry \n"
     OUTPHOT.write(lineout)
 
-    lineout = "# This ellipse has axis a = {:.2f} and b = {:.2f} centered at xc, yc \n".format(aell,bell)
+    lineout = "# This ellipse has axis a = {:.2f} and b = {:.2f} centered at xc, yc \n".format(datatidal.aell, datatidal.bell)
     OUTPHOT.write(lineout)
 
     lineout = "# To see this ellipse check the file {} \n".format(ellconf.namecheck)

@@ -496,7 +496,7 @@ class SkyComp:
 
         theta = theta * np.pi / 180  # Rads!!!
 
-        ypos, xpos = np.mgrid[ymin - 1: ymax, xmin - 1: xmax]
+        ypos, xpos = np.mgrid[ymin - 1: ymax + 1, xmin - 1: xmax + 1]
 
         dx = xpos - x
         dy = ypos - y
@@ -673,7 +673,7 @@ class SkyComp:
 
         theta = self.thetadeg * np.pi / 180  # Rads!!!
 
-        patch = self.maskimg[ymin - 1: ymax, xmin - 1: xmax] # logical patch mask image
+        patch = self.maskimg[ymin - 1: ymax + 1, xmin - 1: xmax + 1] # logical patch mask image
 
         self.invpatch = np.logical_not(patch)
 
@@ -738,10 +738,10 @@ class SkyComp:
         for ind, item in enumerate(Rings):
 
 
-            maskring,idx=self.GetRingMask(masksky[ymin - 1: ymax, xmin - 1:xmax],idx)
+            maskring,idx=self.GetRingMask(masksky[ymin - 1: ymax + 1, xmin - 1:xmax + 1],idx)
 
 
-            flatimg=self.img[ymin - 1:ymax, xmin - 1:xmax][maskring].flatten()  
+            flatimg=self.img[ymin - 1:ymax + 1, xmin - 1:xmax + 1][maskring].flatten()  
             flatimg.sort()
 
             tot=len(flatimg)
@@ -780,14 +780,14 @@ class SkyComp:
                 if (sky[1:-1][gradmask].any()): 
                     
                     savidx=tempidx[0][0]
-                    maskring,none =self.GetRingMask(masksky[ymin - 1: ymax, xmin - 1:xmax],savidx)
+                    maskring,none =self.GetRingMask(masksky[ymin - 1: ymax + 1, xmin - 1:xmax + 1],savidx)
 
 
                     print("sky computed in ring {} ".format(savidx+2))
                     
                     print("Ring radius = {:.2f} marked in {} ".format(radius[1:-1][savidx],namering))
                     print("the counts value within ring represent the long axis") 
-                    self.img[ymin - 1:ymax, xmin - 1:xmax ][maskring] = radius[1:-1][savidx] 
+                    self.img[ymin - 1:ymax + 1, xmin - 1:xmax + 1][maskring] = radius[1:-1][savidx] 
                     break
 
             count += 1

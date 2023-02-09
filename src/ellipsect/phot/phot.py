@@ -31,7 +31,7 @@ from ellipsect.inout.galfit  import GetReff
 
 
 def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps,photapi):
-    """ Output photometry for further analysis """
+    """ Computes Output photometry """
 
 
 
@@ -113,7 +113,6 @@ def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps
     galcomps.Rad50[maskgauss] = 0.5*galcomps.Rad[maskgauss] 
 
     ################
-    # computing Rad 90% light with aproximation taken from my Thesis
 
     galcomps.Rad50sec[maskgalax] = galcomps.Rad50[maskgalax] * galhead.scale 
 
@@ -194,6 +193,38 @@ def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps
     # ignore warnings from Card too long
     if not sys.warnoptions:
         warnings.simplefilter("ignore")
+
+
+    ################################################################
+    ################################################################
+    print('computing the effective radius for the whole galaxy')
+    eff = 0.5
+    EffRad = GetReff().GetReSer(galhead, galcomps, eff)
+
+    eff = 0.9
+    EffRad9 = GetReff().GetReSer(galhead, galcomps, eff)
+
+    eff = 0.3
+    EffRad3 = GetReff().GetReSer(galhead, galcomps, eff)
+
+    datatidal.EffRad = EffRad
+    datatidal.EffRad9 = EffRad9
+    datatidal.EffRad3 = EffRad3
+    ################################################################
+    ################################################################
+
+    if maskmag.any():
+        datatidal.aell = datatidal.EffRad9
+        datatidal.bell = datatidal.EffRad9*ellconf.qarg
+
+    else:
+
+        print("model contains non-sersic functions.") 
+        print("90% Radius from sector_photometry will be used instead")
+        frac = .90
+        datatidal.aell = mgerad.max()*frac 
+        datatidal.bell = mgerad.max()*ellconf.qarg*frac
+
 
 
     # call to Tidal
@@ -358,38 +389,24 @@ def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps
 
     mgerad = sectgalax.radius[stidxg]
 
-    aell = mgerad.max() 
-    bell = mgerad.max()*ellconf.qarg
+    #aell = mgerad.max() 
+    #bell = mgerad.max()*ellconf.qarg
 
-
-    print('computing the effective radius for the whole galaxy')
-    eff = 0.5
-    EffRad = GetReff().GetReSer(galhead, galcomps, eff)
-
-    eff = 0.9
-    EffRad9 = GetReff().GetReSer(galhead, galcomps, eff)
-
-    eff = 0.3
-    EffRad3 = GetReff().GetReSer(galhead, galcomps, eff)
-
-    datatidal.EffRad = EffRad
-    datatidal.EffRad9 = EffRad9
-    datatidal.EffRad3 = EffRad3
 
 
     #prints photometric variables into a file:
-    printPhot(ellconf, galhead, galcomps, dataned, datatidal, sectgalax, aell, bell)
+    printPhot(ellconf, galhead, galcomps, dataned, datatidal, sectgalax)
 
-    passPhotVar(photapi, dataned, datatidal, galcomps, aell, bell)
+    passPhotVar(photapi, dataned, datatidal, galcomps)
 
 
     return photapi
 
 
-def passPhotVar(photapi, dataned, datatidal, galcomps, aell, bell):
+def passPhotVar(photapi, dataned, datatidal, galcomps):
 
-    photapi.aell = aell
-    photapi.bell = bell 
+    photapi.aell = datatidal.aell
+    photapi.bell = datatidal.bell 
 
     photapi.GalExt = dataned.GalExt 
     photapi.DistMod = dataned.DistMod

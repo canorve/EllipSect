@@ -187,15 +187,15 @@ def test_phot():
     tol = 1e-3
 
     bt= 1.000 
-    tidal = 2.052 
-    lchinu = 1.041 
-    bump = 0.128 
-    snr = 1.455 
-    std_snr = 3.836 
-    aic= 1418.811 
-    bic = 1455.297 
-    effrad = 2.623 
+    tidal = 0.688 
+    lchinu = 1.038
+    bump = 0.064 
+    snr = 2.871 
+    std_snr = 5.324 
+    aic= 629.555 
+    bic = 660.334
     effrad3 = 1.192
+    effrad = 2.623 
     effrad9 = 14.914
 
     diffbt =abs(bt-photapi.BulgeToTotal ) 

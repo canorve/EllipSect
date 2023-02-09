@@ -60,12 +60,14 @@ def Tidal(datatidal, ellconf, dataimg, galhead, galcomps, sectgalax, rmin):
 
 
     ab = ellconf.qarg
-
     ell = 1 - ab
 
-    aell = mgerad.max() 
 
-    bell = mgerad.max() * ab
+    aell = datatidal.aell
+    bell = datatidal.bell
+
+    
+
 
     #changing to arc sec
     aellarc = aell*galhead.scale
@@ -222,7 +224,7 @@ def Tidal(datatidal, ellconf, dataimg, galhead, galcomps, sectgalax, rmin):
 
     theta = 0
 
-    ypos, xpos = np.mgrid[ylo - 1: yhi , xlo - 1: xhi ]
+    ypos, xpos = np.mgrid[ylo - 1: yhi + 1 , xlo - 1: xhi + 1 ]
 
     dx = xpos - xser
     dy = ypos - yser
@@ -248,7 +250,8 @@ def Tidal(datatidal, ellconf, dataimg, galhead, galcomps, sectgalax, rmin):
 
     #  correcting for rmin
     
-    maskbum[ylo - 1: yhi, xlo - 1: xhi][mask] = False
+    maskbum[ylo - 1: yhi + 1, xlo - 1: xhi +1][mask] = False
+
 
     ## identifying area to compute photometry: 
     imell = ExtractEllip(imell, True, xser, yser, aell, Theta, ell, xlo, xhi, ylo, yhi)
@@ -429,7 +432,7 @@ def ExtractEllip(imagemat, idn, x, y, R, theta, ell, xmin, xmax, ymin, ymax):
 
     theta = theta * np.pi / 180  # Rads!!!
 
-    ypos, xpos = np.mgrid[ymin - 1: ymax , xmin - 1: xmax]
+    ypos, xpos = np.mgrid[ymin - 1: ymax + 1, xmin - 1: xmax + 1]
 
     dx = xpos - x
     dy = ypos - y
@@ -452,7 +455,7 @@ def ExtractEllip(imagemat, idn, x, y, R, theta, ell, xmin, xmax, ymin, ymax):
     dell = np.sqrt((xell - x)**2 + (yell - y)**2)
     dist = np.sqrt(dx**2 + dy**2)
 
-    mask = dist < dell
+    mask = dist <= dell
     imagemat[ypos[mask], xpos[mask]] = idn
 
     return imagemat

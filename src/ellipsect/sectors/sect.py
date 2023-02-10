@@ -230,7 +230,6 @@ def SectPhot(ellconf, dataimg, n_sectors = 19, minlevel = 0, fit = 'gal'):
     angsec = 90 - ellconf.parg
     #    angsec=ang
 
-
     ###################################################
     if fit == 'gal':
     #  galaxy:

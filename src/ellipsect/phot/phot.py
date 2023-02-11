@@ -215,13 +215,13 @@ def OutPhot(ellconf, dataimg, galhead, galcomps, sectgalax, sectmodel, sectcomps
     ################################################################
     print('computing the effective radius for the whole galaxy')
     eff = 0.5
-    EffRad = GetReff().GetReSer(galhead, galcomps, eff)
+    EffRad, tempmag = GetReff().GetReSer(galhead, galcomps, eff)
 
     eff = 0.9
-    EffRad9 = GetReff().GetReSer(galhead, galcomps, eff)
+    EffRad9, tempmag = GetReff().GetReSer(galhead, galcomps, eff)
 
     eff = 0.3
-    EffRad3 = GetReff().GetReSer(galhead, galcomps, eff)
+    EffRad3, tempmag = GetReff().GetReSer(galhead, galcomps, eff)
 
     datatidal.EffRad = EffRad
     datatidal.EffRad9 = EffRad9

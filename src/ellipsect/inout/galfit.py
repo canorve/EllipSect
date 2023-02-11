@@ -654,6 +654,7 @@ def SelectGal(galcomps: GalComps, distmax: float, n_comp: int) -> GalComps:
 
 
 
+
 ### Sersic components 
 class GetReff:
     '''class to obtain the effective radius for the whole galaxy'''
@@ -669,15 +670,16 @@ class GetReff:
         
         totFlux = comps.Flux[maskgal].sum()
 
+        totmag = -2.5*np.log10(totFlux) + galhead.mgzpt
+
         a = 0.1
-        b = comps.Rad[maskgal][-1] * 100  # hope it doesn't crash
+        b = comps.Rad[maskgal][-1] * 1000  # hope it doesn't crash
+        
+        Reff = self.solveSerRe(a, b, comps.Flux[maskgal], comps.Rad[maskgal], 
+                comps.Exp[maskgal], totFlux, eff)
 
 
-        Reff = self.solveSerRe(a, b, comps.Rad[maskgal], comps.Exp[maskgal], 
-                                totFlux, eff)
-
-
-        return Reff
+        return Reff, totmag
 
 
     def conver2Sersic(self, galcomps: GalComps) -> GalComps:
@@ -710,54 +712,45 @@ class GetReff:
             comps.Exp[maskexp] = 1
             comps.Rad[maskexp] = K_EXP*comps.Rad[maskexp] #converting to Re
 
-
-
         return comps
 
 
 
 
-    def solveSerRe(self, a: float, b: float, rad: list, n: list, totFlux: float, eff: float) -> float:
+    def solveSerRe(self, a: float, b: float, flux: list, rad: list, n: list, totFlux: float, eff: float) -> float:
         "return the Re of a set of Sersic functions. It uses Bisection"
 
-
-        Re = bisect(self.funReSer, a, b, args=(rad, n, totFlux, eff))
+        Re = bisect(self.funReSer, a, b, args=(flux, rad, n, totFlux, eff))
 
         return Re
 
-    def funReSer(self, R: float, rad: list, n: list, totFlux: float, eff: float) -> float:
-        
 
-        fun = self.Ftotser(R, rad, n, totFlux) - totFlux*eff
+    def funReSer(self, R: float, flux: list, rad: list, n: list, totFlux: float, eff: float) -> float:
+        
+        fun = self.Ftotser(R, flux, rad, n) - totFlux*eff
 
         return fun
-     
-    def Ftotser(self, R: float, rad: list, n: list, totFlux: float) -> float:
 
-        ftotR = self.Fser(R, rad, n, totFlux) 
+
+    def Ftotser(self, R: float, flux: list, rad: list, n: list) -> float:
+
+        ftotR = self.Fser(R, flux, rad, n) 
 
         return ftotR.sum()
 
 
-
-    def Fser(self, R: float, Re: float, n: float, totFlux: float) -> float:
+    def Fser(self, R: float, Flux: list, Re: list, n: list) -> float:
         '''sersic flux to a determined R'''
         
         k = gammaincinv(2*n, 0.5)
 
         X = k*(R/Re)**(1/n) 
 
-        Fr = totFlux*gammainc(2*n, X) 
+        Fr = Flux*gammainc(2*n, X) ##esta funcion esta mal 
         
         return Fr
 
-      
-
-
-
-
-
-
+ 
 
 
 

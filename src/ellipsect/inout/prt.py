@@ -407,7 +407,7 @@ def printPhot(ellconf, galhead, galcomps, dataned, datatidal, sectgalax):
 
 
 
-    lineout = "# Some photometric variables are computed within an ellipse containing 90% of total light \n"
+    lineout = "# Some of the photometric variables mentioned below were computed within an ellipse containing 90% of total light \n"
     OUTPHOT.write(lineout)
 
     lineout = "# This ellipse has axis a = {:.2f} and b = {:.2f} centered at xc, yc \n".format(datatidal.aell, datatidal.bell)
@@ -420,7 +420,7 @@ def printPhot(ellconf, galhead, galcomps, dataned, datatidal, sectgalax):
     lineout= "#\n"
     OUTPHOT.write(lineout)
 
-    lineout= "# sectors_photometry was used with q={}, pa={} and minlevel = {} \n".format(ellconf.qarg, 
+    lineout= "# sectors_photometry was used with q = {:.2f}, pa = {:.2f} and minlevel = {} \n".format(ellconf.qarg, 
                                                                                             ellconf.parg, ellconf.minlevel)
     OUTPHOT.write(lineout)
 
@@ -441,15 +441,15 @@ def printPhot(ellconf, galhead, galcomps, dataned, datatidal, sectgalax):
                         dataned.Scalekpc, dataned.SbDim)
     OUTPHOT.write(lineout)
 
-    lineout = "# Check references in NED file {} \n\n".format(ellconf.namened)
+    lineout = "# Check references in the NED file: {} \n\n".format(ellconf.namened)
     OUTPHOT.write(lineout)
 
     #note this below goes in another function
 
-    lineout = "total apparent mag of the galaxy (using ellipse aperture on image) = {:.3f}  \n".format(datatidal.magalaper)
+    lineout = "total apparent mag of the galaxy (using ellipse aperture) = {:.3f}  \n".format(datatidal.magalaper)
     OUTPHOT.write(lineout)
 
-    lineout = "total apparent mag of the model (using ellipse aperture on image) = {:.3f}  \n".format(datatidal.magmodaper)
+    lineout = "total apparent mag of the model (using ellipse aperture) = {:.3f}  \n".format(datatidal.magmodaper)
     OUTPHOT.write(lineout)
 
 
@@ -461,10 +461,10 @@ def printPhot(ellconf, galhead, galcomps, dataned, datatidal, sectgalax):
         lineout = "total apparent mag from model parameters (without corrections) = {:.3f}  \n".format(datatidal.totMag)
         OUTPHOT.write(lineout)
 
-        lineout = "total flux (without corrections) = {:.3f}  \n".format(datatidal.totFlux)
+        lineout = "total flux (without corrections) = {:.3f} \n\n".format(datatidal.totFlux)
         OUTPHOT.write(lineout)
     else:
-        lineout="Total magnitude can not be computed with the actual galfit functions \n"
+        lineout="Total magnitude can not be computed with the actual galfit functions \n\n"
         OUTPHOT.write(lineout)
 
 
@@ -499,7 +499,7 @@ def printPhot(ellconf, galhead, galcomps, dataned, datatidal, sectgalax):
 
     totfreepar = numParFree(galcomps) 
 
-    lineout="Number of free params = {} \n".format(totfreepar)
+    lineout="Number of free params = {} \n\n".format(totfreepar)
     OUTPHOT.write(lineout)
    
 
@@ -520,7 +520,7 @@ def printPhot(ellconf, galhead, galcomps, dataned, datatidal, sectgalax):
             lineout="Absolute Mag using Dist Mod independent of z = {:.3f} \n".format(datatidal.AbsMag2)
             OUTPHOT.write(lineout)
 
-            lineout="Luminosity = {:.3f} (10^10 solar lum) using Dist Mod independent of z  \n".format(datatidal.Lum/1e10)
+            lineout="Luminosity = {:.3f} (10^10 solar lum) using Dist Mod independent of z  \n\n".format(datatidal.Lum/1e10)
             OUTPHOT.write(lineout)
 
 

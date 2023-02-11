@@ -650,7 +650,7 @@ def test_img_size():
 
 
     tempmask="tempmask.fits"
-    filetempmask = path + tempmask 
+    filetempmask = tempmask 
 
     filepng = path+filepng
     filemulpng = path+filemulpng
@@ -680,7 +680,11 @@ def test_img_size():
 
     if os.path.isfile(filermsky):
         os.remove(filermsky)
+
+    if os.path.isfile(filetempmask):
+        os.remove(filetempmask)
  
+
 
     from ellipsect.inout.galfit  import Galfit 
     from ellipsect.sectors.sect  import PassArgs 

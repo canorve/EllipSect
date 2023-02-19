@@ -245,8 +245,7 @@ def plotCube(ellconf, galhead, galcomps):
 
     ShowCube(galhead.outimage, namepng = ellconf.namecube, dpival 
              = ellconf.dpival, bri = ellconf.brightness, con = ellconf.contrast, 
-             frac = ellconf.frac, fracmax = ellconf.fracmax,  cmap = ellconf.cmap, 
-             ellipse = ell)
+              cmap = ellconf.cmap, ellipse = ell)
 
 
     if ellconf.dplot:
@@ -306,7 +305,7 @@ def Comp2Ellip(galhead, galcomps, N, lw=1):
 class ShowCube:
 
     def __init__(self, cubeimg: str, namepng="cubeout.png", dpival=100, 
-                bri = 33, con = 0.98, frac = 1, fracmax = 1, cmap='viridis', ellipse=[]):
+                bri = 0, con = 1, cmap='viridis', ellipse=[]):
         """
         This routine shows the GALFIT output cube image: galaxy, model and residual    
         """
@@ -318,36 +317,53 @@ class ShowCube:
         residual = (hdu[3].data.copy()).astype(float)
         hdu.close()
 
-        flatmodimg=model.flatten()  
-        flatresimg=residual.flatten()  
+        flatmodimg = model.flatten()  
+        flatresimg = residual.flatten()  
 
         flatmodimg.sort()
         flatresimg.sort()
 
-        restot=len(flatresimg)
+        restot = len(flatresimg)
 
-        restop=round(.9*restot)
-        resbot=round(.1*restot)
+        restop = round(.9*restot)
+        resbot = round(.1*restot)
 
-        modimgpatch=flatmodimg
-        resimgpatch=flatresimg[resbot:restop]
+        modtot = len(flatmodimg)
+
+        modtop = round(.9*modtot)
+        modbot = round(.1*modtot)
+
+
+
+        modimgpatch = flatmodimg#[modbot:modtop]
+        resimgpatch = flatresimg[resbot:restop]
+
+        resmin = np.min(resimgpatch)
+        resmax = np.max(resimgpatch)
+
 
         modmin = np.min(modimgpatch)
         modmax = np.max(modimgpatch)
 
 
-        modmin = frac*modmin 
-        modmax = fracmax*modmax
+        data = data.clip(modmax/1e4,modmax)
+        model = model.clip(modmax/1e4)
+
+        modmin = modmax/1e4
 
 
+        middle = (modmax - modmin)/2
 
 
-        if (modmin > modmax):
-            modmin, modmax = modmax, modmin
+        #brightness auto-adjust according to the contrast value 
+
+        Autobri = middle*(con -1) + modmin*(1-con) 
 
 
-        resmin = np.min(resimgpatch)
-        resmax = np.max(resimgpatch)
+        #user can re-adjust brightness in addition to Autobri
+        newdata = con*(data - middle) + middle + Autobri + bri*(modmax-middle)
+        newmodel = con*(model - middle) + middle + Autobri + bri*(modmax-middle)
+
 
 
         mask=data < 0 
@@ -356,8 +372,9 @@ class ShowCube:
         fig, (ax1, ax2, ax3) = plt.subplots(figsize=(14, 5), nrows = 1, ncols = 3)
         fig.subplots_adjust(left=0.04, right=0.98, bottom=0.02, top=0.98)
 
-        ax1.imshow(con*data + bri, origin ='lower', norm 
+        im = ax1.imshow(newdata, origin ='lower', interpolation='nearest', norm 
                     = colors.LogNorm(vmin=modmin, vmax=modmax), cmap = cmap)
+
 
         ax1.set_title('Data')
 
@@ -366,14 +383,14 @@ class ShowCube:
             ax1.add_patch(ell)
 
 
-        ax2.imshow(con*model + bri, origin='lower', norm 
+        ax2.imshow(newmodel, origin='lower', interpolation='nearest', norm 
                     = colors.LogNorm(vmin = modmin, vmax = modmax), cmap = cmap)
+
+
         ax2.set_title('GALFIT Model')
 
         ax3.imshow(residual, origin='lower', vmin = resmin, vmax = resmax, cmap = cmap)
         ax3.set_title('Residual')
-
-
 
 
         plt.savefig(namepng, dpi = dpival)

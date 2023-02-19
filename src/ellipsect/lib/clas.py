@@ -155,13 +155,11 @@ class EllipSectConfig:
 
     distmax = 10
 
-    brightness = 33 
-    contrast = 0.98
+    brightness = 0 
+    contrast = 1 
 
     cmap="viridis"
 
-    frac = 1
-    fracmax = 1
 
     numcomp = 1
     tot = 0 # total number of components

@@ -47,7 +47,6 @@ from ellipsect.lib.clas import PhotAPI
 
 def SectorsGalfit(args):
 
-
     ellconf = PassArgs(args) # from now on, ellconf is used instead of args
 
 
@@ -103,7 +102,6 @@ def SectorsGalfit(args):
     # removing background from galaxy and model images 
     dataimg.img = dataimg.img - ellconf.skylevel
     dataimg.model = dataimg.model - ellconf.skylevel
-
 
     plotCube(ellconf, galhead, galcomps) #plots the cube image
 
@@ -712,18 +710,8 @@ def PassArgs(args):
     if args.brightness:
         ellconf.brightness = args.brightness
 
-
     if args.contrast:
         ellconf.contrast = args.contrast
-
-
-    if args.frac:
-        ellconf.frac = args.frac
-
-    if args.fracmax:
-        ellconf.fracmax = args.fracmax
-
-
 
 
     if args.cmap:

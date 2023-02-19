@@ -107,15 +107,15 @@ def InitParsing():
     parser.add_argument("-fw","--fwhm", type=float, help="It is used to compute Area_psf for BICres. It also draws a vertical line at the given value. Default = 2 pixels ")
 
 
-    parser.add_argument("-fr","--frac", type=float, help="fraction of the minimum model count to be used as vmin of imshow for the cube image ",default=1)
+    #parser.add_argument("-fr","--frac", type=float, help="fraction of the minimum model count to be used as vmin of imshow for the cube image ",default=1)
 
-    parser.add_argument("-frm","--fracmax", type=float, help="fraction of the maximum model count to be used as vmax of imshow for the cube image ",default=1)
+    #parser.add_argument("-frm","--fracmax", type=float, help="fraction of the maximum model count to be used as vmax of imshow for the cube image ",default=1)
 
 
     parser.add_argument("-br","--brightness", type=float, 
-                        help="brightness of the image. Only for galaxy and model. Default = 33", default=33)
+                        help="brightness of the image. Only for galaxy and model. Default = 0. Preferible range goes from -1 to 1", default=0)
     parser.add_argument("-co","--contrast", type=float, 
-                        help="contrast of the image. Only for galaxy and model. Default = 0.98",default=0.98)
+                        help="contrast of the image. Only for galaxy and model. Default = 1. Preferible range goes from 0 to 1",default=1)
 
 
 

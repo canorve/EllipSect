@@ -245,7 +245,7 @@ def plotCube(ellconf, galhead, galcomps):
 
     ShowCube(galhead.outimage, namepng = ellconf.namecube, dpival 
              = ellconf.dpival, bri = ellconf.brightness, con = ellconf.contrast, 
-              cmap = ellconf.cmap, ellipse = ell)
+              cmap = ellconf.cmap, ellipse = ell, plate = galhead.scale)
 
 
     if ellconf.dplot:
@@ -305,7 +305,7 @@ def Comp2Ellip(galhead, galcomps, N, lw=1):
 class ShowCube:
 
     def __init__(self, cubeimg: str, namepng="cubeout.png", dpival=100, 
-                bri = 0, con = 1, cmap='viridis', ellipse=[]):
+                bri = 0, con = 1, cmap='viridis', ellipse=[], plate = 1):
         """
         This routine shows the GALFIT output cube image: galaxy, model and residual    
         """
@@ -378,6 +378,32 @@ class ShowCube:
 
         ax1.set_title('Data')
 
+        y,x = data.shape
+
+        xt = .02*x
+        yt = .02*y
+
+        lxline = round(.1*x)
+        lyline = round(.1*y)
+        x1 = [xt, xt+lxline]
+        y1 = [lyline, lyline]
+
+        arcsec = lxline*plate*U.arcsec 
+
+
+        if arcsec.value >= 60:
+            lxlinearc = arcsec.to("arcmin").value
+            s = "{}\'".format(round(lxlinearc))
+        else:
+            lxlinearc = arcsec.value
+            s = "{}\'\'".format(round(lxlinearc))
+ 
+        ax1.plot(x1, y1, color="white", linewidth=3)
+
+        ax1.text(xt+round(lxline/5),lyline+yt,s,color='white',fontsize=14)
+    
+        #ax1.set_xlabel(r'$\circ$')
+        #ax2.set_ylabel('23\"')
 
         for ell in ellipse:
             ax1.add_patch(ell)

@@ -465,7 +465,7 @@ def PlotMul(ellconf, galhead, galcomps, mgegal, mgemod, mgecom):
         axpix2 = axsec[0,1].twiny()
 
     fig.text(0.04, 0.5, "Surface Brightness (mag/'')", va='center', rotation='vertical')
-    fig.text(0.96, 0.5, 'error (%)', va='center', rotation='vertical')
+    fig.text(0.96, 0.5, 'error ', va='center', rotation='vertical')
 
     axsec[-1, 0].set_xlabel("radius ('')")
     axsec[-1, 1].set_xlabel("radius ('')")

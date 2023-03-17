@@ -12,13 +12,13 @@
 EllipSect creates surface brightness profiles and extracts other
 photometric data from the GALFIT output peng et al. (2002).
 
-This code is “similar” (but not sustitute) to IRAF’s ellipse routine. It
+This code is “similar” (but not substitute) to IRAF’s ellipse routine. It
 creates a Surface brightness profile for the galaxy, model and
-(optionally) individual model components.
+, optionally, individual model components.
 
 In addition, *EllipSect* computes variables such as Absolute Magnitude,
 luminosity, Flux, total apparent magnitude, Bulge to Total Ratio, Tidal,
-Chinu in the sectors ellipse, Bumpiness, Signal to Noise Ratio, Akaike
+Chinu within a radius containing 90% of total light, Bumpiness, Signal to Noise Ratio, Akaike
 Information criterion, Bayesian information criterion, mean surface
 brightness at effective radius, percentage of total light per component,
 radius at 90% of light (for Sersic components only), effective radius in
@@ -68,13 +68,8 @@ Run the automated tests:
 
 ::
 
-   python -m pytest 
+    tox 
 
-or
-
-::
-
-   pytest
 
 **Note**: *EllipSect* needs the GALFIT output files (GALFIT.XX) to work.
 Although *GALFIT* is not stricly required, it will required it to create

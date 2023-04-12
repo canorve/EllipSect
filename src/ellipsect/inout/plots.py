@@ -20,6 +20,7 @@ from ellipsect.lib.libs import *
 from ellipsect import *
 
 from ellipsect.sectors.num import Interpol
+from ellipsect.inout.prt import  PrintFilesGax
 
 
 def PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,ellconf,scale):

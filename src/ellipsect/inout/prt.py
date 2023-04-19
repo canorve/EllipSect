@@ -349,7 +349,7 @@ def printEllinfo(ellconf, galhead):
     print("red angle at upper-right in multi-plot is measured from the Y-axis (same as GALFIT)\n")
 
 
-    print("In multi-plot, each color represents the same as the ones in the single-plot's legend")
+    print("In multi-plot, every color represents the same as the ones in the single-plot's legend")
 
 
 

@@ -80,6 +80,10 @@ def SectorsGalfit(args):
     #creates names of the output files based on prefix of galfit output
     prefixNames(ellconf, galhead.outimage)
 
+    if os.path.isfile(galhead.sigimage):
+        ellconf.namesig = galhead.sigimage #using existing sigma file
+
+
 
 
     if ellconf.flagsbout == True: 

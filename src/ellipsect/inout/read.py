@@ -483,38 +483,61 @@ def prefixNames(ellconf, outimage):
 
     #note: make one function to save all the names: 
     root_ext = os.path.splitext(outimage)
-
     ellconf.namefile = root_ext[0]
-
-    # names for the different png
-    ellconf.namepng = ellconf.namefile + ".png"
-    ellconf.namesec = ellconf.namefile + "-gal.png"
-    ellconf.namemod = ellconf.namefile + "-mod.png"
-    ellconf.namemul = ellconf.namefile + "-mul.png"
-    ellconf.namesub = ellconf.namefile + "-comp.fits"
-
-    ellconf.namesig = ellconf.namefile + "-sig.fits"
-
-
-    ellconf.sboutput = ellconf.namefile + "-sbout"
-    ellconf.output = ellconf.namefile + "-out.txt"
-
-    ellconf.namened = ellconf.namefile + "-ned.xml"
-
-
-
-    ellconf.namesnr = ellconf.namefile + "-snr.fits"
-
-    ellconf.namecheck = ellconf.namefile + "-check.fits"
     
-    ellconf.namering = ellconf.namefile + "-ring.fits"
-    
-    ellconf.nameringmask = ellconf.namefile + "-ringmask.fits"
+    #adding numbers of galfit file for output
+    gal_ext = os.path.splitext(ellconf.galfile)
+    numstr = gal_ext[1] 
+    numstr = numstr[1:]
 
-    ellconf.namecube = ellconf.namefile + "-cub.png"
+    if numstr.isnumeric():
+
+        # names for the different png
+        ellconf.namepng = ellconf.namefile + '-' + numstr + ".png"
+        ellconf.namesec = ellconf.namefile + '-' + numstr + "-gal.png"
+        ellconf.namemod = ellconf.namefile + '-' + numstr + "-mod.png"
+        ellconf.namemul = ellconf.namefile + '-' + numstr + "-mul.png"
+        ellconf.namesub = ellconf.namefile + '-' + numstr + "-comp.fits"
+
+        ellconf.namesig = ellconf.namefile + '-' + numstr + "-sig.fits"
 
 
-    ellconf.namechi = ellconf.namefile + "-chi.fits"
+        ellconf.sboutput = ellconf.namefile + '-' + numstr + "-sbout"
+        ellconf.output = ellconf.namefile + '-' + numstr + "-out.txt"
+
+        ellconf.namened = ellconf.namefile + '-' + numstr + "-ned.xml"
+
+        ellconf.namesnr = ellconf.namefile + '-' + numstr + "-snr.fits"
+        ellconf.namecheck = ellconf.namefile + '-' + numstr + "-check.fits"
+        ellconf.namering = ellconf.namefile + '-' + numstr + "-ring.fits"
+        ellconf.nameringmask = ellconf.namefile + '-' + numstr + "-ringmask.fits"
+        ellconf.namecube = ellconf.namefile + '-' + numstr + "-cub.png"
+        ellconf.namechi = ellconf.namefile + '-' + numstr + "-chi.fits"
+
+    else:
+
+        # names for the different png
+        ellconf.namepng = ellconf.namefile + ".png"
+        ellconf.namesec = ellconf.namefile + "-gal.png"
+        ellconf.namemod = ellconf.namefile + "-mod.png"
+        ellconf.namemul = ellconf.namefile + "-mul.png"
+        ellconf.namesub = ellconf.namefile + "-comp.fits"
+
+        ellconf.namesig = ellconf.namefile + "-sig.fits"
+
+
+        ellconf.sboutput = ellconf.namefile + "-sbout"
+        ellconf.output = ellconf.namefile + "-out.txt"
+
+        ellconf.namened = ellconf.namefile + "-ned.xml"
+
+        ellconf.namesnr = ellconf.namefile + "-snr.fits"
+        ellconf.namecheck = ellconf.namefile + "-check.fits"
+        ellconf.namering = ellconf.namefile + "-ring.fits"
+        ellconf.nameringmask = ellconf.namefile + "-ringmask.fits"
+        ellconf.namecube = ellconf.namefile + "-cub.png"
+        ellconf.namechi = ellconf.namefile + "-chi.fits"
+
 
 
 

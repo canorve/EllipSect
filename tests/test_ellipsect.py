@@ -39,8 +39,8 @@ def test_files():
 
     path="tests/"
 
-    filepng = "imgblock.png"
-    filemulpng = "imgblock-mul.png"
+    filepng = "imgblock-01.png"
+    filemulpng = "imgblock-01-mul.png"
 
     filepng = path+filepng
     filemulpng = path+filemulpng
@@ -78,15 +78,15 @@ def test_comp():
 
     path="tests/"
 
-    filepng = "imgblock.png"
-    filemulpng = "imgblock-mul.png"
+    filepng = "imgblock-01.png"
+    filemulpng = "imgblock-01-mul.png"
 
     filepng = path+filepng
     filemulpng = path+filemulpng
 
 
 
-    filecomp = "imgblock-comp.fits"
+    filecomp = "imgblock-01-comp.fits"
 
     filecomp= path+filecomp
 
@@ -128,22 +128,22 @@ def test_phot():
 
     path="tests/"
 
-    filephot = "imgblock-out.txt"
+    filephot = "imgblock-01-out.txt"
     filephot= path+filephot
 
-    filecomp = "imgblock-comp.fits"
+    filecomp = "imgblock-01-comp.fits"
     filecomp= path+filecomp
 
-    filepng = "imgblock.png"
-    filemulpng = "imgblock-mul.png"
+    filepng = "imgblock-01.png"
+    filemulpng = "imgblock-01-mul.png"
 
-    filesig = "imgblock-sig.fits"
+    filesig = "imgblock-01-sig.fits"
     filesig= path+filesig
 
-    filecheck = "imgblock-check.fits"
+    filecheck = "imgblock-01-check.fits"
     filecheck= path+filecheck
 
-    filecube = "imgblock-cub.png"
+    filecube = "imgblock-01-cub.png"
     filecube = path+filecube
 
 
@@ -259,28 +259,28 @@ def test_gsky():
 
     path="tests/"
 
-    filephot = "imgblock-out.txt"
+    filephot = "imgblock-01-out.txt"
     filephot= path+filephot
 
-    filecomp = "imgblock-comp.fits"
+    filecomp = "imgblock-01-comp.fits"
     filecomp= path+filecomp
 
-    filepng = "imgblock.png"
-    filemulpng = "imgblock-mul.png"
+    filepng = "imgblock-01.png"
+    filemulpng = "imgblock-01-mul.png"
 
-    filesig = "imgblock-sig.fits"
+    filesig = "imgblock-01-sig.fits"
     filesig= path+filesig
 
-    filecheck = "imgblock-check.fits"
+    filecheck = "imgblock-01-check.fits"
     filecheck= path+filecheck
 
-    filecube = "imgblock-cub.png"
+    filecube = "imgblock-01-cub.png"
     filecube = path+filecube
 
-    filersky = "imgblock-ring.fits"
+    filersky = "imgblock-01-ring.fits"
     filersky = path + filersky
 
-    filermsky = "imgblock-ringmask.fits"
+    filermsky = "imgblock-01-ringmask.fits"
     filermsky = path + filermsky
 
 
@@ -374,28 +374,28 @@ def test_rsky():
 
     path="tests/"
 
-    filephot = "imgblock-out.txt"
+    filephot = "imgblock-01-out.txt"
     filephot= path+filephot
 
-    filecomp = "imgblock-comp.fits"
+    filecomp = "imgblock-01-comp.fits"
     filecomp= path+filecomp
 
-    filepng = "imgblock.png"
-    filemulpng = "imgblock-mul.png"
+    filepng = "imgblock.01-png"
+    filemulpng = "imgblock-01-mul.png"
 
-    filesig = "imgblock-sig.fits"
+    filesig = "imgblock-01-sig.fits"
     filesig= path+filesig
 
-    filecheck = "imgblock-check.fits"
+    filecheck = "imgblock-01-check.fits"
     filecheck= path+filecheck
 
-    filecube = "imgblock-cub.png"
+    filecube = "imgblock-01-cub.png"
     filecube = path+filecube
 
-    filersky = "imgblock-ring.fits"
+    filersky = "imgblock-01-ring.fits"
     filersky = path + filersky
 
-    filermsky = "imgblock-ringmask.fits"
+    filermsky = "imgblock-01-ringmask.fits"
     filermsky = path + filermsky
 
 
@@ -491,28 +491,28 @@ def test_freepar():
 
     path="tests/"
 
-    filephot = "imgblock-out.txt"
+    filephot = "imgblock-01-out.txt"
     filephot= path+filephot
 
-    filecomp = "imgblock-comp.fits"
+    filecomp = "imgblock-01-comp.fits"
     filecomp= path+filecomp
 
-    filepng = "imgblock.png"
+    filepng = "imgblock-01.png"
     filemulpng = "imgblock-mul.png"
 
-    filesig = "imgblock-sig.fits"
+    filesig = "imgblock-01-sig.fits"
     filesig= path+filesig
 
-    filecheck = "imgblock-check.fits"
+    filecheck = "imgblock-01-check.fits"
     filecheck= path+filecheck
 
-    filecube = "imgblock-cub.png"
+    filecube = "imgblock-01-cub.png"
     filecube = path+filecube
 
-    filersky = "imgblock-ring.fits"
+    filersky = "imgblock-01-ring.fits"
     filersky = path + filersky
 
-    filermsky = "imgblock-ringmask.fits"
+    filermsky = "imgblock-01-ringmask.fits"
     filermsky = path + filermsky
 
 
@@ -624,28 +624,28 @@ def test_img_size():
 
     path="tests/"
 
-    filephot = "imgblock-out.txt"
+    filephot = "imgblock-01-out.txt"
     filephot= path+filephot
 
-    filecomp = "imgblock-comp.fits"
+    filecomp = "imgblock-01-comp.fits"
     filecomp= path+filecomp
 
-    filepng = "imgblock.png"
-    filemulpng = "imgblock-mul.png"
+    filepng = "imgblock-01.png"
+    filemulpng = "imgblock-01-mul.png"
 
-    filesig = "imgblock-sig.fits"
+    filesig = "imgblock-01-sig.fits"
     filesig= path+filesig
 
-    filecheck = "imgblock-check.fits"
+    filecheck = "imgblock-01-check.fits"
     filecheck= path+filecheck
 
-    filecube = "imgblock-cub.png"
+    filecube = "imgblock-01-cub.png"
     filecube = path+filecube
 
-    filersky = "imgblock-ring.fits"
+    filersky = "imgblock-01-ring.fits"
     filersky = path + filersky
 
-    filermsky = "imgblock-ringmask.fits"
+    filermsky = "imgblock-01-ringmask.fits"
     filermsky = path + filermsky
 
 

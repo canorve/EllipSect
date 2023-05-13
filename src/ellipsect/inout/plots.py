@@ -21,6 +21,8 @@ from ellipsect import *
 
 from ellipsect.sectors.num import Interpol
 from ellipsect.inout.prt import  PrintFilesGax
+from ellipsect.inout.prt import PrintFilesComps
+
 
 
 def PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,ellconf,scale):

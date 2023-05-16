@@ -58,7 +58,7 @@ def PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,ellconf,scale):
     # ULISES begin
     axsec = plt.subplot(gs[0])
 
-    axsec.set_ylabel("Surface Brightness (mag/'')")
+    axsec.set_ylabel(r"Surface Brightness $(mag\; arcsec^{-2})$")
     # ULISES end
 
     axsec.errorbar(xradq, ysbq,yerr=ysberrq,fmt='o-',capsize=2,color='red',markersize=0.7,label="galaxy",linewidth=2)
@@ -136,7 +136,7 @@ def PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,ellconf,scale):
         axred.errorbar(xradq, residual, yerr=err,fmt='.',capsize=2,color='k')
 
     axred.axhline(y=0,ls='dashed', color='k')
-    axred.set_xlabel('Radius (arcsec)')
+    axred.set_xlabel('Radius $(arcsec)$')
     axred.set_ylabel('Residual (%)')
     axred.set_ylim(-2,2)
     # ULISES end
@@ -373,7 +373,6 @@ class ShowCube:
         data[mask] = 1 # avoids problems in log
      
         fig, (ax1, ax2, ax3) = plt.subplots(figsize=(14, 5), nrows = 1, ncols = 3)
-        fig.subplots_adjust(left=0.04, right=0.98, bottom=0.02, top=0.98)
 
         im = ax1.imshow(newdata, origin ='lower', interpolation='nearest', norm 
                     = colors.LogNorm(vmin=modmin, vmax=modmax), cmap = cmap)
@@ -422,7 +421,8 @@ class ShowCube:
         ax3.set_title('Residual')
 
 
-        plt.savefig(namepng, dpi = dpival)
+        fig.subplots_adjust(left=0.04, right=0.98, bottom=0.02, top=0.98)
+        plt.savefig(namepng, dpi = dpival, tight_layout=True)
     
 
         #plt.show()
@@ -467,11 +467,11 @@ def PlotMul(ellconf, galhead, galcomps, mgegal, mgemod, mgecom):
         axpix = axsec[0,0].twiny()
         axpix2 = axsec[0,1].twiny()
 
-    fig.text(0.04, 0.5, "Surface Brightness (mag/'')", va='center', rotation='vertical')
+    fig.text(0.04, 0.5, r"Surface Brightness $(mag\; arcsec^{-2})$", va='center', rotation='vertical')
     fig.text(0.96, 0.5, 'error ', va='center', rotation='vertical')
 
-    axsec[-1, 0].set_xlabel("radius ('')")
-    axsec[-1, 1].set_xlabel("radius ('')")
+    axsec[-1, 0].set_xlabel("radius $(arcsec)$")
+    axsec[-1, 1].set_xlabel("radius $(arcsec)$")
 
     if ellconf.flaglogx == True:
         axsec[-1, 0].xaxis.set_major_locator(LogLocator(base=10.0, numticks=15))

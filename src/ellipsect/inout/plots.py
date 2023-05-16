@@ -422,7 +422,7 @@ class ShowCube:
 
 
         fig.subplots_adjust(left=0.04, right=0.98, bottom=0.02, top=0.98)
-        plt.savefig(namepng, dpi = dpival, tight_layout=True)
+        plt.savefig(namepng, dpi = dpival)
     
 
         #plt.show()

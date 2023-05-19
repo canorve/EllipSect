@@ -36,6 +36,7 @@ from ellipsect.lib.clas import EllipSectConfig
 from ellipsect.inout.galfit  import Galfit 
 from ellipsect.inout.galfit  import numComps
 from ellipsect.inout.galfit  import readDataImg
+from ellipsect.inout.gfits import GetFits
 
 from ellipsect.inout.prt import printEllinfo
 
@@ -81,7 +82,10 @@ def SectorsGalfit(args):
     prefixNames(ellconf, galhead.outimage)
 
     if os.path.isfile(galhead.sigimage):
-        ellconf.namesig = galhead.sigimage #using existing sigma file
+        #ellconf.namesig = galhead.sigimage #using existing sigma file
+        GetFits(galhead.sigimage, ellconf.namesig, galhead.xmin, galhead.xmax, 
+                galhead.ymin, galhead.ymax)
+
 
 
 

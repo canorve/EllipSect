@@ -541,6 +541,14 @@ def PassVars(photapi, ellconf, galhead, galcomps):
     photapi.kser = galcomps.kser.copy()
 
 
+    photapi.hconst = ellconf.hconst 
+
+    photapi.omegam = ellconf.omegam 
+
+    photapi.omegav = ellconf.omegav
+
+
+
 
 
 def PassArgs(args):
@@ -730,6 +738,16 @@ def PassArgs(args):
 
     if args.aext:
         ellconf.Aext = args.aext
+
+
+    if args.hconst:
+        ellconf.hconst = args.hconst
+
+    if args.omegam:
+        ellconf.omegam = args.omegam
+
+    if args.omegav:
+        ellconf.omegav = args.omegav
 
 
 

@@ -43,6 +43,8 @@ def NED(ellconf):
 
     nedweb="https://ned.ipac.caltech.edu/cgi-bin/nph-objsearch?extend=no&of=xml_all&objname="
 
+
+
     if ellconf.flagnedfile:
         filened = ellconf.nedfile
     else:
@@ -56,8 +58,8 @@ def NED(ellconf):
         Scalekpc=ellconf.InScale
         SbDim=ellconf.InSbDim
     else:
-        #checar si el archivo existe para no hacer conexion a internet
         if(not(os.path.isfile(filened))):
+        #verifica si el archivo existe para no hacer conexion a internet
 
             if ellconf.flagnedfile:
                 print("can't find user's ned {} file ".format(filened))
@@ -65,9 +67,17 @@ def NED(ellconf):
             else:
                 # command for wget
                 #wget -O NED_51.xml "https://ned.ipac.caltech.edu/cgi-bin/nph-objsearch?extend=no&of=xml_all&objname=m+51"
-                wgetcmd = 'wget -O {} "{}{}"'.format(filened,nedweb,objname)
+
+                #https://ned.ipac.caltech.edu/cgi-bin/nph-objsearch?extend=no&of=xml_all&objname=ngc+6166&hconst=67.8&omegam=0.308&omegav=0.692
+
+
+                wgetcmd = 'wget -O {} "{}{}&hconst={.1f}\&omegam={.3f}\&omegav={.3f}"'.format(
+                            filened,nedweb,objname,ellconf.hconst,ellconf.omegam,ellconf.omegav)
 
                 print("Running: ",wgetcmd)
+
+                print('Cosmology: hconst = {}, omega m= {}, omega lambda= {}'.format(ellconf.hconst,ellconf.omegam,ellconf.omegav)) 
+
 
                 errwg = sp.run([wgetcmd], shell=True, stdout=sp.PIPE,stderr=sp.PIPE, universal_newlines=True)
 

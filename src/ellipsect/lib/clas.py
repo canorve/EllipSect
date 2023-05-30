@@ -176,6 +176,11 @@ class EllipSectConfig:
 
     Aext = 0  # surface brightness correction for plots
 
+    hconst = 67.8 
+    omegam  = 0.308
+    omegav = 0.692
+
+
 
 #class to comunicate externally:
 class PhotAPI:
@@ -236,6 +241,11 @@ class PhotAPI:
     band="R"
     inputimage="galaxy.fits"
     Aext = 0
+
+    hconst = 67.8 
+    omegam  = 0.308
+    omegav = 0.692
+
 
     # from gradsky
     gradskymean = 0

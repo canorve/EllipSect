@@ -391,6 +391,12 @@ def printPhot(ellconf, galhead, galcomps, dataned, datatidal, sectgalax):
     lineout = "# All photometric quantities are computed for filter {} (use -filter option to change it) \n".format(ellconf.band)
     OUTPHOT.write(lineout)
 
+
+
+    lineout = '# Cosmology: hconst = {}, omega m = {}, omega lambda= {}'.format(ellconf.hconst,ellconf.omegam,ellconf.omegav)) 
+    OUTPHOT.write(lineout)
+
+
     lineout = "# Magnitudes are not corrected by K-Correction \n"
     OUTPHOT.write(lineout)
 

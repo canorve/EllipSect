@@ -130,7 +130,15 @@ def InitParsing():
     parser.add_argument("-ae","--aext", type=float, 
                         help="Surface brightness correction for plots only ", default=0)
  
-
+    parser.add_argument("-hc","--hconst", type=float, 
+                        help="hubble constant to download xml file from NED ", default=67.8)
+ 
+    parser.add_argument("-om","--omegam", type=float, 
+                        help="omega matter value to download xml file from NED ", default=.308)
+ 
+    parser.add_argument("-ov","--omegav", type=float, 
+                        help="omega lambda value to download xml file from NED ", default=.0.692)
+ 
 
     # every new parameter added here must be
     # also added in function PassArgs() in ellipsect/sectors/sect.py

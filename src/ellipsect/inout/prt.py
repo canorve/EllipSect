@@ -393,7 +393,7 @@ def printPhot(ellconf, galhead, galcomps, dataned, datatidal, sectgalax):
 
 
 
-    lineout = '# Cosmology: hconst = {}, omega m = {}, omega lambda= {}'.format(ellconf.hconst,ellconf.omegam,ellconf.omegav)) 
+    lineout = '# Cosmology: hconst = {}, omega m = {}, omega lambda= {}'.format(ellconf.hconst,ellconf.omegam,ellconf.omegav) 
     OUTPHOT.write(lineout)
 
 

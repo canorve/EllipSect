@@ -137,7 +137,7 @@ def InitParsing():
                         help="omega matter value to download xml file from NED ", default=.308)
  
     parser.add_argument("-ov","--omegav", type=float, 
-                        help="omega lambda value to download xml file from NED ", default=.0.692)
+                        help="omega lambda value to download xml file from NED ", default=0.692)
  
 
     # every new parameter added here must be

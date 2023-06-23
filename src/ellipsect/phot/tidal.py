@@ -433,10 +433,10 @@ def ExtractEllip(imagemat, idn, x, y, R, theta, ell, xmin, xmax, ymin, ymax):
     "It returns the area of ellipse with idn values. "
 
 
-    xmin = np.int(xmin)
-    xmax = np.int(xmax)
-    ymin = np.int(ymin)
-    ymax = np.int(ymax)
+    xmin = int(xmin)
+    xmax = int(xmax)
+    ymin = int(ymin)
+    ymax = int(ymax)
 
     q = (1 - ell)
     bim = q * R

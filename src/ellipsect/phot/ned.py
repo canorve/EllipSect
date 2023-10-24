@@ -71,7 +71,7 @@ def NED(ellconf):
                 #https://ned.ipac.caltech.edu/cgi-bin/nph-objsearch?extend=no&of=xml_all&objname=ngc+6166&hconst=67.8&omegam=0.308&omegav=0.692
 
 
-                wgetcmd = 'wget -O {} "{}{}&hconst={.1f}\&omegam={.3f}\&omegav={.3f}"'.format(
+                wgetcmd = 'wget -O {} "{}{}&hconst={:.1f}\&omegam={:.3f}\&omegav={:.3f}"'.format(
                             filened,nedweb,objname,ellconf.hconst,ellconf.omegam,ellconf.omegav)
 
                 print("Running: ",wgetcmd)

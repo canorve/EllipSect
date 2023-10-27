@@ -179,28 +179,33 @@ def Tidal(datatidal, ellconf, dataimg, galhead, galcomps, sectgalax, rmin):
     # creation of the Chi-square image 
     ##################################
 
-    if ellconf.flagchi:
-        header['TypeIMG'] = ('CHI-SQR', 'Chi-Square image')
-        hdu[0].header  = header
+    #if ellconf.flagchi:
+
+    header['TypeIMG'] = ('CHI-SQR', 'Chi-Square image')
+    hdu[0].header  = header
 
 
-        maskchi = immask == True # big image coordinates
+    maskchi = immask == True # big image coordinates
 
 
-        if imgal.shape == imsigma.shape:
-            dataimg.imchi = (imgal - immodel)**2 / imsigma**2
-            if maskchi.any():
-                dataimg.imchi[maskchi] = 0
-        else:
-            print("WARNING: Chi-square image can not be computed" +
-                    "because galaxy and sigma images have different shapes")
-            dataimg.imchi = np.ones(imgal.shape)
-        
-        hdu[0].data = dataimg.imchi
+    if imgal.shape == imsigma.shape:
+        dataimg.imchi = (imgal - immodel)**2 / imsigma**2
+        if maskchi.any():
+            dataimg.imchi[maskchi] = 0
+    else:
+        print("WARNING: Chi-square image can not be computed" +
+                "because galaxy and sigma images have different shapes")
+        dataimg.imchi = np.ones(imgal.shape)
+    
+    hdu[0].data = dataimg.imchi
 
-        hdu.writeto(ellconf.namechi, overwrite=True)
-        print("Chi square image created.. ", ellconf.namechi)
+    hdu.writeto(ellconf.namechi, overwrite=True)
+    print("Chi square image created.. ", ellconf.namechi)
 
+
+    ##################################
+    # end of the Chi-square image 
+    ##################################
 
 
 

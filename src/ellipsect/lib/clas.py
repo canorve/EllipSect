@@ -42,7 +42,7 @@ class EllipSectConfig:
     flagband=False
     flagweb=False # to check connection to ned
     flagsnr = False
-    flagchi = False
+    #flagchi = False
 
     flagcheck=False
     flagned=False

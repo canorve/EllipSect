@@ -68,7 +68,7 @@ def InitParsing():
     parser.add_argument("-gsky","--gradsky", action="store_true", help="computes sky using the gradient method")
     parser.add_argument("-rsky","--randsky", action="store_true", help="computes sky using random boxes")
     parser.add_argument("-snr","--snr", action="store_true", help="Creates Signal to Noise image if phot is activated")
-    parser.add_argument("-chi","--chisqr", action="store_true", help="Creates Chi-square image if phot is activated")
+    #parser.add_argument("-chi","--chisqr", action="store_true", help="Creates Chi-square image if phot is activated")
 
     parser.add_argument("-k","--keep", action="store_true", help="use existing file to compute subcomponents")
     parser.add_argument("-gx","--galax", action="store_true", help="only the galaxy surface brightness is shown in the plot")

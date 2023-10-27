@@ -617,8 +617,8 @@ def PassArgs(args):
     if args.allskypx:
         ellconf.flagrmsky=False
 
-    if args.chisqr:
-        ellconf.flagchi = True
+    #if args.chisqr:
+    #    ellconf.flagchi = True
  
 
     #options with arguments

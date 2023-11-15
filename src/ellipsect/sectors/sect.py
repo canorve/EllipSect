@@ -35,6 +35,7 @@ from ellipsect.lib.clas import EllipSectConfig
 
 from ellipsect.inout.galfit  import Galfit 
 from ellipsect.inout.galfit  import numComps
+from ellipsect.inout.galfit  import conver2Sersic 
 from ellipsect.inout.galfit  import readDataImg
 from ellipsect.inout.gfits import GetFits
 
@@ -111,7 +112,11 @@ def SectorsGalfit(args):
     dataimg.img = dataimg.img - ellconf.skylevel
     dataimg.model = dataimg.model - ellconf.skylevel
 
-    plotCube(ellconf, galhead, galcomps) #plots the cube image
+
+
+    comps = conver2Sersic(galcomps) 
+
+    plotCube(ellconf, galhead, comps) #plots the cube image
 
 
     #   numsectors=19 default

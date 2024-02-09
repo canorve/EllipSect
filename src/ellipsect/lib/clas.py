@@ -97,7 +97,7 @@ class EllipSectConfig:
     minlevel=0
     sectors=19
 
-
+    title = False
 
     #input file
     galfile= "galfit.01"

@@ -78,7 +78,11 @@ def InitParsing():
             + "Default mode removes top %%80 and bottom %%20 sky pixels "
     parser.add_argument("-asp","--allskypx", action="store_true", 
                         help=linehelp)
- 
+
+
+
+    parser.add_argument("-t","--title", action="store_true", help="put title on plots")
+
     #options with arguments
     #parser.add_argument("-cn","--center",nargs=2,action="store", type=float, help="galaxy's center ")
 

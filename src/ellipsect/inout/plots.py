@@ -109,6 +109,8 @@ def PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,ellconf,scale):
     axsec.yaxis.set_minor_locator(AutoMinorLocator())
     axsec.yaxis.set_major_locator(AutoLocator())
 
+    if ellconf.title:
+        plt.title(ellconf.namefile, fontsize=10)
 
     # ULISES begin
     # Residual plot
@@ -459,8 +461,18 @@ def PlotMul(ellconf, galhead, galcomps, mgegal, mgemod, mgecom):
 
     plt.clf()
 
+
+    if ellconf.title:
+        plt.title(ellconf.namefile, fontsize=10)
+
+
+
     fig, axsec = plt.subplots(nrows, 2, sharex=True, sharey='col', num=fignum)
     fig.subplots_adjust(hspace=0.01)
+
+
+
+
 
 
     if ellconf.flagpix:

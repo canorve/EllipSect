@@ -625,6 +625,9 @@ def PassArgs(args):
     #if args.chisqr:
     #    ellconf.flagchi = True
  
+    if args.title:
+        ellconf.title = args.title
+
 
     #options with arguments
 
@@ -753,7 +756,6 @@ def PassArgs(args):
 
     if args.omegav:
         ellconf.omegav = args.omegav
-
 
 
 

@@ -398,8 +398,8 @@ def SectPhotComp(ellconf, dataimg, galcomps, n_sectors=19, minlevel=0):
 
             subim = subimgs[i]
 
-            eps = 1 - galcomps.AxRat[n]
-            angsec = 90 - galcomps.PosAng[n]
+            #eps = 1 - galcomps.AxRat[n]   #removed because it must follow the axrat of galaxy
+            #angsec = 90 - galcomps.PosAng[n] #same but for angle
 
 
             if ellconf.flagcheck:

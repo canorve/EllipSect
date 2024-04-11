@@ -37,6 +37,8 @@ from ellipsect.inout.galfit  import Galfit
 from ellipsect.inout.galfit  import numComps
 from ellipsect.inout.galfit  import conver2Sersic 
 from ellipsect.inout.galfit  import readDataImg
+from ellipsect.inout.galfit  import GetReff 
+
 from ellipsect.inout.gfits import GetFits
 
 from ellipsect.inout.prt import printEllinfo
@@ -144,6 +146,12 @@ def SectorsGalfit(args):
 
     #computing sky
     skyCall(ellconf, galhead, galcomps)
+
+
+    #computing fraction of light radius
+    if ellconf.flagrep:
+        eff = 0.5
+        ellconf.rep, tempmag = GetReff().GetReSer(galhead, comps, eff, ellconf.parg)
 
 
 
@@ -756,6 +764,12 @@ def PassArgs(args):
 
     if args.omegav:
         ellconf.omegav = args.omegav
+
+
+
+    if args.effrad:
+        ellconf.flagrep = True
+
 
 
 

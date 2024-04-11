@@ -97,8 +97,15 @@ def PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,ellconf,scale):
     #begin psf fwhm 
     if ellconf.flagfwhm: 
         xpos = ellconf.fwhm*scale
-        axsec.axvline(x=xpos,  linestyle='--', color='k', linewidth=2)
+        axsec.axvline(x=xpos,  linestyle='--', color='k', label='FWHM', linewidth=2)
     # end 
+
+    #begin effective radius 
+    if ellconf.flagrep: 
+        xre = ellconf.rep*scale
+        axsec.axvline(x=xre,  linestyle='--', color='r', label='Re', linewidth=1.5)
+ 
+
 
 
     # ULISES begin

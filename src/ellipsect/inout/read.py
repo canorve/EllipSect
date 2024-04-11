@@ -73,9 +73,9 @@ def InitParsing():
 
     parser.add_argument("-re","--effrad", action="store_true", help="Draw a vertical line indicating the effective radius")
 
-    parser.add_argument("-r90","--rad90", action="store_true", help="Draw a vertical line indicating the 90% of total light")
+    parser.add_argument("-r90","--rad90", action="store_true", help="Draw a vertical line indicating the 90%% of total light")
 
-    parser.add_argument("-r95","--rad95", action="store_true", help="Draw a vertical line indicating the 95% of total light")
+    parser.add_argument("-r95","--rad95", action="store_true", help="Draw a vertical line indicating the 95%% of total light")
 
 
     parser.add_argument("-k","--keep", action="store_true", help="use existing file to compute subcomponents")

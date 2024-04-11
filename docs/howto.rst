@@ -23,14 +23,26 @@ The options are:
 
 ::
 
-    ellipsect [GALFIT_File] [--logx] [-q AxisRatio] [-pa PositionAngle] [--comp] [--pix] [--ranx/y Value] [--grid] [--dpi Value] [--noplot] [--phot] [--sbout] [--noplot] [--minlevel Value] [--sectors Value] [--object Name] [--filter Name] [--snr] [--help] [--checkimg] [--noned] [--distmod Value] [--magcor Value] [--scalekpc Value][--sbdim Value] [--model ModelImage] [--keep] [--ned XmlFile] [--gradsky ] [--randsky ] [--skyinit Value] [--skyRadmax Value][--skynum Value] [--skybox Value] [--skywidth Value] [--fwhm Value] [--galax ]
+   
+      
+    ellipsect [-h] [-lx] [-cp] [-px] [-g] [-sb] [-np] [-ph] [-ci] [-nn] [-gsky] [-rsky] [-snr]
+                 [-re] [-r90] [-r95] [-k] [-gx] [-asp] [-t] [-q AXISRAT] [-pa POSANGLE]
+                 [-rx RANX RANX] [-ry RANY RANY] [-dpi DOTSINCH] [-ml MINLEVEL] [-sc SECTORS]
+                 [-ob OBJECT] [-f FILTER] [-dm DISTMOD] [-mc MAGCOR] [-sk SCALEKPC] [-sd SBDIM]
+                 [-md MODEL] [-sky SKY] [-ned NED] [-ri RADINIT] [-srm SKYRADMAX] [-skb SKYBOX]
+                 [-skn SKYNUM] [-skw SKYWIDTH] [-distm DISTMAX] [-fw FWHM] [-br BRIGHTNESS]
+                 [-co CONTRAST] [-cm CMAP] [-nc NUMCOMP] [-ae AEXT] [-hc HCONST] [-om OMEGAM]
+                 [-ov OMEGAV]
+                 GalFile
+
+
 
 Below is an explanation of each parameter:
 
 **Main input parameters**
 -------------------------
 
-**GALFIT_File**: GALFIT output file (e.g. galfit.01). This **must** be
+**GalFile**: GALFIT output file (e.g. galfit.01). This **must** be
 the last GALFIT run. In other words, if there are two files: galfit.01
 and galfit.02, the one you need is galfit.02
 
@@ -62,6 +74,11 @@ one from the last component in GALFIT_File.
 profiles.
 
 **galax**: Only the galaxy surface brightness is plotted.
+
+**effrad** Draw a vertical line indicating the effective radius
+**rad90**  Draw a vertical line indicating the 90% of total light
+**rad95**  Draw a vertical line indicating the 95% of total light
+
 
 **Photometric output options**
 ------------------------------

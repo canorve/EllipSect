@@ -23,7 +23,8 @@ from ellipsect.sectors.num import Interpol
 from ellipsect.inout.prt import  PrintFilesGax
 from ellipsect.inout.prt import PrintFilesComps
 
-
+from ellipsect.inout.galfit  import conver2Sersic 
+from ellipsect.inout.galfit  import GetReff 
 
 def PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,ellconf,scale):
     """  Produces final best-fitting plot  """
@@ -439,6 +440,11 @@ class ShowCube:
 
 def PlotMul(ellconf, galhead, galcomps, mgegal, mgemod, mgecom):
 
+
+    
+    comps = conver2Sersic(galcomps) #to compute Re
+
+
     fignum = 1
 
     minrad = np.min(mgegal.rad)
@@ -568,6 +574,14 @@ def PlotMul(ellconf, galhead, galcomps, mgegal, mgemod, mgecom):
         # end 
 
 
+        #begin effective radius 
+        if ellconf.flagrep: 
+            eff = 0.5
+            xre, tempmag = GetReff().GetReSer(galhead, comps, eff, txtangsky)
+
+            xre = xre*galhead.scale
+            axsec[row, 0].axvline(x=xre,  linestyle='--', color='r', label='Re', linewidth=1.5)
+     
 
 
 

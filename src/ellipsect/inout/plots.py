@@ -101,13 +101,21 @@ def PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,ellconf,scale):
         axsec.axvline(x=xpos,  linestyle='--', color='k', label='FWHM', linewidth=2)
     # end 
 
-    #begin effective radius 
+    #effective radius 
     if ellconf.flagrep: 
         xre = ellconf.rep*scale
         axsec.axvline(x=xre,  linestyle='--', color='r', label='Re', linewidth=1.5)
  
-
-
+    #90% of total light radius 
+    if ellconf.flagr90p: 
+        xr90 = ellconf.r90p*scale
+        axsec.axvline(x = xr90,  linestyle='--', color='b', label='R90', linewidth=1.5)
+ 
+    #95%  of total light radius 
+    if ellconf.flagr95p: 
+        xr95 = ellconf.r95p*scale
+        axsec.axvline(x = xr95,  linestyle='--', color='c', label='R95', linewidth=1.5)
+ 
 
     # ULISES begin
     axsec.axes.xaxis.set_ticklabels([])
@@ -574,7 +582,7 @@ def PlotMul(ellconf, galhead, galcomps, mgegal, mgemod, mgecom):
         # end 
 
 
-        #begin effective radius 
+        #effective radius 
         if ellconf.flagrep: 
             eff = 0.5
             xre, tempmag = GetReff().GetReSer(galhead, comps, eff, txtangsky)
@@ -582,6 +590,22 @@ def PlotMul(ellconf, galhead, galcomps, mgegal, mgemod, mgecom):
             xre = xre*galhead.scale
             axsec[row, 0].axvline(x=xre,  linestyle='--', color='r', label='Re', linewidth=1.5)
      
+        #90% radius 
+        if ellconf.flagr90p: 
+            eff = 0.9
+            xr90, tempmag = GetReff().GetReSer(galhead, comps, eff, txtangsky)
+
+            xr90 = xr90*galhead.scale
+            axsec[row, 0].axvline(x = xr90,  linestyle='--', color='b', label='R90', linewidth=1.5)
+ 
+        #95% radius 
+        if ellconf.flagr95p: 
+            eff = 0.95
+            xr95, tempmag = GetReff().GetReSer(galhead, comps, eff, txtangsky)
+
+            xr95 = xr95*galhead.scale
+            axsec[row, 0].axvline(x = xr95,  linestyle='--', color='c', label='R95', linewidth=1.5)
+ 
 
 
 

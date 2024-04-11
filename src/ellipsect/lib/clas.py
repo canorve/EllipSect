@@ -75,6 +75,8 @@ class EllipSectConfig:
     flagfwhm = False
 
     flagrep = False
+    flagr90p = False
+    flagr95p = False
     #flagcent = False 
 
     flagrmsky=True
@@ -155,6 +157,9 @@ class EllipSectConfig:
     fwhm = 2
 
     rep = 0
+    r90p = 0
+    r95p = 0
+
     distmax = 10
 
     brightness = 0 

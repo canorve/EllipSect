@@ -153,6 +153,17 @@ def SectorsGalfit(args):
         eff = 0.5
         ellconf.rep, tempmag = GetReff().GetReSer(galhead, comps, eff, ellconf.parg)
 
+    if ellconf.flagr90p:
+        eff = 0.9
+        ellconf.r90p, tempmag = GetReff().GetReSer(galhead, comps, eff, ellconf.parg)
+
+    if ellconf.flagr95p:
+        eff = 0.95
+        ellconf.r95p, tempmag = GetReff().GetReSer(galhead, comps, eff, ellconf.parg)
+
+
+
+
 
 
     print("creating plots..")
@@ -769,6 +780,14 @@ def PassArgs(args):
 
     if args.effrad:
         ellconf.flagrep = True
+
+
+    if args.rad90:
+        ellconf.flagr90p = True
+
+
+    if args.rad95:
+        ellconf.flagr95p = True
 
 
 

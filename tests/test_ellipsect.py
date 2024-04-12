@@ -39,8 +39,8 @@ def test_files():
 
     path="tests/"
 
-    filepng = "imgblock-01.png"
-    filemulpng = "imgblock-01-mul.png"
+    filepng = "imgblock-g01-nc1-splot.png"
+    filemulpng = "imgblock-g01-nc1-mplot.png"
 
     filepng = path+filepng
     filemulpng = path+filemulpng
@@ -78,15 +78,17 @@ def test_comp():
 
     path="tests/"
 
-    filepng = "imgblock-01.png"
-    filemulpng = "imgblock-01-mul.png"
+    filepng = "imgblock-g01-nc1-splot.png"
+    filemulpng = "imgblock-g01-nc1-mplot.png"
+
+
 
     filepng = path+filepng
     filemulpng = path+filemulpng
 
 
 
-    filecomp = "imgblock-01-comp.fits"
+    filecomp = "imgblock-g01-nc1-comp.fits"
 
     filecomp= path+filecomp
 
@@ -128,22 +130,24 @@ def test_phot():
 
     path="tests/"
 
-    filephot = "imgblock-01-out.txt"
+    filephot = "imgblock-g01-nc1-out.txt"
     filephot= path+filephot
 
-    filecomp = "imgblock-01-comp.fits"
+    filecomp = "imgblock-g01-nc1-comp.fits"
     filecomp= path+filecomp
 
-    filepng = "imgblock-01.png"
-    filemulpng = "imgblock-01-mul.png"
+    filepng = "imgblock-g01-nc1-splot.png"
+    filemulpng = "imgblock-g01-nc1-mplot.png"
 
-    filesig = "imgblock-01-sig.fits"
+
+
+    filesig = "imgblock-g01-nc1-sig.fits"
     filesig= path+filesig
 
-    filecheck = "imgblock-01-check.fits"
+    filecheck = "imgblock-g01-nc1-check.fits"
     filecheck= path+filecheck
 
-    filecube = "imgblock-01-cub.png"
+    filecube = "imgblock-g01-nc1-cub.png"
     filecube = path+filecube
 
 
@@ -259,29 +263,35 @@ def test_gsky():
 
     path="tests/"
 
-    filephot = "imgblock-01-out.txt"
+
+    filephot = "imgblock-g01-nc1-out.txt"
     filephot= path+filephot
 
-    filecomp = "imgblock-01-comp.fits"
+    filecomp = "imgblock-g01-nc1-comp.fits"
     filecomp= path+filecomp
 
-    filepng = "imgblock-01.png"
-    filemulpng = "imgblock-01-mul.png"
+    filepng = "imgblock-g01-nc1-splot.png"
+    filemulpng = "imgblock-g01-nc1-mplot.png"
 
-    filesig = "imgblock-01-sig.fits"
+    filesig = "imgblock-g01-nc1-sig.fits"
     filesig= path+filesig
 
-    filecheck = "imgblock-01-check.fits"
+    filecheck = "imgblock-g01-nc1-check.fits"
     filecheck= path+filecheck
 
-    filecube = "imgblock-01-cub.png"
+    filecube = "imgblock-g01-nc1-cub.png"
     filecube = path+filecube
 
-    filersky = "imgblock-01-ring.fits"
+    filersky = "imgblock-g01-nc1-ring.fits"
     filersky = path + filersky
 
-    filermsky = "imgblock-01-ringmask.fits"
+    filermsky = "imgblock-g01-nc1-ringmask.fits"
     filermsky = path + filermsky
+
+    filechi = "imgblock-g01-nc1-chi.fits"
+    filechi = path + filechi
+
+
 
 
 
@@ -374,29 +384,36 @@ def test_rsky():
 
     path="tests/"
 
-    filephot = "imgblock-01-out.txt"
+    filephot = "imgblock-g01-nc1-out.txt"
     filephot= path+filephot
 
-    filecomp = "imgblock-01-comp.fits"
+    filecomp = "imgblock-g01-nc1-comp.fits"
     filecomp= path+filecomp
 
-    filepng = "imgblock.01-png"
-    filemulpng = "imgblock-01-mul.png"
+    filepng = "imgblock-g01-nc1-splot.png"
+    filemulpng = "imgblock-g01-nc1-mplot.png"
 
-    filesig = "imgblock-01-sig.fits"
+    filesig = "imgblock-g01-nc1-sig.fits"
     filesig= path+filesig
 
-    filecheck = "imgblock-01-check.fits"
+    filecheck = "imgblock-g01-nc1-check.fits"
     filecheck= path+filecheck
 
-    filecube = "imgblock-01-cub.png"
+    filecube = "imgblock-g01-nc1-cub.png"
     filecube = path+filecube
 
-    filersky = "imgblock-01-ring.fits"
+    filersky = "imgblock-g01-nc1-ring.fits"
     filersky = path + filersky
 
-    filermsky = "imgblock-01-ringmask.fits"
+    filermsky = "imgblock-g01-nc1-ringmask.fits"
     filermsky = path + filermsky
+
+    filechi = "imgblock-g01-nc1-chi.fits"
+    filechi = path + filechi
+
+
+
+
 
 
 
@@ -491,29 +508,34 @@ def test_freepar():
 
     path="tests/"
 
-    filephot = "imgblock-01-out.txt"
+    filephot = "imgblock-g01-nc1-out.txt"
     filephot= path+filephot
 
-    filecomp = "imgblock-01-comp.fits"
+    filecomp = "imgblock-g01-nc1-comp.fits"
     filecomp= path+filecomp
 
-    filepng = "imgblock-01.png"
-    filemulpng = "imgblock-mul.png"
+    filepng = "imgblock-g01-nc1-splot.png"
+    filemulpng = "imgblock-g01-nc1-mplot.png"
 
-    filesig = "imgblock-01-sig.fits"
+    filesig = "imgblock-g01-nc1-sig.fits"
     filesig= path+filesig
 
-    filecheck = "imgblock-01-check.fits"
+    filecheck = "imgblock-g01-nc1-check.fits"
     filecheck= path+filecheck
 
-    filecube = "imgblock-01-cub.png"
+    filecube = "imgblock-g01-nc1-cub.png"
     filecube = path+filecube
 
-    filersky = "imgblock-01-ring.fits"
+    filersky = "imgblock-g01-nc1-ring.fits"
     filersky = path + filersky
 
-    filermsky = "imgblock-01-ringmask.fits"
+    filermsky = "imgblock-g01-nc1-ringmask.fits"
     filermsky = path + filermsky
+
+    filechi = "imgblock-g01-nc1-chi.fits"
+    filechi = path + filechi
+
+
 
 
 
@@ -624,29 +646,32 @@ def test_img_size():
 
     path="tests/"
 
-    filephot = "imgblock-01-out.txt"
+    filephot = "imgblock-g01-nc1-out.txt"
     filephot= path+filephot
 
-    filecomp = "imgblock-01-comp.fits"
+    filecomp = "imgblock-g01-nc1-comp.fits"
     filecomp= path+filecomp
 
-    filepng = "imgblock-01.png"
-    filemulpng = "imgblock-01-mul.png"
+    filepng = "imgblock-g01-nc1-splot.png"
+    filemulpng = "imgblock-g01-nc1-mplot.png"
 
-    filesig = "imgblock-01-sig.fits"
+    filesig = "imgblock-g01-nc1-sig.fits"
     filesig= path+filesig
 
-    filecheck = "imgblock-01-check.fits"
+    filecheck = "imgblock-g01-nc1-check.fits"
     filecheck= path+filecheck
 
-    filecube = "imgblock-01-cub.png"
+    filecube = "imgblock-g01-nc1-cub.png"
     filecube = path+filecube
 
-    filersky = "imgblock-01-ring.fits"
+    filersky = "imgblock-g01-nc1-ring.fits"
     filersky = path + filersky
 
-    filermsky = "imgblock-01-ringmask.fits"
+    filermsky = "imgblock-g01-nc1-ringmask.fits"
     filermsky = path + filermsky
+
+    filechi = "imgblock-g01-nc1-chi.fits"
+    filechi = path + filechi
 
 
     tempmask="tempmask.fits"
@@ -684,7 +709,9 @@ def test_img_size():
     if os.path.isfile(filetempmask):
         os.remove(filetempmask)
  
-
+    if os.path.isfile(filechi):
+        os.remove(filechi)
+ 
 
     from ellipsect.inout.galfit  import Galfit 
     from ellipsect.sectors.sect  import PassArgs 
@@ -761,7 +788,9 @@ def test_img_size():
     if os.path.isfile(filetempmask):
         os.remove(filetempmask)
  
-
+    if os.path.isfile(filechi):
+        os.remove(filechi)
+ 
 
 
 

@@ -259,6 +259,9 @@ class SkyComp:
 
         q =  self.q
 
+        if self.thetadeg > 360:
+            self.thetadeg = self.thetadeg - 360 #quick fix
+
         theta = self.thetadeg * (np.pi / 180)  # rads!!
 
         thetax=np.sqrt((np.cos(theta))**2 + (q**2)*(np.sin(theta))**2 )

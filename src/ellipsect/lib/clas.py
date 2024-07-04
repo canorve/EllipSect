@@ -55,7 +55,7 @@ class EllipSectConfig:
     flagmodel=False
 
     flagsky=False
-    flagkeep=False
+    flagkeep=True
     flagalax=False
 
     flagnedfile=False

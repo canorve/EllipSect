@@ -78,7 +78,7 @@ def InitParsing():
     parser.add_argument("-r95","--rad95", action="store_true", help="Draw a vertical line indicating the 95%% of total light")
 
 
-    parser.add_argument("-k","--keep", action="store_true", help="use existing file to compute subcomponents")
+    parser.add_argument("-rc","--remcomp", action="store_true", help="remove file of subcomponents")
     parser.add_argument("-gx","--galax", action="store_true", help="only the galaxy surface brightness is shown in the plot")
 
 

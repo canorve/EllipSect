@@ -632,8 +632,8 @@ def PassArgs(args):
     if args.snr:
         ellconf.flagsnr=True
  
-    if args.keep:
-        ellconf.flagkeep=True
+    if args.remcomp:
+        ellconf.flagkeep=False
 
     if args.galax:
         ellconf.flagalax=True

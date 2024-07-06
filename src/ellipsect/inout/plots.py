@@ -26,15 +26,16 @@ from ellipsect.inout.prt import PrintFilesComps
 from ellipsect.inout.galfit  import conver2Sersic 
 from ellipsect.inout.galfit  import GetReff 
 
-def PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,ellconf,scale):
+def PlotSB(xradq, ysbq, ysberrq, xradm, ysbm, ysberrm, ellconf, scale):
     """  Produces final best-fitting plot  """
 
     # subplot for arc sec axis
     plt.close('all')
 
 
+
     #ULISES begin
-    fig, (axsec,axred) = plt.subplots(2, sharex=True, sharey=False)
+    #fig, (axsec, axred) = plt.subplots(2, sharex=True, sharey=False)
     gs = gridspec.GridSpec(2, 1,height_ratios=[3,1])
     gs.update(hspace=0.07)
     #ULISES end 
@@ -62,11 +63,12 @@ def PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,ellconf,scale):
     axsec.set_ylabel(r"Surface Brightness $(mag\; arcsec^{-2})$")
     # ULISES end
 
-    axsec.errorbar(xradq, ysbq,yerr=ysberrq,fmt='o-',capsize=2,color='red',markersize=0.7,label="galaxy",linewidth=2)
+    axsec.errorbar(xradq, ysbq, yerr=ysberrq,fmt='o-',capsize=2,color='red',markersize=0.7,label="galaxy",linewidth=2)
+    #axsec.plot(r, mgegal.sb[angal], 'C3-',linewidth=2)
 
 
     if ellconf.flagalax == False:
-        axsec.errorbar(xradm, ysbm,yerr=ysberrm,fmt='o-',capsize=2,color='blue',markersize=0.7,label="Model",linewidth=2)
+        axsec.errorbar(xradm, ysbm, yerr=ysberrm,fmt='o-',capsize=2,color='blue',markersize=0.7,label="Model",linewidth=2)
 
 
     if ellconf.flagrany == True:
@@ -93,7 +95,6 @@ def PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,ellconf,scale):
     axsec.tick_params(which='both', width=2)
     axsec.tick_params(which='major', length=7)
     axsec.tick_params(which='minor', length=4, color='r')
-
 
     #begin psf fwhm 
     if ellconf.flagfwhm: 
@@ -146,6 +147,7 @@ def PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,ellconf,scale):
 
     err = ((ysbm/ysbq**2)**2) * ysberrq**2 + ((1/ysbq)**2) * ysberrm**2 
     err = np.sqrt(err)*100
+
     axred = plt.subplot(gs[1])
 
     if len(xradq) != len(residual):
@@ -158,7 +160,6 @@ def PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,ellconf,scale):
     axred.set_ylabel('Residual (%)')
     axred.set_ylim(-2,2)
     # ULISES end
-
 
     if ellconf.flaglogx == True:
 
@@ -235,7 +236,8 @@ def PlotSB(xradq,ysbq,ysberrq,xradm,ysbm,ysberrm,ellconf,scale):
         axred.spines[axis].set_linewidth(1.5)
 
 
-    return xran,yran,axret
+
+    return xran, yran, axret
 
 #io/plot.py
 def PlotSub(xradq,ysbq,nsub,axsec,namec,colorval):

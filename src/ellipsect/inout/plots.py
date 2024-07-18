@@ -287,12 +287,13 @@ def Comp2Ellip(galhead, galcomps, N, lw=1):
     ellipses = [] 
 
     #color value
-    values = range(N)
+    values = np.arange(N)
     jet = cm = plt.get_cmap('jet') 
     cNorm  = colors.Normalize(vmin=0, vmax=values[-1])
     scalarMap = cmx.ScalarMappable(norm=cNorm, cmap=jet)
 
-    
+
+    idxcol=0
     for idx, item in enumerate(galcomps.N):
 
         if galcomps.Active[idx] == True:
@@ -306,8 +307,7 @@ def Comp2Ellip(galhead, galcomps, N, lw=1):
             w = galcomps.Rad[idx]
             h = galcomps.Rad[idx]*galcomps.AxRat[idx]
 
-
-            colorVal = scalarMap.to_rgba(values[idx])
+            colorVal = scalarMap.to_rgba(values[idxcol])
 
 
             ell=Ellipse((xc, yc), width = w, height = h, angle = pa,
@@ -316,7 +316,7 @@ def Comp2Ellip(galhead, galcomps, N, lw=1):
                          linewidth = lw)
 
             ellipses.append(ell)
-
+            idxcol+=1
 
     return ellipses
 

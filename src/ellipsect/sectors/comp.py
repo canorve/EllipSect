@@ -28,7 +28,7 @@ def SubComp(ellconf, galhead, galcomps, sectcomps, axsec, n_sectors=19):
     N=len(galcomps.N)
 
     #color value
-    values = range(N)
+    values = np.arange(N)
     jet = cm = plt.get_cmap('jet') 
     cNorm  = colors.Normalize(vmin=0, vmax=values[-1])
     scalarMap = cmx.ScalarMappable(norm=cNorm, cmap=jet)
@@ -37,21 +37,21 @@ def SubComp(ellconf, galhead, galcomps, sectcomps, axsec, n_sectors=19):
     ab=ellconf.qarg
     n=0
 
+    idxcol=0
     maskcomp = galcomps.Active == True
     while(n<N):
-
 
         if galcomps.Active[n] == True:
             namec = galcomps.NameComp[n] #check if name coincide, it must be
 
-            scmp = sectcomps[n] 
+            scmp = sectcomps[idxcol] 
 
 
             ###################################################
 
             xradq, ysbq, ysberrq = ellip.sect2xy(scmp, ellconf, galhead, n_sectors)
 
-            colorVal = scalarMap.to_rgba(values[n])
+            colorVal = scalarMap.to_rgba(values[idxcol])
 
             PlotSub(xradq, ysbq, n, axsec, namec, colorVal)
 
@@ -62,7 +62,7 @@ def SubComp(ellconf, galhead, galcomps, sectcomps, axsec, n_sectors=19):
 
                 PrintEllFilesComps(ellconf, galhead, namec, ncomp, xradq, ysbq, ysberrq)
 
-
+            idxcol+=1
         n=n+1
 
 

@@ -94,7 +94,7 @@ def NED(ellconf):
 
 
         print("reading ",filened)
-        votable=parse(filened,pedantic=False) 
+        votable=parse(filened,verify='ignore') 
 
         try: 
             table=votable.get_table_by_index(0) 

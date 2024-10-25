@@ -13,7 +13,8 @@
     :alt: Project generated with PyScaffold
     :target: https://pyscaffold.org/
 
-|DOI|
+.. image:: https://zenodo.org/badge/282223217.svg
+    :target: https://zenodo.org/badge/latestdoi/282223217
 
 
 **EllipSect**

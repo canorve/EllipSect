@@ -186,9 +186,9 @@ The code is under the license of **GNU**
 
 If you find this code useful, please cite as:
 
-Añorve, Christopher, Ríos-López, Emmanuel, Reyes-Amador, 
-Ulises, & López-Cruz, Omar. (2022). canorve/EllipSect: 
-EllipSect v2.7.5 (v2.7.5). Zenodo. https://doi.org/10.5281/zenodo.6975592
+Añorve, C., Reyes-Amador, U., Ríos-López, E., & López-Cruz, O. (2024). 
+canorve/EllipSect: v3.4.3 (v3.4.3). Zenodo. https://doi.org/10.5281/zenodo.13994369
+
 
 
 --------------
@@ -246,12 +246,10 @@ PYTHON, 409(4), 1379–1392. doi:10.1111/j.1365-2966.2010.17426.x \__\_
 **Other Stuff**
 ---------------
 
-Check my others GALFIT tools
+Check my other project GALFITtools
 `here <https://github.com/canorve/GALFITools>`__
 
 --------------
 
-.. |DOI| image:: https://zenodo.org/badge/282223217.svg
-   :target: https://zenodo.org/badge/latestdoi/282223217
 .. |A85a| image:: img/A85.cub.png
 .. |A85b| image:: img/A85.def.png

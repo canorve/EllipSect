@@ -167,6 +167,20 @@ def ReadGALFITout(ellconf,galhead,galcomps):
 
 
     galcomps = SelectGal(galcomps,ellconf.distmax,ellconf.numcomp)
+    
+    #removes blank files created by galfit
+    if os.path.isfile("none"):
+        print("Blank file none detected")
+        print("Removing...")
+        os.remove("none")
+        print("Removed")
+
+
+    if os.path.isfile("None"):
+        print("Blank file None detected")
+        print("Removing...")
+        os.remove("None")
+        print("Removed")
  
 
     errmsg="file {} does not exist".format(galhead.inputimage)

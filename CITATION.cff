@@ -1,0 +1,63 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using the metadata in this file."
+title: "EllipSect: A surface brightness analysis tool for GALFIT output"
+type: software
+version: "v3.4.4"
+date-released: "2025-01-04"
+license: "GPL-3.0-only"
+doi: "10.5281/zenodo.14597845"
+url: "https://doi.org/10.5281/zenodo.14597845"
+repository-code: "https://github.com/canorve/EllipSect"
+abstract: "A surface brightness analysis tool for GALFIT output."
+keywords:
+  - astronomy
+  - astrophysics
+  - photometry
+  - galaxies
+  - surface brightness
+  - GALFIT
+
+authors:
+  - given-names: "Christopher"
+    family-names: "Añorve"
+    orcid: "https://orcid.org/0000-0002-3721-8869"
+    affiliation: "FACITE"
+  - given-names: "Ulises"
+    family-names: "Reyes-Amador"
+    orcid: "https://orcid.org/0000-0001-7707-7389"
+    affiliation: "IRyA-UNAM"
+  - given-names: "Diego"
+    family-names: "de Ramon Toledo"
+    affiliation: "FCC-BUAP"
+  - given-names: "Emmanuel"
+    family-names: "Ríos-López"
+    orcid: "https://orcid.org/0000-0002-4436-221X"
+    affiliation: "National Institute of Astrophysics, Optics and Electronics"
+  - given-names: "Omar"
+    family-names: "López-Cruz"
+    orcid: "https://orcid.org/0000-0002-1381-7437"
+    affiliation: "National Institute of Astrophysics, Optics and Electronics"
+
+preferred-citation:
+  type: software
+  title: "canorve/EllipSect: v3.4.4"
+  doi: "10.5281/zenodo.14597845"
+  url: "https://doi.org/10.5281/zenodo.14597845"
+  version: "v3.4.4"
+  date-released: "2025-01-04"
+  authors:
+    - given-names: "Christopher"
+      family-names: "Añorve"
+      orcid: "https://orcid.org/0000-0002-3721-8869"
+    - given-names: "Ulises"
+      family-names: "Reyes-Amador"
+      orcid: "https://orcid.org/0000-0001-7707-7389"
+    - given-names: "Diego"
+      family-names: "de Ramon Toledo"
+    - given-names: "Emmanuel"
+      family-names: "Ríos-López"
+      orcid: "https://orcid.org/0000-0002-4436-221X"
+    - given-names: "Omar"
+      family-names: "López-Cruz"
+      orcid: "https://orcid.org/0000-0002-1381-7437"
+

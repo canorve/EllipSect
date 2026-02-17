@@ -63,7 +63,17 @@ def EllipSectors(ellconf, galhead, galcomps, sectgalax, sectmodel, sectcomps, n_
         xradq, ysbq, n = SubComp(ellconf, galhead, galcomps, sectcomps, axsec, n_sectors = n_sectors)
 
 
-    axsec.legend(loc=1)
+    #axsec.legend(loc=1)
+
+    axsec.legend(
+        loc="upper right",
+        fontsize=8.5,
+        framealpha=0.8,   # semi-transparent
+        borderpad=0.3,
+        labelspacing=0.28,
+        handlelength=1.8,
+    )
+
 
     return limx,limy
 

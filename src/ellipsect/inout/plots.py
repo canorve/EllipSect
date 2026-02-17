@@ -492,6 +492,7 @@ def PlotMul(ellconf, galhead, galcomps, mgegal, mgemod, mgecom):
 
     fig, axsec = plt.subplots(nrows, 2, sharex=True, sharey='col', num=fignum)
     fig.subplots_adjust(hspace=0.01)
+    fig.subplots_adjust(left=0.16)
 
 
 

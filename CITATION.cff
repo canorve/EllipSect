@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-message: "If you use this software, please cite it using the metadata in this file."
+message: "If you use this software, please cite the associated paper in the preferred-citation section."
 title: "EllipSect: A surface brightness analysis tool for GALFIT output"
 type: software
 version: "v3.4.4"
@@ -8,7 +8,7 @@ license: "GPL-3.0-only"
 doi: "10.5281/zenodo.14597845"
 url: "https://doi.org/10.5281/zenodo.14597845"
 repository-code: "https://github.com/canorve/EllipSect"
-abstract: "A surface brightness analysis tool for GALFIT output."
+abstract: "A surface brightness analysis and measurement tool for GALFIT output."
 keywords:
   - astronomy
   - astrophysics
@@ -39,12 +39,16 @@ authors:
     affiliation: "National Institute of Astrophysics, Optics and Electronics"
 
 preferred-citation:
-  type: software
-  title: "canorve/EllipSect: v3.4.4"
-  doi: "10.5281/zenodo.14597845"
-  url: "https://doi.org/10.5281/zenodo.14597845"
-  version: "v3.4.4"
-  date-released: "2025-01-04"
+  type: article
+  title: "EllipSect: A Surface Brightness Analysis Tool for GALFIT 3"
+  doi: "10.22201/ia.30618649e.2026.62.01.7524"
+  url: "https://astronomia.unam.mx/journals/rmxaa/article/view/10.22201.ia.30618649e.2026.62.01.7524"
+  journal: "Revista Mexicana de Astronomía y Astrofísica"
+  year: 2026
+  volume: 62
+  issue: 1
+  pages: "76-86"
+  month: 3
   authors:
     - given-names: "Christopher"
       family-names: "Añorve"

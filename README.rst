@@ -186,10 +186,9 @@ The code is under the license of **GNU**
 
 If you find this code useful, please cite as:
 
-Añorve, C., Reyes-Amador, U., Ríos-López, E., & López-Cruz, O. (2024). 
-canorve/EllipSect: v3.4.3 (v3.4.3). Zenodo. https://doi.org/10.5281/zenodo.13994369
+Añorve, C., Reyes-Amador, U., de Ramon Toledo, D., Ríos-López, E., & López-Cruz, O. (2026). EllipSect: A Surface Brightness Analysis Tool for GALFIT 3. Revista Mexicana de Astronomía y Astrofísica, 62(1). https://doi.org/10.22201/ia.30618649e.2026.62.01.7524
 
-
+Zenodo repository: https://doi.org/10.5281/zenodo.14597845
 
 --------------
 

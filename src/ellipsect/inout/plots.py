@@ -33,13 +33,14 @@ def PlotSB(xradq, ysbq, ysberrq, xradm, ysbm, ysberrm, ellconf, scale):
     plt.close('all')
 
 
-
+    fig = plt.figure()  # optionally: figsize=(6.4, 4.8)
     #ULISES begin
     #fig, (axsec, axred) = plt.subplots(2, sharex=True, sharey=False)
-    gs = gridspec.GridSpec(2, 1,height_ratios=[3,1])
+    gs = gridspec.GridSpec(2, 1,height_ratios=[3,1],hspace=0.07)
     gs.update(hspace=0.07)
     #ULISES end 
 
+    fig.subplots_adjust(bottom=0.16)   # try 0.14–0.22
 
     if ellconf.flagranx == True:
         (xmin,xmax)=ellconf.ranx[0], ellconf.ranx[1]
@@ -58,8 +59,8 @@ def PlotSB(xradq, ysbq, ysberrq, xradm, ysbm, ysberrm, ellconf, scale):
 
    
     # ULISES begin
-    axsec = plt.subplot(gs[0])
-
+    #axsec = plt.subplot(gs[0])
+    axsec = fig.add_subplot(gs[0])
     axsec.set_ylabel(r"Surface Brightness $(mag\; arcsec^{-2})$")
     # ULISES end
 
@@ -148,7 +149,9 @@ def PlotSB(xradq, ysbq, ysberrq, xradm, ysbm, ysberrm, ellconf, scale):
     err = ((ysbm/ysbq**2)**2) * ysberrq**2 + ((1/ysbq)**2) * ysberrm**2 
     err = np.sqrt(err)*100
 
-    axred = plt.subplot(gs[1])
+    #axred = plt.subplot(gs[1])
+    axred = fig.add_subplot(gs[1], sharex=axsec)
+
 
     if len(xradq) != len(residual):
         axred.errorbar(xradm, residual, yerr=err,fmt='.',capsize=2,color='k')
@@ -493,6 +496,7 @@ def PlotMul(ellconf, galhead, galcomps, mgegal, mgemod, mgecom):
     fig, axsec = plt.subplots(nrows, 2, sharex=True, sharey='col', num=fignum)
     fig.subplots_adjust(hspace=0.01)
     fig.subplots_adjust(left=0.16)
+    fig.subplots_adjust(bottom=0.15)
 
 
 

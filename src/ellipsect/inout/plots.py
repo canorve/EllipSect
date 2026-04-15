@@ -40,7 +40,7 @@ def PlotSB(xradq, ysbq, ysberrq, xradm, ysbm, ysberrm, ellconf, scale):
     gs.update(hspace=0.07)
     #ULISES end 
 
-    fig.subplots_adjust(bottom=0.16)   # try 0.14–0.22
+    fig.subplots_adjust(bottom=0.16, left=0.20, top=0.85)   # try 0.14–0.22
 
     if ellconf.flagranx == True:
         (xmin,xmax)=ellconf.ranx[0], ellconf.ranx[1]
@@ -61,7 +61,7 @@ def PlotSB(xradq, ysbq, ysberrq, xradm, ysbm, ysberrm, ellconf, scale):
     # ULISES begin
     #axsec = plt.subplot(gs[0])
     axsec = fig.add_subplot(gs[0])
-    axsec.set_ylabel(r"Surface Brightness $(mag\; arcsec^{-2})$")
+    axsec.set_ylabel("Surface Brightness\n(mag arcsec$^{-2})$",labelpad=12)
     # ULISES end
 
     axsec.errorbar(xradq, ysbq, yerr=ysberrq,fmt='o-',capsize=2,color='red',markersize=0.7,label="galaxy",linewidth=2)

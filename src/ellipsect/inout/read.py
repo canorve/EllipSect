@@ -135,8 +135,9 @@ def InitParsing():
 
 
     parser.add_argument("-nc","--numcomp", type=int, help="component number to" 
-                        + "select for galaxy center. Default = first component. The "
-                        + "component order follows as it is shown in galfit file ",default=1)
+                        + "select for galaxy center. Default = first component."
+                        + "If it is not 1, q and pa are taken from this component "
+                        + "The component order follows as it is shown in galfit file ",default=1)
 
 
     parser.add_argument("-ae","--aext", type=float, 
@@ -252,17 +253,27 @@ def ReadGALFITout(ellconf,galhead,galcomps):
         hdu.writeto(galhead.tempmask, overwrite=True)
 
 
-def GetEllInfo(ellconf,galcomps):
+def GetEllInfo(ellconf, galcomps):
     '''Gets geometry information from the last component''' 
 
 
     maskactive = (galcomps.Active == True) 
 
+
     if ellconf.flagq == False:
-        ellconf.qarg = galcomps.AxRat[maskactive][-1]
+
+        if ellconf.numcomp != 1: 
+            ellconf.qarg = galcomps.AxRat[maskactive][ellconf.numcomp - 1]
+        else:
+            ellconf.qarg = galcomps.AxRat[maskactive][-1]
 
     if ellconf.flagpa == False:
-        ellconf.parg = galcomps.PosAng[maskactive][-1]
+        if ellconf.numcomp != 1: 
+            ellconf.parg = galcomps.PosAng[maskactive][ellconf.numcomp - 1]
+        else:
+            ellconf.parg = galcomps.PosAng[maskactive][-1]
+
+
 
     #for the center, it obtains it from the first component
     #if ellconf.flagcent == False:

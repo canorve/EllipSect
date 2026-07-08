@@ -26,6 +26,8 @@ from ellipsect.inout.prt import PrintFilesComps
 from ellipsect.inout.galfit  import conver2Sersic 
 from ellipsect.inout.galfit  import GetReff 
 
+from matplotlib.ticker import AutoLocator, AutoMinorLocator, ScalarFormatter
+
 def PlotSB(xradq, ysbq, ysberrq, xradm, ysbm, ysberrm, ellconf, scale):
     """  Produces final best-fitting plot  """
 
@@ -177,6 +179,9 @@ def PlotSB(xradq, ysbq, ysberrq, xradm, ysbm, ysberrm, ellconf, scale):
     else:
         axred.xaxis.set_minor_locator(AutoMinorLocator())
         axred.xaxis.set_major_locator(AutoLocator())
+        axred.xaxis.set_major_formatter(ScalarFormatter())
+        axred.tick_params(axis="x", labelbottom=True)
+
 
 
 

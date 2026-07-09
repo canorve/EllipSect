@@ -1,7 +1,9 @@
 .. contents::
    :depth: 3
-..
 
+
+EllipSect
+=========
 
 
 .. image:: https://img.shields.io/pypi/v/EllipSect.svg
@@ -16,15 +18,11 @@
     :target: https://zenodo.org/badge/latestdoi/282223217
 
 
-**EllipSect**
-=============
-
-
 
 EllipSect creates surface brightness profiles and extracts other
-photometric data from the GALFIT output peng et al. (2002).
+photometric data from the GALFIT output Peng et al. (2002).
 
-This code is “similar” (but not substitute) to IRAF’s ellipse routine. It
+This code is “similar” to IRAF’s ellipse routine, but is is not a substitute for it. It
 creates a Surface brightness profile for the galaxy, model and
 , optionally, individual model components.
 
@@ -41,7 +39,7 @@ kpc, etc.
 **Installation**
 ----------------
 
-The code is written for python 3.
+The code is written for Python 3.
 
 The python libraries required are:
 
@@ -53,7 +51,7 @@ The python libraries required are:
 
 Install GALFIT if you haven't done so.
 
-Download the latest release, and installed it via
+Download the latest release, and install it via
 
 ::
 
@@ -84,7 +82,7 @@ Run the automated tests:
 
 
 **Note**: *EllipSect* needs the GALFIT output files (GALFIT.XX) to work.
-Although *GALFIT* is not stricly required, it will required it to create
+Although *GALFIT* is not strictly required, it will require it to create
 the model components and sigma image. Make sure you can call GALFIT from
 the command line. Otherwise the automated tests will fail.
 

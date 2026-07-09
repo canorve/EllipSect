@@ -3,7 +3,6 @@
 ..
 
 
-=============
 
 .. image:: https://img.shields.io/pypi/v/EllipSect.svg
     :alt: PyPI-Server
@@ -130,7 +129,8 @@ for more options:
 
 To see other options for EllipSect:
 
-`How to use <docs/howto.rst>`__
+`How to use <https://github.com/canorve/EllipSect/blob/master/docs/howto.rst>`__
+
 
 **Script run:**
 ^^^^^^^^^^^^^^^
@@ -157,7 +157,7 @@ it in the following way:
 To check all the output variables besides AICrit and BulgeToTotal,
 check:
 
-`Output variables <docs/api.rst>`__
+`Output variables <https://github.com/canorve/EllipSect/blob/master/docs/api.rst>`__
 
 --------------
 
@@ -240,7 +240,7 @@ doi:10.1088/0004-6256/138/5/1417
 
 Vikram, V., Wadadekar, Y., Kembhavi, A. K., & Vijayagovindan, G. V.
 (2010). PYMORPH: automated galaxy structural parameter estimation using
-PYTHON, 409(4), 1379–1392. doi:10.1111/j.1365-2966.2010.17426.x \__\_
+PYTHON, 409(4), 1379–1392. doi:10.1111/j.1365-2966.2010.17426.x 
 
 **Other Stuff**
 ---------------
@@ -250,5 +250,5 @@ Check my other project GALFITtools
 
 --------------
 
-.. |A85a| image:: img/A85.cub.png
-.. |A85b| image:: img/A85.def.png
+.. |A85a| image:: https://raw.githubusercontent.com/canorve/EllipSect/refs/heads/master/img/A85.cub.png 
+.. |A85b| image:: https://raw.githubusercontent.com/canorve/EllipSect/refs/heads/master/img/A85.def.png

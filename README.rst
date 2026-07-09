@@ -34,10 +34,9 @@ brightness at effective radius, percentage of total light per component,
 radius at 90% of light (for Sersic components only), effective radius in
 kpc, etc.
 
---------------
 
-**Installation**
-----------------
+Installation
+--------------
 
 The code is written for Python 3.
 
@@ -86,7 +85,6 @@ Although *GALFIT* is not strictly required, it will require it to create
 the model components and sigma image. Make sure you can call GALFIT from
 the command line. Otherwise the automated tests will fail.
 
---------------
 
 For Linux or Mac, just run ellipsect in the command line:
 
@@ -96,13 +94,11 @@ For Linux or Mac, just run ellipsect in the command line:
 
 and that’s it!!
 
---------------
 
-**HOW TO USE**
-~~~~~~~~~~~~~~
+HOW TO USE
+------------
 
 **easy run:**
-^^^^^^^^^^^^^
 
 Once installed, run *ellipsect* in the same directory that you run
 GALFIT. It only requires the latest GALFIT’s output file. *The easiest
@@ -122,16 +118,14 @@ for more options:
 
    ellipsect --help 
 
-**Full manual:**
-^^^^^^^^^^^^^^^^
+**Full manual**:
 
 To see other options for EllipSect:
 
 `How to use <https://github.com/canorve/EllipSect/blob/master/docs/howto.rst>`__
 
 
-**Script run:**
-^^^^^^^^^^^^^^^
+**Script run**:
 
 If you want to use EllipSect inside your own python script, you can call
 it in the following way:
@@ -157,10 +151,9 @@ check:
 
 `Output variables <https://github.com/canorve/EllipSect/blob/master/docs/api.rst>`__
 
---------------
 
-**Questions?**
---------------
+Questions?
+-----------
 
 Do you have any questions or suggestions? Please send an email to
 canorve [at] gmail [dot] com or open an
@@ -169,18 +162,16 @@ canorve [at] gmail [dot] com or open an
 I’m open to new ideas that can benefit the software *EllipSect* and the
 *GALFIT* community
 
---------------
 
-**License**
------------
+License
+---------
 
 The code is under the license of **GNU**
 
 
------------
 
-**Cite as**
------------
+Cite as
+--------
 
 If you find this code useful, please cite as:
 
@@ -188,10 +179,9 @@ Añorve, C., Reyes-Amador, U., de Ramon Toledo, D., Ríos-López, E., & López-C
 
 Zenodo repository: https://doi.org/10.5281/zenodo.14597845
 
---------------
 
-**References**
---------------
+References
+-----------
 
 Akaike, H. (1974). A New Look at the Statistical Model Identification.
 IEEE Transactions on Automatic Control, 19, 716–723.
@@ -240,13 +230,15 @@ Vikram, V., Wadadekar, Y., Kembhavi, A. K., & Vijayagovindan, G. V.
 (2010). PYMORPH: automated galaxy structural parameter estimation using
 PYTHON, 409(4), 1379–1392. doi:10.1111/j.1365-2966.2010.17426.x 
 
-**Other Stuff**
----------------
+
+Other Stuff
+-----------
 
 Check my other project GALFITtools
 `here <https://github.com/canorve/GALFITools>`__
 
---------------
+.. |A85a| image:: https://raw.githubusercontent.com/canorve/EllipSect/master/img/A85.cub.png
+.. |A85b| image:: https://raw.githubusercontent.com/canorve/EllipSect/master/img/A85.def.png
 
-.. |A85a| image:: https://raw.githubusercontent.com/canorve/EllipSect/refs/heads/master/img/A85.cub.png 
-.. |A85b| image:: https://raw.githubusercontent.com/canorve/EllipSect/refs/heads/master/img/A85.def.png
+
+

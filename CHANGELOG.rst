@@ -2,6 +2,45 @@
 Changelog
 =========
 
+
+
+Version 3.4.9 
+===============
+
+
+A surface brightness analysis tool for GALFIT output.
+
+In this release:
+
+   - Mostly bug fixes.
+    
+
+
+
+
+
+
+
+
+
+Version 3.4.6 
+===============
+
+
+A surface brightness analysis tool for GALFIT output.
+
+In this release:
+
+    Removed a bug when plotting.
+    Except for 1, now number of component can be used for pa and q
+    changed margins for single plots
+
+
+
+
+
+
+
 Version 2.7.5 
 ===============
 
